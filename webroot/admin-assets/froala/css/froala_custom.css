@@ -1,0 +1,11 @@
+.fa-exchange::before {
+    content: "\f362";
+}
+
+.fa-commenting::before {
+    content: "\f27a";
+}
+
+.fa-sliders::before {
+    content: "\f1de";
+}
