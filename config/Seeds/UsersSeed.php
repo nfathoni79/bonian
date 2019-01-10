@@ -20,26 +20,15 @@ class UsersSeed extends AbstractSeed
     {
         $data = [
             [
-                'id' => '1',
+                'id' => '3',
                 'email' => 'admin@admin.com',
-                'password' => '$2y$10$2ofDLxFoKRygwI6T0.SvOu5A/qugAeK69lBWVjrwQMfpfIe/TVPPi',
-                'first_name' => 'admin',
-                'last_name' => '',
+                'password' => '$2y$10$kKYlt.dPlQkpINQMmVrZGeV.nIh6P5mrHEHq6Ms56heAfhRWe2d9m',
+                'first_name' => 'Superadmin',
+                'last_name' => 'Zolaku',
                 'group_id' => '1',
                 'user_status_id' => '1',
-                'created' => '2018-11-20 10:36:33',
-                'modified' => '2018-11-22 17:09:07',
-            ],
-            [
-                'id' => '2',
-                'email' => 'info@ridwan.id',
-                'password' => '$2y$10$TC0lgiqiNPaa8rYXUfGi8eNjdTsKhgJ9hWzesAQc0eahNeBN3S2OG',
-                'first_name' => 'ridwan',
-                'last_name' => '',
-                'group_id' => '2',
-                'user_status_id' => '1',
-                'created' => '2018-11-20 10:47:01',
-                'modified' => '2018-11-20 10:47:01',
+                'created' => '2019-01-10 05:05:01',
+                'modified' => '2019-01-10 05:05:01',
             ],
         ];
 

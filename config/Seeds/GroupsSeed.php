@@ -22,20 +22,9 @@ class GroupsSeed extends AbstractSeed
             [
                 'id' => '1',
                 'name' => 'Administrator',
-                'created' => '2018-11-20 10:35:39',
-                'modified' => '2018-11-20 10:35:39',
-            ],
-            [
-                'id' => '2',
-                'name' => 'Contributor',
-                'created' => '2018-11-20 10:46:41',
-                'modified' => '2018-11-20 10:46:41',
-            ],
-            [
-                'id' => '5',
-                'name' => 'tet lagi',
-                'created' => '2018-11-22 16:56:58',
-                'modified' => '2018-11-22 16:56:58',
+                'created' => '2019-01-10 05:01:45',
+                'modified' => '2019-01-10 05:01:45',
+                'level' => '1',
             ],
         ];
 
