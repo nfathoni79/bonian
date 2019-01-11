@@ -218,6 +218,7 @@
                         }
                     },
 {% endfor %}
+{% endif %}
 {% if isKey is not same as(true) %}
                     {
                         field: '{{ field }}',
@@ -226,8 +227,6 @@
                             return row.{{ field }};
                         }
                     },
-{% endif %}
-
 {% endif %}
 
 {% endif %}
