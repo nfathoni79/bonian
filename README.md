@@ -50,10 +50,16 @@ The app skeleton uses a subset of [Foundation](http://foundation.zurb.com/) (v5)
 framework by default. You can, however, replace it with any other library or
 custom styles.
 
-## Raja Ongkir account
+## Rajaongkir account
 
 ```bash
 username  : zolaku 
-Password  : zo101010
-apikey    : 1ee7bc2c49e1ff46278d7363f3aec3c4
+Password  : zo101010 
+```
+
+
+## Midtrans account
+```bash
+username  : zolaku.online@gmail.com 
+Password  : Zo101010 
 ```
