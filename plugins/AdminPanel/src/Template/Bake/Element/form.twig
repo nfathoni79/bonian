@@ -14,67 +14,121 @@
  */
 #}
 {% set fields = Bake.filterFields(fields, schema, modelObject) %}
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-{% if strpos(action, 'add') is same as(false) %}
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', ${{ singularVar }}->{{ primaryKey[0] }}],
-                ['confirm' => __('Are you sure you want to delete # {0}?', ${{ singularVar }}->{{ primaryKey[0] }})]
-            )
-        ?></li>
-{% endif %}
-        <li><?= $this->Html->link(__('List {{ pluralHumanName }}'), ['action' => 'index']) ?></li>
-        {{- "\n" }}
-{%- set done = [] %}
-{% for type, data in associations %}
-    {%- for alias, details in data %}
-        {%- if details.controller is not same as(_view.name) and details.controller not in done %}
-        <li><?= $this->Html->link(__('List {{ alias|underscore|humanize }}'), ['controller' => '{{ details.controller }}', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New {{ alias|singularize|underscore|humanize }}'), ['controller' => '{{ details.controller }}', 'action' => 'add']) ?></li>
-        {{- "\n" }}
-        {%- set done = done|merge([details.controller]) %}
-        {%- endif %}
-    {%- endfor %}
-{% endfor %}
-    </ul>
-</nav>
-<div class="{{ pluralVar }} form large-9 medium-8 columns content">
-    <?= $this->Form->create(${{ singularVar }}) ?>
-    <fieldset>
-        <legend><?= __('{{ action|humanize }} {{ singularHumanName }}') ?></legend>
-        <?php
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <?= __('{{ singularHumanName }}') ?>
+                </h3>
+                <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                    <li class="m-nav__item m-nav__item--home">
+                        <a href="#" class="m-nav__link m-nav__link--icon">
+                            <i class="m-nav__link-icon la la-home"></i>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">
+                        -
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="#" class="m-nav__link">
+                            <span class="m-nav__link-text">
+                                <?= __('{{ singularHumanName }}') ?>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">
+                        -
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
+                            <span class="m-nav__link-text">
+                                <?= __('List {{ singularHumanName }}') ?>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">
+                        -
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
+                            <span class="m-nav__link-text">
+                                <?= __('{{ action|humanize }} {{ singularHumanName }}') ?>
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            <?= __('{{ action|humanize }} {{ singularHumanName }}') ?>
+                        </h3>
+                    </div>
+                </div>
+                <div class="m-portlet__head-tools">
+
+                </div>
+            </div>
+
+
+            <?= $this->Form->create(${{ singularVar }},['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form']); ?>
+            <div class="m-portlet__body">
+
+            <?php
+                echo $this->Flash->render();
+                $default_class = 'form-control form-control-danger m-input m-input--air';
 {% for field in fields if field not in primaryKey %}
     {%- if keyFields[field] %}
         {%- set fieldData = Bake.columnData(field, schema) %}
         {%- if fieldData.null %}
-            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true]);
-            {{- "\n" }}
+                echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true, 'class' => $default_class]);
+        {{- "\n" }}
         {%- else %}
-            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
+                echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'class' => $default_class]);
             {{- "\n" }}
         {%- endif %}
     {%- elseif field not in ['created', 'modified', 'updated'] %}
         {%- set fieldData = Bake.columnData(field, schema) %}
         {%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
-            echo $this->Form->control('{{ field }}', ['empty' => true]);
+                    echo $this->Form->control('{{ field }}', ['empty' => true,'class' => $default_class]);
             {{- "\n" }}
         {%- else %}
-            echo $this->Form->control('{{ field }}');
-    {{- "\n" }}
+                echo $this->Form->control('{{ field }}',['class' => $default_class]);
+            {{- "\n" }}
         {%- endif %}
     {%- endif %}
 {%- endfor %}
 
 {%- if associations.BelongsToMany %}
     {%- for assocName, assocData in associations.BelongsToMany %}
-            echo $this->Form->control('{{ assocData.property }}._ids', ['options' => ${{ assocData.variable }}]);
-    {{- "\n" }}
+            echo $this->Form->control('{{ assocData.property }}._ids', ['options' => ${{ assocData.variable }}, 'class' => $default_class]);
+        {{- "\n" }}
     {%- endfor %}
 {% endif %}
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
+            ?>
+            </div>
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions m-form__actions">
+                    <div class="row">
+                        <div class="col-lg-9 ml-lg-auto">
+                            <?= $this->Form->submit(__('Submit'),['class' => 'btn btn-brand']) ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?= $this->Form->end(); ?>
+
+        </div>
+    </div>
 </div>
+<script>
+    $('select').selectpicker();
+</script>
+

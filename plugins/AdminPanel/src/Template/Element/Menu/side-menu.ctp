@@ -50,7 +50,25 @@
                                 'url' => ['controller' => 'Provinces', 'action' => 'index'],
                                 'icon' => '',
                                 'children' => []
-                            ]
+                            ],
+                            [
+                                'name' => 'Regency',
+                                'url' => ['controller' => 'Regencies', 'action' => 'index'],
+                                'icon' => '',
+                                'children' => []
+                            ],
+                            [
+                                'name' => 'District',
+                                'url' => ['controller' => 'Districts', 'action' => 'index'],
+                                'icon' => '',
+                                'children' => []
+                            ],
+                            [
+                                'name' => 'Village',
+                                'url' => ['controller' => 'Villages', 'action' => 'index'],
+                                'icon' => '',
+                                'children' => []
+                            ],
                         ]
                     ]
                 ]

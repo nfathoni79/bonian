@@ -95,6 +95,25 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalView" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><span class="titleModal"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body contentModal">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php $this->append('script'); ?>
 <script>
 
@@ -103,6 +122,12 @@
             .done(function( data ) {
                 location.href = '<?= $this->Url->build();?>';
             });
+    }
+
+    function view_data(id) {
+        $('#modalView').modal('show');
+        $('.titleModal').html('Provinces View');
+        $('.contentModal').load( "<?= $this->Url->build(['action' => 'view']); ?>/" + id);
     }
 
     var DatatableRemoteAjaxDemo = function() {
@@ -158,8 +183,8 @@
                         width: 40,
                         selector: false,
                         textAlign: 'center',
-                        render: function (data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart + 1;
+                        template: function(row, index, datatable) {
+                            return ++index;
                         }
                     },
                     {

@@ -4,12 +4,11 @@ namespace AdminPanel\Controller;
 use AdminPanel\Controller\AppController;
 
 /**
- * Provinces Controller
- * @property \AdminPanel\Model\Table\ProvincesTable $Provinces
+ * Regencies Controller
  *
- * @method \AdminPanel\Model\Entity\Province[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \AdminPanel\Model\Entity\Regency[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ProvincesController extends AppController
+class RegenciesController extends AppController
 {
 
     /**
@@ -28,7 +27,7 @@ class ProvincesController extends AppController
             $query = $this->request->getData('query');
 
             /** custom default query : select, where, contain, etc. **/
-            $data = $this->Provinces->find('all')
+            $data = $this->Regencies->find('all')
                 ->select();
 
             if ($query && is_array($query)) {
@@ -39,7 +38,7 @@ class ProvincesController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Provinces.name LIKE' => '%' . $search .'%']);
+                    $data->where(['Regencies.name LIKE' => '%' . $search .'%']);
                 }
                 $data->where($query);
             }
@@ -68,26 +67,26 @@ class ProvincesController extends AppController
             return $this->response->withType('application/json')
             ->withStringBody(json_encode($result));
         }
-        $provinces = $this->paginate($this->Provinces);
+        $regencies = $this->paginate($this->Regencies);
 
-        $this->set(compact('provinces'));
+        $this->set(compact('regencies'));
     }
 
     /**
      * View method
      *
-     * @param string|null $id Province id.
+     * @param string|null $id Regency id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
         $this->viewBuilder()->setLayout('ajax');
-        $province = $this->Provinces->get($id, [
-            'contain' => ['CustomerAddresses', 'Regencies']
+        $regency = $this->Regencies->get($id, [
+            'contain' => []
         ]);
 
-        $this->set('province', $province);
+        $this->set('regency', $regency);
     }
 
     /**
@@ -97,62 +96,62 @@ class ProvincesController extends AppController
      */
     public function add()
     {
-        $province = $this->Provinces->newEntity();
+        $regency = $this->Regencies->newEntity();
         if ($this->request->is('post')) {
-            $province = $this->Provinces->patchEntity($province, $this->request->getData());
-            if ($this->Provinces->save($province)) {
-                $this->Flash->success(__('The province has been saved.'));
+            $regency = $this->Regencies->patchEntity($regency, $this->request->getData());
+            if ($this->Regencies->save($regency)) {
+                $this->Flash->success(__('The regency has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The province could not be saved. Please, try again.'));
+            $this->Flash->error(__('The regency could not be saved. Please, try again.'));
         }
-        $this->set(compact('province'));
+        $this->set(compact('regency'));
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Province id.
+     * @param string|null $id Regency id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $province = $this->Provinces->get($id, [
+        $regency = $this->Regencies->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $province = $this->Provinces->patchEntity($province, $this->request->getData());
-            if ($this->Provinces->save($province)) {
-                $this->Flash->success(__('The province has been saved.'));
+            $regency = $this->Regencies->patchEntity($regency, $this->request->getData());
+            if ($this->Regencies->save($regency)) {
+                $this->Flash->success(__('The regency has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The province could not be saved. Please, try again.'));
+            $this->Flash->error(__('The regency could not be saved. Please, try again.'));
         }
-        $this->set(compact('province'));
+        $this->set(compact('regency'));
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Province id.
+     * @param string|null $id Regency id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $province = $this->Provinces->get($id);
+        $regency = $this->Regencies->get($id);
         try {
-            if ($this->Provinces->delete($province)) {
-                $this->Flash->success(__('The province has been deleted.'));
+            if ($this->Regencies->delete($regency)) {
+                $this->Flash->success(__('The regency has been deleted.'));
             } else {
-                $this->Flash->error(__('The province could not be deleted. Please, try again.'));
+                $this->Flash->error(__('The regency could not be deleted. Please, try again.'));
             }
         } catch (Exception $e) {
-            $this->Flash->error(__('The province could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The regency could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

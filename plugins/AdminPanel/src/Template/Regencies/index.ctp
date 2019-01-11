@@ -1,32 +1,16 @@
-{#
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @since         2.0.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-#}
 <?php
 /**
- * @var \{{ namespace }}\View\AppView $this
- * @var \{{ entityClass }}[]|\Cake\Collection\CollectionInterface ${{ pluralVar }}
+ * @var \App\View\AppView $this
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $regencies
  * nevix
  */
 ?>
-{% set fields = Bake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text']) %}
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('{{ pluralHumanName }}') ?>
+                    <?= __('Regencies') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -40,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('{{ pluralHumanName }}') ?>
+                                <?= __('Regencies') ?>
                             </span>
                         </a>
                     </li>
@@ -50,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List {{ pluralHumanName }}') ?>
+                                <?= __('List Regencies') ?>
                             </span>
                         </a>
                     </li>
@@ -65,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List {{ pluralHumanName }}') ?>
+                            <?= __('List Regencies') ?>
                         </h3>
                     </div>
                 </div>
@@ -75,7 +59,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New {{ singularHumanName }}') ?></span>
+                                    <span><?= __('New Regency') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -104,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-{{ pluralVar }}"></div>
+                <div class="m_datatable" id="table-regencies"></div>
 
             </div>
         </div>
@@ -148,7 +132,7 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-{{ pluralVar }}').mDatatable({
+            var datatable = $('#table-regencies').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -192,10 +176,8 @@
                 },
                 order: [[ 0, "desc" ]],
                 columns: [
-{% for field in fields %}
-{% if field == 'id' %}
                     {
-                        field: '{{ field }}',
+                        field: 'id',
                         title: '#',
                         sortable: true,
                         width: 40,
@@ -205,16 +187,20 @@
                             return ++index;
                         }
                     },
-{% else %}
                     {
-                        field: '{{ field }}',
-                        title: '{{ field | capitalize}}',
+                        field: 'province_id',
+                        title: 'Province_id',
                         template: function(row) {
-                            return row.{{ field }};
+                            return row.province_id;
                         }
                     },
-{% endif %}
-{% endfor %}
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        template: function(row) {
+                            return row.name;
+                        }
+                    },
                     /** Action button **/
                     {
                         field: "Actions",

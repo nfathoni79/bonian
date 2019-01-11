@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface $province
+ * @var \Cake\Datasource\EntityInterface $regency
  */
 ?>
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
@@ -9,7 +9,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Province') ?>
+                    <?= __('Regency') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -23,7 +23,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Province') ?>
+                                <?= __('Regency') ?>
                             </span>
                         </a>
                     </li>
@@ -33,7 +33,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Province') ?>
+                                <?= __('List Regency') ?>
                             </span>
                         </a>
                     </li>
@@ -43,7 +43,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Edit Province') ?>
+                                <?= __('Add Regency') ?>
                             </span>
                         </a>
                     </li>
@@ -58,7 +58,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Edit Province') ?>
+                            <?= __('Add Regency') ?>
                         </h3>
                     </div>
                 </div>
@@ -68,12 +68,13 @@
             </div>
 
 
-            <?= $this->Form->create($province,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form']); ?>
+            <?= $this->Form->create($regency,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form']); ?>
             <div class="m-portlet__body">
 
             <?php
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
+                echo $this->Form->control('province_id', ['options' => $provinces, 'class' => $default_class]);
                 echo $this->Form->control('name',['class' => $default_class]);
             ?>
             </div>
