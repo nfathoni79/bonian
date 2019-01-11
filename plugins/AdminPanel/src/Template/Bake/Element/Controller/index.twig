@@ -21,12 +21,7 @@
      */
     public function index()
     {
-{% set belongsTo = Bake.aliasExtractor(modelObj, 'BelongsTo') %}
-{% if belongsTo %}
-        $this->paginate = [
-            'contain' => [{{ Bake.stringifyList(belongsTo, {'indent': false})|raw }}]
-        ];
-{% endif %}
+
 
         if ($this->request->is('ajax')) {
             $this->viewBuilder()->setLayout('ajax');
@@ -38,6 +33,10 @@
             /** custom default query : select, where, contain, etc. **/
             $data = $this->{{ currentModelName }}->find('all')
                 ->select();
+{% set belongsTo = Bake.aliasExtractor(modelObj, 'BelongsTo') %}
+{% if belongsTo %}
+            $data->contain([{{ Bake.stringifyList(belongsTo, {'indent': false})|raw }}]);
+{% endif %}
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
@@ -76,7 +75,7 @@
             return $this->response->withType('application/json')
             ->withStringBody(json_encode($result));
         }
-        ${{ pluralName }} = $this->paginate($this->{{ currentModelName }});
+
 
         $this->set(compact('{{ pluralName }}'));
     }

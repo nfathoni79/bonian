@@ -193,6 +193,7 @@
                 order: [[ 0, "desc" ]],
                 columns: [
 {% for field in fields %}
+{% set isKey = false %}
 {% if field == 'id' %}
                     {
                         field: '{{ field }}',
@@ -206,6 +207,18 @@
                         }
                     },
 {% else %}
+{% if associations.BelongsTo %}
+{% for alias, details in associations.BelongsTo if field == details.foreignKey %}
+{% set isKey = true %}
+                    {
+                        field: '{{ field }}',
+                        title: '{{ details.property | capitalize}} {{ details.displayField |  capitalize}}',
+                        template: function(row) {
+                            return row.{{ details.property }}.{{ details.displayField }};
+                        }
+                    },
+{% endfor %}
+{% if isKey is not same as(true) %}
                     {
                         field: '{{ field }}',
                         title: '{{ field | capitalize}}',
@@ -213,6 +226,10 @@
                             return row.{{ field }};
                         }
                     },
+{% endif %}
+
+{% endif %}
+
 {% endif %}
 {% endfor %}
                     /** Action button **/
