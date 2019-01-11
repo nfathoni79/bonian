@@ -53,6 +53,12 @@ custom styles.
 ## Rajaongkir account
 
 ```bash
+php bin/cake.php bake controller --plugin AdminPanel --theme AdminPanel Regencies
+```
+
+## Rajaongkir account
+
+```bash
 username  : zolaku 
 Password  : zo101010 
 ```
