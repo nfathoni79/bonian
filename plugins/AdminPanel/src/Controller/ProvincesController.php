@@ -36,17 +36,11 @@ class ProvincesController extends AppController
                 if (isset($query['generalSearch'])) {
                     $search = $query['generalSearch'];
                     unset($query['generalSearch']);
-                    $data->where(function (QueryExpression $exp, Query $query) use($search) {
-                        /**
-                            custom field for general search
-                            ex : 'Users.email LIKE' => '%' . $search .'%'
-                        **/
-                        $orConditions = $exp->or_([
-                            'Provinces.name LIKE' => '%' . $search .'%',
-                        ]);
-                        return $exp
-                            ->add($orConditions);
-                    });
+                    /**
+                    custom field for general search
+                    ex : 'Users.email LIKE' => '%' . $search .'%'
+                     **/
+                    $data->where(['Provinces.name LIKE' => '%' . $search .'%']);
                 }
                 $data->where($query);
             }

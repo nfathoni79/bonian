@@ -43,7 +43,6 @@
         </div>
     </div>
 
-
     <div class="m-content">
         <div class="m-portlet m-portlet--mobile">
             <div class="m-portlet__head">
@@ -55,9 +54,19 @@
                     </div>
                 </div>
                 <div class="m-portlet__head-tools">
-
+                    <ul class="m-portlet__nav">
+                        <li class="m-portlet__nav-item">
+                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                                <span>
+                                    <i class="la la-plus"></i>
+                                    <span><?= __('New Province') ?></span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
+
             <div class="m-portlet__body">
                 <?= $this->Flash->render() ?>
                 <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
@@ -75,17 +84,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xl-4 order-1 order-xl-2 m--align-right">
-                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-info m-btn m-btn--custom m-btn--icon m-btn--air">
-                                <span>
-                                    <i class="fa fa-plus-circle"></i>
-                                    <span>
-                                        New User
-                                    </span>
-                                </span>
-                            </a>
-                            <div class="m-separator m-separator--dashed d-xl-none"></div>
                         </div>
                     </div>
                 </div>
@@ -151,26 +149,42 @@
                 search: {
                     input: $('#generalSearch'),
                 },
-
+                order: [[ 0, "desc" ]],
                 columns: [
                     {
                         field: 'id',
                         title: '#',
-                        sortable: false, // disable sort for this column
+                        sortable: true,
                         width: 40,
                         selector: false,
                         textAlign: 'center',
-                        template: function(row, index, datatable) {
-                            return ++index;
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        template: function(row) {
+                            return row.name;
+                        }
+                    },
+                    /** Action button **/
+                    {
+                        field: "Actions",
+                        width: 110,
+                        title: "Actions",
+                        sortable: false,
+                        overflow: 'visible',
+                        template: function (row, index, datatable) {
+                            return '<a href="javascript:view_data('+row.id+');" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="VIew"><i class="la la-eye"></i></a><a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
+                        }
+                    }
                 ]
             });
-
             var query = datatable.getDataSourceQuery();
 
         };
-
         return {
             init: function() {
                 demo();
