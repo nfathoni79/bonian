@@ -1,32 +1,16 @@
-{#
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @since         2.0.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-#}
 <?php
 /**
- * @var \{{ namespace }}\View\AppView $this
- * @var \{{ entityClass }}[]|\Cake\Collection\CollectionInterface ${{ pluralVar }}
+ * @var \App\View\AppView $this
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $provinces
  * nevix
  */
 ?>
-{% set fields = Bake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text']) %}
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('{{ pluralHumanName }}') ?>
+                    <?= __('Provinces') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -40,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('{{ pluralHumanName }}') ?>
+                                <?= __('Provinces') ?>
                             </span>
                         </a>
                     </li>
@@ -50,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List {{ pluralHumanName }}') ?>
+                                <?= __('List Provinces') ?>
                             </span>
                         </a>
                     </li>
@@ -66,7 +50,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List {{ pluralHumanName }}') ?>
+                            <?= __('List Provinces') ?>
                         </h3>
                     </div>
                 </div>
@@ -106,7 +90,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-{{ pluralVar }}"></div>
+                <div class="m_datatable" id="table-provinces"></div>
 
             </div>
         </div>
@@ -125,7 +109,7 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-{{ pluralVar }}').mDatatable({
+            var datatable = $('#table-provinces').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -202,56 +186,3 @@
 
 
 
-
-<div class="{{ pluralVar }} index large-9 medium-8 columns content">
-    <h3><?= __('{{ pluralHumanName }}') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-{% for field in fields %}
-                <th scope="col"><?= $this->Paginator->sort('{{ field }}') ?></th>
-{% endfor %}
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach (${{ pluralVar }} as ${{ singularVar }}): ?>
-            <tr>
-{% for field in fields %}
-{% set isKey = false %}
-{% if associations.BelongsTo %}
-{% for alias, details in associations.BelongsTo if field == details.foreignKey %}
-{% set isKey = true %}
-                <td><?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
-{% endfor %}
-{% endif %}
-{% if isKey is not same as(true) %}
-{% set columnData = Bake.columnData(field, schema) %}
-{% if columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
-                <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
-{% else %}
-                <td><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
-{% endif %}
-{% endif %}
-{% endfor %}
-{% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', {{ pk|raw }}]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', {{ pk|raw }}]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', {{ pk|raw }}], ['confirm' => __('Are you sure you want to delete # {0}?', {{ pk|raw }})]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{ '{{' }}page{{ '}}' }} of {{ '{{' }}pages{{ '}}' }}, showing {{ '{{' }}current{{ '}}' }} record(s) out of {{ '{{' }}count{{ '}}' }} total')]) ?></p>
-    </div>
-</div>

@@ -30,104 +30,29 @@
                 ]
             ],
             [
-                'name' => 'Clients',
-                'url' => '#',
-                'icon' => 'm-menu__link-icon flaticon-avatar',
-                'children' => [
-                    [
-                        'name' => 'List Clients',
-                        'url' => ['controller' => 'Clients', 'action' => 'index'],
-                        'icon' => 'm-menu__link-icon flaticon-list-3'
-                    ],
-                    [
-                        'name' => 'Client Balances',
-                        'url' => ['controller' => 'Clients', 'action' => 'listbalance'],
-                        'icon' => 'm-menu__link-icon flaticon-list-3'
-                    ],
-                ]
-            ],
-            [
-                'name' => 'Pages',
-                'url' => '#',
-                'icon' => 'm-menu__link-icon flaticon-file-2',
-                'children' => [
-                    [
-                        'name' => 'List Pages',
-                        'url' => ['controller' => 'Pages', 'action' => 'index'],
-                        'icon' => 'm-menu__link-icon flaticon-list-3'
-                    ],
-                    [
-                        'name' => 'Add Page',
-                        'url' => ['controller' => 'Pages', 'action' => 'add'],
-                        'icon' => 'm-menu__link-icon la la-pencil-square-o'
-                    ],
-                ]
-            ],
-            [
-                'name' => 'Roadmaps',
-                'url' => '#',
-                'icon' => 'm-menu__link-icon flaticon-more-v2',
-                'children' => [
-                    [
-                        'name' => 'List Roadmaps',
-                        'url' => ['controller' => 'Roadmaps', 'action' => 'index'],
-                        'icon' => 'm-menu__link-icon flaticon-list-3'
-                    ],
-                    [
-                        'name' => 'Add Roadmap',
-                        'url' => ['controller' => 'Roadmaps', 'action' => 'add'],
-                        'icon' => 'm-menu__link-icon la la-pencil-square-o'
-                    ],
-                ]
-            ],
-            [
-                'name' => 'Faqs',
-                'url' => '#',
-                'icon' => 'm-menu__link-icon flaticon-exclamation',
-                'children' => [
-                    [
-                        'name' => 'List Faqs',
-                        'url' => ['controller' => 'Faqs', 'action' => 'index'],
-                        'icon' => 'm-menu__link-icon flaticon-list-3'
-                    ],
-                    [
-                        'name' => 'Add Faq',
-                        'url' => ['controller' => 'Faqs', 'action' => 'add'],
-                        'icon' => 'm-menu__link-icon la la-pencil-square-o'
-                    ],
-                ]
-            ],
-            [
-                'name' => 'KYC Approval',
-                'url' => ['controller' => 'Verification', 'action' => 'index'],
-                'icon' => 'm-menu__link-icon flaticon-line-graph',
-                'children' => []
-            ],[
-                'name' => 'Withdrawl Aproval',
-                'url' => ['controller' => 'Withdrawal', 'action' => 'index'],
-                'icon' => 'm-menu__link-icon flaticon-line-graph',
+                'name' => 'Customers',
+                'url' => ['controller' => 'Customers', 'action' => 'index'],
+                'icon' => 'm-menu__link-icon flaticon-users',
                 'children' => []
             ],
             [
-                'name' => 'Change Requests',
-                'url' => '#',
-                'icon' => 'm-menu__link-icon flaticon-edit-1',
+                'name' => 'Configurations',
+                'url' => ['controller' => 'Customers', 'action' => 'index'],
+                'icon' => 'm-menu__link-icon flaticon-settings',
                 'children' => [
                     [
-                        'name' => 'Email',
-                        'url' => ['controller' => 'ChangeRequests', 'action' => 'email'],
-                        'icon' => 'm-menu__link-icon flaticon-email'
-                    ],
-                    [
-                        'name' => 'Phone',
-                        'url' => ['controller' => 'ChangeRequests', 'action' => 'phone'],
-                        'icon' => 'm-menu__link-icon flaticon-support'
-                    ],
-                    [
-                        'name' => 'Address',
-                        'url' => ['controller' => 'ChangeRequests', 'action' => 'address'],
-                        'icon' => 'm-menu__link-icon flaticon-map-location'
-                    ],
+                        'name' => 'Master Data',
+                        'url' => '#',
+                        'icon' => '',
+                        'children' => [
+                            [
+                                'name' => 'Province',
+                                'url' => ['controller' => 'Provinces', 'action' => 'index'],
+                                'icon' => '',
+                                'children' => []
+                            ]
+                        ]
+                    ]
                 ]
             ],
         ];
