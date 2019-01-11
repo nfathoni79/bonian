@@ -211,7 +211,7 @@
 {% for alias, details in associations.BelongsTo if field == details.foreignKey %}
 {% set isKey = true %}
                     {
-                        field: '{{ field }}',
+                        field: '{{ details.alias }}.{{ details.displayField }}',
                         title: '{{ details.property | capitalize}} {{ details.displayField |  capitalize}}',
                         template: function(row) {
                             return row.{{ details.property }}.{{ details.displayField }};
@@ -221,7 +221,7 @@
 {% endif %}
 {% if isKey is not same as(true) %}
                     {
-                        field: '{{ field }}',
+                        field: '{{ modelClass | replace({ (plugin ~ "."): "" }) }}.{{ field }}',
                         title: '{{ field | capitalize}}',
                         template: function(row) {
                             return row.{{ field }};
