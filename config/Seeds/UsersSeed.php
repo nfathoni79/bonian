@@ -20,7 +20,7 @@ class UsersSeed extends AbstractSeed
     {
         $data = [
             [
-                'id' => '3',
+                'id' => '1',
                 'email' => 'admin@admin.com',
                 'password' => '$2y$10$kKYlt.dPlQkpINQMmVrZGeV.nIh6P5mrHEHq6Ms56heAfhRWe2d9m',
                 'first_name' => 'Superadmin',

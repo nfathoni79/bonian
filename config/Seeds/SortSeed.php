@@ -6,6 +6,9 @@ class SortSeed extends AbstractSeed
 {
     public function run()
     {
+        $this->call('AcosSeed');
+        $this->call('ArosSeed');
+        $this->call('ArosAcosSeed');
         $this->call('ProvincesSeed');
         $this->call('RegenciesSeed');
         $this->call('DistrictsSeed');
