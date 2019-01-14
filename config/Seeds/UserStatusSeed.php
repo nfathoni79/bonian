@@ -21,15 +21,11 @@ class UserStatusSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'name' => 'Active',
-                'created' => '0000-00-00 00:00:00',
-                'modified' => '0000-00-00 00:00:00',
+                'name' => 'Active'
             ],
             [
                 'id' => '2',
-                'name' => 'In Active',
-                'created' => '0000-00-00 00:00:00',
-                'modified' => '0000-00-00 00:00:00',
+                'name' => 'In Active'
             ],
         ];
 
