@@ -15,7 +15,7 @@ class CreateTableProductStatuses extends AbstractMigration
         $table = $this->table('product_statuses');
         $table->addColumn('name', 'string', [
             'default' => null,
-            'limit' => 2
+            'limit' => 9
         ]);
         $table->create();
     }
