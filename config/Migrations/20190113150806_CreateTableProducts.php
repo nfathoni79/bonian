@@ -100,11 +100,11 @@ class CreateTableProducts extends AbstractMigration
             'limit' => 2
         ]);
         $table->addColumn('created', 'datetime', [
-            'default' => 0,
+            'default' => null,
             'null' => true
         ]);
         $table->addColumn('modified', 'datetime', [
-            'default' => 0,
+            'default' => null,
             'null' => true
         ]);
         $table->addIndex('product_status_id');
