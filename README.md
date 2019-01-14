@@ -50,10 +50,17 @@ The app skeleton uses a subset of [Foundation](http://foundation.zurb.com/) (v5)
 framework by default. You can, however, replace it with any other library or
 custom styles.
 
-## Rajaongkir account
+## Bake By Admin Theme
 
 ```bash
 php bin/cake.php bake controller --plugin AdminPanel --theme AdminPanel Regencies
+```
+
+## Migrations Seed By Class SortSeed
+
+```bash
+php bin/cake.php migrations seed --seed SortSeed
+
 ```
 
 ## Rajaongkir account

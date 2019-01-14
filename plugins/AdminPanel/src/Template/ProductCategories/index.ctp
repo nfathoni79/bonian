@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $regencies
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $productCategories
  * nevix
  */
 ?>
@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Regencies') ?>
+                    <?= __('Product Categories') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Regencies') ?>
+                                <?= __('Product Categories') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Regencies') ?>
+                                <?= __('List Product Categories') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List Regencies') ?>
+                            <?= __('List Product Categories') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New Regency') ?></span>
+                                    <span><?= __('New Product Category') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -88,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-regencies"></div>
+                <div class="m_datatable" id="table-productCategories"></div>
 
             </div>
         </div>
@@ -132,7 +132,7 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-regencies').mDatatable({
+            var datatable = $('#table-productCategories').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -188,18 +188,50 @@
                         }
                     },
                     {
-                        field: 'Provinces.name',
-                        title: 'Province Name',
+                        field: 'ParentProductCategories.name',
+                        title: 'Parent Name',
                         template: function(row) {
-                            return row.province.name;
+                            if(row.parent_product_category){
+                                return row.parent_product_category.name;
+                            }else{
+                                return null;
+                            }
                         }
                     },
 
                     {
-                        field: 'Regencies.name',
+                        field: 'ProductCategories.name',
                         title: 'Name',
                         template: function(row) {
                             return row.name;
+                        }
+                    },
+
+                    {
+                        field: 'ProductCategories.slug',
+                        title: 'Slug',
+                        template: function(row) {
+                            return row.slug;
+                        }
+                    },
+
+                    {
+                        field: 'ProductCategories.description',
+                        title: 'Description',
+                        template: function(row) {
+                            return row.description;
+                        }
+                    },
+
+                    {
+                        field: 'ProductCategories.path',
+                        title: 'Path',
+                        template: function(row) {
+                            if(row.path){
+                                return '<img src="<?= $this->Url->build('/files/ProductCategories/path/thumbnail-'); ?>'+row.path+'">';
+                            }else{
+                                return null;
+                            }
                         }
                     },
 

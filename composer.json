@@ -11,6 +11,9 @@
         "cakephp/migrations": "^2.0.0",
         "cakephp/plugin-installer": "^1.0",
         "icings/menu": "^3.0",
+        "imagine/imagine": "^1.2",
+        "josegonzalez/cakephp-upload": "^4.0",
+        "josegonzalez/dotenv": "3.*",
         "mobiledetect/mobiledetectlib": "2.*"
     },
     "require-dev": {

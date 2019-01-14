@@ -12,7 +12,7 @@ class CreateTableAttributes extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('table_attributes');
+        $table = $this->table('attributes');
         $table->addColumn('attribute_group_id', 'integer', [
             'default' => null,
             'limit' => 5

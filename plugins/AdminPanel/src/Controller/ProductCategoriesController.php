@@ -4,12 +4,12 @@ namespace AdminPanel\Controller;
 use AdminPanel\Controller\AppController;
 
 /**
- * Regencies Controller
- * @property \AdminPanel\Model\Table\RegenciesTable $Regencies
+ * ProductCategories Controller
+ * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  *
- * @method \AdminPanel\Model\Entity\Regency[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \AdminPanel\Model\Entity\ProductCategory[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class RegenciesController extends AppController
+class ProductCategoriesController extends AppController
 {
 
     /**
@@ -17,6 +17,13 @@ class RegenciesController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('AdminPanel.ProductCategories');
+    }
+
+
     public function index()
     {
 
@@ -29,9 +36,9 @@ class RegenciesController extends AppController
             $query = $this->request->getData('query');
 
             /** custom default query : select, where, contain, etc. **/
-            $data = $this->Regencies->find('all')
+            $data = $this->ProductCategories->find('all')
                 ->select();
-            $data->contain(['Provinces']);
+            $data->contain(['ParentProductCategories']);
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
@@ -41,7 +48,8 @@ class RegenciesController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Regencies.name LIKE' => '%' . $search .'%']);
+                    $data->where(['ProductCategories.name LIKE' => '%' . $search .'%']);
+                    $data->where(['ParentProductCategories.name LIKE' => '%' . $search .'%']);
                 }
                 $data->where($query);
             }
@@ -72,24 +80,24 @@ class RegenciesController extends AppController
         }
 
 
-        $this->set(compact('regencies'));
+        $this->set(compact('productCategories'));
     }
 
     /**
      * View method
      *
-     * @param string|null $id Regency id.
+     * @param string|null $id Product Category id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
         $this->viewBuilder()->setLayout('ajax');
-        $regency = $this->Regencies->get($id, [
-            'contain' => ['Provinces', 'CustomerAddresses', 'Districts']
+        $productCategory = $this->ProductCategories->get($id, [
+            'contain' => ['ParentProductCategories', 'ChildProductCategories', 'ProductToCategories']
         ]);
 
-        $this->set('regency', $regency);
+        $this->set('productCategory', $productCategory);
     }
 
     /**
@@ -99,64 +107,64 @@ class RegenciesController extends AppController
      */
     public function add()
     {
-        $regency = $this->Regencies->newEntity();
+        $productCategory = $this->ProductCategories->newEntity();
         if ($this->request->is('post')) {
-            $regency = $this->Regencies->patchEntity($regency, $this->request->getData());
-            if ($this->Regencies->save($regency)) {
-                $this->Flash->success(__('The regency has been saved.'));
+            $productCategory = $this->ProductCategories->patchEntity($productCategory, $this->request->getData());
+            if ($this->ProductCategories->save($productCategory)) {
+                $this->Flash->success(__('The product category has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The regency could not be saved. Please, try again.'));
+            $this->Flash->error(__('The product category could not be saved. Please, try again.'));
         }
-        $provinces = $this->Regencies->Provinces->find('list', ['limit' => 200]);
-        $this->set(compact('regency', 'provinces'));
+        $parentProductCategories = $this->ProductCategories->ParentProductCategories->find('list', ['limit' => 200]);
+        $this->set(compact('productCategory', 'parentProductCategories'));
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Regency id.
+     * @param string|null $id Product Category id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $regency = $this->Regencies->get($id, [
+        $productCategory = $this->ProductCategories->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $regency = $this->Regencies->patchEntity($regency, $this->request->getData());
-            if ($this->Regencies->save($regency)) {
-                $this->Flash->success(__('The regency has been saved.'));
+            $productCategory = $this->ProductCategories->patchEntity($productCategory, $this->request->getData());
+            if ($this->ProductCategories->save($productCategory)) {
+                $this->Flash->success(__('The product category has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The regency could not be saved. Please, try again.'));
+            $this->Flash->error(__('The product category could not be saved. Please, try again.'));
         }
-        $provinces = $this->Regencies->Provinces->find('list', ['limit' => 200]);
-        $this->set(compact('regency', 'provinces'));
+        $parentProductCategories = $this->ProductCategories->ParentProductCategories->find('list', ['limit' => 200]);
+        $this->set(compact('productCategory', 'parentProductCategories'));
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Regency id.
+     * @param string|null $id Product Category id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $regency = $this->Regencies->get($id);
+        $productCategory = $this->ProductCategories->get($id);
         try {
-            if ($this->Regencies->delete($regency)) {
-                $this->Flash->success(__('The regency has been deleted.'));
+            if ($this->ProductCategories->delete($productCategory)) {
+                $this->Flash->success(__('The product category has been deleted.'));
             } else {
-                $this->Flash->error(__('The regency could not be deleted. Please, try again.'));
+                $this->Flash->error(__('The product category could not be deleted. Please, try again.'));
             }
         } catch (Exception $e) {
-            $this->Flash->error(__('The regency could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The product category could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

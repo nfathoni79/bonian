@@ -4,12 +4,12 @@ namespace AdminPanel\Controller;
 use AdminPanel\Controller\AppController;
 
 /**
- * Regencies Controller
- * @property \AdminPanel\Model\Table\RegenciesTable $Regencies
+ * Villages Controller
+ * @property \AdminPanel\Model\Table\VillagesTable $Villages
  *
- * @method \AdminPanel\Model\Entity\Regency[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \AdminPanel\Model\Entity\Village[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class RegenciesController extends AppController
+class VillagesController extends AppController
 {
 
     /**
@@ -29,9 +29,9 @@ class RegenciesController extends AppController
             $query = $this->request->getData('query');
 
             /** custom default query : select, where, contain, etc. **/
-            $data = $this->Regencies->find('all')
+            $data = $this->Villages->find('all')
                 ->select();
-            $data->contain(['Provinces']);
+            $data->contain(['Districts']);
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
@@ -41,7 +41,7 @@ class RegenciesController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Regencies.name LIKE' => '%' . $search .'%']);
+                    $data->where(['Villages.name LIKE' => '%' . $search .'%']);
                 }
                 $data->where($query);
             }
@@ -72,24 +72,24 @@ class RegenciesController extends AppController
         }
 
 
-        $this->set(compact('regencies'));
+        $this->set(compact('villages'));
     }
 
     /**
      * View method
      *
-     * @param string|null $id Regency id.
+     * @param string|null $id Village id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
         $this->viewBuilder()->setLayout('ajax');
-        $regency = $this->Regencies->get($id, [
-            'contain' => ['Provinces', 'CustomerAddresses', 'Districts']
+        $village = $this->Villages->get($id, [
+            'contain' => ['Districts', 'CustomerAddresses']
         ]);
 
-        $this->set('regency', $regency);
+        $this->set('village', $village);
     }
 
     /**
@@ -99,64 +99,64 @@ class RegenciesController extends AppController
      */
     public function add()
     {
-        $regency = $this->Regencies->newEntity();
+        $village = $this->Villages->newEntity();
         if ($this->request->is('post')) {
-            $regency = $this->Regencies->patchEntity($regency, $this->request->getData());
-            if ($this->Regencies->save($regency)) {
-                $this->Flash->success(__('The regency has been saved.'));
+            $village = $this->Villages->patchEntity($village, $this->request->getData());
+            if ($this->Villages->save($village)) {
+                $this->Flash->success(__('The village has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The regency could not be saved. Please, try again.'));
+            $this->Flash->error(__('The village could not be saved. Please, try again.'));
         }
-        $provinces = $this->Regencies->Provinces->find('list', ['limit' => 200]);
-        $this->set(compact('regency', 'provinces'));
+        $districts = $this->Villages->Districts->find('list', ['limit' => 200]);
+        $this->set(compact('village', 'districts'));
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Regency id.
+     * @param string|null $id Village id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $regency = $this->Regencies->get($id, [
+        $village = $this->Villages->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $regency = $this->Regencies->patchEntity($regency, $this->request->getData());
-            if ($this->Regencies->save($regency)) {
-                $this->Flash->success(__('The regency has been saved.'));
+            $village = $this->Villages->patchEntity($village, $this->request->getData());
+            if ($this->Villages->save($village)) {
+                $this->Flash->success(__('The village has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The regency could not be saved. Please, try again.'));
+            $this->Flash->error(__('The village could not be saved. Please, try again.'));
         }
-        $provinces = $this->Regencies->Provinces->find('list', ['limit' => 200]);
-        $this->set(compact('regency', 'provinces'));
+        $districts = $this->Villages->Districts->find('list', ['limit' => 200]);
+        $this->set(compact('village', 'districts'));
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Regency id.
+     * @param string|null $id Village id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $regency = $this->Regencies->get($id);
+        $village = $this->Villages->get($id);
         try {
-            if ($this->Regencies->delete($regency)) {
-                $this->Flash->success(__('The regency has been deleted.'));
+            if ($this->Villages->delete($village)) {
+                $this->Flash->success(__('The village has been deleted.'));
             } else {
-                $this->Flash->error(__('The regency could not be deleted. Please, try again.'));
+                $this->Flash->error(__('The village could not be deleted. Please, try again.'));
             }
         } catch (Exception $e) {
-            $this->Flash->error(__('The regency could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The village could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
