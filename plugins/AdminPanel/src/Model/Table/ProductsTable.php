@@ -129,8 +129,7 @@ class ProductsTable extends Table
         $validator
             ->scalar('slug')
             ->maxLength('slug', 255)
-            ->allowEmptyString('slug')
-            ->add('slug', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->allowEmptyString('slug');
 
         $validator
             ->scalar('model')
@@ -163,12 +162,12 @@ class ProductsTable extends Table
             ->allowEmptyString('shipping', false);
 
         $validator
-            ->numeric('price')
+            ->decimal('price')
             ->requirePresence('price', 'create')
             ->allowEmptyString('price', false);
 
         $validator
-            ->numeric('price_discount')
+            ->decimal('price_discount')
             ->requirePresence('price_discount', 'create')
             ->allowEmptyString('price_discount', false);
 
@@ -205,7 +204,6 @@ class ProductsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['slug']));
         $rules->add($rules->existsIn(['product_stock_status_id'], 'ProductStockStatuses'));
         $rules->add($rules->existsIn(['product_weight_class_id'], 'ProductWeightClasses'));
         $rules->add($rules->existsIn(['product_status_id'], 'ProductStatuses'));

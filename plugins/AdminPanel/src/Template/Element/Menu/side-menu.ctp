@@ -35,6 +35,45 @@
                 'icon' => 'm-menu__link-icon flaticon-users',
                 'children' => []
             ],
+
+            [
+                'name' => 'Products',
+                'url' => ['controller' => 'Products', 'action' => 'index'],
+                'icon' => 'm-menu__link-icon flaticon-box',
+                'children' => [
+                    [
+                        'name' => 'Product Lists',
+                        'url' => ['controller' => 'Products', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Product Categories',
+                        'url' => ['controller' => 'ProductCategories', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Product Attribute',
+                        'url' => '#',
+                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                        'children' => [
+                            [
+                                'name' => 'Attribute Group',
+                                'url' => ['controller' => 'AttributeGroups', 'action' => 'index'],
+                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                                'children' => []
+                            ],
+                            [
+                                'name' => 'Attribute',
+                                'url' => ['controller' => 'Attributes', 'action' => 'index'],
+                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                                'children' => []
+                            ],
+                        ]
+                    ],
+                ]
+            ],
             [
                 'name' => 'Configurations',
                 'url' => ['controller' => 'Customers', 'action' => 'index'],
@@ -43,30 +82,30 @@
                     [
                         'name' => 'Master Data',
                         'url' => '#',
-                        'icon' => '',
+                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                         'children' => [
                             [
                                 'name' => 'Province',
                                 'url' => ['controller' => 'Provinces', 'action' => 'index'],
-                                'icon' => '',
+                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                                 'children' => []
                             ],
                             [
                                 'name' => 'Regency',
                                 'url' => ['controller' => 'Regencies', 'action' => 'index'],
-                                'icon' => '',
+                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                                 'children' => []
                             ],
                             [
                                 'name' => 'District',
                                 'url' => ['controller' => 'Districts', 'action' => 'index'],
-                                'icon' => '',
+                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                                 'children' => []
                             ],
                             [
                                 'name' => 'Village',
                                 'url' => ['controller' => 'Villages', 'action' => 'index'],
-                                'icon' => '',
+                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                                 'children' => []
                             ],
                         ]

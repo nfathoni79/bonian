@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $productCategories
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $products
  * nevix
  */
 ?>
@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Product Categories') ?>
+                    <?= __('Products') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Product Categories') ?>
+                                <?= __('Products') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Product Categories') ?>
+                                <?= __('List Products') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List Product Categories') ?>
+                            <?= __('List Products') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New Product Category') ?></span>
+                                    <span><?= __('New Product') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -88,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-productCategories"></div>
+                <div class="m_datatable" id="table-products"></div>
 
             </div>
         </div>
@@ -132,7 +132,7 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-productCategories').mDatatable({
+            var datatable = $('#table-products').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -188,19 +188,14 @@
                         }
                     },
                     {
-                        field: 'ParentProductCategories.name',
-                        title: 'Parent Name',
+                        field: '#',
+                        title: 'Image',
                         template: function(row) {
-                            if(row.parent_product_category){
-                                return row.parent_product_category.name;
-                            }else{
-                                return null;
-                            }
+                            // return row.name;
                         }
                     },
-
                     {
-                        field: 'ProductCategories.name',
+                        field: 'Products.name',
                         title: 'Name',
                         template: function(row) {
                             return row.name;
@@ -208,30 +203,58 @@
                     },
 
                     {
-                        field: 'ProductCategories.slug',
-                        title: 'Slug',
+                        field: 'Products.code',
+                        title: 'Code',
                         template: function(row) {
-                            return row.slug;
+                            return row.code;
                         }
                     },
 
                     {
-                        field: 'ProductCategories.description',
-                        title: 'Description',
+                        field: 'Products.qty',
+                        title: 'Qty',
                         template: function(row) {
-                            return row.description;
+                            return row.qty;
                         }
                     },
 
                     {
-                        field: 'ProductCategories.path',
-                        title: 'Images',
+                        field: 'ProductStockStatuses.name',
+                        title: 'Product Stock Status',
                         template: function(row) {
-                            if(row.path){
-                                return '<img src="<?= $this->Url->build('/files/ProductCategories/path/thumbnail-'); ?>'+row.path+'">';
-                            }else{
-                                return null;
-                            }
+                            return row.product_stock_status.name;
+                        }
+                    },
+
+
+                    {
+                        field: 'Products.price',
+                        title: 'Price',
+                        template: function(row) {
+                            return row.price;
+                        }
+                    },
+
+                    {
+                        field: 'Products.price_discount',
+                        title: 'Price_discount',
+                        template: function(row) {
+                            return row.price_discount;
+                        }
+                    },
+                    {
+                        field: 'ProductStatuses.name',
+                        title: 'Product Status',
+                        template: function(row) {
+                            return row.product_status.name;
+                        }
+                    },
+
+                    {
+                        field: 'Products.view',
+                        title: 'View',
+                        template: function(row) {
+                            return row.view;
                         }
                     },
 

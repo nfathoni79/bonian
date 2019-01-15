@@ -38,6 +38,10 @@ class CreateTableProductCategories extends AbstractMigration
             'default' => null,
             'limit' => 255
         ]);
+        $table->addColumn('path', 'string', [
+            'default' => null,
+            'limit' => 255
+        ]);
         $table->create();
     }
 }
