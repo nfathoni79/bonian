@@ -17,14 +17,14 @@ class CreateTableProductStockMutations extends AbstractMigration
             'default' => null,
             'limit' => 9
         ]);
-        $table->addColumn('product_stock_mutation_type_id', 'integer', [
-            'default' => null,
-            'limit' => 3
-        ]);
-        $table->addColumn('order_id', 'integer', [
+        $table->addColumn('product_option_values_id', 'integer', [
             'default' => null,
             'limit' => 9,
             'null' => true
+        ]);
+        $table->addColumn('product_stock_mutation_type_id', 'integer', [
+            'default' => null,
+            'limit' => 3
         ]);
         $table->addColumn('amount', 'decimal', [
             'default' => null,
@@ -40,8 +40,8 @@ class CreateTableProductStockMutations extends AbstractMigration
             'default' => null,
             'null' => true
         ]);
-        $table->addIndex('order_id');
-        $table->addForeignKey('order_id', 'orders', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
+        $table->addIndex('product_option_values_id');
+        $table->addForeignKey('product_option_values_id', 'product_option_values', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
         $table->addIndex('product_id');
         $table->addForeignKey('product_id', 'products', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
         $table->addIndex('product_stock_mutation_type_id');

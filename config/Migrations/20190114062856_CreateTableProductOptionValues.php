@@ -37,6 +37,10 @@ class CreateTableProductOptionValues extends AbstractMigration
             'limit' => 5,
             'null' => true
         ]);
+        $table->addColumn('stock', 'integer', [
+            'default' => 0,
+            'limit' => 5
+        ]);
         $table->addIndex('product_id');
         $table->addForeignKey('product_id', 'products', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
         $table->addIndex('option_value_id');

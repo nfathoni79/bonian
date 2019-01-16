@@ -13,7 +13,7 @@ class CreateTableAttributes extends AbstractMigration
     public function change()
     {
         $table = $this->table('attributes');
-        $table->addColumn('attribute_group_id', 'integer', [
+        $table->addColumn('product_categories_id', 'integer', [
             'default' => null,
             'limit' => 5
         ]);
@@ -26,13 +26,8 @@ class CreateTableAttributes extends AbstractMigration
             'limit' => 255,
             'null' => true
         ]);
-        $table->addColumn('sort_order', 'integer', [
-            'default' => null,
-            'limit' => 4,
-            'null' => true
-        ]);
-        $table->addIndex('attribute_group_id');
-        $table->addForeignKey('attribute_group_id', 'attribute_groups', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
+        $table->addIndex('product_categories_id');
+        $table->addForeignKey('product_categories_id', 'product_categories', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
         $table->create();
     }
 }

@@ -23,6 +23,7 @@ class SortSeed extends AbstractSeed
         $this->call('ProductWeightClassesSeed');
         $this->call('UsersSeed');
         $this->call('UserStatusSeed');
+        $this->call('ProductCategoriesSeed');
 
     }
 }
