@@ -21,11 +21,6 @@ class CreateTableOrderHistories extends AbstractMigration
             'default' => null,
             'limit' => 3
         ]);
-        $table->addColumn('awb', 'string', [
-            'default' => null,
-            'limit' => 20,
-            'null' => true
-        ]);
         $table->addColumn('notify', 'integer', [
             'default' => 1,
             'limit' => 1

@@ -23,9 +23,8 @@ class CreateTableOrders extends AbstractMigration
             'limit' => 9,
             'null' => true
         ]);
-        $table->addColumn('customer_address_id', 'integer', [
+        $table->addColumn('address', 'text', [
             'default' => null,
-            'limit' => 9,
             'null' => true
         ]);
         $table->addColumn('customer_shipping_type', 'string', [
@@ -58,10 +57,8 @@ class CreateTableOrders extends AbstractMigration
         $table->addColumn('created', 'datetime', [
             'default' => null,
             'null' => true
+
         ]);
-        $table->addIndex('customer_address_id');
-        $table->addForeignKey('customer_address_id', 'customer_addresses', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
-        $table->addIndex('customer_address_id');
         $table->addForeignKey('customer_id', 'customers', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
         $table->create();
     }

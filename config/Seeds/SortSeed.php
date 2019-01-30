@@ -24,6 +24,8 @@ class SortSeed extends AbstractSeed
         $this->call('UsersSeed');
         $this->call('UserStatusSeed');
         $this->call('ProductCategoriesSeed');
+        $this->call('CouriersSeed');
+        $this->call('CourierStatusesSeed');
 
     }
 }
