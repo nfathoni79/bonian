@@ -15,7 +15,7 @@ class RegenciesController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response
      */
     public function index()
     {
