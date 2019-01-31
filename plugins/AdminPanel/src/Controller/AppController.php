@@ -40,9 +40,14 @@ class AppController extends BaseController
         ]);
 
 	}
-	
+
+    /**
+     * @param Event $event
+     * @return \Cake\Http\Response|void|null
+     */
     public function beforeRender(Event $event)
     {
+
         parent::beforeRender($event);
         $this->viewBuilder()->setClassName('AdminPanel.App');
 
