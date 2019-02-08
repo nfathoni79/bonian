@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.7.7
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 11, 2019 at 05:22 AM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.2.12
+-- Waktu pembuatan: 08 Feb 2019 pada 11.49
+-- Versi server: 10.1.30-MariaDB
+-- Versi PHP: 7.2.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,34 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `zolaku`
+-- Database: `zols`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `acl_phinxlog`
---
-
-CREATE TABLE `acl_phinxlog` (
-  `version` bigint(20) NOT NULL,
-  `migration_name` varchar(100) DEFAULT NULL,
-  `start_time` timestamp NULL DEFAULT NULL,
-  `end_time` timestamp NULL DEFAULT NULL,
-  `breakpoint` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `acl_phinxlog`
---
-
-INSERT INTO `acl_phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `breakpoint`) VALUES
-(20141229162641, 'CakePhpDbAcl', '2019-01-08 02:13:15', '2019-01-08 02:13:15', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `acos`
+-- Struktur dari tabel `acos`
 --
 
 CREATE TABLE `acos` (
@@ -55,21 +34,21 @@ CREATE TABLE `acos` (
   `model` varchar(255) DEFAULT NULL,
   `foreign_key` int(11) DEFAULT NULL,
   `alias` varchar(255) DEFAULT NULL,
-  `lft` int(11) DEFAULT NULL,
-  `rght` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `lft` int(11) NOT NULL,
+  `rght` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `acos`
+-- Dumping data untuk tabel `acos`
 --
 
 INSERT INTO `acos` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft`, `rght`) VALUES
-(1, NULL, NULL, NULL, 'controllers', 1, 102),
+(1, NULL, NULL, NULL, 'controllers', 1, 150),
 (2, 1, NULL, NULL, 'Error', 2, 3),
 (3, 1, NULL, NULL, 'Pages', 4, 7),
 (4, 3, NULL, NULL, 'display', 5, 6),
 (5, 1, NULL, NULL, 'Acl', 8, 9),
-(6, 1, NULL, NULL, 'AdminPanel', 10, 67),
+(6, 1, NULL, NULL, 'AdminPanel', 10, 115),
 (7, 6, NULL, NULL, 'Dashboard', 11, 22),
 (8, 7, NULL, NULL, 'index', 12, 13),
 (9, 7, NULL, NULL, 'view', 14, 15),
@@ -85,23 +64,23 @@ INSERT INTO `acos` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft`, `
 (19, 13, NULL, NULL, 'delete', 34, 35),
 (20, 13, NULL, NULL, 'login', 36, 37),
 (21, 13, NULL, NULL, 'logout', 38, 39),
-(22, 1, NULL, NULL, 'Bake', 68, 69),
-(23, 1, NULL, NULL, 'DebugKit', 70, 97),
-(24, 23, NULL, NULL, 'Composer', 71, 74),
-(25, 24, NULL, NULL, 'checkDependencies', 72, 73),
-(26, 23, NULL, NULL, 'MailPreview', 75, 82),
-(27, 26, NULL, NULL, 'index', 76, 77),
-(28, 26, NULL, NULL, 'sent', 78, 79),
-(29, 26, NULL, NULL, 'email', 80, 81),
-(30, 23, NULL, NULL, 'Panels', 83, 88),
-(31, 30, NULL, NULL, 'index', 84, 85),
-(32, 30, NULL, NULL, 'view', 86, 87),
-(33, 23, NULL, NULL, 'Requests', 89, 92),
-(34, 33, NULL, NULL, 'view', 90, 91),
-(35, 23, NULL, NULL, 'Toolbar', 93, 96),
-(36, 35, NULL, NULL, 'clearCache', 94, 95),
-(37, 1, NULL, NULL, 'Migrations', 98, 99),
-(38, 1, NULL, NULL, 'WyriHaximus\\TwigView', 100, 101),
+(22, 1, NULL, NULL, 'Bake', 116, 117),
+(23, 1, NULL, NULL, 'DebugKit', 118, 145),
+(24, 23, NULL, NULL, 'Composer', 119, 122),
+(25, 24, NULL, NULL, 'checkDependencies', 120, 121),
+(26, 23, NULL, NULL, 'MailPreview', 123, 130),
+(27, 26, NULL, NULL, 'index', 124, 125),
+(28, 26, NULL, NULL, 'sent', 126, 127),
+(29, 26, NULL, NULL, 'email', 128, 129),
+(30, 23, NULL, NULL, 'Panels', 131, 136),
+(31, 30, NULL, NULL, 'index', 132, 133),
+(32, 30, NULL, NULL, 'view', 134, 135),
+(33, 23, NULL, NULL, 'Requests', 137, 140),
+(34, 33, NULL, NULL, 'view', 138, 139),
+(35, 23, NULL, NULL, 'Toolbar', 141, 144),
+(36, 35, NULL, NULL, 'clearCache', 142, 143),
+(37, 1, NULL, NULL, 'Migrations', 146, 147),
+(38, 1, NULL, NULL, 'WyriHaximus\\TwigView', 148, 149),
 (39, 6, NULL, NULL, 'Groups', 41, 54),
 (40, 39, NULL, NULL, 'index', 42, 43),
 (41, 39, NULL, NULL, 'view', 44, 45),
@@ -109,17 +88,41 @@ INSERT INTO `acos` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft`, `
 (43, 39, NULL, NULL, 'add', 48, 49),
 (44, 39, NULL, NULL, 'edit', 50, 51),
 (45, 39, NULL, NULL, 'delete', 52, 53),
-(46, 6, NULL, NULL, 'Test', 55, 66),
-(47, 46, NULL, NULL, 'index', 56, 57),
-(48, 46, NULL, NULL, 'view', 58, 59),
-(49, 46, NULL, NULL, 'add', 60, 61),
-(50, 46, NULL, NULL, 'edit', 62, 63),
-(51, 46, NULL, NULL, 'delete', 64, 65);
+(52, 6, NULL, NULL, 'Districts', 55, 66),
+(53, 52, NULL, NULL, 'index', 56, 57),
+(54, 52, NULL, NULL, 'view', 58, 59),
+(55, 52, NULL, NULL, 'add', 60, 61),
+(56, 52, NULL, NULL, 'edit', 62, 63),
+(57, 52, NULL, NULL, 'delete', 64, 65),
+(58, 6, NULL, NULL, 'Provinces', 67, 78),
+(59, 58, NULL, NULL, 'index', 68, 69),
+(60, 58, NULL, NULL, 'view', 70, 71),
+(61, 58, NULL, NULL, 'add', 72, 73),
+(62, 58, NULL, NULL, 'edit', 74, 75),
+(63, 58, NULL, NULL, 'delete', 76, 77),
+(64, 6, NULL, NULL, 'Regencies', 79, 90),
+(65, 64, NULL, NULL, 'index', 80, 81),
+(66, 64, NULL, NULL, 'view', 82, 83),
+(67, 64, NULL, NULL, 'add', 84, 85),
+(68, 64, NULL, NULL, 'edit', 86, 87),
+(69, 64, NULL, NULL, 'delete', 88, 89),
+(70, 6, NULL, NULL, 'Villages', 91, 102),
+(71, 70, NULL, NULL, 'index', 92, 93),
+(72, 70, NULL, NULL, 'view', 94, 95),
+(73, 70, NULL, NULL, 'add', 96, 97),
+(74, 70, NULL, NULL, 'edit', 98, 99),
+(75, 70, NULL, NULL, 'delete', 100, 101),
+(76, 6, NULL, NULL, 'ProductCategories', 103, 114),
+(77, 76, NULL, NULL, 'index', 104, 105),
+(78, 76, NULL, NULL, 'view', 106, 107),
+(79, 76, NULL, NULL, 'add', 108, 109),
+(80, 76, NULL, NULL, 'edit', 110, 111),
+(81, 76, NULL, NULL, 'delete', 112, 113);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aros`
+-- Struktur dari tabel `aros`
 --
 
 CREATE TABLE `aros` (
@@ -128,12 +131,12 @@ CREATE TABLE `aros` (
   `model` varchar(255) DEFAULT NULL,
   `foreign_key` int(11) DEFAULT NULL,
   `alias` varchar(255) DEFAULT NULL,
-  `lft` int(11) DEFAULT NULL,
-  `rght` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `lft` int(11) NOT NULL,
+  `rght` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `aros`
+-- Dumping data untuk tabel `aros`
 --
 
 INSERT INTO `aros` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft`, `rght`) VALUES
@@ -143,21 +146,21 @@ INSERT INTO `aros` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aros_acos`
+-- Struktur dari tabel `aros_acos`
 --
 
 CREATE TABLE `aros_acos` (
   `id` int(11) NOT NULL,
   `aro_id` int(11) NOT NULL,
   `aco_id` int(11) NOT NULL,
-  `_create` varchar(2) NOT NULL DEFAULT '0',
-  `_read` varchar(2) NOT NULL DEFAULT '0',
-  `_update` varchar(2) NOT NULL DEFAULT '0',
-  `_delete` varchar(2) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `_create` varchar(2) NOT NULL,
+  `_read` varchar(2) NOT NULL,
+  `_update` varchar(2) NOT NULL,
+  `_delete` varchar(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `aros_acos`
+-- Dumping data untuk tabel `aros_acos`
 --
 
 INSERT INTO `aros_acos` (`id`, `aro_id`, `aco_id`, `_create`, `_read`, `_update`, `_delete`) VALUES
@@ -179,38 +182,96 @@ INSERT INTO `aros_acos` (`id`, `aro_id`, `aco_id`, `_create`, `_read`, `_update`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `attributes`
+-- Struktur dari tabel `attributes`
 --
 
 CREATE TABLE `attributes` (
-  `id` int(9) NOT NULL,
-  `attribute_group_id` int(5) NOT NULL,
+  `id` int(11) NOT NULL,
+  `product_categories_id` int(5) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `sort_order` int(4) DEFAULT NULL
+  `description` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `attribute_groups`
+-- Struktur dari tabel `branches`
 --
 
-CREATE TABLE `attribute_groups` (
-  `id` int(5) NOT NULL,
+CREATE TABLE `branches` (
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `sort_order` int(3) DEFAULT NULL
+  `address` text NOT NULL,
+  `phone` varchar(15) NOT NULL,
+  `provice_id` int(11) NOT NULL,
+  `city_id` int(11) NOT NULL,
+  `subdistrict_id` int(11) NOT NULL,
+  `latitude` float NOT NULL,
+  `longitude` float NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customers`
+-- Struktur dari tabel `chats`
+--
+
+CREATE TABLE `chats` (
+  `id` int(11) NOT NULL,
+  `order_detail_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `chat_details`
+--
+
+CREATE TABLE `chat_details` (
+  `id` int(11) NOT NULL,
+  `chat_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `courriers`
+--
+
+CREATE TABLE `courriers` (
+  `id` int(11) NOT NULL,
+  `name` varchar(15) NOT NULL,
+  `code` varchar(5) NOT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `courriers`
+--
+
+INSERT INTO `courriers` (`id`, `name`, `code`, `created`) VALUES
+(1, 'JNE', 'jne', '2019-02-08 00:00:00'),
+(2, 'JNT', 'jnt', '2019-02-08 00:00:00'),
+(3, 'TIKI', 'tiki', '2019-02-08 00:00:00'),
+(4, 'POS', 'pos', '2019-02-08 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `customers`
 --
 
 CREATE TABLE `customers` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
+  `reffcode` varchar(10) DEFAULT NULL,
+  `refferal_customer_id` int(11) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `first_name` varchar(30) NOT NULL,
@@ -219,6 +280,8 @@ CREATE TABLE `customers` (
   `dob` date DEFAULT NULL,
   `customer_group_id` int(1) DEFAULT NULL,
   `customer_status_id` int(1) NOT NULL DEFAULT '1',
+  `is_verified` int(11) NOT NULL,
+  `platforrm` varchar(15) NOT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -226,11 +289,11 @@ CREATE TABLE `customers` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customer_addresses`
+-- Struktur dari tabel `customer_addresses`
 --
 
 CREATE TABLE `customer_addresses` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `customer_id` int(9) NOT NULL,
   `province_id` int(4) DEFAULT NULL,
   `regency_id` int(11) DEFAULT NULL,
@@ -244,7 +307,47 @@ CREATE TABLE `customer_addresses` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customer_groups`
+-- Struktur dari tabel `customer_balances`
+--
+
+CREATE TABLE `customer_balances` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `balance` double NOT NULL,
+  `point` double NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `customer_buy_groups`
+--
+
+CREATE TABLE `customer_buy_groups` (
+  `id` int(11) NOT NULL,
+  `product_group_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL COMMENT 'as initiator only',
+  `name` varchar(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `customer_buy_group_details`
+--
+
+CREATE TABLE `customer_buy_group_details` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `customer_buy_group_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `customer_groups`
 --
 
 CREATE TABLE `customer_groups` (
@@ -253,7 +356,7 @@ CREATE TABLE `customer_groups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `customer_groups`
+-- Dumping data untuk tabel `customer_groups`
 --
 
 INSERT INTO `customer_groups` (`id`, `group`) VALUES
@@ -263,16 +366,124 @@ INSERT INTO `customer_groups` (`id`, `group`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customer_statuses`
+-- Struktur dari tabel `customer_log_browsings`
+--
+
+CREATE TABLE `customer_log_browsings` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `customer_mutation_amounts`
+--
+
+CREATE TABLE `customer_mutation_amounts` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `customer_mutation_amount_type_id` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `amount` double NOT NULL,
+  `balance` double NOT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `customer_mutation_amount_types`
+--
+
+CREATE TABLE `customer_mutation_amount_types` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `type` enum('Debit','Credit') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `customer_mutation_amount_types`
+--
+
+INSERT INTO `customer_mutation_amount_types` (`id`, `name`, `type`) VALUES
+(1, 'Pembelanjaan', 'Debit'),
+(2, 'Refund', 'Credit'),
+(3, 'Deposite', 'Credit');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `customer_mutation_points`
+--
+
+CREATE TABLE `customer_mutation_points` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `customer_mutation_point_type_id` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `amount` double NOT NULL,
+  `balance` double NOT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `customer_mutation_point_types`
+--
+
+CREATE TABLE `customer_mutation_point_types` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `type` enum('Debit','Credit') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `customer_mutation_point_types`
+--
+
+INSERT INTO `customer_mutation_point_types` (`id`, `name`, `type`) VALUES
+(1, 'Pembelanjaan', 'Debit'),
+(2, 'Refund', 'Credit'),
+(3, 'Bonus Point', 'Credit'),
+(4, 'Bonus Point Generasi', 'Credit');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `customer_point_rates`
+--
+
+CREATE TABLE `customer_point_rates` (
+  `id` int(11) NOT NULL,
+  `point` int(11) NOT NULL DEFAULT '1',
+  `value` double NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `customer_point_rates`
+--
+
+INSERT INTO `customer_point_rates` (`id`, `point`, `value`) VALUES
+(1, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `customer_statuses`
 --
 
 CREATE TABLE `customer_statuses` (
-  `id` int(2) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `customer_statuses`
+-- Dumping data untuk tabel `customer_statuses`
 --
 
 INSERT INTO `customer_statuses` (`id`, `name`) VALUES
@@ -283,11 +494,11 @@ INSERT INTO `customer_statuses` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customer_tookens`
+-- Struktur dari tabel `customer_tokens`
 --
 
-CREATE TABLE `customer_tookens` (
-  `id` int(9) NOT NULL,
+CREATE TABLE `customer_tokens` (
+  `id` int(11) NOT NULL,
   `customer_id` int(9) NOT NULL,
   `uuid` varchar(128) NOT NULL,
   `activated` int(1) NOT NULL DEFAULT '0',
@@ -299,17 +510,31 @@ CREATE TABLE `customer_tookens` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `districts`
+-- Struktur dari tabel `customer_virtual_account`
+--
+
+CREATE TABLE `customer_virtual_account` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `va_number` varchar(25) NOT NULL,
+  `expired_date` datetime NOT NULL,
+  `status` enum('Active','Expired') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `districts`
 --
 
 CREATE TABLE `districts` (
   `id` int(11) NOT NULL,
   `regency_id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `districts`
+-- Dumping data untuk tabel `districts`
 --
 
 INSERT INTO `districts` (`id`, `regency_id`, `name`) VALUES
@@ -7493,7 +7718,7 @@ INSERT INTO `districts` (`id`, `regency_id`, `name`) VALUES
 (7175, 510, 'OMUKIA'),
 (7176, 510, 'SINAK'),
 (7177, 510, 'SINAK BARAT'),
-(7178, 510, 'MAGEÁBUME'),
+(7178, 510, 'MAGEÃBUME'),
 (7179, 510, 'YUGUMUAK'),
 (7180, 510, 'POGOMA'),
 (7181, 510, 'KEMBRU'),
@@ -7535,7 +7760,21 @@ INSERT INTO `districts` (`id`, `regency_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `groups`
+-- Struktur dari tabel `generations`
+--
+
+CREATE TABLE `generations` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `refferal_id` int(11) DEFAULT NULL,
+  `level` int(11) NOT NULL DEFAULT '1',
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `groups`
 --
 
 CREATE TABLE `groups` (
@@ -7547,38 +7786,47 @@ CREATE TABLE `groups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `groups`
+-- Dumping data untuk tabel `groups`
 --
 
 INSERT INTO `groups` (`id`, `name`, `created`, `modified`, `level`) VALUES
-(1, 'Administrator', '2019-01-09 08:34:26', '2019-01-09 08:34:26', 1);
+(1, 'Administrator', '2019-01-10 05:01:45', '2019-01-10 05:01:45', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `options`
+-- Struktur dari tabel `options`
 --
 
 CREATE TABLE `options` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `option_type_id` int(4) NOT NULL,
   `name` varchar(150) NOT NULL,
   `sort_order` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data untuk tabel `options`
+--
+
+INSERT INTO `options` (`id`, `option_type_id`, `name`, `sort_order`) VALUES
+(1, 1, 'Warna', 1),
+(2, 1, 'Ukuran', 2),
+(3, 2, 'Quantity', NULL);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `option_types`
+-- Struktur dari tabel `option_types`
 --
 
 CREATE TABLE `option_types` (
-  `id` int(4) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `option_types`
+-- Dumping data untuk tabel `option_types`
 --
 
 INSERT INTO `option_types` (`id`, `name`) VALUES
@@ -7588,30 +7836,43 @@ INSERT INTO `option_types` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `option_values`
+-- Struktur dari tabel `option_values`
 --
 
 CREATE TABLE `option_values` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `option_id` int(9) NOT NULL,
   `name` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data untuk tabel `option_values`
+--
+
+INSERT INTO `option_values` (`id`, `option_id`, `name`) VALUES
+(1, 1, 'Merah'),
+(2, 1, 'Biru'),
+(5, 1, 'Hitam'),
+(6, 1, 'Putih'),
+(7, 3, '6 PCS'),
+(8, 3, '12 PCS'),
+(9, 3, '24 PCS'),
+(10, 3, 'paket voucher 2 pcs'),
+(11, 3, 'paket voucher 4 pcs');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders`
+-- Struktur dari tabel `orders`
 --
 
 CREATE TABLE `orders` (
-  `id` int(9) NOT NULL,
-  `orderid` varchar(15) DEFAULT NULL COMMENT '20121113-1-98271',
+  `id` int(11) NOT NULL,
+  `invoice` varchar(15) DEFAULT NULL,
   `customer_id` int(9) DEFAULT NULL,
-  `customer_address_id` int(9) DEFAULT NULL,
-  `customer_shipping_type` varchar(5) DEFAULT '',
-  `shipping_price` double DEFAULT NULL,
-  `weight` int(7) DEFAULT NULL,
-  `uniq_code` int(5) DEFAULT NULL,
+  `address` text,
+  `voucher_id` int(11) DEFAULT NULL,
+  `product_promotion_id` int(11) DEFAULT NULL,
   `total` double DEFAULT NULL,
   `created` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -7619,60 +7880,71 @@ CREATE TABLE `orders` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_histories`
+-- Struktur dari tabel `order_details`
 --
 
-CREATE TABLE `order_histories` (
-  `id` int(9) NOT NULL,
-  `order_id` int(9) NOT NULL,
-  `order_status_id` int(3) NOT NULL,
-  `awb` varchar(20) DEFAULT NULL,
-  `notify` int(1) NOT NULL DEFAULT '1',
-  `desciption` text,
-  `created` datetime DEFAULT NULL
+CREATE TABLE `order_details` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `branch_id` int(11) DEFAULT NULL,
+  `courrier_id` int(11) NOT NULL,
+  `awb` varchar(50) NOT NULL,
+  `courrier_code` varchar(5) NOT NULL COMMENT 'yes,reg, dll',
+  `origin_subdistrict_id` int(11) NOT NULL,
+  `destination_subdistrict_id` int(11) NOT NULL,
+  `origin_city_id` int(11) NOT NULL,
+  `destination_city_id` int(11) NOT NULL,
+  `product_price` double NOT NULL,
+  `shipping_cost` double NOT NULL,
+  `total` double NOT NULL,
+  `order_status_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_options`
+-- Struktur dari tabel `order_detail_products`
 --
 
-CREATE TABLE `order_options` (
-  `id` int(9) NOT NULL,
-  `order_id` int(9) NOT NULL,
-  `order_product_id` int(9) NOT NULL,
-  `product_option_value_id` int(9) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `order_products`
---
-
-CREATE TABLE `order_products` (
-  `id` int(9) NOT NULL,
-  `order_id` int(9) NOT NULL,
-  `product_id` int(9) NOT NULL,
-  `qty` int(3) NOT NULL DEFAULT '1',
+CREATE TABLE `order_detail_products` (
+  `id` int(11) NOT NULL,
+  `order_detail_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_option_value_id` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
   `price` double NOT NULL,
-  `total` double NOT NULL
+  `total` double NOT NULL,
+  `created` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_status`
+-- Struktur dari tabel `order_shipping_details`
+--
+
+CREATE TABLE `order_shipping_details` (
+  `id` int(11) NOT NULL,
+  `order_detail_id` int(11) DEFAULT NULL,
+  `note` text NOT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `order_status`
 --
 
 CREATE TABLE `order_status` (
-  `id` int(3) NOT NULL,
-  `name` varchar(32) COLLATE utf8_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `id` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `order_status`
+-- Dumping data untuk tabel `order_status`
 --
 
 INSERT INTO `order_status` (`id`, `name`) VALUES
@@ -7694,7 +7966,7 @@ INSERT INTO `order_status` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pages`
+-- Struktur dari tabel `pages`
 --
 
 CREATE TABLE `pages` (
@@ -7710,7 +7982,7 @@ CREATE TABLE `pages` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `phinxlog`
+-- Struktur dari tabel `phinxlog`
 --
 
 CREATE TABLE `phinxlog` (
@@ -7722,43 +7994,79 @@ CREATE TABLE `phinxlog` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `phinxlog`
+-- Dumping data untuk tabel `phinxlog`
 --
 
 INSERT INTO `phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `breakpoint`) VALUES
-(20181116093719, 'CreateTableUsers', '2019-01-08 02:21:25', '2019-01-08 02:21:25', 0),
-(20181116160556, 'CreateTableUserStatus', '2019-01-08 03:12:00', '2019-01-08 03:12:00', 0),
-(20181117093708, 'CreateTablePages', '2019-01-08 03:10:18', '2019-01-08 03:10:18', 0),
-(20181124142019, 'CreateTableGroups', '2019-01-08 02:21:25', '2019-01-08 02:21:25', 0),
-(20181124142020, 'AlterGroup', '2019-01-08 02:21:25', '2019-01-08 02:21:25', 0);
+(20181116093719, 'CreateTableUsers', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20181116160556, 'CreateTableUserStatus', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20181117093708, 'CreateTablePages', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20181124142019, 'CreateTableGroups', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20181124142020, 'AlterGroup', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111044758, 'CreateTableProvinces', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111050327, 'CreateTableRegencies', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111051652, 'CreateTableDistricts', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111052408, 'CreateTableVillages', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111072349, 'CreateTableCustomerGroups', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111073235, 'CreateTableCustomerStatuses', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111085657, 'CreateTableCustomers', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111088217, 'CreateTableCustomerTokens', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111089629, 'CreateTableCustomerAddresses', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111090739, 'CreateTableOptionTypes', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111091427, 'CreateTableOptions', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190111112159, 'CreateTableOptionValues', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190113145402, 'CreateTableProductStockStatuses', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190113145836, 'CreateTableProductStatuses', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190113150051, 'CreateTableProductWeightClasses', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190113150806, 'CreateTableProducts', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190113153340, 'CreateTableAttributeGroups', '2019-01-14 23:29:34', '2019-01-14 23:29:34', 0),
+(20190113153549, 'CreateTableAttributes', '2019-01-14 23:29:34', '2019-01-14 23:29:35', 0),
+(20190114044757, 'CreateTableProductAttributes', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114045126, 'CreateTableProductCategories', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114045417, 'CreateTableProductDeals', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114050653, 'CreateTableProductDiscounts', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114051313, 'CreateTableProductImages', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114061901, 'CreateTableProductImageSizes', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114062401, 'CreateTableProductMetaTags', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114062856, 'CreateTableProductOptionValues', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114064301, 'CreateTableProductStockMutationTypes', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114064444, 'CreateTableProductToCategories', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114065500, 'CreateTableOrders', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114065707, 'CreateTableOrderStatus', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114070631, 'CreateTableOrderHistories', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114071453, 'CreateTableOrderProducts', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114071454, 'CreateTableOrderOptions', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114075019, 'CreateTableProductStockMutations', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114115253, 'CreateTableAcos', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114115257, 'CreateTableAros', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0),
+(20190114115303, 'CreateTableAcosAros', '2019-01-14 23:29:35', '2019-01-14 23:29:35', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Struktur dari tabel `products`
 --
 
 CREATE TABLE `products` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `slug` varchar(255) DEFAULT NULL,
   `model` varchar(100) DEFAULT NULL,
   `code` varchar(50) DEFAULT NULL,
   `sku` varchar(25) DEFAULT NULL,
-  `isbn` varchar(25) DEFAULT NULL,
   `qty` int(6) NOT NULL DEFAULT '1',
   `product_stock_status_id` int(2) DEFAULT NULL,
   `shipping` int(1) NOT NULL DEFAULT '1',
-  `price` double NOT NULL,
-  `price_discount` double NOT NULL,
+  `price` decimal(11,2) NOT NULL,
+  `price_discount` decimal(11,2) NOT NULL,
   `weight` float DEFAULT NULL,
   `product_weight_class_id` int(2) DEFAULT NULL,
   `product_status_id` int(2) NOT NULL,
   `highlight` text,
   `condition` text,
   `profile` text,
-  `view` int(6) NOT NULL DEFAULT '0',
+  `view` int(2) NOT NULL DEFAULT '0',
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -7766,11 +8074,11 @@ CREATE TABLE `products` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_attributes`
+-- Struktur dari tabel `product_attributes`
 --
 
 CREATE TABLE `product_attributes` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `product_id` int(9) NOT NULL,
   `attribute_id` int(9) NOT NULL,
   `value` text NOT NULL
@@ -7779,40 +8087,92 @@ CREATE TABLE `product_attributes` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_categories`
+-- Struktur dari tabel `product_branches`
+--
+
+CREATE TABLE `product_branches` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `branch_id` int(11) DEFAULT NULL,
+  `is_option` int(11) NOT NULL DEFAULT '0',
+  `stock` int(11) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `product_categories`
 --
 
 CREATE TABLE `product_categories` (
-  `id` int(5) NOT NULL,
+  `id` int(11) NOT NULL,
   `parent_id` int(5) DEFAULT NULL,
   `lft` int(6) NOT NULL,
   `rght` int(6) NOT NULL,
   `name` varchar(50) NOT NULL,
   `slug` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL
+  `description` varchar(255) NOT NULL,
+  `path` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `product_categories`
+--
+
+INSERT INTO `product_categories` (`id`, `parent_id`, `lft`, `rght`, `name`, `slug`, `description`, `path`) VALUES
+(1, NULL, 1, 16, 'Pakaian Pria', 'pakaian-pria', 'Aneka pakaian pria', '1547470496114.png'),
+(2, 1, 2, 3, 'Atasan', 'atasan', 'Atasan pakaian pria', ''),
+(3, 1, 4, 5, 'Bawahan', 'bawahan', 'Bawahan pakaian pria', ''),
+(4, 1, 6, 7, 'Jeans', 'jeans', 'Jeans pakaian pria', ''),
+(5, 1, 8, 9, 'Outerwear', 'outerwear', '-', ''),
+(6, 1, 10, 11, 'Batik', 'batik', '-', ''),
+(7, 1, 12, 13, 'Pakaian Tidur', 'pakaian-tidur', '-', ''),
+(8, 1, 14, 15, 'Pakaian Dalam', 'pakaian-dalam', '-', ''),
+(9, NULL, 17, 18, 'Pakaian Wanita', 'pakaian-wanita', '-', '1547461907247.png'),
+(10, NULL, 19, 20, 'Handphone & Aksesoris', 'handphone--aksesoris', '-', '1547461887842.png'),
+(11, NULL, 21, 22, 'Komputer & Aksesoris', 'komputer--aksesoris', '-', '1547461931955.png'),
+(12, NULL, 23, 24, 'Fashion Bayi & Anak', 'fashion-bayi--anak', '-', '1547461950438.png'),
+(13, NULL, 25, 26, 'Sepatu Pria', 'sepatu-pria', '-', '1547461967203.png');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_deals`
+-- Struktur dari tabel `product_deals`
 --
 
 CREATE TABLE `product_deals` (
-  `id` int(9) NOT NULL,
-  `product_id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
+  `name` varchar(15) NOT NULL COMMENT 'event name',
   `date_start` datetime NOT NULL,
-  `date_end` datetime NOT NULL
+  `date_end` datetime NOT NULL,
+  `status` int(11) NOT NULL COMMENT '0, waiting, 1 : running, 2: expired,marking status aktif'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_discounts`
+-- Struktur dari tabel `product_deal_details`
+--
+
+CREATE TABLE `product_deal_details` (
+  `id` int(11) NOT NULL,
+  `product_deal_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `discount` int(11) NOT NULL,
+  `stock` int(11) NOT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `product_discounts`
 --
 
 CREATE TABLE `product_discounts` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `product_id` int(9) NOT NULL,
   `discount` int(3) DEFAULT NULL,
   `date_start` date DEFAULT NULL,
@@ -7824,11 +8184,40 @@ CREATE TABLE `product_discounts` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_images`
+-- Struktur dari tabel `product_groups`
+--
+
+CREATE TABLE `product_groups` (
+  `id` int(11) NOT NULL,
+  `name` varchar(15) NOT NULL,
+  `value` int(11) NOT NULL COMMENT 'qty pembeli',
+  `date_start` datetime NOT NULL,
+  `date_end` datetime NOT NULL,
+  `status` int(1) NOT NULL COMMENT '0, waiting, 1 : running, 2: expired,marking status aktif',
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `product_group_details`
+--
+
+CREATE TABLE `product_group_details` (
+  `id` int(11) NOT NULL,
+  `product_group_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `product_images`
 --
 
 CREATE TABLE `product_images` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `product_id` int(9) DEFAULT NULL,
   `primary` int(1) DEFAULT NULL,
   `created` datetime DEFAULT NULL
@@ -7837,24 +8226,24 @@ CREATE TABLE `product_images` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_image_sizes`
+-- Struktur dari tabel `product_image_sizes`
 --
 
 CREATE TABLE `product_image_sizes` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `product_image_id` int(9) DEFAULT NULL,
   `dimension` varchar(20) DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='normalize : 100x100, 122x83, 220x160,  300x200, 460x250, 460x340, 460x275, 640x480';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_meta_tags`
+-- Struktur dari tabel `product_meta_tags`
 --
 
 CREATE TABLE `product_meta_tags` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `product_id` int(9) NOT NULL,
   `keyword` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL
@@ -7863,48 +8252,54 @@ CREATE TABLE `product_meta_tags` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_option_values`
+-- Struktur dari tabel `product_option_values`
 --
 
 CREATE TABLE `product_option_values` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `product_id` int(9) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `option_value_id` int(9) NOT NULL,
-  `price` double DEFAULT NULL,
-  `weight` int(5) DEFAULT NULL
+  `price` double DEFAULT '0' COMMENT 'additiona price from base price',
+  `weight` int(5) DEFAULT NULL COMMENT 'in gram additional weight from base wight',
+  `stock` int(11) NOT NULL,
+  `width` int(11) NOT NULL DEFAULT '0',
+  `length` int(11) NOT NULL DEFAULT '0',
+  `height` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_statuses`
+-- Struktur dari tabel `product_statuses`
 --
 
 CREATE TABLE `product_statuses` (
-  `id` int(2) NOT NULL,
-  `name` varchar(10) NOT NULL
+  `id` int(11) NOT NULL,
+  `name` varchar(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `product_statuses`
+-- Dumping data untuk tabel `product_statuses`
 --
 
 INSERT INTO `product_statuses` (`id`, `name`) VALUES
-(1, 'Enable'),
-(2, 'Disable');
+(1, 'Publish'),
+(2, 'Unpublish');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_stock_mutations`
+-- Struktur dari tabel `product_stock_mutations`
 --
 
 CREATE TABLE `product_stock_mutations` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `product_id` int(9) NOT NULL,
+  `branch_id` int(11) DEFAULT NULL,
+  `product_option_values_id` int(11) DEFAULT NULL,
   `product_stock_mutation_type_id` int(3) NOT NULL,
-  `order_id` int(9) DEFAULT NULL,
+  `description` text,
   `amount` double NOT NULL,
   `balance` double NOT NULL,
   `created` datetime DEFAULT NULL
@@ -7913,26 +8308,18 @@ CREATE TABLE `product_stock_mutations` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_stock_mutation_types`
+-- Struktur dari tabel `product_stock_mutation_types`
 --
 
 CREATE TABLE `product_stock_mutation_types` (
-  `id` int(3) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `product_stock_mutation_types`
---
-
-INSERT INTO `product_stock_mutation_types` (`id`, `name`) VALUES
-(1, 'Sales'),
-(2, 'Added Stock');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_stock_statuses`
+-- Struktur dari tabel `product_stock_statuses`
 --
 
 CREATE TABLE `product_stock_statuses` (
@@ -7941,23 +8328,21 @@ CREATE TABLE `product_stock_statuses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `product_stock_statuses`
+-- Dumping data untuk tabel `product_stock_statuses`
 --
 
 INSERT INTO `product_stock_statuses` (`id`, `name`) VALUES
 (1, 'In Stock'),
-(2, 'Pre-Order'),
-(3, 'Out Of Stock'),
-(4, '2 - 3 Days');
+(2, 'Out Of Stock');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_to_categories`
+-- Struktur dari tabel `product_to_categories`
 --
 
 CREATE TABLE `product_to_categories` (
-  `id` int(9) NOT NULL,
+  `id` int(11) NOT NULL,
   `product_id` int(9) NOT NULL,
   `product_category_id` int(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -7965,17 +8350,17 @@ CREATE TABLE `product_to_categories` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_weight_classes`
+-- Struktur dari tabel `product_weight_classes`
 --
 
 CREATE TABLE `product_weight_classes` (
-  `id` int(2) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `unit` varchar(2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `product_weight_classes`
+-- Dumping data untuk tabel `product_weight_classes`
 --
 
 INSERT INTO `product_weight_classes` (`id`, `name`, `unit`) VALUES
@@ -7984,16 +8369,49 @@ INSERT INTO `product_weight_classes` (`id`, `name`, `unit`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `provinces`
+-- Struktur dari tabel `promotions`
+--
+
+CREATE TABLE `promotions` (
+  `id` int(11) NOT NULL,
+  `name` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `qty` int(11) NOT NULL COMMENT 'qty utama',
+  `min_qty` int(11) NOT NULL COMMENT 'minimum pembelian',
+  `free_product_id` int(11) NOT NULL,
+  `free_qty` int(11) NOT NULL COMMENT 'bonus pembelian',
+  `date_start` datetime NOT NULL,
+  `date_end` datetime NOT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `promotion_images`
+--
+
+CREATE TABLE `promotion_images` (
+  `id` int(11) NOT NULL,
+  `promotion_id` int(11) DEFAULT NULL,
+  `image` varchar(255) NOT NULL,
+  `dimension` varchar(9) NOT NULL,
+  `created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `provinces`
 --
 
 CREATE TABLE `provinces` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `provinces`
+-- Dumping data untuk tabel `provinces`
 --
 
 INSERT INTO `provinces` (`id`, `name`) VALUES
@@ -8035,17 +8453,17 @@ INSERT INTO `provinces` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `regencies`
+-- Struktur dari tabel `regencies`
 --
 
 CREATE TABLE `regencies` (
   `id` int(11) NOT NULL,
   `province_id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `regencies`
+-- Dumping data untuk tabel `regencies`
 --
 
 INSERT INTO `regencies` (`id`, `province_id`, `name`) VALUES
@@ -8567,20 +8985,7 @@ INSERT INTO `regencies` (`id`, `province_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `test`
---
-
-CREATE TABLE `test` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `created` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
@@ -8591,52 +8996,53 @@ CREATE TABLE `users` (
   `last_name` varchar(50) DEFAULT NULL,
   `group_id` int(4) NOT NULL,
   `user_status_id` int(4) NOT NULL,
+  `branch_id` int(11) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `users`
+-- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `first_name`, `last_name`, `group_id`, `user_status_id`, `created`, `modified`) VALUES
-(1, 'admin@admin.com', '$2y$10$.cFPEdFgCybsY.DWAEeKre66ZsEoLXxW9AXeaC6ekEh4wV6KLcmpa', 'Superadmin', 'Zolaku', 1, 1, '2019-01-09 08:35:25', '2019-01-09 08:35:25');
+INSERT INTO `users` (`id`, `email`, `password`, `first_name`, `last_name`, `group_id`, `user_status_id`, `branch_id`, `created`, `modified`) VALUES
+(1, 'admin@admin.com', '$2y$10$kKYlt.dPlQkpINQMmVrZGeV.nIh6P5mrHEHq6Ms56heAfhRWe2d9m', 'Superadmin', 'Zolaku', 1, 1, NULL, '2019-01-10 05:05:01', '2019-01-10 05:05:01');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_status`
+-- Struktur dari tabel `user_status`
 --
 
 CREATE TABLE `user_status` (
   `id` int(11) NOT NULL,
   `name` varchar(150) NOT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user_status`
+-- Dumping data untuk tabel `user_status`
 --
 
 INSERT INTO `user_status` (`id`, `name`, `created`, `modified`) VALUES
-(1, 'Active', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(2, 'In Active', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(1, 'Active', NULL, NULL),
+(2, 'In Active', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `villages`
+-- Struktur dari tabel `villages`
 --
 
 CREATE TABLE `villages` (
   `id` int(11) NOT NULL,
   `district_id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `villages`
+-- Dumping data untuk tabel `villages`
 --
 
 INSERT INTO `villages` (`id`, `district_id`, `name`) VALUES
@@ -73215,7 +73621,7 @@ INSERT INTO `villages` (`id`, `district_id`, `name`) VALUES
 (64539, 5479, 'BAULU'),
 (64540, 5479, 'MATOBIYAI'),
 (64541, 5479, 'SAMPOBAE'),
-(64542, 5479, 'TITIRIí POPOLION'),
+(64542, 5479, 'TITIRIÃ­ POPOLION'),
 (64543, 5480, 'TIGA PULAU'),
 (64544, 5480, 'LUOK'),
 (64545, 5480, 'POPOLII'),
@@ -89215,190 +89621,269 @@ INSERT INTO `villages` (`id`, `district_id`, `name`) VALUES
 (80531, 7215, 'TANJUNG RIA'),
 (80532, 7215, 'KAMPUNG KAYOBATU');
 
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `vouchers`
+--
+
+CREATE TABLE `vouchers` (
+  `id` int(11) NOT NULL,
+  `code_voucher` varchar(8) NOT NULL,
+  `date_start` datetime NOT NULL,
+  `date_end` datetime NOT NULL,
+  `qty` int(11) NOT NULL,
+  `type` int(1) NOT NULL COMMENT '1 :persen atau 2 :discount',
+  `value` double NOT NULL COMMENT 'berupa value % (30), atau cashbak 100.0000',
+  `status` int(11) NOT NULL COMMENT '1 : active, 2 : not active'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `acl_phinxlog`
---
-ALTER TABLE `acl_phinxlog`
-  ADD PRIMARY KEY (`version`);
-
---
--- Indexes for table `acos`
+-- Indeks untuk tabel `acos`
 --
 ALTER TABLE `acos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `lft` (`lft`,`rght`),
-  ADD KEY `alias` (`alias`);
+  ADD KEY `alias` (`alias`),
+  ADD KEY `lft` (`lft`),
+  ADD KEY `rght` (`rght`);
 
 --
--- Indexes for table `aros`
+-- Indeks untuk tabel `aros`
 --
 ALTER TABLE `aros`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `lft` (`lft`,`rght`),
-  ADD KEY `alias` (`alias`);
+  ADD KEY `alias` (`alias`),
+  ADD KEY `lft` (`lft`),
+  ADD KEY `rght` (`rght`);
 
 --
--- Indexes for table `aros_acos`
+-- Indeks untuk tabel `aros_acos`
 --
 ALTER TABLE `aros_acos`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `aro_id` (`aro_id`,`aco_id`),
+  ADD KEY `aro_id` (`aro_id`),
   ADD KEY `aco_id` (`aco_id`);
 
 --
--- Indexes for table `attributes`
+-- Indeks untuk tabel `attributes`
 --
 ALTER TABLE `attributes`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `attribute_group_id` (`attribute_group_id`);
+  ADD KEY `attribute_group_id` (`product_categories_id`);
 
 --
--- Indexes for table `attribute_groups`
+-- Indeks untuk tabel `branches`
 --
-ALTER TABLE `attribute_groups`
+ALTER TABLE `branches`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `customers`
+-- Indeks untuk tabel `chats`
+--
+ALTER TABLE `chats`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `chat_details`
+--
+ALTER TABLE `chat_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `courriers`
+--
+ALTER TABLE `courriers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `customers`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
   ADD KEY `customer_group_id` (`customer_group_id`),
   ADD KEY `customer_status_id` (`customer_status_id`);
 
 --
--- Indexes for table `customer_addresses`
+-- Indeks untuk tabel `customer_addresses`
 --
 ALTER TABLE `customer_addresses`
   ADD PRIMARY KEY (`id`),
   ADD KEY `customer_id` (`customer_id`),
   ADD KEY `province_id` (`province_id`),
-  ADD KEY `kota` (`regency_id`),
+  ADD KEY `regency_id` (`regency_id`),
   ADD KEY `district_id` (`district_id`),
   ADD KEY `village_id` (`village_id`);
 
 --
--- Indexes for table `customer_groups`
+-- Indeks untuk tabel `customer_balances`
+--
+ALTER TABLE `customer_balances`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `customer_buy_groups`
+--
+ALTER TABLE `customer_buy_groups`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `customer_buy_group_details`
+--
+ALTER TABLE `customer_buy_group_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `customer_groups`
 --
 ALTER TABLE `customer_groups`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `customer_statuses`
+-- Indeks untuk tabel `customer_log_browsings`
+--
+ALTER TABLE `customer_log_browsings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `customer_mutation_amounts`
+--
+ALTER TABLE `customer_mutation_amounts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `customer_mutation_amount_types`
+--
+ALTER TABLE `customer_mutation_amount_types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `customer_mutation_points`
+--
+ALTER TABLE `customer_mutation_points`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `customer_mutation_point_types`
+--
+ALTER TABLE `customer_mutation_point_types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `customer_point_rates`
+--
+ALTER TABLE `customer_point_rates`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `customer_statuses`
 --
 ALTER TABLE `customer_statuses`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `customer_tookens`
+-- Indeks untuk tabel `customer_tokens`
 --
-ALTER TABLE `customer_tookens`
+ALTER TABLE `customer_tokens`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uuid` (`uuid`),
   ADD KEY `customer_id` (`customer_id`);
 
 --
--- Indexes for table `districts`
+-- Indeks untuk tabel `customer_virtual_account`
+--
+ALTER TABLE `customer_virtual_account`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `districts`
 --
 ALTER TABLE `districts`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `districts_id_index` (`regency_id`);
+  ADD KEY `regency_id` (`regency_id`);
 
 --
--- Indexes for table `groups`
+-- Indeks untuk tabel `groups`
 --
 ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `options`
+-- Indeks untuk tabel `options`
 --
 ALTER TABLE `options`
   ADD PRIMARY KEY (`id`),
   ADD KEY `option_type_id` (`option_type_id`);
 
 --
--- Indexes for table `option_types`
+-- Indeks untuk tabel `option_types`
 --
 ALTER TABLE `option_types`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `option_values`
+-- Indeks untuk tabel `option_values`
 --
 ALTER TABLE `option_values`
   ADD PRIMARY KEY (`id`),
   ADD KEY `option_id` (`option_id`);
 
 --
--- Indexes for table `orders`
+-- Indeks untuk tabel `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `orderid` (`orderid`),
-  ADD KEY `customer_id` (`customer_id`),
-  ADD KEY `customer_address_id` (`customer_address_id`);
+  ADD KEY `customer_id` (`customer_id`);
 
 --
--- Indexes for table `order_histories`
+-- Indeks untuk tabel `order_details`
 --
-ALTER TABLE `order_histories`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `order_id` (`order_id`),
-  ADD KEY `order_status_id` (`order_status_id`);
+ALTER TABLE `order_details`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `order_options`
+-- Indeks untuk tabel `order_detail_products`
 --
-ALTER TABLE `order_options`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `order_id` (`order_id`),
-  ADD KEY `order_product_id` (`order_product_id`),
-  ADD KEY `product_option_value_id` (`product_option_value_id`);
+ALTER TABLE `order_detail_products`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `order_products`
+-- Indeks untuk tabel `order_shipping_details`
 --
-ALTER TABLE `order_products`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `order_id` (`order_id`),
-  ADD KEY `product_id` (`product_id`);
+ALTER TABLE `order_shipping_details`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `order_status`
+-- Indeks untuk tabel `order_status`
 --
 ALTER TABLE `order_status`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `pages`
+-- Indeks untuk tabel `pages`
 --
 ALTER TABLE `pages`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `phinxlog`
+-- Indeks untuk tabel `phinxlog`
 --
 ALTER TABLE `phinxlog`
   ADD PRIMARY KEY (`version`);
 
 --
--- Indexes for table `products`
+-- Indeks untuk tabel `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `slug` (`slug`),
+  ADD KEY `product_status_id` (`product_status_id`),
   ADD KEY `product_stock_status_id` (`product_stock_status_id`),
-  ADD KEY `product_weight_class_id` (`product_weight_class_id`),
-  ADD KEY `product_status_id` (`product_status_id`);
+  ADD KEY `product_weight_class_id` (`product_weight_class_id`);
 
 --
--- Indexes for table `product_attributes`
+-- Indeks untuk tabel `product_attributes`
 --
 ALTER TABLE `product_attributes`
   ADD PRIMARY KEY (`id`),
@@ -89406,52 +89891,71 @@ ALTER TABLE `product_attributes`
   ADD KEY `attribute_id` (`attribute_id`);
 
 --
--- Indexes for table `product_categories`
+-- Indeks untuk tabel `product_branches`
+--
+ALTER TABLE `product_branches`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `product_categories`
 --
 ALTER TABLE `product_categories`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `slug` (`slug`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `product_deals`
+-- Indeks untuk tabel `product_deals`
 --
 ALTER TABLE `product_deals`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `product_id` (`product_id`),
-  ADD KEY `date_start` (`date_start`),
-  ADD KEY `date_end` (`date_end`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `product_discounts`
+-- Indeks untuk tabel `product_deal_details`
+--
+ALTER TABLE `product_deal_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `product_discounts`
 --
 ALTER TABLE `product_discounts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `product_id` (`product_id`);
 
 --
--- Indexes for table `product_images`
+-- Indeks untuk tabel `product_groups`
+--
+ALTER TABLE `product_groups`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `product_group_details`
+--
+ALTER TABLE `product_group_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `product_images`
 --
 ALTER TABLE `product_images`
   ADD PRIMARY KEY (`id`),
   ADD KEY `product_id` (`product_id`);
 
 --
--- Indexes for table `product_image_sizes`
+-- Indeks untuk tabel `product_image_sizes`
 --
 ALTER TABLE `product_image_sizes`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `product_image_id` (`product_image_id`),
-  ADD KEY `dimension` (`dimension`);
+  ADD KEY `product_image_id` (`product_image_id`);
 
 --
--- Indexes for table `product_meta_tags`
+-- Indeks untuk tabel `product_meta_tags`
 --
 ALTER TABLE `product_meta_tags`
   ADD PRIMARY KEY (`id`),
   ADD KEY `product_id` (`product_id`);
 
 --
--- Indexes for table `product_option_values`
+-- Indeks untuk tabel `product_option_values`
 --
 ALTER TABLE `product_option_values`
   ADD PRIMARY KEY (`id`),
@@ -89459,68 +89963,73 @@ ALTER TABLE `product_option_values`
   ADD KEY `option_value_id` (`option_value_id`);
 
 --
--- Indexes for table `product_statuses`
+-- Indeks untuk tabel `product_statuses`
 --
 ALTER TABLE `product_statuses`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `product_stock_mutations`
+-- Indeks untuk tabel `product_stock_mutations`
 --
 ALTER TABLE `product_stock_mutations`
   ADD PRIMARY KEY (`id`),
   ADD KEY `product_id` (`product_id`),
-  ADD KEY `order_id` (`order_id`),
-  ADD KEY `product_stock_mutation_type_id` (`product_stock_mutation_type_id`);
+  ADD KEY `product_stock_mutation_type_id` (`product_stock_mutation_type_id`),
+  ADD KEY `product_option_values_id` (`product_option_values_id`);
 
 --
--- Indexes for table `product_stock_mutation_types`
+-- Indeks untuk tabel `product_stock_mutation_types`
 --
 ALTER TABLE `product_stock_mutation_types`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `product_stock_statuses`
+-- Indeks untuk tabel `product_stock_statuses`
 --
 ALTER TABLE `product_stock_statuses`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `product_to_categories`
+-- Indeks untuk tabel `product_to_categories`
 --
 ALTER TABLE `product_to_categories`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `product_id` (`product_id`,`product_category_id`),
-  ADD KEY `product_id_2` (`product_id`),
+  ADD KEY `product_id` (`product_id`),
   ADD KEY `product_category_id` (`product_category_id`);
 
 --
--- Indexes for table `product_weight_classes`
+-- Indeks untuk tabel `product_weight_classes`
 --
 ALTER TABLE `product_weight_classes`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `provinces`
+-- Indeks untuk tabel `promotions`
+--
+ALTER TABLE `promotions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `promotion_images`
+--
+ALTER TABLE `promotion_images`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `provinces`
 --
 ALTER TABLE `provinces`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `regencies`
+-- Indeks untuk tabel `regencies`
 --
 ALTER TABLE `regencies`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `regencies_province_id_index` (`province_id`);
+  ADD KEY `province_id` (`province_id`);
 
 --
--- Indexes for table `test`
---
-ALTER TABLE `test`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `users`
+-- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
@@ -89528,414 +90037,522 @@ ALTER TABLE `users`
   ADD KEY `group_id` (`group_id`);
 
 --
--- Indexes for table `user_status`
+-- Indeks untuk tabel `user_status`
 --
 ALTER TABLE `user_status`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `villages`
+-- Indeks untuk tabel `villages`
 --
 ALTER TABLE `villages`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `villages_district_id_index` (`district_id`);
+  ADD KEY `district_id` (`district_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indeks untuk tabel `vouchers`
+--
+ALTER TABLE `vouchers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `acos`
+-- AUTO_INCREMENT untuk tabel `acos`
 --
 ALTER TABLE `acos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
--- AUTO_INCREMENT for table `aros`
+-- AUTO_INCREMENT untuk tabel `aros`
 --
 ALTER TABLE `aros`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `aros_acos`
+-- AUTO_INCREMENT untuk tabel `aros_acos`
 --
 ALTER TABLE `aros_acos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT for table `attributes`
+-- AUTO_INCREMENT untuk tabel `attributes`
 --
 ALTER TABLE `attributes`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `attribute_groups`
+-- AUTO_INCREMENT untuk tabel `branches`
 --
-ALTER TABLE `attribute_groups`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `branches`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `customers`
+-- AUTO_INCREMENT untuk tabel `chats`
+--
+ALTER TABLE `chats`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `chat_details`
+--
+ALTER TABLE `chat_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `courriers`
+--
+ALTER TABLE `courriers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT untuk tabel `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `customer_addresses`
+-- AUTO_INCREMENT untuk tabel `customer_addresses`
 --
 ALTER TABLE `customer_addresses`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `customer_groups`
+-- AUTO_INCREMENT untuk tabel `customer_balances`
+--
+ALTER TABLE `customer_balances`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `customer_buy_groups`
+--
+ALTER TABLE `customer_buy_groups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `customer_buy_group_details`
+--
+ALTER TABLE `customer_buy_group_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `customer_groups`
 --
 ALTER TABLE `customer_groups`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `customer_statuses`
+-- AUTO_INCREMENT untuk tabel `customer_log_browsings`
+--
+ALTER TABLE `customer_log_browsings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `customer_mutation_amounts`
+--
+ALTER TABLE `customer_mutation_amounts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `customer_mutation_amount_types`
+--
+ALTER TABLE `customer_mutation_amount_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT untuk tabel `customer_mutation_points`
+--
+ALTER TABLE `customer_mutation_points`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `customer_mutation_point_types`
+--
+ALTER TABLE `customer_mutation_point_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT untuk tabel `customer_point_rates`
+--
+ALTER TABLE `customer_point_rates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT untuk tabel `customer_statuses`
 --
 ALTER TABLE `customer_statuses`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `customer_tookens`
+-- AUTO_INCREMENT untuk tabel `customer_tokens`
 --
-ALTER TABLE `customer_tookens`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `customer_tokens`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `districts`
+-- AUTO_INCREMENT untuk tabel `customer_virtual_account`
+--
+ALTER TABLE `customer_virtual_account`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `districts`
 --
 ALTER TABLE `districts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7216;
 
 --
--- AUTO_INCREMENT for table `groups`
+-- AUTO_INCREMENT untuk tabel `groups`
 --
 ALTER TABLE `groups`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `options`
+-- AUTO_INCREMENT untuk tabel `options`
 --
 ALTER TABLE `options`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `option_types`
+-- AUTO_INCREMENT untuk tabel `option_types`
 --
 ALTER TABLE `option_types`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `option_values`
+-- AUTO_INCREMENT untuk tabel `option_values`
 --
 ALTER TABLE `option_values`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `orders`
+-- AUTO_INCREMENT untuk tabel `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `order_histories`
+-- AUTO_INCREMENT untuk tabel `order_details`
 --
-ALTER TABLE `order_histories`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `order_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `order_options`
+-- AUTO_INCREMENT untuk tabel `order_detail_products`
 --
-ALTER TABLE `order_options`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `order_detail_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `order_products`
+-- AUTO_INCREMENT untuk tabel `order_shipping_details`
 --
-ALTER TABLE `order_products`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `order_shipping_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `order_status`
+-- AUTO_INCREMENT untuk tabel `order_status`
 --
 ALTER TABLE `order_status`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT for table `pages`
+-- AUTO_INCREMENT untuk tabel `pages`
 --
 ALTER TABLE `pages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `products`
+-- AUTO_INCREMENT untuk tabel `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_attributes`
+-- AUTO_INCREMENT untuk tabel `product_attributes`
 --
 ALTER TABLE `product_attributes`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_categories`
+-- AUTO_INCREMENT untuk tabel `product_branches`
+--
+ALTER TABLE `product_branches`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `product_categories`
 --
 ALTER TABLE `product_categories`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT for table `product_deals`
+-- AUTO_INCREMENT untuk tabel `product_deals`
 --
 ALTER TABLE `product_deals`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_discounts`
+-- AUTO_INCREMENT untuk tabel `product_deal_details`
+--
+ALTER TABLE `product_deal_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `product_discounts`
 --
 ALTER TABLE `product_discounts`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_images`
+-- AUTO_INCREMENT untuk tabel `product_groups`
+--
+ALTER TABLE `product_groups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `product_group_details`
+--
+ALTER TABLE `product_group_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_image_sizes`
+-- AUTO_INCREMENT untuk tabel `product_image_sizes`
 --
 ALTER TABLE `product_image_sizes`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_meta_tags`
+-- AUTO_INCREMENT untuk tabel `product_meta_tags`
 --
 ALTER TABLE `product_meta_tags`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_option_values`
+-- AUTO_INCREMENT untuk tabel `product_option_values`
 --
 ALTER TABLE `product_option_values`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_stock_mutations`
+-- AUTO_INCREMENT untuk tabel `product_statuses`
+--
+ALTER TABLE `product_statuses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT untuk tabel `product_stock_mutations`
 --
 ALTER TABLE `product_stock_mutations`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_to_categories`
+-- AUTO_INCREMENT untuk tabel `product_stock_mutation_types`
+--
+ALTER TABLE `product_stock_mutation_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `product_stock_statuses`
+--
+ALTER TABLE `product_stock_statuses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT untuk tabel `product_to_categories`
 --
 ALTER TABLE `product_to_categories`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_weight_classes`
+-- AUTO_INCREMENT untuk tabel `product_weight_classes`
 --
 ALTER TABLE `product_weight_classes`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `provinces`
+-- AUTO_INCREMENT untuk tabel `promotions`
+--
+ALTER TABLE `promotions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `promotion_images`
+--
+ALTER TABLE `promotion_images`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `provinces`
 --
 ALTER TABLE `provinces`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
--- AUTO_INCREMENT for table `regencies`
+-- AUTO_INCREMENT untuk tabel `regencies`
 --
 ALTER TABLE `regencies`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=515;
 
 --
--- AUTO_INCREMENT for table `test`
---
-ALTER TABLE `test`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `user_status`
+-- AUTO_INCREMENT untuk tabel `user_status`
 --
 ALTER TABLE `user_status`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `villages`
+-- AUTO_INCREMENT untuk tabel `villages`
 --
 ALTER TABLE `villages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80533;
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT untuk tabel `vouchers`
+--
+ALTER TABLE `vouchers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `attributes`
+-- Ketidakleluasaan untuk tabel `attributes`
 --
 ALTER TABLE `attributes`
-  ADD CONSTRAINT `attributes_ibfk_1` FOREIGN KEY (`attribute_group_id`) REFERENCES `attribute_groups` (`id`);
+  ADD CONSTRAINT `attributes_ibfk_1` FOREIGN KEY (`product_categories_id`) REFERENCES `product_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `customers`
+-- Ketidakleluasaan untuk tabel `customers`
 --
 ALTER TABLE `customers`
-  ADD CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`customer_status_id`) REFERENCES `customer_statuses` (`id`),
-  ADD CONSTRAINT `customers_ibfk_2` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_groups` (`id`);
+  ADD CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `customers_ibfk_2` FOREIGN KEY (`customer_status_id`) REFERENCES `customer_statuses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `customer_addresses`
+-- Ketidakleluasaan untuk tabel `customer_addresses`
 --
 ALTER TABLE `customer_addresses`
-  ADD CONSTRAINT `customer_addresses_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
-  ADD CONSTRAINT `customer_addresses_ibfk_2` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`),
-  ADD CONSTRAINT `customer_addresses_ibfk_3` FOREIGN KEY (`district_id`) REFERENCES `districts` (`id`),
-  ADD CONSTRAINT `customer_addresses_ibfk_4` FOREIGN KEY (`regency_id`) REFERENCES `regencies` (`id`),
-  ADD CONSTRAINT `customer_addresses_ibfk_5` FOREIGN KEY (`village_id`) REFERENCES `villages` (`id`);
+  ADD CONSTRAINT `customer_addresses_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `customer_addresses_ibfk_2` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `customer_addresses_ibfk_3` FOREIGN KEY (`regency_id`) REFERENCES `regencies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `customer_addresses_ibfk_4` FOREIGN KEY (`district_id`) REFERENCES `districts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `customer_addresses_ibfk_5` FOREIGN KEY (`village_id`) REFERENCES `villages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `customer_tookens`
+-- Ketidakleluasaan untuk tabel `customer_tokens`
 --
-ALTER TABLE `customer_tookens`
-  ADD CONSTRAINT `customer_tookens_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`);
+ALTER TABLE `customer_tokens`
+  ADD CONSTRAINT `customer_tokens_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `districts`
+-- Ketidakleluasaan untuk tabel `districts`
 --
 ALTER TABLE `districts`
-  ADD CONSTRAINT `districts_ibfk_1` FOREIGN KEY (`regency_id`) REFERENCES `regencies` (`id`);
+  ADD CONSTRAINT `districts_ibfk_1` FOREIGN KEY (`regency_id`) REFERENCES `regencies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `options`
+-- Ketidakleluasaan untuk tabel `options`
 --
 ALTER TABLE `options`
-  ADD CONSTRAINT `options_ibfk_1` FOREIGN KEY (`option_type_id`) REFERENCES `option_types` (`id`);
+  ADD CONSTRAINT `options_ibfk_1` FOREIGN KEY (`option_type_id`) REFERENCES `option_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `option_values`
+-- Ketidakleluasaan untuk tabel `option_values`
 --
 ALTER TABLE `option_values`
-  ADD CONSTRAINT `option_values_ibfk_1` FOREIGN KEY (`option_id`) REFERENCES `options` (`id`);
+  ADD CONSTRAINT `option_values_ibfk_1` FOREIGN KEY (`option_id`) REFERENCES `options` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `orders`
+-- Ketidakleluasaan untuk tabel `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_address_id`) REFERENCES `customer_addresses` (`id`),
-  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`);
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `order_histories`
---
-ALTER TABLE `order_histories`
-  ADD CONSTRAINT `order_histories_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
-  ADD CONSTRAINT `order_histories_ibfk_2` FOREIGN KEY (`order_status_id`) REFERENCES `order_status` (`id`);
-
---
--- Constraints for table `order_options`
---
-ALTER TABLE `order_options`
-  ADD CONSTRAINT `order_options_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
-  ADD CONSTRAINT `order_options_ibfk_2` FOREIGN KEY (`order_product_id`) REFERENCES `order_products` (`id`),
-  ADD CONSTRAINT `order_options_ibfk_3` FOREIGN KEY (`product_option_value_id`) REFERENCES `product_option_values` (`id`);
-
---
--- Constraints for table `order_products`
---
-ALTER TABLE `order_products`
-  ADD CONSTRAINT `order_products_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
-  ADD CONSTRAINT `order_products_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
-
---
--- Constraints for table `products`
+-- Ketidakleluasaan untuk tabel `products`
 --
 ALTER TABLE `products`
-  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`product_status_id`) REFERENCES `product_statuses` (`id`),
-  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`product_stock_status_id`) REFERENCES `product_stock_statuses` (`id`),
-  ADD CONSTRAINT `products_ibfk_3` FOREIGN KEY (`product_weight_class_id`) REFERENCES `product_weight_classes` (`id`);
+  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`product_status_id`) REFERENCES `product_statuses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`product_stock_status_id`) REFERENCES `product_stock_statuses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `products_ibfk_3` FOREIGN KEY (`product_weight_class_id`) REFERENCES `product_weight_classes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `product_attributes`
+-- Ketidakleluasaan untuk tabel `product_attributes`
 --
 ALTER TABLE `product_attributes`
-  ADD CONSTRAINT `product_attributes_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
-  ADD CONSTRAINT `product_attributes_ibfk_2` FOREIGN KEY (`attribute_id`) REFERENCES `attributes` (`id`);
+  ADD CONSTRAINT `product_attributes_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `product_attributes_ibfk_2` FOREIGN KEY (`attribute_id`) REFERENCES `attributes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `product_deals`
---
-ALTER TABLE `product_deals`
-  ADD CONSTRAINT `product_deals_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
-
---
--- Constraints for table `product_discounts`
+-- Ketidakleluasaan untuk tabel `product_discounts`
 --
 ALTER TABLE `product_discounts`
-  ADD CONSTRAINT `product_discounts_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+  ADD CONSTRAINT `product_discounts_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `product_images`
+-- Ketidakleluasaan untuk tabel `product_images`
 --
 ALTER TABLE `product_images`
-  ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+  ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `product_image_sizes`
+-- Ketidakleluasaan untuk tabel `product_image_sizes`
 --
 ALTER TABLE `product_image_sizes`
-  ADD CONSTRAINT `product_image_sizes_ibfk_1` FOREIGN KEY (`product_image_id`) REFERENCES `product_images` (`id`);
+  ADD CONSTRAINT `product_image_sizes_ibfk_1` FOREIGN KEY (`product_image_id`) REFERENCES `product_images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `product_meta_tags`
+-- Ketidakleluasaan untuk tabel `product_meta_tags`
 --
 ALTER TABLE `product_meta_tags`
-  ADD CONSTRAINT `product_meta_tags_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+  ADD CONSTRAINT `product_meta_tags_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `product_option_values`
+-- Ketidakleluasaan untuk tabel `product_option_values`
 --
 ALTER TABLE `product_option_values`
-  ADD CONSTRAINT `product_option_values_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
-  ADD CONSTRAINT `product_option_values_ibfk_2` FOREIGN KEY (`option_value_id`) REFERENCES `option_values` (`id`);
+  ADD CONSTRAINT `product_option_values_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `product_option_values_ibfk_2` FOREIGN KEY (`option_value_id`) REFERENCES `option_values` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `product_stock_mutations`
+-- Ketidakleluasaan untuk tabel `product_stock_mutations`
 --
 ALTER TABLE `product_stock_mutations`
-  ADD CONSTRAINT `product_stock_mutations_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
-  ADD CONSTRAINT `product_stock_mutations_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
-  ADD CONSTRAINT `product_stock_mutations_ibfk_3` FOREIGN KEY (`product_stock_mutation_type_id`) REFERENCES `product_stock_mutation_types` (`id`);
+  ADD CONSTRAINT `product_stock_mutations_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `product_stock_mutations_ibfk_3` FOREIGN KEY (`product_stock_mutation_type_id`) REFERENCES `product_stock_mutation_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `product_to_categories`
+-- Ketidakleluasaan untuk tabel `product_to_categories`
 --
 ALTER TABLE `product_to_categories`
-  ADD CONSTRAINT `product_to_categories_ibfk_1` FOREIGN KEY (`product_category_id`) REFERENCES `product_categories` (`id`),
-  ADD CONSTRAINT `product_to_categories_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+  ADD CONSTRAINT `product_to_categories_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `product_to_categories_ibfk_2` FOREIGN KEY (`product_category_id`) REFERENCES `product_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `regencies`
+-- Ketidakleluasaan untuk tabel `regencies`
 --
 ALTER TABLE `regencies`
-  ADD CONSTRAINT `regencies_ibfk_1` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`);
+  ADD CONSTRAINT `regencies_ibfk_1` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `villages`
+-- Ketidakleluasaan untuk tabel `villages`
 --
 ALTER TABLE `villages`
-  ADD CONSTRAINT `villages_ibfk_1` FOREIGN KEY (`district_id`) REFERENCES `districts` (`id`);
+  ADD CONSTRAINT `villages_ibfk_1` FOREIGN KEY (`district_id`) REFERENCES `districts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

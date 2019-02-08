@@ -26,8 +26,8 @@ class CreateTableAttributes extends AbstractMigration
             'limit' => 255,
             'null' => true
         ]);
-        $table->addIndex('product_categories_id');
-        $table->addForeignKey('product_categories_id', 'product_categories', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
+//        $table->addIndex('product_categories_id');
+//        $table->addForeignKey('product_categories_id', 'product_categories', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
         $table->create();
     }
 }
