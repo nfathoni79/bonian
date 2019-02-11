@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class CreateTableProductShippings extends AbstractMigration
+class CreateTableProductToCourriers extends AbstractMigration
 {
     /**
      * Change Method.
@@ -12,7 +12,7 @@ class CreateTableProductShippings extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('product_shippings');
+        $table = $this->table('product_to_courriers');
         $table->addColumn('product_id', 'integer', [
             'default' => null,
             'limit' => 11
