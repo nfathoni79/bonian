@@ -21,11 +21,11 @@ class ProductStatusesSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'name' => 'Enable',
+                'name' => 'Publish',
             ],
             [
                 'id' => '2',
-                'name' => 'Disable',
+                'name' => 'Unpublish',
             ],
         ];
 

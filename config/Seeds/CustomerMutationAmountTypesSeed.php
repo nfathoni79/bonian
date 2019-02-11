@@ -2,9 +2,9 @@
 use Migrations\AbstractSeed;
 
 /**
- * ProductStockStatuses seed.
+ * CustomerMutationAmountTypes seed.
  */
-class ProductStockStatusesSeed extends AbstractSeed
+class CustomerMutationAmountTypesSeed extends AbstractSeed
 {
     /**
      * Run Method.
@@ -21,15 +21,22 @@ class ProductStockStatusesSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'name' => 'In Stock',
+                'name' => 'Pembelanjaan',
+                'type' => 'Debit',
             ],
             [
                 'id' => '2',
-                'name' => 'Out Of Stock',
+                'name' => 'Refund',
+                'type' => 'Credit',
+            ],
+            [
+                'id' => '3',
+                'name' => 'Deposite',
+                'type' => 'Credit',
             ],
         ];
 
-        $table = $this->table('product_stock_statuses');
+        $table = $this->table('customer_mutation_amount_types');
         $table->insert($data)->save();
     }
 }

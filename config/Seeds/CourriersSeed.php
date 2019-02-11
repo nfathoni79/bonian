@@ -2,9 +2,9 @@
 use Migrations\AbstractSeed;
 
 /**
- * CustomerGroups seed.
+ * Courriers seed.
  */
-class CustomerGroupsSeed extends AbstractSeed
+class CourriersSeed extends AbstractSeed
 {
     /**
      * Run Method.
@@ -21,23 +21,31 @@ class CustomerGroupsSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'name' => 'Normal',
+                'name' => 'JNE',
+                'code' => 'jne',
+                'created' => '2019-02-08 00:00:00',
             ],
             [
                 'id' => '2',
-                'name' => 'Silver',
+                'name' => 'JNT',
+                'code' => 'jnt',
+                'created' => '2019-02-08 00:00:00',
             ],
             [
                 'id' => '3',
-                'name' => 'Gold',
+                'name' => 'TIKI',
+                'code' => 'tiki',
+                'created' => '2019-02-08 00:00:00',
             ],
             [
                 'id' => '4',
-                'name' => 'Platinum',
-            ], 
+                'name' => 'POS',
+                'code' => 'pos',
+                'created' => '2019-02-08 00:00:00',
+            ],
         ];
 
-        $table = $this->table('customer_groups');
+        $table = $this->table('courriers');
         $table->insert($data)->save();
     }
 }

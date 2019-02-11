@@ -2,9 +2,9 @@
 use Migrations\AbstractSeed;
 
 /**
- * CustomerGroups seed.
+ * CustomerMutationPointTypes seed.
  */
-class CustomerGroupsSeed extends AbstractSeed
+class CustomerMutationPointTypesSeed extends AbstractSeed
 {
     /**
      * Run Method.
@@ -21,23 +21,27 @@ class CustomerGroupsSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'name' => 'Normal',
+                'name' => 'Pembelanjaan',
+                'type' => 'Debit',
             ],
             [
                 'id' => '2',
-                'name' => 'Silver',
+                'name' => 'Refund',
+                'type' => 'Credit',
             ],
             [
                 'id' => '3',
-                'name' => 'Gold',
+                'name' => 'Bonus Point',
+                'type' => 'Credit',
             ],
             [
                 'id' => '4',
-                'name' => 'Platinum',
-            ], 
+                'name' => 'Bonus Point Generasi',
+                'type' => 'Credit',
+            ],
         ];
 
-        $table = $this->table('customer_groups');
+        $table = $this->table('customer_mutation_point_types');
         $table->insert($data)->save();
     }
 }

@@ -21,139 +21,139 @@ class ProvincesSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'name' => 'ACEH',
+                'name' => 'Bali',
             ],
             [
                 'id' => '2',
-                'name' => 'SUMATERA UTARA',
+                'name' => 'Bangka Belitung',
             ],
             [
                 'id' => '3',
-                'name' => 'SUMATERA BARAT',
+                'name' => 'Banten',
             ],
             [
                 'id' => '4',
-                'name' => 'RIAU',
+                'name' => 'Bengkulu',
             ],
             [
                 'id' => '5',
-                'name' => 'JAMBI',
+                'name' => 'DI Yogyakarta',
             ],
             [
                 'id' => '6',
-                'name' => 'SUMATERA SELATAN',
+                'name' => 'DKI Jakarta',
             ],
             [
                 'id' => '7',
-                'name' => 'BENGKULU',
+                'name' => 'Gorontalo',
             ],
             [
                 'id' => '8',
-                'name' => 'LAMPUNG',
+                'name' => 'Jambi',
             ],
             [
                 'id' => '9',
-                'name' => 'KEPULAUAN BANGKA BELITUNG',
+                'name' => 'Jawa Barat',
             ],
             [
                 'id' => '10',
-                'name' => 'KEPULAUAN RIAU',
+                'name' => 'Jawa Tengah',
             ],
             [
                 'id' => '11',
-                'name' => 'DKI JAKARTA',
+                'name' => 'Jawa Timur',
             ],
             [
                 'id' => '12',
-                'name' => 'JAWA BARAT',
+                'name' => 'Kalimantan Barat',
             ],
             [
                 'id' => '13',
-                'name' => 'JAWA TENGAH',
+                'name' => 'Kalimantan Selatan',
             ],
             [
                 'id' => '14',
-                'name' => 'DI YOGYAKARTA',
+                'name' => 'Kalimantan Tengah',
             ],
             [
                 'id' => '15',
-                'name' => 'JAWA TIMUR',
+                'name' => 'Kalimantan Timur',
             ],
             [
                 'id' => '16',
-                'name' => 'BANTEN',
+                'name' => 'Kalimantan Utara',
             ],
             [
                 'id' => '17',
-                'name' => 'BALI',
+                'name' => 'Kepulauan Riau',
             ],
             [
                 'id' => '18',
-                'name' => 'NUSA TENGGARA BARAT',
+                'name' => 'Lampung',
             ],
             [
                 'id' => '19',
-                'name' => 'NUSA TENGGARA TIMUR',
+                'name' => 'Maluku',
             ],
             [
                 'id' => '20',
-                'name' => 'KALIMANTAN BARAT',
+                'name' => 'Maluku Utara',
             ],
             [
                 'id' => '21',
-                'name' => 'KALIMANTAN TENGAH',
+                'name' => 'Nanggroe Aceh Darussalam (NAD)',
             ],
             [
                 'id' => '22',
-                'name' => 'KALIMANTAN SELATAN',
+                'name' => 'Nusa Tenggara Barat (NTB)',
             ],
             [
                 'id' => '23',
-                'name' => 'KALIMANTAN TIMUR',
+                'name' => 'Nusa Tenggara Timur (NTT)',
             ],
             [
                 'id' => '24',
-                'name' => 'KALIMANTAN UTARA',
+                'name' => 'Papua',
             ],
             [
                 'id' => '25',
-                'name' => 'SULAWESI UTARA',
+                'name' => 'Papua Barat',
             ],
             [
                 'id' => '26',
-                'name' => 'SULAWESI TENGAH',
+                'name' => 'Riau',
             ],
             [
                 'id' => '27',
-                'name' => 'SULAWESI SELATAN',
+                'name' => 'Sulawesi Barat',
             ],
             [
                 'id' => '28',
-                'name' => 'SULAWESI TENGGARA',
+                'name' => 'Sulawesi Selatan',
             ],
             [
                 'id' => '29',
-                'name' => 'GORONTALO',
+                'name' => 'Sulawesi Tengah',
             ],
             [
                 'id' => '30',
-                'name' => 'SULAWESI BARAT',
+                'name' => 'Sulawesi Tenggara',
             ],
             [
                 'id' => '31',
-                'name' => 'MALUKU',
+                'name' => 'Sulawesi Utara',
             ],
             [
                 'id' => '32',
-                'name' => 'MALUKU UTARA',
+                'name' => 'Sumatera Barat',
             ],
             [
                 'id' => '33',
-                'name' => 'PAPUA BARAT',
+                'name' => 'Sumatera Selatan',
             ],
             [
                 'id' => '34',
-                'name' => 'PAPUA',
+                'name' => 'Sumatera Utara',
             ],
         ];
 

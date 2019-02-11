@@ -27,6 +27,7 @@ class UsersSeed extends AbstractSeed
                 'last_name' => 'Zolaku',
                 'group_id' => '1',
                 'user_status_id' => '1',
+                'branch_id' => NULL,
                 'created' => '2019-01-10 05:05:01',
                 'modified' => '2019-01-10 05:05:01',
             ],
