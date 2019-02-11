@@ -55,7 +55,7 @@
                     <div class="m-stack m-stack--ver m-stack--general">
                         <div class="m-stack__item m-stack__item--middle m-brand__logo">
                             <a href="<?= $this->Url->build(['controller' => 'Dashboard']); ?>" class="m-brand__logo-wrapper">
-                                <img alt="" src="<?= $this->Url->build('/admin-assets/media/logos/logo-1.png'); ?>" />
+                                <img alt="" src="<? $this->Url->build('/admin-assets/media/logos/logo-1.png'); ?>" />
                             </a>
                         </div>
                         <div class="m-stack__item m-stack__item--middle m-brand__tools">
