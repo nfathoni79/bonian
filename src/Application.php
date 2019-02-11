@@ -47,6 +47,7 @@ class Application extends BaseApplication
             $this->addPlugin('Migrations');
         }
 		$this->addPlugin('Acl');
+        $this->addPlugin('Josegonzalez/Upload');
 
         /*
          * Only try to load DebugKit in development mode
