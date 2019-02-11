@@ -88,6 +88,10 @@ class CreateTableProducts extends AbstractMigration
             'default' => 0,
             'limit' => 5
         ]);
+        $table->addColumn('point', 'integer', [
+            'default' => 0,
+            'limit' => 5
+        ]);
         $table->addColumn('created', 'datetime', [
             'default' => null,
         ]);
