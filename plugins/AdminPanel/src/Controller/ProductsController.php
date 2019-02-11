@@ -12,6 +12,12 @@ use AdminPanel\Controller\AppController;
 class ProductsController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('AdminPanel.Courriers');
+        $this->loadModel('AdminPanel.Options');
+    }
     /**
      * Index method
      *
@@ -112,7 +118,64 @@ class ProductsController extends AppController
         $productStockStatuses = $this->Products->ProductStockStatuses->find('list', ['limit' => 200]);
         $productWeightClasses = $this->Products->ProductWeightClasses->find('list', ['limit' => 200]);
         $productStatuses = $this->Products->ProductStatuses->find('list', ['limit' => 200]);
-        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses'));
+        $courriers = $this->Courriers->find('list')->toArray();
+        $options = $this->Options->find('list')->toArray();
+
+        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options'));
+    }
+
+    public function getoptionvalues(){
+
+        if ($this->request->is('ajax')) {
+            $this->viewBuilder()->setLayout('ajax');
+
+//
+//            $pagination = $this->request->getData('pagination');
+//            $sort = $this->request->getData('sort');
+//            $query = $this->request->getData('query');
+//
+//            /** custom default query : select, where, contain, etc. **/
+//            $data = $this->Regencies->find('all')
+//                ->select();
+//            $data->contain(['Provinces']);
+//
+//            if ($query && is_array($query)) {
+//                if (isset($query['generalSearch'])) {
+//                    $search = $query['generalSearch'];
+//                    unset($query['generalSearch']);
+//                    /**
+//                    custom field for general search
+//                    ex : 'Users.email LIKE' => '%' . $search .'%'
+//                     **/
+//                    $data->where(['Regencies.name LIKE' => '%' . $search .'%']);
+//                }
+//                $data->where($query);
+//            }
+//
+//            if (isset($sort['field']) && isset($sort['sort'])) {
+//                $data->order([$sort['field'] => $sort['sort']]);
+//            }
+//
+//            if (isset($pagination['perpage']) && is_numeric($pagination['perpage'])) {
+//                $data->limit($pagination['perpage']);
+//            }
+//            if (isset($pagination['page']) && is_numeric($pagination['page'])) {
+//                $data->page($pagination['page']);
+//            }
+//
+//            $total = $data->count();
+//
+//            $result = [];
+//            $result['data'] = $data->toArray();
+//
+//
+//            $result['meta'] = array_merge((array) $pagination, (array) $sort);
+//            $result['meta']['total'] = $total;
+//
+//
+//            return $this->response->withType('application/json')
+//                ->withStringBody(json_encode($result));
+        }
     }
 
     /**

@@ -1,0 +1,91 @@
+<?php
+namespace AdminPanel\Model\Table;
+
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+/**
+ * Options Model
+ *
+ * @property \AdminPanel\Model\Table\OptionTypesTable|\Cake\ORM\Association\BelongsTo $OptionTypes
+ * @property \AdminPanel\Model\Table\OptionValuesTable|\Cake\ORM\Association\HasMany $OptionValues
+ *
+ * @method \AdminPanel\Model\Entity\Option get($primaryKey, $options = [])
+ * @method \AdminPanel\Model\Entity\Option newEntity($data = null, array $options = [])
+ * @method \AdminPanel\Model\Entity\Option[] newEntities(array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\Option|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \AdminPanel\Model\Entity\Option|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \AdminPanel\Model\Entity\Option patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\Option[] patchEntities($entities, array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\Option findOrCreate($search, callable $callback = null, $options = [])
+ */
+class OptionsTable extends Table
+{
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this->setTable('options');
+        $this->setDisplayField('name');
+        $this->setPrimaryKey('id');
+
+        $this->belongsTo('OptionTypes', [
+            'foreignKey' => 'option_type_id',
+            'joinType' => 'INNER',
+            'className' => 'AdminPanel.OptionTypes'
+        ]);
+        $this->hasMany('OptionValues', [
+            'foreignKey' => 'option_id',
+            'className' => 'AdminPanel.OptionValues'
+        ]);
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', 'create');
+
+        $validator
+            ->scalar('name')
+            ->maxLength('name', 150)
+            ->requirePresence('name', 'create')
+            ->allowEmptyString('name', false);
+
+        $validator
+            ->integer('sort_order')
+            ->requirePresence('sort_order', 'create')
+            ->allowEmptyString('sort_order', false);
+
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['option_type_id'], 'OptionTypes'));
+
+        return $rules;
+    }
+}

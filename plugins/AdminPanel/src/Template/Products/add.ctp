@@ -4,6 +4,39 @@
  * @var \Cake\Datasource\EntityInterface $product
  */
 ?>
+
+
+<?php $this->append('script'); ?>
+<?php echo $this->Html->script('/admin-assets/demo/default/custom/crud/wizard/wizard'); ?>
+<script>
+    $(document).ready(function(){
+        $('.add-attribute').on('click',function(){
+            var selected = $('#options').val();
+            var text = $('#options option:selected').text();
+            var disabled = $('#options option:selected').attr('disabled');
+            if(disabled == 'disabled'){
+                return false;
+            }
+            $('#options option[value="'+selected+'"]').attr("disabled", true);
+            $('.dynamic-form').append('<div class="'+text.toLowerCase()+'"><div class="m-form__heading"><h3 class="m-form__heading-title pull-left">Attribute '+text+'</h3><a href="#" class="btn btn-danger btn-sm remove-attribute pull-right" data-attribute="'+text.toLowerCase()+'" data-value="'+selected+'"><span>Remove</span></a><div class="clearfix"></div></div><div class="form-group m-form__group row"><label class="col-xl-3 col-lg-3 col-form-label">Form</label><div class="col-xl-3"></div></div></div>');
+
+
+
+            $('.remove-attribute').on('click',function(){
+                var selected  = $(this).data('value');
+                var text  = $(this).data('attribute');
+                $('select#options option[value="'+selected+'"]').prop('disabled', false);
+                $('div').remove('.'+text);
+            })
+        });
+    })
+</script>
+<script>
+    $('select').selectpicker();
+</script>
+
+
+<?php $this->end(); ?>
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
@@ -133,7 +166,7 @@
                                                     <span></span>
                                                 </div>
                                                 <div class="m-wizard__step-label">
-                                                    Shipping
+                                                    Shipping & Attributes
                                                 </div>
                                             </div>
                                         </div>
@@ -141,19 +174,6 @@
                                             <div class="m-wizard__step-info">
                                                 <a href="#" class="m-wizard__step-number">
                                                     <span><span>4</span></span>
-                                                </a>
-                                                <div class="m-wizard__step-line">
-                                                    <span></span>
-                                                </div>
-                                                <div class="m-wizard__step-label">
-                                                    Attributes
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_5">
-                                            <div class="m-wizard__step-info">
-                                                <a href="#" class="m-wizard__step-number">
-                                                    <span><span>5</span></span>
                                                 </a>
                                                 <div class="m-wizard__step-line">
                                                     <span></span>
@@ -173,7 +193,7 @@
                         <div class="col-xl-9 col-lg-12">
                             <div class="m-wizard__form">
                                 <?=
-                                $this->Form->create($product,['class' => 'm-form m-form--label-align-left- m-form--state-', 'id' =>'m_form','templates' => 'AdminPanel.app_form']);
+                                $this->Form->create($product,['class' => 'm-form m-form--label-align-left- m-form--state-', 'id' =>'m_form']);
                                 $default_class = 'form-control m-input';
                                 ?>
                                     <div class="m-portlet__body m-portlet__body--no-padding">
@@ -249,6 +269,41 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+
+
+                                            <div class="m-form__section">
+                                                <div class="m-form__heading">
+                                                    <h3 class="m-form__heading-title">Attributes</h3>
+                                                </div>
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Selector Attribute</label>
+                                                    <div class="col-xl-3">
+                                                        <?php echo $this->Form->control('options',['div' => false, 'label' => false,'options' => $options, 'class' => $default_class]);?>
+                                                    </div>
+                                                    <div class="col-xl-3">
+                                                        <a href="#" class="btn btn-success m-btn m-btn--custom m-btn--icon add-attribute">
+                                                            <span>Add</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="dynamic-form"></div>
+
+                                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                         </div>
 
                                         <!--begin: Form Wizard Step 2-->
@@ -293,29 +348,28 @@
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Regular Price</label>
                                                     <div class="col-xl-5 col-lg-9">
-                                                        <?php echo $this->Form->control('price',['label' => false,'class' => $default_class]);?>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend"><span class="input-group-text">IDR</span></div>
+                                                            <?php echo $this->Form->control('price',['div' => false, 'label' => false,'class' => $default_class]);?>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Discount</label>
-                                                    <div class="col-xl-2 col-lg-9">
-                                                        <?php echo $this->Form->control('price_discount',['label' => false,'class' => $default_class]);?>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Sale Price</label>
+                                                    <div class="col-xl-5 col-lg-9">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend"><span class="input-group-text">IDR</span></div>
+                                                            <?php echo $this->Form->control('price_sale',['div' => false, 'label' => false,'class' => $default_class]);?>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Discount</label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <div class="input-group">
-                                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
-                                                            <input type="text" name="phone" class="form-control m-input" placeholder="" value="1-541-754-3010">
+                                                            <div class="input-group-prepend"><span class="input-group-text">%</div>
+                                                            <?php echo $this->Form->control('price_discount',['div' => false, 'label' => false,'class' => $default_class, 'disabled' => 'disabled']);?>
                                                         </div>
-                                                        <span class="m-form__help">Enter your valid phone in US phone format. E.g: 1-541-754-3010</span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Sale Price</label>
-                                                    <div class="col-xl-5 col-lg-9">
-                                                        <?php echo $this->Form->control('sale',['label' => false,'class' => $default_class]);?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -324,6 +378,52 @@
                                         <!--end: Form Wizard Step 2-->
 
 
+                                        <!--begin: Form Wizard Step 3-->
+                                        <div class="m-wizard__form-step" id="m_wizard_form_step_3">
+                                            <div class="m-form__section m-form__section--first">
+                                                <div class="m-form__heading">
+                                                    <h3 class="m-form__heading-title">Shippings</h3>
+                                                </div>
+                                                <div class="form-group m-form__group row">
+                                                    <div class="col-lg-12 m-form__group-sub">
+                                                        <label class="form-control-label">Courrier </label>
+                                                        <div class="m-checkbox-inline">
+                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                                                <input type="checkbox" name="account_communication[]" checked value="JNE"> JNE
+                                                                <span></span>
+                                                            </label>
+                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                                                <input type="checkbox" name="account_communication[]" checked value="JNT"> JNT
+                                                                <span></span>
+                                                            </label>
+                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                                                <input type="checkbox" name="account_communication[]" checked value="TIKI"> TIKI
+                                                                <span></span>
+                                                            </label>
+                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                                                <input type="checkbox" name="account_communication[]" checked value="POS"> POS
+                                                                <span></span>
+                                                            </label>
+                                                        </div>
+                                                        <span class="m-form__help">Select courriers options</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-separator m-separator--dashed m-separator--lg"></div>
+                                            <div class="m-form__section">
+                                                <div class="m-form__heading">
+                                                    <h3 class="m-form__heading-title">Attributes</h3>
+                                                </div>
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-xl-2 col-form-label">Selector</label>
+                                                    <div class="col-xl-3">
+                                                        <?php echo $this->Form->control('options',['div' => false, 'label' => false,'options' => $options, 'class' => $default_class]);?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--end: Form Wizard Step 3-->
 
 
                                     </div>
@@ -365,9 +465,3 @@
     </div>
 </div>
 
-<?php $this->append('script'); ?>
-<?php echo $this->Html->script('/admin-assets/demo/default/custom/crud/wizard/wizard'); ?>
-<script>
-    $('select').selectpicker();
-</script>
-<?php $this->end(); ?>
