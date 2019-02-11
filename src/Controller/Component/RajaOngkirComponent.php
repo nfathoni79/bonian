@@ -131,6 +131,7 @@ class RajaOngkirComponent extends Component
             'originType' => $origin_type,
             'destination' => $destination,
             'destinationType' => $$destination_type,
+            'courier' => $courier,
             'weight' => $weight
         ];
 
