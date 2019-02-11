@@ -94,6 +94,12 @@ class CreateTableProducts extends AbstractMigration
         $table->addColumn('modified', 'datetime', [
             'default' => null,
         ]);
+        $table->addIndex('product_stock_status_id');
+        $table->addForeignKey('product_stock_status_id', 'product_stock_statuses', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
+        $table->addIndex('product_weight_class_id');
+        $table->addForeignKey('product_weight_class_id', 'product_weight_classes', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
+        $table->addIndex('product_status_id');
+        $table->addForeignKey('product_status_id', 'product_statuses', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
         $table->create();
     }
 }
