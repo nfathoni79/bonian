@@ -308,8 +308,6 @@
                                                         <div class="input-group">
                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                                             <input type="text" name="phone" class="form-control m-input" placeholder="" value="1-541-754-3010">
-
-                                                            <?php echo $this->Form->control('price_discount',['div' => false,'label' => false,'class' => $default_class]);?>
                                                         </div>
                                                         <span class="m-form__help">Enter your valid phone in US phone format. E.g: 1-541-754-3010</span>
                                                     </div>
