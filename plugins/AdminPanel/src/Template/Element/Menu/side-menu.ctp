@@ -88,6 +88,12 @@
                             ],
                         ]
                     ],
+                    [
+                        'name' => 'Tags',
+                        'url' => ['controller' => 'Tags', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
                 ]
             ],
             [

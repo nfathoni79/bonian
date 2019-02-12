@@ -4,17 +4,16 @@ namespace AdminPanel\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * ProductAttribute Entity
+ * ProductTag Entity
  *
  * @property int $id
  * @property int $product_id
- * @property int $attribute_id
- * @property string $description
+ * @property int $tag_id
  *
  * @property \AdminPanel\Model\Entity\Product $product
- * @property \AdminPanel\Model\Entity\Attribute $attribute
+ * @property \AdminPanel\Model\Entity\Tag $tag
  */
-class ProductAttribute extends Entity
+class ProductTag extends Entity
 {
 
     /**
@@ -28,9 +27,8 @@ class ProductAttribute extends Entity
      */
     protected $_accessible = [
         'product_id' => true,
-        'attribute_id' => true,
-        'description' => true,
+        'tag_id' => true,
         'product' => true,
-        'attribute' => true
+        'tag' => true
     ];
 }

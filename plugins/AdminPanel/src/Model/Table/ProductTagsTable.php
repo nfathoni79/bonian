@@ -7,21 +7,21 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * ProductAttributes Model
+ * ProductTags Model
  *
  * @property \AdminPanel\Model\Table\ProductsTable|\Cake\ORM\Association\BelongsTo $Products
- * @property \AdminPanel\Model\Table\AttributesTable|\Cake\ORM\Association\BelongsTo $Attributes
+ * @property \AdminPanel\Model\Table\TagsTable|\Cake\ORM\Association\BelongsTo $Tags
  *
- * @method \AdminPanel\Model\Entity\ProductAttribute get($primaryKey, $options = [])
- * @method \AdminPanel\Model\Entity\ProductAttribute newEntity($data = null, array $options = [])
- * @method \AdminPanel\Model\Entity\ProductAttribute[] newEntities(array $data, array $options = [])
- * @method \AdminPanel\Model\Entity\ProductAttribute|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \AdminPanel\Model\Entity\ProductAttribute|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \AdminPanel\Model\Entity\ProductAttribute patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \AdminPanel\Model\Entity\ProductAttribute[] patchEntities($entities, array $data, array $options = [])
- * @method \AdminPanel\Model\Entity\ProductAttribute findOrCreate($search, callable $callback = null, $options = [])
+ * @method \AdminPanel\Model\Entity\ProductTag get($primaryKey, $options = [])
+ * @method \AdminPanel\Model\Entity\ProductTag newEntity($data = null, array $options = [])
+ * @method \AdminPanel\Model\Entity\ProductTag[] newEntities(array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\ProductTag|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \AdminPanel\Model\Entity\ProductTag|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \AdminPanel\Model\Entity\ProductTag patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\ProductTag[] patchEntities($entities, array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\ProductTag findOrCreate($search, callable $callback = null, $options = [])
  */
-class ProductAttributesTable extends Table
+class ProductTagsTable extends Table
 {
 
     /**
@@ -34,7 +34,7 @@ class ProductAttributesTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('product_attributes');
+        $this->setTable('product_tags');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
@@ -43,10 +43,10 @@ class ProductAttributesTable extends Table
             'joinType' => 'INNER',
             'className' => 'AdminPanel.Products'
         ]);
-        $this->belongsTo('Attributes', [
-            'foreignKey' => 'attribute_id',
+        $this->belongsTo('Tags', [
+            'foreignKey' => 'tag_id',
             'joinType' => 'INNER',
-            'className' => 'AdminPanel.Attributes'
+            'className' => 'AdminPanel.Tags'
         ]);
     }
 
@@ -62,11 +62,6 @@ class ProductAttributesTable extends Table
             ->integer('id')
             ->allowEmptyString('id', 'create');
 
-        $validator
-            ->scalar('description')
-            ->requirePresence('description', 'create')
-            ->allowEmptyString('description', false);
-
         return $validator;
     }
 
@@ -80,7 +75,7 @@ class ProductAttributesTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['product_id'], 'Products'));
-        $rules->add($rules->existsIn(['attribute_id'], 'Attributes'));
+        $rules->add($rules->existsIn(['tag_id'], 'Tags'));
 
         return $rules;
     }
