@@ -6,6 +6,9 @@ use AdminPanel\Controller\AppController;
 /**
  * Products Controller
  * @property \AdminPanel\Model\Table\ProductsTable $Products
+ * @property \AdminPanel\Model\Table\CourriersTable $Courriers
+ * @property \AdminPanel\Model\Table\OptionsTable $Options
+ * @property \AdminPanel\Model\Table\OptionValuesTable $OptionValues
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */

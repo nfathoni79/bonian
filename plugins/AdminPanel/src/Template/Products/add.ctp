@@ -50,17 +50,17 @@
                         '<div class="col-xl-4">'+formTemplate+'</div>\n' +
                         '<div class="col-xl-8">\n' +
                         '<div class="form-group m-form__group row">\n' +
-                        '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="price"></div>\n' +
-                        '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][stock]"  class="form-control m-input" placeholder="stock"></div>\n' +
-                        '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][weight]" class="form-control m-input" placeholder="weight"></div>\n' +
+                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="price"></div>\n' +
+                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][stock]"  class="form-control m-input" placeholder="stock"></div>\n' +
+                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][weight]" class="form-control m-input" placeholder="weight"></div>\n' +
                         '</div> \n' +
                         '<div class="form-group m-form__group row">\n' +
                         '<label class="col-xl-3 col-form-label">Dimension</label>\n' +
                         '<label class="col-xl-9">\n' +
                         '<div class="row">\n' +
-                        '<div class="col-xl-3"><input type="text" name="ProductOptionPrices['+i+'][length]" class="form-control m-input" placeholder="length"></div>\n' +
-                        '<div class="col-xl-3"><input type="text" name="ProductOptionPrices['+i+'][width]"  class="form-control m-input" placeholder="width"></div>\n' +
-                        '<div class="col-xl-3"><input type="text" name="ProductOptionPrices['+i+'][heigth]" class="form-control m-input" placeholder="heigth"></div>\n' +
+                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][length]" class="form-control m-input" placeholder="length"></div>\n' +
+                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][width]"  class="form-control m-input" placeholder="width"></div>\n' +
+                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][heigth]" class="form-control m-input" placeholder="heigth"></div>\n' +
                         '<div class="col-xl-3"><a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item='+i+'><i class="la la-trash"></i></a></div>\n' +
                         '</div> \n' +
                         '</div> \n' +
