@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \AdminPanel\Model\Table\ProvincesTable|\Cake\ORM\Association\BelongsTo $Provinces
  * @property \AdminPanel\Model\Table\BranchesTable|\Cake\ORM\Association\HasMany $Branches
+ * @property |\Cake\ORM\Association\HasMany $CustomerAddreses
  * @property \AdminPanel\Model\Table\SubdistrictsTable|\Cake\ORM\Association\HasMany $Subdistricts
  *
  * @method \AdminPanel\Model\Entity\City get($primaryKey, $options = [])
@@ -48,6 +49,10 @@ class CitiesTable extends Table
             'foreignKey' => 'city_id',
             'className' => 'AdminPanel.Branches'
         ]);
+        $this->hasMany('CustomerAddreses', [
+            'foreignKey' => 'city_id',
+            'className' => 'AdminPanel.CustomerAddreses'
+        ]);
         $this->hasMany('Subdistricts', [
             'foreignKey' => 'city_id',
             'className' => 'AdminPanel.Subdistricts'
@@ -75,11 +80,13 @@ class CitiesTable extends Table
         $validator
             ->scalar('type')
             ->maxLength('type', 15)
-            ->allowEmptyString('type');
+            ->requirePresence('type', 'create')
+            ->allowEmptyString('type', false);
 
         $validator
             ->integer('postal_code')
-            ->allowEmptyString('postal_code');
+            ->requirePresence('postal_code', 'create')
+            ->allowEmptyString('postal_code', false);
 
         return $validator;
     }

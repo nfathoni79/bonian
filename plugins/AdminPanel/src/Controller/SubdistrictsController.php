@@ -4,18 +4,18 @@ namespace AdminPanel\Controller;
 use AdminPanel\Controller\AppController;
 
 /**
- * Villages Controller
- * @property \AdminPanel\Model\Table\VillagesTable $Villages
+ * Subdistricts Controller
+ * @property \AdminPanel\Model\Table\SubdistrictsTable $Subdistricts
  *
- * @method \AdminPanel\Model\Entity\Village[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \AdminPanel\Model\Entity\Subdistrict[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class VillagesController extends AppController
+class SubdistrictsController extends AppController
 {
 
     /**
      * Index method
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|void
      */
     public function index()
     {
@@ -29,9 +29,9 @@ class VillagesController extends AppController
             $query = $this->request->getData('query');
 
             /** custom default query : select, where, contain, etc. **/
-            $data = $this->Villages->find('all')
+            $data = $this->Subdistricts->find('all')
                 ->select();
-            $data->contain(['Districts']);
+            $data->contain(['Cities']);
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
@@ -41,7 +41,7 @@ class VillagesController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Villages.name LIKE' => '%' . $search .'%']);
+                    $data->where(['Subdistricts.name LIKE' => '%' . $search .'%']);
                 }
                 $data->where($query);
             }
@@ -72,24 +72,24 @@ class VillagesController extends AppController
         }
 
 
-        $this->set(compact('villages'));
+        $this->set(compact('subdistricts'));
     }
 
     /**
      * View method
      *
-     * @param string|null $id Village id.
+     * @param string|null $id Subdistrict id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
         $this->viewBuilder()->setLayout('ajax');
-        $village = $this->Villages->get($id, [
-            'contain' => ['Districts', 'CustomerAddresses']
+        $subdistrict = $this->Subdistricts->get($id, [
+            'contain' => ['Cities', 'Branches', 'CustomerAddreses']
         ]);
 
-        $this->set('village', $village);
+        $this->set('subdistrict', $subdistrict);
     }
 
     /**
@@ -99,64 +99,64 @@ class VillagesController extends AppController
      */
     public function add()
     {
-        $village = $this->Villages->newEntity();
+        $subdistrict = $this->Subdistricts->newEntity();
         if ($this->request->is('post')) {
-            $village = $this->Villages->patchEntity($village, $this->request->getData());
-            if ($this->Villages->save($village)) {
-                $this->Flash->success(__('The village has been saved.'));
+            $subdistrict = $this->Subdistricts->patchEntity($subdistrict, $this->request->getData());
+            if ($this->Subdistricts->save($subdistrict)) {
+                $this->Flash->success(__('The subdistrict has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The village could not be saved. Please, try again.'));
+            $this->Flash->error(__('The subdistrict could not be saved. Please, try again.'));
         }
-        $districts = $this->Villages->Districts->find('list', ['limit' => 200]);
-        $this->set(compact('village', 'districts'));
+        $cities = $this->Subdistricts->Cities->find('list', ['limit' => 200]);
+        $this->set(compact('subdistrict', 'cities'));
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Village id.
+     * @param string|null $id Subdistrict id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $village = $this->Villages->get($id, [
+        $subdistrict = $this->Subdistricts->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $village = $this->Villages->patchEntity($village, $this->request->getData());
-            if ($this->Villages->save($village)) {
-                $this->Flash->success(__('The village has been saved.'));
+            $subdistrict = $this->Subdistricts->patchEntity($subdistrict, $this->request->getData());
+            if ($this->Subdistricts->save($subdistrict)) {
+                $this->Flash->success(__('The subdistrict has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The village could not be saved. Please, try again.'));
+            $this->Flash->error(__('The subdistrict could not be saved. Please, try again.'));
         }
-        $districts = $this->Villages->Districts->find('list', ['limit' => 200]);
-        $this->set(compact('village', 'districts'));
+        $cities = $this->Subdistricts->Cities->find('list', ['limit' => 200]);
+        $this->set(compact('subdistrict', 'cities'));
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Village id.
+     * @param string|null $id Subdistrict id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $village = $this->Villages->get($id);
+        $subdistrict = $this->Subdistricts->get($id);
         try {
-            if ($this->Villages->delete($village)) {
-                $this->Flash->success(__('The village has been deleted.'));
+            if ($this->Subdistricts->delete($subdistrict)) {
+                $this->Flash->success(__('The subdistrict has been deleted.'));
             } else {
-                $this->Flash->error(__('The village could not be deleted. Please, try again.'));
+                $this->Flash->error(__('The subdistrict could not be deleted. Please, try again.'));
             }
         } catch (Exception $e) {
-            $this->Flash->error(__('The village could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The subdistrict could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

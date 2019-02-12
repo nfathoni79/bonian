@@ -4,18 +4,18 @@ namespace AdminPanel\Controller;
 use AdminPanel\Controller\AppController;
 
 /**
- * Regencies Controller
- * @property \AdminPanel\Model\Table\RegenciesTable $Regencies
+ * OptionValues Controller
+ * @property \AdminPanel\Model\Table\OptionValuesTable $OptionValues
  *
- * @method \AdminPanel\Model\Entity\Regency[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \AdminPanel\Model\Entity\OptionValue[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class RegenciesController extends AppController
+class OptionValuesController extends AppController
 {
 
     /**
      * Index method
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|void
      */
     public function index()
     {
@@ -29,9 +29,9 @@ class RegenciesController extends AppController
             $query = $this->request->getData('query');
 
             /** custom default query : select, where, contain, etc. **/
-            $data = $this->Regencies->find('all')
+            $data = $this->OptionValues->find('all')
                 ->select();
-            $data->contain(['Provinces']);
+            $data->contain(['Options']);
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
@@ -41,7 +41,7 @@ class RegenciesController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Regencies.name LIKE' => '%' . $search .'%']);
+                    $data->where(['OptionValues.name LIKE' => '%' . $search .'%']);
                 }
                 $data->where($query);
             }
@@ -72,24 +72,24 @@ class RegenciesController extends AppController
         }
 
 
-        $this->set(compact('regencies'));
+        $this->set(compact('optionValues'));
     }
 
     /**
      * View method
      *
-     * @param string|null $id Regency id.
+     * @param string|null $id Option Value id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
         $this->viewBuilder()->setLayout('ajax');
-        $regency = $this->Regencies->get($id, [
-            'contain' => ['Provinces', 'CustomerAddresses', 'Districts']
+        $optionValue = $this->OptionValues->get($id, [
+            'contain' => ['Options', 'ProductOptionValues']
         ]);
 
-        $this->set('regency', $regency);
+        $this->set('optionValue', $optionValue);
     }
 
     /**
@@ -99,64 +99,64 @@ class RegenciesController extends AppController
      */
     public function add()
     {
-        $regency = $this->Regencies->newEntity();
+        $optionValue = $this->OptionValues->newEntity();
         if ($this->request->is('post')) {
-            $regency = $this->Regencies->patchEntity($regency, $this->request->getData());
-            if ($this->Regencies->save($regency)) {
-                $this->Flash->success(__('The regency has been saved.'));
+            $optionValue = $this->OptionValues->patchEntity($optionValue, $this->request->getData());
+            if ($this->OptionValues->save($optionValue)) {
+                $this->Flash->success(__('The option value has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The regency could not be saved. Please, try again.'));
+            $this->Flash->error(__('The option value could not be saved. Please, try again.'));
         }
-        $provinces = $this->Regencies->Provinces->find('list', ['limit' => 200]);
-        $this->set(compact('regency', 'provinces'));
+        $options = $this->OptionValues->Options->find('list', ['limit' => 200]);
+        $this->set(compact('optionValue', 'options'));
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Regency id.
+     * @param string|null $id Option Value id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $regency = $this->Regencies->get($id, [
+        $optionValue = $this->OptionValues->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $regency = $this->Regencies->patchEntity($regency, $this->request->getData());
-            if ($this->Regencies->save($regency)) {
-                $this->Flash->success(__('The regency has been saved.'));
+            $optionValue = $this->OptionValues->patchEntity($optionValue, $this->request->getData());
+            if ($this->OptionValues->save($optionValue)) {
+                $this->Flash->success(__('The option value has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The regency could not be saved. Please, try again.'));
+            $this->Flash->error(__('The option value could not be saved. Please, try again.'));
         }
-        $provinces = $this->Regencies->Provinces->find('list', ['limit' => 200]);
-        $this->set(compact('regency', 'provinces'));
+        $options = $this->OptionValues->Options->find('list', ['limit' => 200]);
+        $this->set(compact('optionValue', 'options'));
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Regency id.
+     * @param string|null $id Option Value id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $regency = $this->Regencies->get($id);
+        $optionValue = $this->OptionValues->get($id);
         try {
-            if ($this->Regencies->delete($regency)) {
-                $this->Flash->success(__('The regency has been deleted.'));
+            if ($this->OptionValues->delete($optionValue)) {
+                $this->Flash->success(__('The option value has been deleted.'));
             } else {
-                $this->Flash->error(__('The regency could not be deleted. Please, try again.'));
+                $this->Flash->error(__('The option value could not be deleted. Please, try again.'));
             }
         } catch (Exception $e) {
-            $this->Flash->error(__('The regency could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The option value could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

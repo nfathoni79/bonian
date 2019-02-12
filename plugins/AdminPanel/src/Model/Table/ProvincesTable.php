@@ -9,8 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Provinces Model
  *
- * @property \AdminPanel\Model\Table\CustomerAddressesTable|\Cake\ORM\Association\HasMany $CustomerAddresses
- * @property \AdminPanel\Model\Table\RegenciesTable|\Cake\ORM\Association\HasMany $Regencies
+ * @property |\Cake\ORM\Association\HasMany $Cities
+ * @property |\Cake\ORM\Association\HasMany $CustomerAddreses
  *
  * @method \AdminPanel\Model\Entity\Province get($primaryKey, $options = [])
  * @method \AdminPanel\Model\Entity\Province newEntity($data = null, array $options = [])
@@ -38,13 +38,13 @@ class ProvincesTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('CustomerAddresses', [
+        $this->hasMany('Cities', [
             'foreignKey' => 'province_id',
-            'className' => 'AdminPanel.CustomerAddresses'
+            'className' => 'AdminPanel.Cities'
         ]);
-        $this->hasMany('Regencies', [
+        $this->hasMany('CustomerAddreses', [
             'foreignKey' => 'province_id',
-            'className' => 'AdminPanel.Regencies'
+            'className' => 'AdminPanel.CustomerAddreses'
         ]);
     }
 

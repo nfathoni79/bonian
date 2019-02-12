@@ -9,14 +9,14 @@ use Cake\Validation\Validator;
 /**
  * Pages Model
  *
- * @method \App\Model\Entity\Page get($primaryKey, $options = [])
- * @method \App\Model\Entity\Page newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Page[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Page|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Page|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Page patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Page[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Page findOrCreate($search, callable $callback = null, $options = [])
+ * @method \AdminPanel\Model\Entity\Page get($primaryKey, $options = [])
+ * @method \AdminPanel\Model\Entity\Page newEntity($data = null, array $options = [])
+ * @method \AdminPanel\Model\Entity\Page[] newEntities(array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\Page|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \AdminPanel\Model\Entity\Page|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \AdminPanel\Model\Entity\Page patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\Page[] patchEntities($entities, array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\Page findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
@@ -38,11 +38,6 @@ class PagesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
-        $this->addBehavior('Translate', [
-            'fields' => ['title', 'content'],
-            'allowEmptyTranslations' => false,
-            'validator' => 'translated'
-        ]);
     }
 
     /**
@@ -55,35 +50,30 @@ class PagesTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->scalar('title')
-            ->maxLength('title', 200)
+            ->maxLength('title', 255)
             ->requirePresence('title', 'create')
-            ->notEmpty('title');
+            ->allowEmptyString('title', false);
 
         $validator
             ->scalar('slug')
-            ->maxLength('slug', 200)
+            ->maxLength('slug', 255)
             ->requirePresence('slug', 'create')
-            ->notEmpty('slug');
+            ->allowEmptyString('slug', false);
 
         $validator
             ->scalar('content')
             ->requirePresence('content', 'create')
-            ->notEmpty('content');
+            ->allowEmptyString('content', false);
 
         $validator
             ->integer('enable')
             ->requirePresence('enable', 'create')
-            ->notEmpty('enable');
+            ->allowEmptyString('enable', false);
 
-        return $validator;
-    }
-
-    public function validationTranslated(Validator $validator)
-    {
         return $validator;
     }
 }

@@ -7,7 +7,6 @@ use Cake\ORM\Entity;
  * Option Entity
  *
  * @property int $id
- * @property int $option_type_id
  * @property string $name
  * @property int $sort_order
  *
@@ -27,7 +26,6 @@ class Option extends Entity
      * @var array
      */
     protected $_accessible = [
-        'option_type_id' => true,
         'name' => true,
         'sort_order' => true,
         'option_type' => true,

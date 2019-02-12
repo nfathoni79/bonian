@@ -188,12 +188,13 @@
                         }
                     },
                     {
-                        field: 'name',
+                        field: 'Provinces.name',
                         title: 'Name',
                         template: function(row) {
                             return row.name;
                         }
                     },
+
                     /** Action button **/
                     {
                         field: "Actions",

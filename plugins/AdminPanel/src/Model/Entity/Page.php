@@ -2,7 +2,6 @@
 namespace AdminPanel\Model\Entity;
 
 use Cake\ORM\Entity;
-use Cake\ORM\Behavior\Translate\TranslateTrait;
 
 /**
  * Page Entity
@@ -14,10 +13,13 @@ use Cake\ORM\Behavior\Translate\TranslateTrait;
  * @property int $enable
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
+ *
+ * @property \App\Model\Entity\PagesTitleTranslation $title_translation
+ * @property \App\Model\Entity\PagesContentTranslation $content_translation
+ * @property \App\Model\Entity\I18n[] $_i18n
  */
 class Page extends Entity
 {
-    use TranslateTrait;
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -35,6 +37,8 @@ class Page extends Entity
         'enable' => true,
         'created' => true,
         'modified' => true,
-        '_translations' => true
+        'title_translation' => true,
+        'content_translation' => true,
+        '_i18n' => true
     ];
 }

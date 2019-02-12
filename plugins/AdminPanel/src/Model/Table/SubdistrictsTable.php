@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \AdminPanel\Model\Table\CitiesTable|\Cake\ORM\Association\BelongsTo $Cities
  * @property \AdminPanel\Model\Table\BranchesTable|\Cake\ORM\Association\HasMany $Branches
+ * @property |\Cake\ORM\Association\HasMany $CustomerAddreses
  *
  * @method \AdminPanel\Model\Entity\Subdistrict get($primaryKey, $options = [])
  * @method \AdminPanel\Model\Entity\Subdistrict newEntity($data = null, array $options = [])
@@ -46,6 +47,10 @@ class SubdistrictsTable extends Table
         $this->hasMany('Branches', [
             'foreignKey' => 'subdistrict_id',
             'className' => 'AdminPanel.Branches'
+        ]);
+        $this->hasMany('CustomerAddreses', [
+            'foreignKey' => 'subdistrict_id',
+            'className' => 'AdminPanel.CustomerAddreses'
         ]);
     }
 

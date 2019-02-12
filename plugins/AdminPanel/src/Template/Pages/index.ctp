@@ -1,10 +1,16 @@
+<?php
+/**
+ * @var \App\View\AppView $this
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $pages
+ * nevix
+ */
+?>
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
-    <!-- BEGIN: Subheader -->
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    Pages
+                    <?= __('Pages') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -17,9 +23,9 @@
                     </li>
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
-											<span class="m-nav__link-text">
-												Pages
-											</span>
+                            <span class="m-nav__link-text">
+                                <?= __('Pages') ?>
+                            </span>
                         </a>
                     </li>
                     <li class="m-nav__separator">
@@ -27,78 +33,89 @@
                     </li>
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
-											<span class="m-nav__link-text">
-												List Page
-											</span>
+                            <span class="m-nav__link-text">
+                                <?= __('List Pages') ?>
+                            </span>
                         </a>
                     </li>
-
                 </ul>
             </div>
         </div>
     </div>
-    <!-- END: Subheader -->
+
     <div class="m-content">
         <div class="m-portlet m-portlet--mobile">
             <div class="m-portlet__head">
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            List Page
-                            <!-- <small>
-                                data loaded from remote data source
-                            </small> -->
+                            <?= __('List Pages') ?>
                         </h3>
                     </div>
                 </div>
                 <div class="m-portlet__head-tools">
-
+                    <ul class="m-portlet__nav">
+                        <li class="m-portlet__nav-item">
+                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                                <span>
+                                    <i class="la la-plus"></i>
+                                    <span><?= __('New Page') ?></span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
+
             <div class="m-portlet__body">
                 <?= $this->Flash->render() ?>
-                <!--begin: Search Form -->
                 <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
                     <div class="row align-items-center">
                         <div class="col-xl-8 order-2 order-xl-1">
                             <div class="form-group m-form__group row align-items-center">
-                                <div class="col-md-4">
+                                <div class="col-md-8">
                                     <div class="m-input-icon m-input-icon--left">
                                         <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
-															<span>
-																<i class="la la-search"></i>
-															</span>
-														</span>
+                                            <span>
+                                                <i class="la la-search"></i>
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 order-1 order-xl-2 m--align-right">
-                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-info m-btn m-btn--custom m-btn--icon m-btn--air">
-												<span>
-													<i class="fa fa-plus-circle"></i>
-													<span>
-														New Page
-													</span>
-												</span>
-                            </a>
-                            <div class="m-separator m-separator--dashed d-xl-none"></div>
-                        </div>
                     </div>
                 </div>
-                <!--end: Search Form -->
-                <!--begin: Datatable -->
-                <div class="m_datatable" id="ajax_data_page"></div>
-                <!--end: Datatable -->
+
+                <div class="m_datatable" id="table-pages"></div>
+
             </div>
         </div>
     </div>
 </div>
 
-<!-- end:: Body -->
+<div class="modal fade" id="modalView" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><span class="titleModal"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body contentModal">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php $this->append('script'); ?>
 <script>
-    //== Class definition
 
     function delete_data(id) {
         $.post( "<?= $this->Url->build(['action' => 'delete']); ?>/" + id, { _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>' } )
@@ -107,19 +124,19 @@
             });
     }
 
+    function view_data(id) {
+        $('#modalView').modal('show');
+        $('.titleModal').html('Provinces View');
+        $('.contentModal').load( "<?= $this->Url->build(['action' => 'view']); ?>/" + id);
+    }
+
     var DatatableRemoteAjaxDemo = function() {
-        //== Private functions
-
-        // basic demo
         var demo = function() {
-
-            var datatable = $('.m_datatable').mDatatable({
-                // datasource definition
+            var datatable = $('#table-pages').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
                         read: {
-                            // sample GET method
                             method: 'POST',
                             url: '<?= $this->Url->build(); ?>',
                             cache: false,
@@ -127,7 +144,6 @@
                                 _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
                             },
                             map: function(raw) {
-                                // sample data mapping
                                 var dataSet = raw;
                                 if (typeof raw.data !== 'undefined') {
                                     dataSet = raw.data;
@@ -141,80 +157,68 @@
                     serverFiltering: true,
                     serverSorting: true,
                 },
-
-                // layout definition
                 layout: {
                     scroll: true,
                     height: 550,
                     footer: false
                 },
-
-                // column sorting
                 sortable: true,
-
                 pagination: true,
-
                 toolbar: {
-                    // toolbar items
                     items: {
-                        // pagination
                         pagination: {
-                            // page size select
                             pageSizeSelect: [10, 20, 30, 50, 100],
                         },
                     },
                 },
-
                 search: {
                     input: $('#generalSearch'),
                 },
-
-                // columns definition
+                order: [[ 0, "desc" ]],
                 columns: [
                     {
                         field: 'id',
                         title: '#',
-                        sortable: false, // disable sort for this column
+                        sortable: true,
                         width: 40,
                         selector: false,
                         textAlign: 'center',
                         template: function(row, index, datatable) {
                             return ++index;
                         }
-                    }, {
-                        field: 'title',
+                    },
+                    {
+                        field: 'Pages.title',
                         title: 'Title',
-                        // sortable: 'asc', // default sort
-                        filterable: false, // disable or enable filtering
-                        width: 150,
-                        // basic templating support for column rendering,
-                        //template: '{{OrderID}} - {{ShipCountry}}',
-                    },
-                    {
-                        field: 'slug',
-                        title: 'slug Name',
-                        // sortable: 'asc', // default sort
-                        filterable: false, // disable or enable filtering
-                        //width: 150,
-                        // basic templating support for column rendering,
-                    },
-                    {
-                        field: 'content',
-                        title: 'Content',
-                        // sortable: 'asc', // default sort
-                        filterable: false, // disable or enable filtering
-                        //width: 150,
                         template: function(row) {
-                            return row.content ? row.content.substring(0, 50) + '...' : '-';
+                            return row.title;
                         }
                     },
+
+                    {
+                        field: 'Pages.slug',
+                        title: 'Slug',
+                        template: function(row) {
+                            return row.slug;
+                        }
+                    },
+
+                    {
+                        field: 'Pages.enable',
+                        title: 'Enable',
+                        template: function(row) {
+                            return row.enable;
+                        }
+                    },
+
                     {
                         field: 'Pages.created',
-                        title: 'Create',
+                        title: 'Created',
                         template: function(row) {
                             return row.created;
                         }
                     },
+
                     {
                         field: 'Pages.modified',
                         title: 'Modified',
@@ -222,6 +226,8 @@
                             return row.modified;
                         }
                     },
+
+                    /** Action button **/
                     {
                         field: "Actions",
                         width: 110,
@@ -229,36 +235,15 @@
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {
-                            //var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
-                            return '\
-						<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Edit">\
-							<i class="la la-edit"></i>\
-						</a>\
-						<a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete">\
-							<i class="la la-trash"></i>\
-						</a>\
-					';
+                            return '<a href="javascript:view_data('+row.id+');" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="VIew"><i class="la la-eye"></i></a><a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
                         }
                     }
-                ],
+                ]
             });
-
             var query = datatable.getDataSourceQuery();
 
-            $('#m_form_group').on('change', function() {
-                datatable.search($(this).val().toLowerCase(), 'group_id');
-            });
-
-            $('#m_form_status').on('change', function() {
-                datatable.search($(this).val().toLowerCase(), 'user_status_id');
-            });
-
-            $('#m_form_group, #m_form_status').selectpicker();
-
         };
-
         return {
-            // public functions
             init: function() {
                 demo();
             },
@@ -269,3 +254,7 @@
         DatatableRemoteAjaxDemo.init();
     });
 </script>
+<?php $this->end(); ?>
+
+
+

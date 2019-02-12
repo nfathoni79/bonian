@@ -13,10 +13,6 @@ class CreateTableOptions extends AbstractMigration
     public function change()
     {
         $table = $this->table('options');
-        $table->addColumn('option_type_id', 'integer', [
-            'default' => null,
-            'limit' => 4,
-        ]);
         $table->addColumn('name', 'string', [
             'default' => null,
             'limit' => 150,
@@ -25,8 +21,6 @@ class CreateTableOptions extends AbstractMigration
             'default' => null,
             'limit' => 3,
         ]);
-        $table->addIndex('option_type_id');
-        $table->addForeignKey('option_type_id', 'option_types', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
         $table->create();
     }
 }

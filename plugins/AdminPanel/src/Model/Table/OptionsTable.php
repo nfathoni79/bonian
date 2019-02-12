@@ -9,7 +9,6 @@ use Cake\Validation\Validator;
 /**
  * Options Model
  *
- * @property \AdminPanel\Model\Table\OptionTypesTable|\Cake\ORM\Association\BelongsTo $OptionTypes
  * @property \AdminPanel\Model\Table\OptionValuesTable|\Cake\ORM\Association\HasMany $OptionValues
  *
  * @method \AdminPanel\Model\Entity\Option get($primaryKey, $options = [])
@@ -38,11 +37,6 @@ class OptionsTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('OptionTypes', [
-            'foreignKey' => 'option_type_id',
-            'joinType' => 'INNER',
-            'className' => 'AdminPanel.OptionTypes'
-        ]);
         $this->hasMany('OptionValues', [
             'foreignKey' => 'option_id',
             'className' => 'AdminPanel.OptionValues'
@@ -73,19 +67,5 @@ class OptionsTable extends Table
             ->allowEmptyString('sort_order', false);
 
         return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['option_type_id'], 'OptionTypes'));
-
-        return $rules;
     }
 }

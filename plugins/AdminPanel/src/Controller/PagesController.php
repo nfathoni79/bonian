@@ -4,12 +4,12 @@ namespace AdminPanel\Controller;
 use AdminPanel\Controller\AppController;
 
 /**
- * AttributeGroups Controller
- * @property \AdminPanel\Model\Table\AttributeGroupsTable $AttributeGroups
+ * Pages Controller
+ * @property \AdminPanel\Model\Table\PagesTable $Pages
  *
- * @method \AdminPanel\Model\Entity\AttributeGroup[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \AdminPanel\Model\Entity\Page[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class AttributeGroupsController extends AppController
+class PagesController extends AppController
 {
 
     /**
@@ -29,7 +29,7 @@ class AttributeGroupsController extends AppController
             $query = $this->request->getData('query');
 
             /** custom default query : select, where, contain, etc. **/
-            $data = $this->AttributeGroups->find('all')
+            $data = $this->Pages->find('all')
                 ->select();
 
             if ($query && is_array($query)) {
@@ -40,7 +40,7 @@ class AttributeGroupsController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['AttributeGroups.name LIKE' => '%' . $search .'%']);
+                    $data->where(['Pages.name LIKE' => '%' . $search .'%']);
                 }
                 $data->where($query);
             }
@@ -71,24 +71,24 @@ class AttributeGroupsController extends AppController
         }
 
 
-        $this->set(compact('attributeGroups'));
+        $this->set(compact('pages'));
     }
 
     /**
      * View method
      *
-     * @param string|null $id Attribute Group id.
+     * @param string|null $id Page id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
         $this->viewBuilder()->setLayout('ajax');
-        $attributeGroup = $this->AttributeGroups->get($id, [
-            'contain' => ['Attributes']
+        $page = $this->Pages->get($id, [
+            'contain' => []
         ]);
 
-        $this->set('attributeGroup', $attributeGroup);
+        $this->set('page', $page);
     }
 
     /**
@@ -98,62 +98,62 @@ class AttributeGroupsController extends AppController
      */
     public function add()
     {
-        $attributeGroup = $this->AttributeGroups->newEntity();
+        $page = $this->Pages->newEntity();
         if ($this->request->is('post')) {
-            $attributeGroup = $this->AttributeGroups->patchEntity($attributeGroup, $this->request->getData());
-            if ($this->AttributeGroups->save($attributeGroup)) {
-                $this->Flash->success(__('The attribute group has been saved.'));
+            $page = $this->Pages->patchEntity($page, $this->request->getData());
+            if ($this->Pages->save($page)) {
+                $this->Flash->success(__('The page has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The attribute group could not be saved. Please, try again.'));
+            $this->Flash->error(__('The page could not be saved. Please, try again.'));
         }
-        $this->set(compact('attributeGroup'));
+        $this->set(compact('page'));
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Attribute Group id.
+     * @param string|null $id Page id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $attributeGroup = $this->AttributeGroups->get($id, [
+        $page = $this->Pages->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $attributeGroup = $this->AttributeGroups->patchEntity($attributeGroup, $this->request->getData());
-            if ($this->AttributeGroups->save($attributeGroup)) {
-                $this->Flash->success(__('The attribute group has been saved.'));
+            $page = $this->Pages->patchEntity($page, $this->request->getData());
+            if ($this->Pages->save($page)) {
+                $this->Flash->success(__('The page has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The attribute group could not be saved. Please, try again.'));
+            $this->Flash->error(__('The page could not be saved. Please, try again.'));
         }
-        $this->set(compact('attributeGroup'));
+        $this->set(compact('page'));
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Attribute Group id.
+     * @param string|null $id Page id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $attributeGroup = $this->AttributeGroups->get($id);
+        $page = $this->Pages->get($id);
         try {
-            if ($this->AttributeGroups->delete($attributeGroup)) {
-                $this->Flash->success(__('The attribute group has been deleted.'));
+            if ($this->Pages->delete($page)) {
+                $this->Flash->success(__('The page has been deleted.'));
             } else {
-                $this->Flash->error(__('The attribute group could not be deleted. Please, try again.'));
+                $this->Flash->error(__('The page could not be deleted. Please, try again.'));
             }
         } catch (Exception $e) {
-            $this->Flash->error(__('The attribute group could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The page could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

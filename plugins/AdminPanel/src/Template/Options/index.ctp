@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $attributeGroups
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $options
  * nevix
  */
 ?>
@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Attribute Groups') ?>
+                    <?= __('Options') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Attribute Groups') ?>
+                                <?= __('Options') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Attribute Groups') ?>
+                                <?= __('List Options') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List Attribute Groups') ?>
+                            <?= __('List Options') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New Attribute Group') ?></span>
+                                    <span><?= __('New Option') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -88,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-attributeGroups"></div>
+                <div class="m_datatable" id="table-options"></div>
 
             </div>
         </div>
@@ -132,7 +132,7 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-attributeGroups').mDatatable({
+            var datatable = $('#table-options').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -188,21 +188,12 @@
                         }
                     },
                     {
-                        field: 'AttributeGroups.name',
+                        field: 'Options.name',
                         title: 'Name',
                         template: function(row) {
                             return row.name;
                         }
                     },
-
-                    {
-                        field: 'AttributeGroups.description',
-                        title: 'Description',
-                        template: function(row) {
-                            return row.description;
-                        }
-                    },
-
 
                     /** Action button **/
                     {

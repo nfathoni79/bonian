@@ -20,12 +20,29 @@
                     [
                         'name' => 'List Users',
                         'url' => ['controller' => 'Users', 'action' => 'index'],
-                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot'
+                        'icon' => 'm-menu__link-bullet'
                     ],
                     [
                         'name' => 'List Groups',
                         'url' => ['controller' => 'Groups', 'action' => 'index'],
-                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot'
+                        'icon' => 'm-menu__link-bullet'
+                    ],
+                ]
+            ],
+            [
+                'name' => 'Pages CMS',
+                'url' => '#',
+                'icon' => 'm-menu__link-icon  flaticon-browser',
+                'children' => [
+                    [
+                        'name' => 'All Pages',
+                        'url' => ['controller' => 'Pages', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet'
+                    ],
+                    [
+                        'name' => 'New Pages',
+                        'url' => ['controller' => 'Pages', 'action' => 'add'],
+                        'icon' => 'm-menu__link-bullet'
                     ],
                 ]
             ],
@@ -35,38 +52,37 @@
                 'icon' => 'm-menu__link-icon flaticon-users',
                 'children' => []
             ],
-
             [
                 'name' => 'Products',
                 'url' => ['controller' => 'Products', 'action' => 'index'],
                 'icon' => 'm-menu__link-icon flaticon-box',
                 'children' => [
                     [
-                        'name' => 'Product Lists',
+                        'name' => 'All Products',
                         'url' => ['controller' => 'Products', 'action' => 'index'],
-                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                        'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
                     [
-                        'name' => 'Product Categories',
+                        'name' => 'Categories',
                         'url' => ['controller' => 'ProductCategories', 'action' => 'index'],
-                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                        'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
                     [
-                        'name' => 'Product Attribute',
+                        'name' => 'Options',
                         'url' => '#',
                         'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                         'children' => [
                             [
-                                'name' => 'Attribute Group',
-                                'url' => ['controller' => 'AttributeGroups', 'action' => 'index'],
+                                'name' => 'All Options',
+                                'url' => ['controller' => 'Options', 'action' => 'index'],
                                 'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                                 'children' => []
                             ],
                             [
-                                'name' => 'Attribute',
-                                'url' => ['controller' => 'Attributes', 'action' => 'index'],
+                                'name' => 'Option Values',
+                                'url' => ['controller' => 'OptionValues', 'action' => 'index'],
                                 'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                                 'children' => []
                             ],
@@ -75,10 +91,54 @@
                 ]
             ],
             [
+                'name' => 'Promotion Sales',
+                'url' => '#',
+                'icon' => 'm-menu__link-icon flaticon-cart',
+                'children' => [
+                    [
+                        'name' => 'Sales Method',
+                        'url' => '#',
+                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                        'children' => [
+                            [
+                                'name' => 'Flash Sales',
+                                'url' => ['controller' => 'Provinces', 'action' => 'index'],
+                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                                'children' => []
+                            ],
+                            [
+                                'name' => 'Group Sales',
+                                'url' => ['controller' => 'Cities', 'action' => 'index'],
+                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                                'children' => []
+                            ]
+                        ]
+                    ],
+                    [
+                        'name' => 'Voucher',
+                        'url' => ['controller' => 'Vouchers', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                ]
+            ],
+            [
+                'name' => 'Gamification',
+                'url' => '#',
+                'icon' => 'm-menu__link-icon flaticon-apps',
+                'children' => []
+            ],
+            [
                 'name' => 'Configurations',
                 'url' => ['controller' => 'Customers', 'action' => 'index'],
                 'icon' => 'm-menu__link-icon flaticon-settings',
                 'children' => [
+                    [
+                        'name' => 'Branches',
+                        'url' => ['controller' => 'Branches', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
                     [
                         'name' => 'Master Data',
                         'url' => '#',
@@ -91,20 +151,14 @@
                                 'children' => []
                             ],
                             [
-                                'name' => 'Regency',
-                                'url' => ['controller' => 'Regencies', 'action' => 'index'],
+                                'name' => 'Cities',
+                                'url' => ['controller' => 'Cities', 'action' => 'index'],
                                 'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                                 'children' => []
                             ],
                             [
-                                'name' => 'District',
-                                'url' => ['controller' => 'Districts', 'action' => 'index'],
-                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
-                                'children' => []
-                            ],
-                            [
-                                'name' => 'Village',
-                                'url' => ['controller' => 'Villages', 'action' => 'index'],
+                                'name' => 'Subdistrict',
+                                'url' => ['controller' => 'Subdistricts', 'action' => 'index'],
                                 'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                                 'children' => []
                             ],

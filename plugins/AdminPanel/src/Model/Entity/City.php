@@ -9,8 +9,8 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int $province_id
  * @property string $name
- * @property string|null $type
- * @property int|null $postal_code
+ * @property string $type
+ * @property int $postal_code
  *
  * @property \AdminPanel\Model\Entity\Province $province
  * @property \AdminPanel\Model\Entity\Branch[] $branches
