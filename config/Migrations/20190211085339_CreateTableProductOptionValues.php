@@ -17,49 +17,16 @@ class CreateTableProductOptionValues extends AbstractMigration
             'default' => null,
             'limit' => 11
         ]);
-
-
-        $table->addColumn('name', 'string', [
-            'default' => null,
-            'limit' => 255
-        ]);
-
-
         $table->addColumn('option_value_id', 'integer', [
             'default' => null,
             'limit' => 11
         ]);
 
-
-        $table->addColumn('price', 'float', [
-            'default' => 0,
-            'comment' => 'additiona price from base price'
-        ]);
-
-
-        $table->addColumn('weight', 'integer', [
+        $table->addColumn('key_form', 'integer', [
             'default' => null,
-            'limit' => 5,
-            'comment' => 'in gram additional weight from base wight'
+            'limit' => 2
         ]);
 
-
-        $table->addColumn('stock', 'integer', [
-            'default' => null,
-            'limit' => 11
-        ]);
-        $table->addColumn('width', 'integer', [
-            'default' => null,
-            'limit' => 11
-        ]);
-        $table->addColumn('length', 'integer', [
-            'default' => null,
-            'limit' => 11
-        ]);
-        $table->addColumn('height', 'integer', [
-            'default' => null,
-            'limit' => 11
-        ]);
 
         $table->addIndex('product_id');
         $table->addForeignKey('product_id', 'products', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE']);
