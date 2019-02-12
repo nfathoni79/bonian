@@ -22,7 +22,7 @@ class CustomersController  extends AppController
         parent::initialize();
         $this->loadModel('AdminPanel.Customers');
         $this->loadComponent('SendAuth');
-        $this->loadComponent('Mailer');
+        $this->loadComponent('Mailer', ['transport' => 'default']);
     }
 
     private function reffcode($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'){
@@ -77,6 +77,7 @@ class CustomersController  extends AppController
                 $save = $this->Customers->save($register);
                 if($save){
                     $this->SendAuth->setUsed();
+                    $this->id = $register->get('id');
                     //$success = true;
                 }else{
                     $this->setResponse($this->response->withStatus(406, 'Failed to registers'));
