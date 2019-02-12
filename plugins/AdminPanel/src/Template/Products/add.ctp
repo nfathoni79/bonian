@@ -25,22 +25,21 @@
                         var values = $(this).val();
                         var text = $(this).data('text');
 
-                        var opt = '<option>-- Select '+text+'--</option>';
+                        var opt = '<option value="">-- Select '+text+' --</option>';
                         $.each(response[text], function(k,v){
                             opt += '<option value="'+v.id+'">'+v.name+'</option>';
-                        }) 
+                        })
                         formTemplate += '\n' +
                             '\t\t\t<div class="form-group m-form__group row">\n' +
-                            '\t\t\t\t<label class="col-xl-6 col-form-label">'+text+'</label>\n' +
-                            '\t\t\t\t<div class="col-xl-6">\n' +
-                            '\t\t\t\t\t<select name="ProductOptionValues.'+i+'.'+text.toLowerCase()+'" class="form-control m-input" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
+                            '\t\t\t\t<label class="col-xl-4 col-form-label">'+text+'</label>\n' +
+                            '\t\t\t\t<div class="col-xl-8">\n' +
+                            '\t\t\t\t\t<select name="ProductOptionValues['+i+']['+text.toLowerCase()+']" class="form-control m-input" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
                             '\t\t\t\t</div> \n' +
                             '\t\t\t</div>';
                     });
-                    console.log(i)
 
                     var template = '\n' +
-                        '<div class="m-accordion__item">\n' +
+                        '<div class="m-accordion__item item-'+i+'">\n' +
                         '<div class="m-accordion__item-head" role="tab" id="m_accordion_2_item_'+i+'_head" data-toggle="collapse" href="#m_accordion_2_item_'+i+'_body" aria-expanded="    false">\n' +
                         '<span class="m-accordion__item-title">Product Variant</span>\n' +
                         '<span class="m-accordion__item-mode"></span>\n' +
@@ -51,17 +50,18 @@
                         '<div class="col-xl-4">'+formTemplate+'</div>\n' +
                         '<div class="col-xl-8">\n' +
                         '<div class="form-group m-form__group row">\n' +
-                        '<div class="col-xl-4"><input type="text" name="ProductOptionPrices.'+i+'.price" class="form-control m-input" placeholder="price"></div>\n' +
-                        '<div class="col-xl-4"><input type="text" name="ProductOptionPrices.'+i+'.stock"  class="form-control m-input" placeholder="stock"></div>\n' +
-                        '<div class="col-xl-4"><input type="text" name="ProductOptionPrices.'+i+'.weight" class="form-control m-input" placeholder="weight"></div>\n' +
+                        '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="price"></div>\n' +
+                        '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][stock]"  class="form-control m-input" placeholder="stock"></div>\n' +
+                        '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][weight]" class="form-control m-input" placeholder="weight"></div>\n' +
                         '</div> \n' +
                         '<div class="form-group m-form__group row">\n' +
                         '<label class="col-xl-3 col-form-label">Dimension</label>\n' +
                         '<label class="col-xl-9">\n' +
                         '<div class="row">\n' +
-                        '<div class="col-xl-3"><input type="text" name="ProductOptionPrices.'+i+'.length" class="form-control m-input" placeholder="length"></div>\n' +
-                        '<div class="col-xl-3"><input type="text" name="ProductOptionPrices.'+i+'.width"  class="form-control m-input" placeholder="width"></div>\n' +
-                        '<div class="col-xl-3"><input type="text" name="ProductOptionPrices.'+i+'.heigth" class="form-control m-input" placeholder="heigth"></div>\n' +
+                        '<div class="col-xl-3"><input type="text" name="ProductOptionPrices['+i+'][length]" class="form-control m-input" placeholder="length"></div>\n' +
+                        '<div class="col-xl-3"><input type="text" name="ProductOptionPrices['+i+'][width]"  class="form-control m-input" placeholder="width"></div>\n' +
+                        '<div class="col-xl-3"><input type="text" name="ProductOptionPrices['+i+'][heigth]" class="form-control m-input" placeholder="heigth"></div>\n' +
+                        '<div class="col-xl-3"><a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item='+i+'><i class="la la-trash"></i></a></div>\n' +
                         '</div> \n' +
                         '</div> \n' +
                         '</div> \n' +
@@ -72,6 +72,10 @@
                         '</div>\n';
 
                     $('.form-dynamic').append(template);
+                    $('.remove-row').on('click',function(){
+                        var item = $(this).data('item');
+                        $('div').remove('.item-'+item);
+                    })
                     i++;
                 })
 
@@ -229,7 +233,7 @@
                                                     <span></span>
                                                 </div>
                                                 <div class="m-wizard__step-label">
-                                                    Advanced
+                                                    Finish
                                                 </div>
                                             </div>
                                         </div>
@@ -315,50 +319,10 @@
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Description</label>
                                                     <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('description',['type' => 'textarea','label' => false,'class' => $default_class]);?>
+                                                        <?php echo $this->Form->control('ProductMetaTags.description',['type' => 'textarea','label' => false,'class' => $default_class]);?>
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
-                                            <div class="m-form__section">
-                                                <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title">Attributes</h3>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <div class="col-lg-6 m-form__group-sub">
-                                                        <div class="m-checkbox-inline">
-                                                            <?php foreach($options as $k => $vals):?>
-                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                                <input type="checkbox" name="options[]"  value="<?php echo $k;?>" class="option" data-text="<?php echo $vals;?>"> <?php echo $vals;?>
-                                                                <span></span>
-                                                            </label>
-                                                            <?php endforeach;?>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <a href="javascript:void(0);" class="btn btn-success m-btn m-btn--custom m-btn--icon add-attribute"><span>Add Form</span></a>
-                                                    </div>
-                                                </div>
-
-                                                <div class="m-accordion m-accordion--bordered form-dynamic" id="m_accordion_2" role="tablist">
-
-
-                                                </div>
-
-                                            </div>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -430,6 +394,15 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group m-form__group row">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">Reward Point</label>
+                                                    <div class="col-xl-5 col-lg-9">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend"><span class="input-group-text">IDR</span></div>
+                                                            <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class]);?>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -446,39 +419,44 @@
                                                     <div class="col-lg-12 m-form__group-sub">
                                                         <label class="form-control-label">Courrier </label>
                                                         <div class="m-checkbox-inline">
+                                                            <?php foreach($courriers as $k => $vals):?>
                                                             <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                                <input type="checkbox" name="account_communication[]" checked value="JNE"> JNE
+                                                                <input type="checkbox" name="ProductToCourriers[]" value="<?php echo $k;?>"> <?php echo $vals;?>
                                                                 <span></span>
                                                             </label>
-                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                                <input type="checkbox" name="account_communication[]" checked value="JNT"> JNT
-                                                                <span></span>
-                                                            </label>
-                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                                <input type="checkbox" name="account_communication[]" checked value="TIKI"> TIKI
-                                                                <span></span>
-                                                            </label>
-                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                                <input type="checkbox" name="account_communication[]" checked value="POS"> POS
-                                                                <span></span>
-                                                            </label>
+                                                            <?php endforeach;?>
                                                         </div>
                                                         <span class="m-form__help">Select courriers options</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+
                                             <div class="m-form__section">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title">Attributes</h3>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-2 col-form-label">Selector</label>
-                                                    <div class="col-xl-3">
-                                                        <?php echo $this->Form->control('options',['div' => false, 'label' => false,'options' => $options, 'class' => $default_class]);?>
+                                                    <div class="col-lg-6 m-form__group-sub">
+                                                        <div class="m-checkbox-inline">
+                                                            <?php foreach($options as $k => $vals):?>
+                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                                                <input type="checkbox" name="options[]"  value="<?php echo $k;?>" class="option" data-text="<?php echo $vals;?>"> <?php echo $vals;?>
+                                                                <span></span>
+                                                            </label>
+                                                            <?php endforeach;?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <a href="javascript:void(0);" class="btn btn-success m-btn m-btn--custom m-btn--icon add-attribute"><span>Add Product Variant</span></a>
                                                     </div>
                                                 </div>
+
+                                                <div class="m-accordion m-accordion--bordered form-dynamic" id="m_accordion_2" role="tablist">
+                                                </div>
                                             </div>
+
                                         </div>
 
                                         <!--end: Form Wizard Step 3-->
