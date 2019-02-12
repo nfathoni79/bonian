@@ -1,15 +1,17 @@
 <?php
 namespace App\Controller\V1;
-/**
- * Class CouriersController
- * @package App\Controller\V1
- * @property \AdminPanel\Model\Table\CustomersTable $Customers
- */
 
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
 use Cake\Validation\Validator;
+
+
+/**
+ * Class CouriersController
+ * @package App\Controller\V1
+ * @property \AdminPanel\Model\Table\CustomersTable $Customers
+ */
 
 class CustomersController  extends AppController
 {
@@ -82,23 +84,26 @@ class CustomersController  extends AppController
 //                    'message' => __d('MemberPanel', 'Auth code not valid')
 //                ]);
 
+            // display error custom on controller
             $errors = $validator->errors($this->request->getData());
             if (empty($errors)) {
                 $success = false;
                 $register = $this->Customers->newEntity();
                 $register = $this->Customers->patchEntity($register, $this->request->getData(),['fields' => ['email','password','cpassword','phone']]);
-                $register['reffcode'] = $this->reffcode('10');
-                $register['customer_group_id'] = 1;
-                $register['customer_status_id'] = 1;
-                $register['is_verified'] = 1;
-                $register['platforrm'] = 'Android';
+                $register->set('reffcode', $this->reffcode('10'));
+                $register->set('customer_group_id', 1);
+                $register->set('customer_status_id', 1);
+                $register->set('is_verified', 1);
+                $register->set('platforrm', 'Android');
                 $save = $this->Customers->save($register);
-                debug($register);
-                exit;
+                //debug($register);
+                //exit;
                 if($save){
-                    $success = true;
+                    //$success = true;
                 }else{
                     $this->setResponse($this->response->withStatus(406, 'Failed to registers'));
+                    //display error on models
+                    $error = $register->getErrors();
                 }
             }else {
                 $this->setResponse($this->response->withStatus(406, 'Failed to registers'));
