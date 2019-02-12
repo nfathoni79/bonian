@@ -140,13 +140,13 @@ class CustomersTable extends Table
             ->email('email')
             ->requirePresence('email', 'create')
             ->notEmpty('email')
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => __d('MemberPanel','Email address already exist')]);
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'Email address already exist']);
 
         $validator
             ->requirePresence('password', 'create')
             ->notEmpty('password', __d('MemberPanel','You must enter a password'), 'create')
             ->lengthBetween('password', [6, 20], 'password min 6 - 20 character')
-            ->regex('password', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/', __d('MemberPanel', 'Password min 6 char at least one uppercase letter, one lowercase letter and one number'));
+            ->regex('password', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/', 'Password min 6 char at least one uppercase letter, one lowercase letter and one number');
 
         $validator
             ->requirePresence('cpassword', 'create')
@@ -154,7 +154,7 @@ class CustomersTable extends Table
             ->allowEmpty('cpassword', function ($context) {
                 return !isset($context['data']['password']);
             })
-            ->equalToField('cpassword', 'password', __d('MemberPanel', 'Confirmation password does not match with your password'))
+            ->equalToField('cpassword', 'password', 'Confirmation password does not match with your password')
             ->add('cpassword', 'compareWith', [
                 'rule' => ['compareWith', 'password'],
                 'message' => __d('MemberPanel','Passwords do not match.')
@@ -196,6 +196,7 @@ class CustomersTable extends Table
 
         return $validator;
     }
+
 
     public function validationPassword(Validator $validator)
     {
@@ -239,6 +240,7 @@ class CustomersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->isUnique(['reffcode']));
 //        $rules->add($rules->existsIn(['refferal_customer_id'], 'RefferalCustomers'));
         $rules->add($rules->existsIn(['customer_group_id'], 'CustomerGroups'));
         $rules->add($rules->existsIn(['customer_status_id'], 'CustomerStatuses'));

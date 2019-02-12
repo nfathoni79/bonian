@@ -72,19 +72,34 @@ class SendAuthComponent extends Component
     public function generates($key = '0123456789')
     {
         try {
-            $entity = $this->AuthCodes->newEntity([
-                'phone' => $this->phone,
-                'name' => $this->name,
-                'code' => $this->random_str(6, $key),
-                'expired' => (new \DateTime())->add(new \DateInterval('PT15M'))->format('Y-m-d H:i:s')
-            ]);
-            if ($this->AuthCodes->save($entity)) {
-                $this->_id = $entity->get('id');
-            }
+
+
+//            $find =  $this->AuthCodes->find()
+//                ->select(['AuthCodes.id'])
+//                ->where([
+//                    'AuthCodes.phone' => $this->phone,
+//                    'AuthCodes.name' => $this->name,
+//                    'AuthCodes.used' => 0
+//                ])->toArray();
+
+//            if(empty($find)){
+                $entity = $this->AuthCodes->newEntity([
+                    'phone' => $this->phone,
+                    'name' => $this->name,
+                    'code' => $this->random_str(6, $key),
+                    'expired' => (new \DateTime())->add(new \DateInterval('PT15M'))->format('Y-m-d H:i:s')
+                ]);
+                if ($this->AuthCodes->save($entity)) {
+                    $this->_id = $entity->get('id');
+                }
+                return $entity->get('code');
+//            }else{
+//
+//            }
 
         } catch (\Exception $e) {}
 
-        return $entity->get('code');
+
     }
 
     /**
@@ -166,6 +181,13 @@ class SendAuthComponent extends Component
 //            ->setSubject('Request authorization for ' . $this->name)
 //            ->send();
 //        return true;
+    }
+
+    public function sendsms($text = null)
+    {
+//        send sms to this phone number $this->phone with $text
+
+        return true;
     }
 
     public function getData()
