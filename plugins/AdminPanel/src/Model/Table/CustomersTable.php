@@ -1,0 +1,257 @@
+<?php
+namespace AdminPanel\Model\Table;
+
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+/**
+ * Customers Model
+ *
+ * @property \AdminPanel\Model\Table\RefferalCustomersTable|\Cake\ORM\Association\BelongsTo $RefferalCustomers
+ * @property \AdminPanel\Model\Table\CustomerGroupsTable|\Cake\ORM\Association\BelongsTo $CustomerGroups
+ * @property \AdminPanel\Model\Table\CustomerStatusesTable|\Cake\ORM\Association\BelongsTo $CustomerStatuses
+ * @property \AdminPanel\Model\Table\ChatDetailsTable|\Cake\ORM\Association\HasMany $ChatDetails
+ * @property \AdminPanel\Model\Table\CustomerAddresesTable|\Cake\ORM\Association\HasMany $CustomerAddreses
+ * @property \AdminPanel\Model\Table\CustomerBalancesTable|\Cake\ORM\Association\HasMany $CustomerBalances
+ * @property \AdminPanel\Model\Table\CustomerBuyGroupDetailsTable|\Cake\ORM\Association\HasMany $CustomerBuyGroupDetails
+ * @property \AdminPanel\Model\Table\CustomerBuyGroupsTable|\Cake\ORM\Association\HasMany $CustomerBuyGroups
+ * @property \AdminPanel\Model\Table\CustomerLogBrowsingsTable|\Cake\ORM\Association\HasMany $CustomerLogBrowsings
+ * @property \AdminPanel\Model\Table\CustomerMutationAmountsTable|\Cake\ORM\Association\HasMany $CustomerMutationAmounts
+ * @property \AdminPanel\Model\Table\CustomerMutationPointsTable|\Cake\ORM\Association\HasMany $CustomerMutationPoints
+ * @property \AdminPanel\Model\Table\CustomerTokensTable|\Cake\ORM\Association\HasMany $CustomerTokens
+ * @property \AdminPanel\Model\Table\CustomerVirtualAccountTable|\Cake\ORM\Association\HasMany $CustomerVirtualAccount
+ * @property \AdminPanel\Model\Table\GenerationsTable|\Cake\ORM\Association\HasMany $Generations
+ * @property \AdminPanel\Model\Table\OrdersTable|\Cake\ORM\Association\HasMany $Orders
+ *
+ * @method \AdminPanel\Model\Entity\Customer get($primaryKey, $options = [])
+ * @method \AdminPanel\Model\Entity\Customer newEntity($data = null, array $options = [])
+ * @method \AdminPanel\Model\Entity\Customer[] newEntities(array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\Customer|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \AdminPanel\Model\Entity\Customer|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \AdminPanel\Model\Entity\Customer patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\Customer[] patchEntities($entities, array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\Customer findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ */
+class CustomersTable extends Table
+{
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this->setTable('customers');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+//
+//        $this->belongsTo('RefferalCustomers', [
+//            'foreignKey' => 'refferal_customer_id',
+//            'joinType' => 'INNER',
+//            'className' => 'AdminPanel.RefferalCustomers'
+//        ]);
+        $this->belongsTo('CustomerGroups', [
+            'foreignKey' => 'customer_group_id',
+            'className' => 'AdminPanel.CustomerGroups'
+        ]);
+        $this->belongsTo('CustomerStatuses', [
+            'foreignKey' => 'customer_status_id',
+            'className' => 'AdminPanel.CustomerStatuses'
+        ]);
+        $this->hasMany('ChatDetails', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.ChatDetails'
+        ]);
+        $this->hasMany('CustomerAddreses', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.CustomerAddreses'
+        ]);
+        $this->hasMany('CustomerBalances', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.CustomerBalances'
+        ]);
+        $this->hasMany('CustomerBuyGroupDetails', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.CustomerBuyGroupDetails'
+        ]);
+        $this->hasMany('CustomerBuyGroups', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.CustomerBuyGroups'
+        ]);
+        $this->hasMany('CustomerLogBrowsings', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.CustomerLogBrowsings'
+        ]);
+        $this->hasMany('CustomerMutationAmounts', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.CustomerMutationAmounts'
+        ]);
+        $this->hasMany('CustomerMutationPoints', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.CustomerMutationPoints'
+        ]);
+        $this->hasMany('CustomerTokens', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.CustomerTokens'
+        ]);
+        $this->hasMany('CustomerVirtualAccount', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.CustomerVirtualAccount'
+        ]);
+        $this->hasMany('Generations', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.Generations'
+        ]);
+        $this->hasMany('Orders', [
+            'foreignKey' => 'customer_id',
+            'className' => 'AdminPanel.Orders'
+        ]);
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', 'create');
+
+        $validator
+            ->scalar('reffcode')
+            ->maxLength('reffcode', 10)
+            ->requirePresence('reffcode', 'create')
+            ->allowEmptyString('reffcode', false);
+
+        $validator
+            ->email('email')
+            ->requirePresence('email', 'create')
+            ->notEmpty('email')
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => __d('MemberPanel','Email address already exist')]);
+
+        $validator
+            ->requirePresence('password', 'create')
+            ->notEmpty('password', __d('MemberPanel','You must enter a password'), 'create')
+            ->lengthBetween('password', [6, 20], 'password min 6 - 20 character')
+            ->regex('password', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/', __d('MemberPanel', 'Password min 6 char at least one uppercase letter, one lowercase letter and one number'));
+
+        $validator
+            ->requirePresence('cpassword', 'create')
+            ->notEmpty('cpassword')
+            ->allowEmpty('cpassword', function ($context) {
+                return !isset($context['data']['password']);
+            })
+            ->equalToField('cpassword', 'password', __d('MemberPanel', 'Confirmation password does not match with your password'))
+            ->add('cpassword', 'compareWith', [
+                'rule' => ['compareWith', 'password'],
+                'message' => __d('MemberPanel','Passwords do not match.')
+            ]);
+
+        $validator
+            ->scalar('first_name')
+            ->maxLength('first_name', 40)
+            ->requirePresence('first_name', 'create')
+            ->allowEmptyString('first_name', false);
+
+        $validator
+            ->scalar('last_name')
+            ->maxLength('last_name', 30)
+            ->requirePresence('last_name', 'create')
+            ->allowEmptyString('last_name', false);
+
+        $validator
+            ->scalar('phone')
+            ->maxLength('phone', 15)
+            ->requirePresence('phone', 'create')
+            ->allowEmptyString('phone', false);
+
+//        $validator
+//            ->date('dob')
+//            ->requirePresence('dob', 'create')
+//            ->allowEmptyDate('dob', false);
+
+        $validator
+            ->integer('is_verified')
+            ->requirePresence('is_verified', 'create')
+            ->allowEmptyString('is_verified', false);
+
+        $validator
+            ->scalar('platforrm')
+            ->maxLength('platforrm', 15)
+            ->requirePresence('platforrm', 'create')
+            ->allowEmptyString('platforrm', false);
+
+        return $validator;
+    }
+
+    public function validationPassword(Validator $validator)
+    {
+        $validator
+            ->lengthBetween('password', [6, 20], 'password min 6 - 20 character')
+            ->notEqualToField('password', 'current_password', __d('MemberPanel', 'New password cannot match with your current password'))
+            ->regex('password', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/',
+                __d('MemberPanel', 'password min 6 char at least one uppercase letter, one lowercase letter and one number'));
+
+        $validator
+            ->equalToField('repeat_password', 'password', __d('MemberPanel', 'Repeat password does not match with your password'))
+            ->notEqualToField('repeat_password', 'current_password', __d('MemberPanel', 'Repeat password cannot match with your current password'))
+            ->allowEmpty('repeat_password', function ($context) {
+                return !isset($context['data']['password']);
+            });
+        return $validator;
+    }
+
+    public function validationPasswords(Validator $validator)
+    {
+        $validator
+            ->lengthBetween('password', [6, 20], 'password min 6 - 20 character')
+            ->regex('password', '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/',
+                __d('MemberPanel', 'password min 6 char at least one uppercase letter, one lowercase letter and one number'));
+
+        $validator
+            ->equalToField('repeat_password', 'password', __d('MemberPanel', 'Repeat password does not match with your password'))
+            ->allowEmpty('repeat_password', function ($context) {
+                return !isset($context['data']['password']);
+            });
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['email']));
+//        $rules->add($rules->existsIn(['refferal_customer_id'], 'RefferalCustomers'));
+        $rules->add($rules->existsIn(['customer_group_id'], 'CustomerGroups'));
+        $rules->add($rules->existsIn(['customer_status_id'], 'CustomerStatuses'));
+
+        return $rules;
+    }
+
+    public function findAuth(\Cake\ORM\Query $query, array $options)
+    {
+        $query
+            ->select(['id', 'email', 'password'])
+            ->where(['Customers.status' => 1]);
+
+        return $query;
+    }
+}

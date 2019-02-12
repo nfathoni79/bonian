@@ -21,19 +21,16 @@ class OptionsSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'option_type_id' => '1',
                 'name' => 'Warna',
                 'sort_order' => '1',
             ],
             [
                 'id' => '2',
-                'option_type_id' => '1',
                 'name' => 'Ukuran',
                 'sort_order' => '2',
             ],
             [
                 'id' => '3',
-                'option_type_id' => '2',
                 'name' => 'Quantity',
                 'sort_order' => '0',
             ],

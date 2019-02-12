@@ -105,7 +105,9 @@ Router::scope('/', function (RouteBuilder $routes) {
 
 Router::scope('/api', function (RouteBuilder $routes) {
     $routes->prefix('v1', function(RouteBuilder $routes) {
-        $routes->connect('/:controller/*');
+        $routes->connect('/:controller');
+        $routes->connect('/:controller/:action');
+        $routes->connect('/:controller/:action/*');
     });
 });
 

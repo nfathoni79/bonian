@@ -16,7 +16,6 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
-
 /**
  * Application Controller
  *
@@ -35,6 +34,7 @@ class AppController extends Controller
      *
      * e.g. `$this->loadComponent('Security');`
      *
+     * @property \App\Controller\Component\SendAuthComponent $SendAuth
      * @return void
      */
     public function initialize()
@@ -45,6 +45,7 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
+
 
         /*
          * Enable the following component for recommended CakePHP security settings.
