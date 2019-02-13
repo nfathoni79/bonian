@@ -137,6 +137,12 @@ class CustomersTable extends Table
             ->allowEmptyString('reffcode', false);
 
         $validator
+            ->scalar('username')
+            ->maxLength('username', 30)
+            ->requirePresence('username', 'create')
+            ->allowEmptyString('username', false);
+
+        $validator
             ->email('email')
             ->requirePresence('email', 'create')
             ->notEmpty('email')
@@ -160,17 +166,17 @@ class CustomersTable extends Table
                 'message' => __d('MemberPanel','Passwords do not match.')
             ]);
 
-        $validator
-            ->scalar('first_name')
-            ->maxLength('first_name', 40)
-            ->requirePresence('first_name', 'create')
-            ->allowEmptyString('first_name', false);
-
-        $validator
-            ->scalar('last_name')
-            ->maxLength('last_name', 30)
-            ->requirePresence('last_name', 'create')
-            ->allowEmptyString('last_name', false);
+//        $validator
+//            ->scalar('first_name')
+//            ->maxLength('first_name', 40)
+//            ->requirePresence('first_name', 'create')
+//            ->allowEmptyString('first_name', false);
+//
+//        $validator
+//            ->scalar('last_name')
+//            ->maxLength('last_name', 30)
+//            ->requirePresence('last_name', 'create')
+//            ->allowEmptyString('last_name', false);
 
         $validator
             ->scalar('phone')
@@ -240,6 +246,7 @@ class CustomersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->isUnique(['username']));
         $rules->add($rules->isUnique(['reffcode']));
 //        $rules->add($rules->existsIn(['refferal_customer_id'], 'RefferalCustomers'));
         $rules->add($rules->existsIn(['customer_group_id'], 'CustomerGroups'));

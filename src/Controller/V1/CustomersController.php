@@ -39,14 +39,15 @@ class CustomersController  extends AppController
     public function registers()
     {
             /*DATA SAMPLE*/
-            $this->request->data['email'] = 'thinktobad@gmail.com';
-            $this->request->data['password'] = '123456Abc';
-            $this->request->data['cpassword'] = '123456Abc';
-            $this->request->data['first_name'] = 'Resliansyah';
-            $this->request->data['last_name'] = 'Pratama';
-            $this->request->data['phone'] = '08112052555';
-            $this->request->data['platforrm'] = 'Android';
-            $this->request->data['auth_code'] = '161300';
+//            $this->request->data['email'] = 'thinktobad@gmail.com';
+//            $this->request->data['username'] = 'thinktobad';
+//            $this->request->data['password'] = '123456Abc';
+//            $this->request->data['cpassword'] = '123456Abc';
+/*//            $this->request->data['first_name'] = 'Resliansyah';
+//            $this->request->data['last_name'] = 'Pratama';*/
+//            $this->request->data['phone'] = '08112052555';
+//            $this->request->data['platforrm'] = 'Android';
+//            $this->request->data['auth_code'] = '156279';
 
             $this->SendAuth->register('register', $this->request->getData('phone'));
             $validator = new Validator();
@@ -66,24 +67,35 @@ class CustomersController  extends AppController
             if (empty($errors)) {
                 $success = false;
                 $register = $this->Customers->newEntity();
-                $register = $this->Customers->patchEntity($register, $this->request->getData(),['fields' => ['email','password','cpassword','phone']]);
-//                $register->set('reffcode', $this->reffcode('10'));
-                $register->set('reffcode', 'lKdYcWFbxD');
+                $register = $this->Customers->patchEntity($register, $this->request->getData(),['fields' => ['email','username','password','cpassword','phone']]);
+                $register->set('reffcode', $this->reffcode('10'));
+//                $register->set('reffcode', 'lKdYcWFbxD');
                 $register->set('customer_group_id', 1);
                 $register->set('customer_status_id', 1);
-                $register->set('is_verified', 1);
+                $register->set('is_verified', 0);
                 $register->set('platforrm', 'Android');
                 $register->set('activation', \Cake\Utility\Text::uuid());
+
                 $save = $this->Customers->save($register);
                 if($save){
                     $this->SendAuth->setUsed();
-                    $this->id = $register->get('id');
-                    //$success = true;
+                    /*SEND EMAIL REGISTRATION*/
+                    $this->Mailer
+                        ->setVar([
+                            'code' => \Cake\Utility\Text::uuid(),
+                            'name' => $save->get('username'),
+                            'email' => $save->get('email'),
+                        ])
+                        ->send(
+                            $save->get('id'),
+                            'Verifikasi Alamat Email Kamu Di Zolaku',
+                            'verification'
+                        );
+
                 }else{
                     $this->setResponse($this->response->withStatus(406, 'Failed to registers'));
                     //display error on models
                     $error = $register->getErrors();
-                    /*SEND EMAIL REGISTRATION*/
                 }
             }else {
                 $this->setResponse($this->response->withStatus(406, 'Failed to registers'));
@@ -93,34 +105,64 @@ class CustomersController  extends AppController
              $this->set(compact('error'));
     }
 
-    public function sendverification(){
+    public function sendcode(){
 
-        $this->request->data['phone'] = '08112052555';
+
+        //$this->request->data['phone'] = '08112052555';
         $this->SendAuth->register('register', $this->request->getData('phone'));
         $code = $this->SendAuth->generates();
-
         if($code){
             $text = 'Demi keamanan akun Anda, mohon TIDAK MEMBERIKAN kode verifikasi kepada siapapun TERMASUK TIM ZOLAKU. Kode verifikasi berlaku 15 mnt : '.$code;
-            $this->SendAuth->sendsms($text);
+//            $this->SendAuth->sendsms($text);
+//            send sms
         }else{
             $this->setResponse($this->response->withStatus(406, 'Failed request verification'));
         }
         $this->set(compact('error'));
     }
 
-    public function testmail(){
 
-        $this->Mailer
-            ->setVar([
-                'code' => \Cake\Utility\Text::uuid()
-            ])
-            ->sendEmail(
-                'thinktobad@gmail.com',
-                'Verivikasi Alamat Email Kamu Di Zolaku',
-                'verification'
-            );
+    public function verification($code = null){
+        $this->request->allowMethod('get');
 
-        exit;
+        $code = $this->request->getQuery('code');
+        if(!empty($code)){
+
+            $customers = $this->Customers->find()
+                ->where(['activation' => $code, 'is_verified' => 0])
+                ->first();
+            if($customers){
+
+                $update = $this->Customers->get($customers->id);
+                $update->is_verified = 1;
+                $update->activation = null;
+                if($this->Customers->save($update)){
+                    $this->Mailer
+                        ->setVar([
+                            'code' => \Cake\Utility\Text::uuid(),
+                            'name' => $customers->get('username'),
+                            'email' => $customers->get('email'),
+                        ])
+                        ->send(
+                            $customers->get('id'),
+                            'Verifikasi Di Zolaku Berhasil',
+                            'actived'
+                        );
+
+                }else{
+                    $this->setResponse($this->response->withStatus(406, 'Failed request verification'));
+                }
+
+            }else{
+                $this->setResponse($this->response->withStatus(406, 'Wrong code'));
+            }
+        }else{
+            $this->setResponse($this->response->withStatus(406, 'Verification code is empty'));
+        }
+        $this->set(compact('error'));
 
     }
+
+
+
 }

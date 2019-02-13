@@ -62,12 +62,12 @@ class MailerComponent extends Component
         if (!filter_var($destination, FILTER_VALIDATE_EMAIL)) {
             $this->Customers = TableRegistry::get('AdminPanel.Customers');
             $data = $this->Customers->find()
-                ->select(['email', 'name'])
+                ->select(['email', 'username'])
                 ->where(['id' => $destination])
                 ->first();
             if ($data) {
                 $destination = $data->get('email');
-                $this->params['name'] = $data->get('name');
+                $this->params['name'] = $data->get('username');
             }
         }
         $this->Email = new Email($this->_defaultConfig['transport']);
@@ -86,34 +86,6 @@ class MailerComponent extends Component
         return $this->Email;
     }
 
-    public function sendEmail($destination, $subject, $template, $send_later = false)
-    {
-        if (!filter_var($destination, FILTER_VALIDATE_EMAIL)) {
-            $this->Customers = TableRegistry::get('AdminPanel.Customers');
-            $data = $this->Customers->find()
-                ->select(['email', 'name'])
-                ->where(['email' => $destination])
-                ->first();
-            if ($data) {
-                $destination = $data->get('email');
-                $this->params['name'] = $data->get('name');
-            }
-        }
-        $this->Email = new Email($this->_defaultConfig['transport']);
-        $this->Email->setFrom(['noreply@zolaku.com' => 'Zolaku'])
-            ->setTo($destination)
-            ->setViewVars($this->params)
-            ->setLayout('default')
-            ->setTemplate($template)
-            ->setEmailFormat('html')
-            ->setSubject($subject);
-        if (!$send_later) {
-            if ($this->Email->send()) {
-                $this->Email = null; //set null if success
-            }
-        }
-        return $this->Email;
-    }
 
     /**
      * execute email

@@ -55,6 +55,7 @@ class Customer extends Entity
         'refferal_customer_id' => true,
         'email' => true,
         'password' => true,
+        'username' => true,
         'first_name' => true,
         'last_name' => true,
         'phone' => true,
