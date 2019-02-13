@@ -8,7 +8,7 @@ namespace App\Controller\V1;
  * @package App\Controller\V1
  * @property \AdminPanel\Model\Table\CourriersTable $Courriers
  */
-class CouriersController extends AppController
+class CouriersController extends BaseController
 {
 
     public function initialize()
