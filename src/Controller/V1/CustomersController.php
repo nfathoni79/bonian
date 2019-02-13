@@ -12,6 +12,7 @@ use Cake\ORM\Rule\IsUnique;
  * Class CouriersController
  * @package App\Controller\V1
  * @property \AdminPanel\Model\Table\CustomersTable $Customers
+ * @property \AdminPanel\Model\Table\CustomerBalancesTable $CustomerBalances
  */
 
 class CustomersController  extends AppController
@@ -21,6 +22,11 @@ class CustomersController  extends AppController
     {
         parent::initialize();
         $this->loadModel('AdminPanel.Customers');
+        $this->loadModel('AdminPanel.CustomerBalances');
+        $this->loadModel('AdminPanel.CustomerMutationAmounts');
+        $this->loadModel('AdminPanel.CustomerMutationPoints');
+        $this->loadModel('AdminPanel.CustomerAddreses');
+
         $this->loadComponent('SendAuth');
         $this->loadComponent('Mailer', ['transport' => 'default']);
     }
@@ -38,48 +44,44 @@ class CustomersController  extends AppController
 
     public function registers()
     {
-            /*DATA SAMPLE*/
-//            $this->request->data['email'] = 'thinktobad@gmail.com';
-//            $this->request->data['username'] = 'thinktobad';
-//            $this->request->data['password'] = '123456Abc';
-//            $this->request->data['cpassword'] = '123456Abc';
-/*//            $this->request->data['first_name'] = 'Resliansyah';
-//            $this->request->data['last_name'] = 'Pratama';*/
-//            $this->request->data['phone'] = '08112052555';
-//            $this->request->data['platforrm'] = 'Android';
-//            $this->request->data['auth_code'] = '156279';
 
-            $this->SendAuth->register('register', $this->request->getData('phone'));
-            $validator = new Validator();
+        $this->SendAuth->register('register', $this->request->getData('phone'));
+        $validator = new Validator();
 
-            $validator
-                ->requirePresence('auth_code')
-                ->notEmpty('auth_code', __d('MemberPanel', 'This field is required'))
-                ->add('auth_code', 'is_valid', [
-                    'rule' => function($value) {
-                        return $this->SendAuth->isValid($value);
-                    },
-                    'message' => 'Auth code not valid'
+        $validator
+            ->requirePresence('auth_code')
+            ->notEmpty('auth_code', __d('MemberPanel', 'This field is required'))
+            ->add('auth_code', 'is_valid', [
+                'rule' => function($value) {
+                    return $this->SendAuth->isValid($value);
+                },
+                'message' => 'Auth code not valid'
+            ]);
+
+        // display error custom on controller
+        $errors = $validator->errors($this->request->getData());
+        if (empty($errors)) {
+            $success = false;
+            $register = $this->Customers->newEntity();
+            $register = $this->Customers->patchEntity($register, $this->request->getData(),['fields' => ['email','username','password','cpassword','phone']]);
+            $register->set('reffcode', $this->reffcode('10'));
+            $register->set('customer_group_id', 1);
+            $register->set('customer_status_id', 1);
+            $register->set('is_verified', 0);
+            $register->set('platforrm', 'Android');
+            $register->set('activation', \Cake\Utility\Text::uuid());
+
+            $save = $this->Customers->save($register);
+            if($save){
+
+                $balanceEntity = $this->CustomerBalances->newEntity([
+                        'customer_id' => $save->get('id'),
+                        'balance' => 0,
+                        'point' => 0
                 ]);
+                if ($this->CustomerBalances->save($balanceEntity)) {
 
-            // display error custom on controller
-            $errors = $validator->errors($this->request->getData());
-            if (empty($errors)) {
-                $success = false;
-                $register = $this->Customers->newEntity();
-                $register = $this->Customers->patchEntity($register, $this->request->getData(),['fields' => ['email','username','password','cpassword','phone']]);
-                $register->set('reffcode', $this->reffcode('10'));
-//                $register->set('reffcode', 'lKdYcWFbxD');
-                $register->set('customer_group_id', 1);
-                $register->set('customer_status_id', 1);
-                $register->set('is_verified', 0);
-                $register->set('platforrm', 'Android');
-                $register->set('activation', \Cake\Utility\Text::uuid());
-
-                $save = $this->Customers->save($register);
-                if($save){
                     $this->SendAuth->setUsed();
-                    /*SEND EMAIL REGISTRATION*/
                     $this->Mailer
                         ->setVar([
                             'code' => \Cake\Utility\Text::uuid(),
@@ -92,23 +94,23 @@ class CustomersController  extends AppController
                             'verification'
                         );
 
-                }else{
-                    $this->setResponse($this->response->withStatus(406, 'Failed to registers'));
-                    //display error on models
-                    $error = $register->getErrors();
                 }
-            }else {
+            }else{
                 $this->setResponse($this->response->withStatus(406, 'Failed to registers'));
-                $error = $errors;
+                //display error on models
+                $error = $register->getErrors();
             }
+        }else {
+            $this->setResponse($this->response->withStatus(406, 'Failed to registers'));
+            $error = $errors;
+        }
 
-             $this->set(compact('error'));
+         $this->set(compact('error'));
     }
 
     public function sendcode(){
 
 
-        //$this->request->data['phone'] = '08112052555';
         $this->SendAuth->register('register', $this->request->getData('phone'));
         $code = $this->SendAuth->generates();
         if($code){
@@ -161,6 +163,17 @@ class CustomersController  extends AppController
         }
         $this->set(compact('error'));
 
+    }
+
+
+    public function testing(){
+
+
+//        $this->CustomerMutationAmounts->saving('1','1', '-50000','Test mutation'); //mutation amount
+//        $this->CustomerMutationPoints->saving('1','1', '1','Test mutation'); //mutation point
+//        $config = Configure::read('configure.address_limit');
+//        debug($config);
+//        exit;
     }
 
 
