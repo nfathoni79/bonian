@@ -7,9 +7,54 @@
 
 
 <?php $this->append('script'); ?>
-<?php echo $this->Html->script('/admin-assets/demo/default/custom/crud/wizard/wizard'); ?>
+<?php
+    //echo $this->Html->script('/admin-assets/demo/default/custom/crud/wizard/wizard');
+    echo $this->Html->script([
+            '/admin-assets/vendors/custom/slugify/speakingurl.min',
+            '/admin-assets/vendors/custom/slugify/slugify.min',
+            '/admin-assets/vendors/custom/libs/validation-render',
+    ]);
+?>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
+
+        $('#slug').slugify('#title'); // Type as you slug
+
+        var formEl = $("#m_form");
+
+        var url = '<?= $this->Url->build(['action' => 'validationWizard']); ?>';
+
+        var ajaxRequest = new ajaxValidation(formEl);
+
+
+
+
+        wizard = new mWizard('m_wizard', {
+            startStep: 1
+        });
+
+        //== Validation before going to next page
+        wizard.on('beforeNext', function(wizardObj) {
+            //alert('next'); //m-wizard__form-step--current
+            var current = formEl.find('.m-wizard__form-step--current :input');
+            ajaxRequest.post(url + '/' + wizardObj.getStep(), current);
+
+        })
+
+        //== Change event
+        wizard.on('change', function(wizard) {
+            mUtil.scrollTop();
+        });
+
+        //== Change event
+        wizard.on('change', function(wizard) {
+            if (wizard.getStep() === 1) {
+                //alert(1);
+            }
+        });
+
+
+
         $.ajax({
             url: "<?= $this->Url->build(['action' => 'getoptionvalues']); ?>",
             cache: false,
