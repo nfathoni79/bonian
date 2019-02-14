@@ -1,0 +1,14 @@
+div[class^="col-"] {
+    padding-left: 2.5px !important;
+    padding-right: 2.5px !important;
+}
+
+.row {
+    margin-left: -2.5px !important;
+    margin-right: -2.5px !important;
+}
+
+.m-form .m-form__group {
+    padding-top: 7px;
+    padding-bottom: 7px;
+}

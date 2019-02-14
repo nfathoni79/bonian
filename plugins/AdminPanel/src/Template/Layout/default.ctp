@@ -26,7 +26,8 @@
     <!--end::Page Vendors -->
     <?= $this->Html->css([
             '/admin-assets/vendors/base/vendors.bundle',
-            '/admin-assets/demo/default/base/style.bundle'
+            '/admin-assets/demo/default/base/style.bundle',
+            '/admin-assets/app/css/custom'
     ]); ?>
     <!--end::Base Styles -->
     <?= $this->Html->meta(
