@@ -147,6 +147,21 @@ class ProductsController extends AppController
                     ->notBlank('price');
 
                 break;
+
+            case '3':
+
+                $validator
+                    ->requirePresence('ProductToCourriers')
+                    ->hasAtLeast('ProductToCourriers', 2, 'Pilih salah satu');
+                    /*->add('ProductToCourriers[]', 'required3', [
+                        'rule' => function ($value)  {
+                            debug('test');
+                            return false;
+                            return count($this->request->getData('ProductToCourriers')) > 0;
+                        },
+                        'message' => __d('AdminPanel', 'Silahkan pilih salah satu')
+                    ]);*/
+                break;
         }
 
         $error = $validator->errors($this->request->getData());

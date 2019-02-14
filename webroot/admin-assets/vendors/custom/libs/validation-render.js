@@ -4,6 +4,20 @@ function ajaxValidation(formEL) {
     this.blockUIelement = '';
 }
 
+
+ajaxValidation.prototype.checkFieldName = function(element, field, matched) {
+    let inputs = [];
+    element.find(':input:visible').each(function() {
+        if (String($(this).attr('name')).replace('[]', '') === field && inputs.indexOf($(this).attr('name')) == -1) {
+            inputs.push($(this).attr('name'));
+            if (typeof matched === 'function') {
+                matched($(this));
+            }
+            return;
+        }
+    });
+}
+
 /**
  * serialize form :input all
  * @param input
@@ -38,9 +52,12 @@ ajaxValidation.prototype.post = function(url, input, callback) {
                     }
 
                     for (let [key, value] of Object.entries(data)) {
-                        let input = that.form.find(`[name="${key}"]`)
-                            .addClass('is-invalid');
-                        that.appendTextInput(input, value);
+                        that.checkFieldName(that.form, key, function(m) {
+                            that.appendTextInput(m, value);
+                        });
+                        //let input = that.form.find(`[name="${key}"]`)
+                        //    .addClass('is-invalid');
+                        //that.appendTextInput(input, value);
                     }
                 }
             },
@@ -72,7 +89,6 @@ ajaxValidation.prototype.appendTextInput = function (el, message) {
         out += '<ul style="margin-left: -30px;">';
     }
     for (let [key, value] of Object.entries(message)) {
-        console.log(value);
         out += len > 1 ? `<li>${value}</li>` : value;
     }
     if (len > 1) {
@@ -84,6 +100,8 @@ ajaxValidation.prototype.appendTextInput = function (el, message) {
     el.parents('.form-group').addClass('has-danger');
     if (el.parents('.input-group').find('.input-group-append').length || el.parents('.input-group').find('.input-group-prepend').length) {
         el.parents('.input-group').after(out);
+    } else if (el.attr('type') === 'checkbox') {
+        el.parents('.m-checkbox-inline').after(out);
     } else {
         el.after(out);
     }
