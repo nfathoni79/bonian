@@ -19,6 +19,7 @@ ajaxValidation.prototype.post = function(url, input, callback) {
             state:"success" ,
             message:"Please wait..."
         });
+        that.removeError();
         $.ajax({
             type: "POST",
             url: url,
@@ -30,6 +31,7 @@ ajaxValidation.prototype.post = function(url, input, callback) {
                 mApp.unblock(that.blockUIelement);
                 if (data instanceof Array) {
                     callback({success: true});
+
                 } else if (typeof data === 'object') {
                     if (typeof callback === 'function') {
                         callback({success: false});
@@ -51,6 +53,12 @@ ajaxValidation.prototype.post = function(url, input, callback) {
 
 ajaxValidation.prototype.setblockUI = function(el) {
     this.blockUIelement = el;
+}
+
+ajaxValidation.prototype.removeError = function() {
+    this.form.find('.form-group.is-invalid').removeClass('is-invalid');
+    this.form.find('.error.invalid-feedback').remove();
+    this.form.find('.is-invalid').removeClass('is-invalid');
 }
 
 ajaxValidation.prototype.appendTextInput = function (el, message) {
