@@ -38,7 +38,7 @@ ajaxValidation.prototype.post = function(url, input, callback) {
                     }
 
                     for (let [key, value] of Object.entries(data)) {
-                        let input = that.form.find(`input[name="${key}"]`)
+                        let input = that.form.find(`[name="${key}"]`)
                             .addClass('is-invalid');
                         that.appendTextInput(input, value);
                     }
@@ -61,12 +61,12 @@ ajaxValidation.prototype.setblockUI = function(el) {
 
 ajaxValidation.prototype.removeError = function() {
     this.form.find('.form-group.is-invalid').removeClass('is-invalid');
-    this.form.find('.error.invalid-feedback').remove();
+    this.form.find('.error.form-control-feedback').remove();
     this.form.find('.is-invalid').removeClass('is-invalid');
 }
 
 ajaxValidation.prototype.appendTextInput = function (el, message) {
-    let out = '<div class="error invalid-feedback">';
+    let out = '<div class="error form-control-feedback">';
     let len = Object.entries(message).length;
     if (len > 1) {
         out += '<ul style="margin-left: -30px;">';
@@ -79,8 +79,10 @@ ajaxValidation.prototype.appendTextInput = function (el, message) {
         out += '</ul>';
     }
     out += '</div>';
-    el.parents('.form-group').addClass('validate is-invalid');
-    if (el.parents('.input-group').find('.input-group-append').length) {
+
+    
+    el.parents('.form-group').addClass('has-danger');
+    if (el.parents('.input-group').find('.input-group-append').length || el.parents('.input-group').find('.input-group-prepend').length) {
         el.parents('.input-group').after(out);
     } else {
         el.after(out);

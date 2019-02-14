@@ -12,3 +12,8 @@ div[class^="col-"] {
     padding-top: 7px;
     padding-bottom: 7px;
 }
+
+/* form validation custom ajax */
+.has-danger label:not([class]), .has-danger label.col-form-label, .has-danger label.form-control-label {
+    color: inherit;
+}

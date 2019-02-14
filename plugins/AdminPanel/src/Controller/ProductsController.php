@@ -119,7 +119,32 @@ class ProductsController extends AppController
                     ->requirePresence('title')
                     ->notBlank('title');
 
+                $validator
+                    ->requirePresence('slug')
+                    ->notBlank('slug');
 
+                $validator
+                    ->requirePresence('condition')
+                    ->notBlank('condition');
+
+                break;
+
+            case '2':
+                $validator
+                    ->requirePresence('model')
+                    ->notBlank('model');
+
+                $validator
+                    ->requirePresence('sku')
+                    ->notBlank('sku');
+
+                $validator
+                    ->requirePresence('code')
+                    ->notBlank('code');
+
+                $validator
+                    ->requirePresence('price')
+                    ->notBlank('price');
 
                 break;
         }
