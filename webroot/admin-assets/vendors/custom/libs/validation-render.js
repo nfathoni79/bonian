@@ -96,7 +96,7 @@ ajaxValidation.prototype.appendTextInput = function (el, message) {
     }
     out += '</div>';
 
-    
+
     el.parents('.form-group').addClass('has-danger');
     if (el.parents('.input-group').find('.input-group-append').length || el.parents('.input-group').find('.input-group-prepend').length) {
         el.parents('.input-group').after(out);
