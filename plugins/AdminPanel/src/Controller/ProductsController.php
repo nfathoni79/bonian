@@ -2,6 +2,7 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use Cake\Validation\Validator;
 
 /**
  * Products Controller
@@ -100,6 +101,32 @@ class ProductsController extends AppController
         ]);
 
         $this->set('product', $product);
+    }
+
+
+    public function validationWizard($step = 1)
+    {
+        $this->disableAutoRender();
+        $validator = new Validator();
+
+        switch ($step) {
+            case '1':
+                $validator
+                    ->requirePresence('name')
+                    ->notBlank('name');
+
+                $validator
+                    ->requirePresence('title')
+                    ->notBlank('title');
+
+
+
+                break;
+        }
+
+        $error = $validator->errors($this->request->getData());
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($error));
     }
 
     /**

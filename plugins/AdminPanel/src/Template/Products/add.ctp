@@ -24,8 +24,9 @@
 
         var url = '<?= $this->Url->build(['action' => 'validationWizard']); ?>';
 
-        var ajaxRequest = new ajaxValidation(formEl);
 
+        var ajaxRequest = new ajaxValidation(formEl);
+        ajaxRequest.setblockUI('#m_wizard');
 
 
 
@@ -33,13 +34,21 @@
             startStep: 1
         });
 
+
         //== Validation before going to next page
         wizard.on('beforeNext', function(wizardObj) {
-            //alert('next'); //m-wizard__form-step--current
-            var current = formEl.find('.m-wizard__form-step--current :input');
-            ajaxRequest.post(url + '/' + wizardObj.getStep(), current);
+            //wizardObj.stop();
+        });
 
-        })
+        //override next2 with validation ajax
+        $("[data-wizard-action=next2]").click(function() {
+            var current = formEl.find('.m-wizard__form-step--current :input');
+            ajaxRequest.post(url + '/' + wizard.getStep(), current, function(data) {
+                if (data.success) {
+                    wizard.goNext();
+                }
+            });
+        });
 
         //== Change event
         wizard.on('change', function(wizard) {
@@ -524,7 +533,7 @@
                                                             <span>Submit</span>
                                                         </span>
                                                     </a>
-                                                    <a href="#" class="btn btn-success m-btn m-btn--custom m-btn--icon" data-wizard-action="next">
+                                                    <a href="#" class="btn btn-success m-btn m-btn--custom m-btn--icon" data-wizard-action="next2">
                                                         <span>
                                                             <span>Continue</span>&nbsp;&nbsp;
                                                             <i class="la la-arrow-right"></i>
