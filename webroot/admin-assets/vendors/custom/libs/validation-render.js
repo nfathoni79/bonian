@@ -44,9 +44,13 @@ ajaxValidation.prototype.post = function(url, input, callback) {
                     }
                 }
             },
-            error: function() {
+            error: function(data) {
+                if (data.status == 403) {
+                    location.reload();
+
+                }
                 mApp.unblock(that.blockUIelement);
-            }
+            },
         });
     }
 }
