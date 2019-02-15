@@ -29,16 +29,17 @@ ajaxValidation.prototype.extractFields = function (object) {
     var self = this;
     Object.keys(object).map(e => {
         if (typeof object[e] === 'object' && self.ObjectLength(object[e]) > 0) {
-            //console.log(j[e]);
+            var n = [];
             for( var [key, value] of Object.entries(object[e]) ) {
-                e += '[' + key + ']';
                 if (self.ObjectLength(value) > 0) {
+                    n.push('[' + key + ']');
                     for(var f of Object.keys(value)) {
                         var i = '[' + f + ']';
-                        o.push({field: e + i, message: self.extractMessage(value[f])});
+                        o.push({field: e + n.join('') + i, message: self.extractMessage(value[f])});
                     }
+                    n = [];
                 } else {
-                    o.push({field: e, message: self.extractMessage(value)});
+                    o.push({field: e + '[' + key + ']', message: self.extractMessage(value)});
                 }
             }
         } else {
@@ -103,6 +104,7 @@ ajaxValidation.prototype.post = function(url, input, callback) {
 
                     let fields = that.extractFields(data);
                     for(var field in fields) {
+                        //console.log(fields[field].field)
                         that.checkFieldName(that.form, fields[field].field, function(m) {
                             that.appendTextInput(m, fields[field].message);
                         });

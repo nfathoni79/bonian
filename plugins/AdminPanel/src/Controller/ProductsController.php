@@ -169,8 +169,15 @@ class ProductsController extends AppController
                     ->requirePresence('ukuran')
                     ->notBlank('ukuran');
 
-
                 $validator->addNestedMany('ProductOptionValues', $productOption);
+
+                $productPrice = new Validator();
+                $productPrice
+                    ->requirePresence('price')
+                    ->numeric('price')
+                    ->greaterThanOrEqual('price', 1000, 'harga harus lebih besar 1000');
+
+                $validator->addNestedMany('ProductOptionPrices', $productPrice);
 
 
                 break;
