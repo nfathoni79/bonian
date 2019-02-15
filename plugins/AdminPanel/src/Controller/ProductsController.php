@@ -127,6 +127,14 @@ class ProductsController extends AppController
                     ->requirePresence('condition')
                     ->notBlank('condition');
 
+                $meta = new Validator();
+                $meta
+                    ->requirePresence('keyword')
+                    ->notBlank('keyword');
+
+                $validator->addNested('ProductMetaTags', $meta);
+
+
                 break;
 
             case '2':
@@ -153,6 +161,18 @@ class ProductsController extends AppController
                 $validator
                     ->requirePresence('ProductToCourriers')
                     ->hasAtLeast('ProductToCourriers', 2, __d('AdminPanel', 'Pilih Minimal dua'));
+
+                $productOption = new Validator();
+                $productOption
+                    ->requirePresence('warna')
+                    ->notBlank('warna')
+                    ->requirePresence('ukuran')
+                    ->notBlank('ukuran');
+
+
+                $validator->addNestedMany('ProductOptionValues', $productOption);
+
+
                 break;
         }
 

@@ -443,7 +443,7 @@
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Discount</label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <div class="input-group">
-                                                            <div class="input-group-prepend"><span class="input-group-text">%</div>
+                                                            <div class="input-group-prepend"><span class="input-group-text">%</span></div>
                                                             <?php echo $this->Form->control('price_discount',['div' => false, 'label' => false,'class' => $default_class, 'disabled' => 'disabled']);?>
                                                         </div>
                                                     </div>

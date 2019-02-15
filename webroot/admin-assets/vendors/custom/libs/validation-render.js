@@ -18,8 +18,48 @@ ajaxValidation.prototype.checkFieldName = function(element, field, matched) {
     });
 }
 
+ajaxValidation.prototype.extractMessage = function (object) {
+    if (this.ObjectLength(object) === 0) {
+        return object;
+    }
+}
+
+ajaxValidation.prototype.extractFields = function (object) {
+    var o = [];
+    var self = this;
+    Object.keys(object).map(e => {
+        if (typeof object[e] === 'object' && self.ObjectLength(object[e]) > 0) {
+            //console.log(j[e]);
+            for( var [key, value] of Object.entries(object[e]) ) {
+                e += '[' + key + ']';
+                if (self.ObjectLength(value) > 0) {
+                    for(var f of Object.keys(value)) {
+                        var i = '[' + f + ']';
+                        o.push({field: e + i, message: self.extractMessage(value[f])});
+                    }
+                } else {
+                    o.push({field: e, message: self.extractMessage(value)});
+                }
+            }
+        } else {
+            o.push({field: e, message: self.extractMessage(object[e])});
+        }
+    });
+    return o;
+};
+
+ajaxValidation.prototype.ObjectLength = function( object ) {
+    var length = 0;
+    for( var [key, value] of Object.entries(object) ) {
+        if (typeof value === 'object') {
+            length += 1 + this.ObjectLength(value);
+        }
+    }
+    return length;
+};
+
 /**
- * serialize form :input all
+ * serialize form :input all https://jsfiddle.net/7Lwfx8ty/1/
  * @param input
  */
 ajaxValidation.prototype.post = function(url, input, callback) {
@@ -51,13 +91,21 @@ ajaxValidation.prototype.post = function(url, input, callback) {
                         callback({success: false});
                     }
 
-                    for (let [key, value] of Object.entries(data)) {
+                    /*for (let [key, value] of Object.entries(data)) {
+
                         that.checkFieldName(that.form, key, function(m) {
                             that.appendTextInput(m, value);
                         });
                         //let input = that.form.find(`[name="${key}"]`)
                         //    .addClass('is-invalid');
                         //that.appendTextInput(input, value);
+                    }*/
+
+                    let fields = that.extractFields(data);
+                    for(var field in fields) {
+                        that.checkFieldName(that.form, fields[field].field, function(m) {
+                            that.appendTextInput(m, fields[field].message);
+                        });
                     }
                 }
             },
