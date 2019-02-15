@@ -163,10 +163,11 @@ class ProductsController extends AppController
                     ->hasAtLeast('ProductToCourriers', 2, __d('AdminPanel', 'Pilih Minimal dua'));
 
                 $productOption = new Validator();
+
                 $productOption
-                    ->requirePresence('warna')
-                    ->notBlank('warna')
-                    ->requirePresence('ukuran')
+                    ->notBlank('warna');
+
+                $productOption
                     ->notBlank('ukuran');
 
                 $validator->addNestedMany('ProductOptionValues', $productOption);
