@@ -150,7 +150,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Product') ?>
+                    <?= __d('AdminPanel', 'Product') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -164,7 +164,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Product') ?>
+                                <?= __d('AdminPanel', 'Product') ?>
                             </span>
                         </a>
                     </li>
@@ -174,7 +174,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Product') ?>
+                                <?= __d('AdminPanel', 'List Product') ?>
                             </span>
                         </a>
                     </li>
@@ -184,7 +184,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Add Product') ?>
+                                <?= __d('AdminPanel', 'Add Product') ?>
                             </span>
                         </a>
                     </li>
@@ -200,7 +200,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Add Product') ?>
+                            <?= __d('AdminPanel', 'Add Product') ?>
                         </h3>
                     </div>
                 </div>
@@ -248,7 +248,7 @@
                                                     <span></span>
                                                 </div>
                                                 <div class="m-wizard__step-label">
-                                                   General
+                                                   <?= __d('AdminPanel', 'General'); ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -261,7 +261,7 @@
                                                     <span></span>
                                                 </div>
                                                 <div class="m-wizard__step-label">
-                                                   Inventory & pricing
+                                                    <?= __d('AdminPanel', 'Inventory & pricing'); ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -274,7 +274,7 @@
                                                     <span></span>
                                                 </div>
                                                 <div class="m-wizard__step-label">
-                                                    Shipping & Attributes
+                                                    <?= __d('AdminPanel', 'Shipping & Attributes'); ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -287,7 +287,7 @@
                                                     <span></span>
                                                 </div>
                                                 <div class="m-wizard__step-label">
-                                                    Finish
+                                                    <?= __d('AdminPanel', 'Finish'); ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -310,22 +310,22 @@
                                         <div class="m-wizard__form-step m-wizard__form-step--current" id="m_wizard_form_step_1">
                                             <div class="m-form__section m-form__section--first">
                                                 <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title">Product Information</h3>
+                                                    <h3 class="m-form__heading-title"><?= __d('AdminPanel', 'Product Information'); ?></h3>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Name</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel', 'Name'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <?php echo $this->Form->control('name',['label' => false,'class' => $default_class]);?>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Title</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Title'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <?php echo $this->Form->control('title',['label' => false,'class' => $default_class]);?>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Slug</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Slug'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <?php echo $this->Form->control('slug',['label' => false,'class' => $default_class]);?>
                                                     </div>
@@ -335,25 +335,25 @@
                                             <div class="m-form__section">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title">
-                                                        Product Descriptions
+                                                        <?= __d('AdminPanel',  'Product Descriptions'); ?>
                                                     </h3>
                                                 </div>
 
 
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Highlight</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Highlight'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class, 'rows' => 2]);?>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Condition</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Condition'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <?php echo $this->Form->control('condition',['label' => false,'class' => $default_class, 'rows' => 2]);?>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Profile</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Profile'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class, 'rows' => 2]);?>
                                                     </div>
@@ -363,17 +363,17 @@
                                             <div class="m-form__section">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title">
-                                                        SEO Setting
+                                                        <?= __d('AdminPanel',  'SEO Setting'); ?>
                                                     </h3>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Keyword</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Keyword'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <?php echo $this->Form->control('ProductMetaTags.keyword',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 2]);?>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Description</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Description'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <?php echo $this->Form->control('ProductMetaTags.description',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 2]);?>
                                                     </div>
@@ -388,30 +388,30 @@
                                         <div class="m-wizard__form-step" id="m_wizard_form_step_2">
                                             <div class="m-form__section m-form__section--first">
                                                 <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title">Inventory</h3>
+                                                    <h3 class="m-form__heading-title"><?= __d('AdminPanel',  'Inventory'); ?></h3>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-form-label">* Model</label>
+                                                    <label class="col-xl-3 col-form-label">* <?= __d('AdminPanel',  'Model'); ?></label>
                                                     <div class="col-xl-3">
                                                         <?php echo $this->Form->control('model',['label' => false,'class' => $default_class]);?>
                                                     </div>
-                                                    <label class="col-xl-2 offset-1 col-form-label">* Code</label>
+                                                    <label class="col-xl-2 offset-1 col-form-label">* <?= __d('AdminPanel',  'Code'); ?></label>
                                                     <div class="col-xl-3">
                                                         <?php echo $this->Form->control('code',['label' => false,'class' => $default_class]);?>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-form-label">* Sku</label>
+                                                    <label class="col-xl-3 col-form-label">* <?= __d('AdminPanel',  'Sku'); ?></label>
                                                     <div class="col-xl-3">
                                                         <?php echo $this->Form->control('sku',['label' => false,'class' => $default_class]);?>
                                                     </div>
-                                                    <label class="col-xl-2 offset-1 col-form-label">* Isbn</label>
+                                                    <label class="col-xl-2 offset-1 col-form-label">* <?= __d('AdminPanel',  'Isbn'); ?></label>
                                                     <div class="col-xl-3">
                                                         <?php echo $this->Form->control('isbn',['label' => false,'class' => $default_class]);?>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Stock Status</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Stock Status'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <?php echo $this->Form->control('product_stock_status_id', ['options' => $productStockStatuses,'label' => false, 'class' => $default_class]);?>
                                                     </div>
@@ -420,31 +420,31 @@
 
                                             <div class="m-form__section">
                                                 <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title">Pricing</h3>
+                                                    <h3 class="m-form__heading-title"><?= __d('AdminPanel',  'Pricing'); ?></h3>
                                                 </div>
 
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Regular Price</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Regular Price'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <div class="input-group">
-                                                            <div class="input-group-prepend"><span class="input-group-text">IDR</span></div>
+                                                            <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
                                                             <?php echo $this->Form->control('price',['div' => false, 'label' => false,'class' => $default_class]);?>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Sale Price</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Sale Price'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <div class="input-group">
-                                                            <div class="input-group-prepend"><span class="input-group-text">IDR</span></div>
+                                                            <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
                                                             <?php echo $this->Form->control('price_sale', ['div' => false, 'label' => false,'class' => $default_class, 'type' => 'number']);?>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Discount</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Discount'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <div class="input-group">
                                                             <div class="input-group-prepend"><span class="input-group-text">%</span></div>
@@ -454,7 +454,7 @@
                                                 </div>
 
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Reward Point</label>
+                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
                                                         <div class="input-group">
                                                             <div class="input-group-prepend"><span class="input-group-text">IDR</span></div>
@@ -476,11 +476,11 @@
                                         <div class="m-wizard__form-step" id="m_wizard_form_step_3">
                                             <div class="m-form__section m-form__section--first">
                                                 <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title">Shippings</h3>
+                                                    <h3 class="m-form__heading-title"><?= __d('AdminPanel',  'Shippings'); ?></h3>
                                                 </div>
                                                 <div class="form-group m-form__group row">
                                                     <div class="col-lg-12 m-form__group-sub">
-                                                        <label class="form-control-label">Courrier </label>
+                                                        <label class="form-control-label"><?= __d('AdminPanel',  'Courier'); ?></label>
                                                         <div class="m-checkbox-inline">
                                                             <?php foreach($courriers as $k => $vals):?>
                                                             <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
@@ -489,7 +489,7 @@
                                                             </label>
                                                             <?php endforeach;?>
                                                         </div>
-                                                        <span class="m-form__help">Select courriers options</span>
+                                                        <span class="m-form__help"><?= __d('AdminPanel',  'Select courier options'); ?></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -497,7 +497,7 @@
 
                                             <div class="m-form__section">
                                                 <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title">Attributes</h3>
+                                                    <h3 class="m-form__heading-title"><?= __d('AdminPanel',  'Attributes'); ?></h3>
                                                 </div>
                                                 <div class="form-group m-form__group row">
                                                     <div class="col-lg-6 m-form__group-sub">
@@ -531,19 +531,19 @@
                                             <div class="row">
                                                 <div class="col-lg-6 m--align-left">
                                                     <a href="#" class="btn btn-secondary m-btn m-btn--custom m-btn--icon" data-wizard-action="prev">
-                                                        <span><i class="la la-arrow-left"></i>&nbsp;&nbsp;<span>Back</span></span>
+                                                        <span><i class="la la-arrow-left"></i>&nbsp;&nbsp;<span><?= __d('AdminPanel',  'Back'); ?></span></span>
                                                     </a>
                                                 </div>
                                                 <div class="col-lg-6 m--align-right">
                                                     <a href="#" class="btn btn-primary m-btn m-btn--custom m-btn--icon" data-wizard-action="submit">
                                                         <span>
                                                             <i class="la la-check"></i>&nbsp;&nbsp;
-                                                            <span>Submit</span>
+                                                            <span><?= __d('AdminPanel',  'Submit'); ?></span>
                                                         </span>
                                                     </a>
                                                     <a href="#" class="btn btn-success m-btn m-btn--custom m-btn--icon" data-wizard-action="next2">
                                                         <span>
-                                                            <span>Continue</span>&nbsp;&nbsp;
+                                                            <span><?= __d('AdminPanel',  'Continue'); ?></span>&nbsp;&nbsp;
                                                             <i class="la la-arrow-right"></i>
                                                         </span>
                                                     </a>

@@ -160,7 +160,7 @@ class ProductsController extends AppController
 
                 $validator
                     ->requirePresence('ProductToCourriers')
-                    ->hasAtLeast('ProductToCourriers', 2, __d('AdminPanel', 'Pilih Minimal dua'));
+                    ->hasAtLeast('ProductToCourriers', 2, __d('AdminPanel', __d('AdminPanel','please fill at least two')));
 
                 $productOption = new Validator();
 
@@ -175,8 +175,7 @@ class ProductsController extends AppController
                 $productPrice = new Validator();
                 $productPrice
                     ->requirePresence('price')
-                    ->numeric('price')
-                    ->greaterThanOrEqual('price', 1000, 'harga harus lebih besar 1000');
+                    ->numeric('price');
 
                 $validator->addNestedMany('ProductOptionPrices', $productPrice);
 
