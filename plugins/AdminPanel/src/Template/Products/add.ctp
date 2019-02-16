@@ -424,41 +424,40 @@
                                                 </div>
 
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Regular Price</label>
-                                                    <div class="col-xl-5 col-lg-9">
+                                                    <label class="col-xl-3 col-form-label">Regular Price</label>
+                                                    <div class="col-xl-3">
                                                         <div class="input-group">
                                                             <div class="input-group-prepend"><span class="input-group-text">IDR</span></div>
                                                             <?php echo $this->Form->control('price',['div' => false, 'label' => false,'class' => $default_class]);?>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Sale Price</label>
-                                                    <div class="col-xl-5 col-lg-9">
+                                                    <label class="col-xl-2 offset-1 col-form-label">Sale Price</label>
+                                                    <div class="col-xl-3">
                                                         <div class="input-group">
                                                             <div class="input-group-prepend"><span class="input-group-text">IDR</span></div>
-                                                            <?php echo $this->Form->control('price_sale',['div' => false, 'label' => false,'class' => $default_class]);?>
+                                                            <?php echo $this->Form->control('price_sale', ['div' => false, 'label' => false,'class' => $default_class, 'type' => 'number']);?>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Discount</label>
-                                                    <div class="col-xl-9 col-lg-9">
+                                                    <label class="col-xl-3 col-form-label">Discount</label>
+                                                    <div class="col-xl-3">
                                                         <div class="input-group">
                                                             <div class="input-group-prepend"><span class="input-group-text">%</span></div>
-                                                            <?php echo $this->Form->control('price_discount',['div' => false, 'label' => false,'class' => $default_class, 'disabled' => 'disabled']);?>
+                                                            <?php echo $this->Form->control('price_discount', ['div' => false, 'label' => false, 'class' => $default_class, 'disabled' => 'disabled']);?>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Reward Point</label>
-                                                    <div class="col-xl-5 col-lg-9">
+                                                    <label class="col-xl-2 offset-1 col-form-label">Reward Point</label>
+                                                    <div class="col-xl-3">
                                                         <div class="input-group">
                                                             <div class="input-group-prepend"><span class="input-group-text">IDR</span></div>
                                                             <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class]);?>
                                                         </div>
                                                     </div>
                                                 </div>
+
+
                                             </div>
                                         </div>
 
