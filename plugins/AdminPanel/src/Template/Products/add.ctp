@@ -331,33 +331,35 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
                                             <div class="m-form__section">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title">
                                                         Product Descriptions
                                                     </h3>
                                                 </div>
+
+
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Highlight</label>
                                                     <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class]);?>
+                                                        <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class, 'rows' => 2]);?>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Condition</label>
                                                     <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('condition',['label' => false,'class' => $default_class]);?>
+                                                        <?php echo $this->Form->control('condition',['label' => false,'class' => $default_class, 'rows' => 2]);?>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Profile</label>
                                                     <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class]);?>
+                                                        <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class, 'rows' => 2]);?>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
                                             <div class="m-form__section">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title">
@@ -367,13 +369,13 @@
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Keyword</label>
                                                     <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('ProductMetaTags.keyword',['type' => 'textarea','label' => false,'class' => $default_class]);?>
+                                                        <?php echo $this->Form->control('ProductMetaTags.keyword',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 2]);?>
                                                     </div>
                                                 </div>
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Description</label>
                                                     <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('ProductMetaTags.description',['type' => 'textarea','label' => false,'class' => $default_class]);?>
+                                                        <?php echo $this->Form->control('ProductMetaTags.description',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 2]);?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -415,7 +417,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
                                             <div class="m-form__section">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title">Pricing</h3>
@@ -484,7 +486,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="m-separator m-separator--dashed m-separator--lg"></div>
 
 
                                             <div class="m-form__section">
