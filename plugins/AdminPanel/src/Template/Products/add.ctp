@@ -62,9 +62,11 @@
             }
         });
 
-
         var optbranchs = getList();
-
+        getList().then(function(value){
+            optbranchs += value;
+        });
+        // setTimeout(function() { console.log(optbranchs); }, 2000);
         $.ajax({
             url: "<?= $this->Url->build(['action' => 'getoptionvalues']); ?>",
             cache: false,
@@ -106,10 +108,9 @@
                     });
 
 
-                    var template = '\n' +
-                        '<div class="m-accordion__item item-'+i+'">\n' +
+                    var template = '<div class="m-accordion__item item-'+i+'">\n' +
                         '<div class="m-accordion__item-head" role="tab" id="m_accordion_2_item_'+i+'_head" data-toggle="collapse" href="#m_accordion_2_item_'+i+'_body" aria-expanded="    false">\n' +
-                        '<span class="m-accordion__item-title">Varian Produk</span>\n' +
+                        '<span class="m-accordion__item-title">Varian Produk <a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item='+i+'><i class="la la-trash"></i></a></span>\n' +
                         '<span class="m-accordion__item-mode"></span>\n' +
                         '</div>\n' +
                         '<div class="m-accordion__item-body collapse show" id="m_accordion_2_item_'+i+'_body" class=" " role="tabpanel" aria-labelledby="m_accordion_2_item_'+i+'_head" data-parent="#m_accordion_2">\n' +
@@ -117,6 +118,17 @@
                         '<div class="row">\n' +
                         '<div class="col-xl-4">'+formTemplate+'</div>\n' +
                         '<div class="col-xl-8"> \n' +
+                        '<div class="form-group m-form__group row">\n' +
+                        '<label class="col-xl-4 col-form-label">Gambar Produk</label>\n' +
+                        '<div class="col-xl-8"> \n' +
+                        '<div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone-two">\n' +
+                        '<div class="m-dropzone__msg dz-message needsclick">\n' +
+                        '<h3 class="m-dropzone__msg-title">Drop files disini atau click untuk upload.</h3>\n' +
+                        '<span class="m-dropzone__msg-desc">Upload sampai 10 file</span>\n' +
+                        '</div>\n' +
+                        '</div>\n' +
+                        '</div> \n' +
+                        '</div>  \n' +
                         '<div class="form-group m-form__group row">\n' +
                         '<label class="col-xl-4 col-form-label">Harga Tambahan</label>\n' +
                         '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="Harga"></div> \n' +
@@ -136,14 +148,16 @@
                         '<div class="m-form__group form-group row">\n' +
                         '<label class="col-xl-4 col-form-label">Stock Cabang</label>\n' +
                         '<div class="col-xl-2">\n' +
-                        '<select name="ProductOptionValues['+i+'][branches]" class="form-control  m-input " >'+optbranchs+'</select>\t\n' +
+                        '<select name="ProductOptionValues['+i+'][0][branches]" class="form-control select2  m-input " >'+optbranchs+'</select>\n' +
                         '</div> \n' +
                         '<div class="col-xl-2">\n' +
-                        '<input type="number" name="ProductOptionPrices['+i+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
+                        '<input type="number" name="ProductOptionPrices['+i+'][0][stock]"  class="form-control m-input" placeholder="Stok">\n' +
                         '</div>\n' +
                         '<div class="col-xl-2">\n' +
-                        '<a href="javascript:void(0);" class="btn btn-info m-btn m-btn--icon m-btn--icon-only" data-item='+i+'><i class="la la-plus"></i></a>\n' +
+                        '<a href="javascript:void(0);" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-cabang" data-item='+i+'><i class="la la-plus"></i></a>\n' +
                         '</div> \n' +
+                        '</div>  \n' +
+                        '<div class="multi-cabang-'+i+'">\n' +
                         '</div>  \n' +
                         '</div> \n' +
                         '</div> \n' +
@@ -153,18 +167,11 @@
 
                     if(formTemplate != ''){
                         $('.form-dynamic').append(template);
-
                         if(radioValue == 'Berat'){
                             $('.berat').show();
                         }else{
                             $('.dimensi').show();
                         }
-
-                        var radioValue = $("input[name='gender']:checked").val();
-                        if(radioValue){
-                            alert("Your are a - " + radioValue);
-                        }
-
                         $('.remove-row').on('click',function(){
                             var item = $(this).data('item');
                             $('div').remove('.item-'+item);
@@ -173,6 +180,32 @@
                             var variant = $(this).data('variant');
                             $('.title-variant').html(variant);
                             $('#code-attribute').val(variant);
+                        });
+                        var y = 1;
+                        $('.add-cabang').on('click',function(){
+                            var item = $(this).data('item');
+                            var rowcabang = '<div class="m-form__group form-group row cabang-'+item+'-'+y+'">\n' +
+                                '<label class="col-xl-4 col-form-label"></label>\n' +
+                                '<div class="col-xl-2">\n' +
+                                '<select name="ProductOptionValues['+item+']['+y+'][branches]" class="form-control select2  m-input " >'+optbranchs+'</select>\t\n' +
+                                '</div> \n' +
+                                '<div class="col-xl-2">\n' +
+                                '<input type="number" name="ProductOptionPrices['+item+']['+y+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
+                                '</div>\n' +
+                                '<div class="col-xl-2">\n' +
+                                '<a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-cabang" data-item="'+item+'" data-row="'+y+'"><i class="la la-minus"></i></a>\n' +
+                                '</div> \n' +
+                                '<div>';
+
+                            $('.multi-cabang-'+item).append(rowcabang);
+
+                            $('.remove-cabang').on('click',function(){
+                                var items = $(this).data('item');
+                                var row = $(this).data('row');
+                                $('div').remove('.cabang-'+items+'-'+row);
+                            });
+                            $('.select2').select2();
+                            y++;
                         });
 
                         $('.select2').select2();
@@ -210,20 +243,22 @@
             });
         });
 
-
         function getList(){
-            var optbranch = '<option value="">-- Pilih Cabang --</option>';
-            $.ajax({
-                url: "<?= $this->Url->build(['action' => 'getListBranch']); ?>",
-                cache: false,
-                method: 'GET',
-                success: function (responseBranchs) {
-                    $.each(responseBranchs, function(k,v){
-                        optbranch += '<option value="'+k+'">'+v+'</option>';
-                    })
-                }
-            })
-            return optbranch;
+            return new Promise((resolve, reject) => {
+                var optbranch = '<option value="">-- Pilih Cabang --</option>';
+                $.ajax({
+                    url: "<?= $this->Url->build(['action' => 'getListBranch']); ?>",
+                    cache: false,
+                    method: 'GET',
+                    success: function (responseBranchs) {
+                        $.each(responseBranchs, function(k,v){
+                            optbranch += '<option value="'+k+'">'+v+'</option>';
+                        });
+                        resolve(optbranch);
+                    }
+                })
+            });
+
         }
     })
 </script>
