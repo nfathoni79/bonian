@@ -111,6 +111,9 @@ class ProductsController extends AppController
 
         switch ($step) {
             case '1':
+
+                break;
+            case '2':
                 $validator
                     ->requirePresence('name')
                     ->notBlank('name');
@@ -137,7 +140,7 @@ class ProductsController extends AppController
 
                 break;
 
-            case '2':
+            case '3':
                 $validator
                     ->requirePresence('model')
                     ->notBlank('model');
@@ -156,7 +159,7 @@ class ProductsController extends AppController
 
                 break;
 
-            case '3':
+            case '4':
 
                 $validator
                     ->requirePresence('ProductToCourriers')

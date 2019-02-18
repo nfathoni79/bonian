@@ -140,7 +140,7 @@
     })
 </script>
 <script>
-    $('select').selectpicker();
+    $('select.select-picker').selectpicker();
 </script>
 
 
@@ -216,98 +216,148 @@
             </div>
 
             <div class="m-portlet__body m-portlet__body--no-padding">
-                <div class="m-wizard m-wizard--3 m-wizard--success" id="m_wizard">
-
+                <!--begin: Form Wizard-->
+                <div class="m-wizard m-wizard--2 m-wizard--success" id="m_wizard">
+                    <!--begin: Message container -->
                     <div class="m-portlet__padding-x">
                         <!-- Here you can put a message or alert -->
                         <?php  echo $this->Flash->render(); ?>
                     </div>
-
-                    <div class="row m-row--no-padding">
-                        <div class="col-xl-3 col-lg-12">
-
-                            <!--begin: Form Wizard Head -->
-                            <div class="m-wizard__head">
-
-                                <!--begin: Form Wizard Progress -->
-                                <div class="m-wizard__progress">
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                <!--end: Form Wizard Progress -->
-                                <!--begin: Form Wizard Nav -->
-                                <div class="m-wizard__nav">
-                                    <div class="m-wizard__steps">
-                                        <div class="m-wizard__step m-wizard__step--current" m-wizard-target="m_wizard_form_step_1">
-                                            <div class="m-wizard__step-info">
-                                                <a href="#" class="m-wizard__step-number">
-                                                    <span><span>1</span></span>
-                                                </a>
-                                                <div class="m-wizard__step-line">
-                                                    <span></span>
-                                                </div>
-                                                <div class="m-wizard__step-label">
-                                                   <?= __d('AdminPanel', 'General'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_2">
-                                            <div class="m-wizard__step-info">
-                                                <a href="#" class="m-wizard__step-number">
-                                                    <span><span>2</span></span>
-                                                </a>
-                                                <div class="m-wizard__step-line">
-                                                    <span></span>
-                                                </div>
-                                                <div class="m-wizard__step-label">
-                                                    <?= __d('AdminPanel', 'Inventory & pricing'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_3">
-                                            <div class="m-wizard__step-info">
-                                                <a href="#" class="m-wizard__step-number">
-                                                    <span><span>3</span></span>
-                                                </a>
-                                                <div class="m-wizard__step-line">
-                                                    <span></span>
-                                                </div>
-                                                <div class="m-wizard__step-label">
-                                                    <?= __d('AdminPanel', 'Shipping & Attributes'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_4">
-                                            <div class="m-wizard__step-info">
-                                                <a href="#" class="m-wizard__step-number">
-                                                    <span><span>4</span></span>
-                                                </a>
-                                                <div class="m-wizard__step-line">
-                                                    <span></span>
-                                                </div>
-                                                <div class="m-wizard__step-label">
-                                                    <?= __d('AdminPanel', 'Finish'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!--end: Form Wizard Nav -->
+                    <!--end: Message container -->
+                    <!--begin: Form Wizard Head -->
+                    <div class="m-wizard__head m-portlet__padding-x">
+                        <!--begin: Form Wizard Progress -->
+                        <div class="m-wizard__progress">
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar"  aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-
                         </div>
-                        <div class="col-xl-9 col-lg-12">
-                            <div class="m-wizard__form">
-                                <?=
-                                $this->Form->create($product,['class' => 'm-form m-form--label-align-left- m-form--state-', 'id' =>'m_form']);
-                                $default_class = 'form-control m-input';
-                                ?>
-                                    <div class="m-portlet__body m-portlet__body--no-padding">
+                        <!--end: Form Wizard Progress -->
+                        <!--begin: Form Wizard Nav -->
+                        <div class="m-wizard__nav">
+                            <div class="m-wizard__steps">
+                                <div class="m-wizard__step m-wizard__step--current"  m-wizard-target="m_wizard_form_step_1">
+                                    <a href="#"  class="m-wizard__step-number">
+                                        <span><i class="fa  flaticon-placeholder"></i></span>
+                                    </a>
+                                    <div class="m-wizard__step-info">
+                                        <div class="m-wizard__step-title">
+                                            1. <?= __d('AdminPanel', 'Select Category'); ?>
+                                        </div>
+                                        <div class="m-wizard__step-desc">
 
-                                        <!--begin: Form Wizard Step 1-->
-                                        <div class="m-wizard__form-step m-wizard__form-step--current" id="m_wizard_form_step_1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_2">
+                                    <a href="#" class="m-wizard__step-number">
+                                        <span><i class="fa flaticon-menu-2"></i></span>
+                                    </a>
+                                    <div class="m-wizard__step-info">
+                                        <div class="m-wizard__step-title">
+                                            2. <?= __d('AdminPanel', 'General'); ?>
+                                        </div>
+                                        <div class="m-wizard__step-desc">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_3">
+                                    <a href="#" class="m-wizard__step-number">
+                                        <span><i class="fa flaticon-price-tag"></i></span>
+                                    </a>
+                                    <div class="m-wizard__step-info">
+                                        <div class="m-wizard__step-title">
+                                            3. <?= __d('AdminPanel', 'Inventory & pricing'); ?>
+                                        </div>
+                                        <div class="m-wizard__step-desc">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_4">
+                                    <a href="#" class="m-wizard__step-number">
+                                        <span><i class="fa flaticon-settings-1"></i></span>
+                                    </a>
+                                    <div class="m-wizard__step-info">
+                                        <div class="m-wizard__step-title">
+                                            4. <?= __d('AdminPanel', 'Shipping & Attributes'); ?>
+                                        </div>
+                                        <div class="m-wizard__step-desc">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_5">
+                                    <a href="#" class="m-wizard__step-number">
+                                        <span><i class="fa  flaticon-layers"></i></span>
+                                    </a>
+                                    <div class="m-wizard__step-info">
+                                        <div class="m-wizard__step-title">
+                                            5. <?= __d('AdminPanel', 'Finish'); ?>
+                                        </div>
+                                        <div class="m-wizard__step-desc">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end: Form Wizard Nav -->
+                    </div>
+                    <!--end: Form Wizard Head -->
+                    <!--begin: Form Wizard Form-->
+                    <div class="m-wizard__form">
+                        <!--
+                            1) Use m-form--label-align-left class to alight the form input lables to the right
+                            2) Use m-form--state class to highlight input control borders on form validation
+                            -->
+                        <?=
+                        $this->Form->create($product,['class' => 'm-form m-form--label-align-left- m-form--state-', 'id' =>'m_form']);
+                        $default_class = 'form-control m-input';
+                        ?>
+                            <!--begin: Form Body -->
+                            <div class="m-portlet__body">
+                                <!--begin: Form Wizard Step 1-->
+                                <div class="m-wizard__form-step m-wizard__form-step--current" id="m_wizard_form_step_1">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group m-form__group row">
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <select class="form-control" id="m_multipleselectsplitter_1" size="7" multiple="false">
+                                                        <option value="1" >Choice 1</option>
+                                                        <option value="2">Choice 2</option>
+                                                        <option value="3">Choice 3</option>
+                                                        <option value="4">Choice 4</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <select class="form-control" id="m_multipleselectsplitter_2" size="7" multiple="false">
+                                                        <option value="1" >Choice 1</option>
+                                                        <option value="2">Choice 2</option>
+                                                        <option value="3">Choice 3</option>
+                                                        <option value="4">Choice 4</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <select class="form-control" id="m_multipleselectsplitter_2" size="7" multiple="false">
+                                                        <option value="1" >Choice 1</option>
+                                                        <option value="2">Choice 2</option>
+                                                        <option value="3">Choice 3</option>
+                                                        <option value="4">Choice 4</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end: Form Wizard Step 1-->
+                                <!--begin: Form Wizard Step 2-->
+                                <div class="m-wizard__form-step" id="m_wizard_form_step_2">
+                                    <div class="row">
+                                        <div class="col-xl-12">
                                             <div class="m-form__section m-form__section--first">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title"><?= __d('AdminPanel', 'Product Information'); ?></h3>
@@ -379,13 +429,14 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
                                         </div>
-
-                                        <!--begin: Form Wizard Step 2-->
-                                        <div class="m-wizard__form-step" id="m_wizard_form_step_2">
+                                    </div>
+                                </div>
+                                <!--end: Form Wizard Step 2-->
+                                <!--begin: Form Wizard Step 3-->
+                                <div class="m-wizard__form-step" id="m_wizard_form_step_3">
+                                    <div class="row">
+                                        <div class="col-lg-12">
                                             <div class="m-form__section m-form__section--first">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title"><?= __d('AdminPanel',  'Inventory'); ?></h3>
@@ -413,7 +464,7 @@
                                                 <div class="form-group m-form__group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Stock Status'); ?></label>
                                                     <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('product_stock_status_id', ['options' => $productStockStatuses,'label' => false, 'class' => $default_class]);?>
+                                                        <?php echo $this->Form->control('product_stock_status_id', ['options' => $productStockStatuses,'label' => false, 'class' => $default_class . ' .select-picker']);?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -468,12 +519,14 @@
 
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <!--end: Form Wizard Step 3-->
 
-                                        <!--end: Form Wizard Step 2-->
-
-
-                                        <!--begin: Form Wizard Step 3-->
-                                        <div class="m-wizard__form-step" id="m_wizard_form_step_3">
+                                <!--begin: Form Wizard Step 4-->
+                                <div class="m-wizard__form-step" id="m_wizard_form_step_4">
+                                    <div class="row">
+                                        <div class="col-lg-12">
                                             <div class="m-form__section m-form__section--first">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title"><?= __d('AdminPanel',  'Shippings'); ?></h3>
@@ -483,10 +536,10 @@
                                                         <label class="form-control-label"><?= __d('AdminPanel',  'Courier'); ?></label>
                                                         <div class="m-checkbox-inline">
                                                             <?php foreach($courriers as $k => $vals):?>
-                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                                <input type="checkbox" name="ProductToCourriers[]" value="<?php echo $k;?>"> <?php echo $vals;?>
-                                                                <span></span>
-                                                            </label>
+                                                                <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                                                    <input type="checkbox" name="ProductToCourriers[]" value="<?php echo $k;?>"> <?php echo $vals;?>
+                                                                    <span></span>
+                                                                </label>
                                                             <?php endforeach;?>
                                                         </div>
                                                         <span class="m-form__help"><?= __d('AdminPanel',  'Select courier options'); ?></span>
@@ -503,10 +556,10 @@
                                                     <div class="col-lg-6 m-form__group-sub">
                                                         <div class="m-checkbox-inline">
                                                             <?php foreach($options as $k => $vals):?>
-                                                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                                <input type="checkbox" name="options[]"  value="<?php echo $k;?>" class="option" data-text="<?php echo $vals;?>"> <?php echo $vals;?>
-                                                                <span></span>
-                                                            </label>
+                                                                <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                                                    <input type="checkbox" name="options[]"  value="<?php echo $k;?>" class="option" data-text="<?php echo $vals;?>"> <?php echo $vals;?>
+                                                                    <span></span>
+                                                                </label>
                                                             <?php endforeach;?>
                                                         </div>
                                                     </div>
@@ -518,46 +571,64 @@
                                                 <div class="m-accordion m-accordion--bordered form-dynamic" id="m_accordion_2" role="tablist">
                                                 </div>
                                             </div>
-
-                                        </div>
-
-                                        <!--end: Form Wizard Step 3-->
-
-
-                                    </div>
-
-                                    <div class="m-portlet__foot m-portlet__foot--fit m--margin-top-40">
-                                        <div class="m-form__actions">
-                                            <div class="row">
-                                                <div class="col-lg-6 m--align-left">
-                                                    <a href="#" class="btn btn-secondary m-btn m-btn--custom m-btn--icon" data-wizard-action="prev">
-                                                        <span><i class="la la-arrow-left"></i>&nbsp;&nbsp;<span><?= __d('AdminPanel',  'Back'); ?></span></span>
-                                                    </a>
-                                                </div>
-                                                <div class="col-lg-6 m--align-right">
-                                                    <a href="#" class="btn btn-primary m-btn m-btn--custom m-btn--icon" data-wizard-action="submit">
-                                                        <span>
-                                                            <i class="la la-check"></i>&nbsp;&nbsp;
-                                                            <span><?= __d('AdminPanel',  'Submit'); ?></span>
-                                                        </span>
-                                                    </a>
-                                                    <a href="#" class="btn btn-success m-btn m-btn--custom m-btn--icon" data-wizard-action="next2">
-                                                        <span>
-                                                            <span><?= __d('AdminPanel',  'Continue'); ?></span>&nbsp;&nbsp;
-                                                            <i class="la la-arrow-right"></i>
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                                <!--end: Form Wizard Step 4-->
 
-                                <?= $this->Form->end(); ?>
+                                <!--begin: Form Wizard Step 5-->
+                                <div class="m-wizard__form-step" id="m_wizard_form_step_5">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            review
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end: Form Wizard Step 5-->
+
+
                             </div>
-                        </div>
+                            <!--end: Form Body -->
+                            <!--begin: Form Actions -->
+                            <div class="m-portlet__foot m-portlet__foot--fit m--margin-top-40">
+                                <div class="m-form__actions">
+                                    <div class="row">
+                                        <div class="col-lg-1"></div>
+                                        <div class="col-lg-5 m--align-left">
+                                            <a href="#" class="btn btn-secondary m-btn m-btn--custom m-btn--icon" data-wizard-action="prev">
+                                <span>
+                                <i class="la la-arrow-left"></i>&nbsp;&nbsp;
+                                <span><?= __d('AdminPanel',  'Back'); ?></span>
+                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-5 m--align-right">
+                                            <a href="#" class="btn btn-primary m-btn m-btn--custom m-btn--icon" data-wizard-action="submit">
+                                <span>
+                                <i class="la la-check"></i>&nbsp;&nbsp;
+                                <span><?= __d('AdminPanel',  'Submit'); ?></span>
+                                </span>
+                                            </a>
+                                            <a href="#" class="btn btn-warning m-btn m-btn--custom m-btn--icon" data-wizard-action="next2">
+                                <span>
+                                <span><?= __d('AdminPanel',  'Continue'); ?></span>&nbsp;&nbsp;
+                                <i class="la la-arrow-right"></i>
+                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end: Form Actions -->
+                        <?= $this->Form->end(); ?>
                     </div>
+                    <!--end: Form Wizard Form-->
                 </div>
+                <!--end: Form Wizard-->
             </div>
+
+
 
         </div>
     </div>
