@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Product Categories') ?>
+                    <?= __('Kategori Produk') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Product Categories') ?>
+                                <?= __('Kategori Produk') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Product Categories') ?>
+                                <?= __('Daftar Kategori Produk') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List Product Categories') ?>
+                            <?= __('Daftar Kategori Produk') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New Category') ?></span>
+                                    <span><?= __('Tambah Kategori') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -67,7 +67,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air" data-toggle="modal" data-target="#m_modal_1">
                                 <span>
                                     <i class="la la-upload"></i>
-                                    <span><?= __('Import Category') ?></span>
+                                    <span><?= __('Import Kategori') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -75,7 +75,7 @@
                             <a href="<?= $this->Url->build('/files/csv/categories.csv'); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-download"></i>
-                                    <span><?= __('Example CSV Category') ?></span>
+                                    <span><?= __('Contoh CSV Kategori') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -91,7 +91,7 @@
                             <div class="form-group m-form__group row align-items-center">
                                 <div class="col-md-8">
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                                        <input type="text" class="form-control m-input" placeholder="Pencarian..." id="generalSearch">
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="la la-search"></i>
@@ -205,7 +205,7 @@
                     },
                     {
                         field: 'ParentProductCategories.name',
-                        title: 'Parent Name',
+                        title: 'Induk Kategori',
                         template: function(row) {
                             if(row.parent_product_category){
                                 return row.parent_product_category.name;
@@ -217,23 +217,16 @@
 
                     {
                         field: 'ProductCategories.name',
-                        title: 'Name',
+                        title: 'Nama',
                         template: function(row) {
                             return row.name;
                         }
                     },
 
-                    {
-                        field: 'ProductCategories.slug',
-                        title: 'Slug',
-                        template: function(row) {
-                            return row.slug;
-                        }
-                    },
 
                     {
                         field: 'ProductCategories.description',
-                        title: 'Description',
+                        title: 'Deskripsi',
                         template: function(row) {
                             return row.description;
                         }
@@ -241,7 +234,7 @@
 
                     {
                         field: 'ProductCategories.path',
-                        title: 'Images',
+                        title: 'Foto',
                         template: function(row) {
                             if(row.path){
                                 return '<img src="<?= $this->Url->build('/files/ProductCategories/path/thumbnail-'); ?>'+row.path+'">';
@@ -255,7 +248,7 @@
                     {
                         field: "Actions",
                         width: 110,
-                        title: "Actions",
+                        title: "Aksi",
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {
@@ -288,7 +281,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import Category</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Import Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -297,18 +290,18 @@
                 <?= $this->Form->create('ProductCategories',['action' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file']); ?>
 
                 <div class="form-group m-form__group">
-                    <label for="files">File Browser</label>
+                    <label for="files">Cari FIle</label>
                     <div></div>
                     <div class="custom-file">
                         <?php
                              echo $this->Form->control('files',['class' => 'custom-file-input', 'type' => 'file']);
                         ?>
-                        <label class="custom-file-label" for="files">Choose file</label>
+                        <label class="custom-file-label" for="files">Pilih file</label>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                 <?= $this->Form->submit(__('Import'),['class' => 'btn btn-brand']) ?>
             </div>
             <?= $this->Form->end(); ?>

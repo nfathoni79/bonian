@@ -18,7 +18,7 @@
 <script>
     $(document).ready(function() {
 
-        $('#slug').slugify('#title'); // Type as you slug
+        $('#slug').slugify('#name'); // Type as you slug
 
         var formEl = $("#m_form");
 
@@ -78,24 +78,28 @@
                     $('.option:checked').each(function(){
                         var values = $(this).val();
                         var text = $(this).data('text');
-
-                        var opt = '<option value="">-- Select '+text+' --</option>';
+                        if(text == ''){
+                            return false;
+                        }
+                        var opt = '<option value="">-- Pilih '+text+' --</option>';
                         $.each(response[text], function(k,v){
                             opt += '<option value="'+v.id+'">'+v.name+'</option>';
                         })
-                        formTemplate += '\n' +
-                            '\t\t\t<div class="form-group m-form__group row">\n' +
-                            '\t\t\t\t<label class="col-xl-4 col-form-label">'+text+'</label>\n' +
-                            '\t\t\t\t<div class="col-xl-8">\n' +
-                            '\t\t\t\t\t<select name="ProductOptionValues['+i+']['+text.toLowerCase()+']" class="form-control m-input" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
-                            '\t\t\t\t</div> \n' +
-                            '\t\t\t</div>';
+                        formTemplate += '<div class="form-group m-form__group row">\n' +
+                            '<label class="col-xl-4 col-form-label">'+text+'</label>\n' +
+                            '<div class="col-xl-6">\n' +
+                            '<select name="ProductOptionValues['+i+']['+text.toLowerCase()+']" class="form-control select2 m-input select-'+text.toLowerCase()+'" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
+                            '</div>\n' +
+                            '<div class="col-xl-2">\n' +
+                            '<a href="#" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-variant"  data-toggle="modal" data-target="#modal-attribute" data-variant="'+text.toLowerCase()+'"><i class="la la-plus"></i></a>\n' +
+                            '</div>\n' +
+                            '</div>';
                     });
 
                     var template = '\n' +
                         '<div class="m-accordion__item item-'+i+'">\n' +
                         '<div class="m-accordion__item-head" role="tab" id="m_accordion_2_item_'+i+'_head" data-toggle="collapse" href="#m_accordion_2_item_'+i+'_body" aria-expanded="    false">\n' +
-                        '<span class="m-accordion__item-title">Product Variant</span>\n' +
+                        '<span class="m-accordion__item-title">Varian Produk</span>\n' +
                         '<span class="m-accordion__item-mode"></span>\n' +
                         '</div>\n' +
                         '<div class="m-accordion__item-body collapse show" id="m_accordion_2_item_'+i+'_body" class=" " role="tabpanel" aria-labelledby="m_accordion_2_item_'+i+'_head" data-parent="#m_accordion_2">\n' +
@@ -104,17 +108,17 @@
                         '<div class="col-xl-4">'+formTemplate+'</div>\n' +
                         '<div class="col-xl-8">\n' +
                         '<div class="form-group m-form__group row">\n' +
-                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="price"></div>\n' +
-                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][stock]"  class="form-control m-input" placeholder="stock"></div>\n' +
-                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][weight]" class="form-control m-input" placeholder="weight"></div>\n' +
+                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="Harga"></div>\n' +
+                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][stock]"  class="form-control m-input" placeholder="Stok"></div>\n' +
+                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][weight]" class="form-control m-input" placeholder="Berat"></div>\n' +
                         '</div> \n' +
                         '<div class="form-group m-form__group row">\n' +
                         '<label class="col-xl-3 col-form-label">Dimension</label>\n' +
                         '<label class="col-xl-9">\n' +
                         '<div class="row">\n' +
-                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][length]" class="form-control m-input" placeholder="length"></div>\n' +
-                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][width]"  class="form-control m-input" placeholder="width"></div>\n' +
-                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][heigth]" class="form-control m-input" placeholder="heigth"></div>\n' +
+                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
+                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
+                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
                         '<div class="col-xl-3"><a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item='+i+'><i class="la la-trash"></i></a></div>\n' +
                         '</div> \n' +
                         '</div> \n' +
@@ -125,16 +129,51 @@
                         '</div>\n' +
                         '</div>\n';
 
-                    $('.form-dynamic').append(template);
-                    $('.remove-row').on('click',function(){
-                        var item = $(this).data('item');
-                        $('div').remove('.item-'+item);
-                    })
+                    if(formTemplate != ''){
+                        $('.form-dynamic').append(template);
+                        $('.remove-row').on('click',function(){
+                            var item = $(this).data('item');
+                            $('div').remove('.item-'+item);
+                        });
+                        $('.add-variant').on('click',function(){
+                            var variant = $(this).data('variant');
+                            $('.title-variant').html(variant);
+                            $('#code-attribute').val(variant);
+                        });
+
+                        $('.select2').select2();
+                    }
+
+
+
+
                     i++;
                 })
 
 
             }
+        });
+
+
+        var frm = $('#form-attribute');
+        frm.submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (data) {
+                   if(data.is_error){
+                       return false;
+                   }
+                   var code = $('#code-attribute').val();
+                    $(".select-"+code).append('<option value="'+data.data.id+'">'+data.data.name+'</option>');
+                    $('.select-'+code).trigger('change');
+                    $('#form-attribute').trigger('reset');
+                    $('#modal-attribute').modal('toggle');
+
+                },
+            });
         });
 
     })
@@ -164,7 +203,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __d('AdminPanel', 'Product') ?>
+                                <?= __d('AdminPanel', 'Produk') ?>
                             </span>
                         </a>
                     </li>
@@ -174,7 +213,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __d('AdminPanel', 'List Product') ?>
+                                <?= __d('AdminPanel', 'Daftar Produk') ?>
                             </span>
                         </a>
                     </li>
@@ -184,7 +223,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __d('AdminPanel', 'Add Product') ?>
+                                <?= __d('AdminPanel', 'Tambah Produk') ?>
                             </span>
                         </a>
                     </li>
@@ -200,7 +239,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __d('AdminPanel', 'Add Product') ?>
+                            <?= __d('AdminPanel', 'Tambah Produk') ?>
                         </h3>
                     </div>
                 </div>
@@ -242,7 +281,7 @@
                                     </a>
                                     <div class="m-wizard__step-info">
                                         <div class="m-wizard__step-title">
-                                            1. <?= __d('AdminPanel', 'Select Category'); ?>
+                                            1. <?= __d('AdminPanel', 'Pilih Kategori'); ?>
                                         </div>
                                         <div class="m-wizard__step-desc">
 
@@ -255,7 +294,7 @@
                                     </a>
                                     <div class="m-wizard__step-info">
                                         <div class="m-wizard__step-title">
-                                            2. <?= __d('AdminPanel', 'General'); ?>
+                                            2. <?= __d('AdminPanel', 'Input Data'); ?>
                                         </div>
                                         <div class="m-wizard__step-desc">
 
@@ -264,37 +303,11 @@
                                 </div>
                                 <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_3">
                                     <a href="#" class="m-wizard__step-number">
-                                        <span><i class="fa flaticon-price-tag"></i></span>
-                                    </a>
-                                    <div class="m-wizard__step-info">
-                                        <div class="m-wizard__step-title">
-                                            3. <?= __d('AdminPanel', 'Inventory & pricing'); ?>
-                                        </div>
-                                        <div class="m-wizard__step-desc">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_4">
-                                    <a href="#" class="m-wizard__step-number">
-                                        <span><i class="fa flaticon-settings-1"></i></span>
-                                    </a>
-                                    <div class="m-wizard__step-info">
-                                        <div class="m-wizard__step-title">
-                                            4. <?= __d('AdminPanel', 'Shipping & Attributes'); ?>
-                                        </div>
-                                        <div class="m-wizard__step-desc">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="m-wizard__step" m-wizard-target="m_wizard_form_step_5">
-                                    <a href="#" class="m-wizard__step-number">
                                         <span><i class="fa  flaticon-layers"></i></span>
                                     </a>
                                     <div class="m-wizard__step-info">
                                         <div class="m-wizard__step-title">
-                                            5. <?= __d('AdminPanel', 'Finish'); ?>
+                                            3. <?= __d('AdminPanel', 'Selesai'); ?>
                                         </div>
                                         <div class="m-wizard__step-desc">
 
@@ -358,226 +371,182 @@
                                 <div class="m-wizard__form-step" id="m_wizard_form_step_2">
                                     <div class="row">
                                         <div class="col-xl-12">
-                                            <div class="m-form__section m-form__section--first">
-                                                <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title"><?= __d('AdminPanel', 'Product Information'); ?></h3>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel', 'Name'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('name',['label' => false,'class' => $default_class]);?>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Title'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('title',['label' => false,'class' => $default_class]);?>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Slug'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('slug',['label' => false,'class' => $default_class]);?>
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                             <div class="m-form__section">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title">
-                                                        <?= __d('AdminPanel',  'Product Descriptions'); ?>
+                                                        <?= __d('AdminPanel',  'Informasi Produk'); ?>
                                                     </h3>
-                                                </div>
-
-
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Highlight'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class, 'rows' => 2]);?>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Condition'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('condition',['label' => false,'class' => $default_class, 'rows' => 2]);?>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Profile'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class, 'rows' => 2]);?>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="m-form__section">
-                                                <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title">
-                                                        <?= __d('AdminPanel',  'SEO Setting'); ?>
-                                                    </h3>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Keyword'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('ProductMetaTags.keyword',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 2]);?>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Description'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('ProductMetaTags.description',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 2]);?>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-xl-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Nama Produk'); ?></label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('name',['label' => false,'class' => $default_class]);?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Slug URL'); ?></label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('slug',['label' => false,'class' => $default_class,'disabled' => 'disabled']);?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row mt-3">
+                                        <div class="col-xl-6">
+
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Highlight Produk'); ?></label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class, 'rows' => 4]);?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Kondisi Produk'); ?></label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('condition',['label' => false,'class' => $default_class, 'rows' => 4]);?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Profil Produk'); ?></label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class, 'rows' => 4]);?>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Model'); ?></label>
+                                                <div class="col-xl-4">
+                                                    <?php echo $this->Form->control('model',['label' => false,'class' => $default_class]);?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Code'); ?></label>
+                                                <div class="col-xl-4">
+                                                    <?php echo $this->Form->control('code',['label' => false,'class' => $default_class]);?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Sku'); ?></label>
+                                                <div class="col-xl-4">
+                                                    <?php echo $this->Form->control('sku',['label' => false,'class' => $default_class]);?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Isbn'); ?></label>
+                                                <div class="col-xl-4">
+                                                    <?php echo $this->Form->control('isbn',['label' => false,'class' => $default_class]);?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Status Stok'); ?></label>
+                                                <div class="col-xl-4">
+                                                    <?php echo $this->Form->control('product_stock_status_id', ['options' => $productStockStatuses,'label' => false, 'class' => $default_class . ' .select-picker']);?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-xl-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Harga Reguler'); ?></label>
+                                                <div class="col-xl-4">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
+                                                        <?php echo $this->Form->control('price',['div' => false, 'label' => false,'class' => $default_class]);?>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Harga Jual'); ?></label>
+                                                <div class="col-xl-4">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
+                                                        <?php echo $this->Form->control('price_sale', ['div' => false, 'label' => false,'class' => $default_class, 'type' => 'number']);?>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Diskon'); ?></label>
+                                                <div class="col-xl-4">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><span class="input-group-text">%</span></div>
+                                                        <?php echo $this->Form->control('price_discount', ['div' => false, 'label' => false, 'class' => $default_class, 'disabled' => 'disabled']);?>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?></label>
+                                                <div class="col-xl-4">
+                                                    <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class]);?>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-xl-12">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-2 col-form-label"><?= __d('AdminPanel',  'Kurir'); ?></label>
+                                                <div class="col-xl-10 m-form__group-sub">
+                                                    <div class="m-checkbox-inline">
+                                                        <?php foreach($courriers as $k => $vals):?>
+                                                        <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                                            <input type="checkbox" name="ProductToCourriers[]" value="<?php echo $k;?>"> <?php echo $vals;?>
+                                                            <span></span>
+                                                        </label>
+                                                        <?php endforeach;?>
+                                                    </div>
+                                                    <span class="m-form__help"><?= __d('AdminPanel',  'Pilihan Kurir'); ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-2 col-form-label"><?= __d('AdminPanel',  'Atribut'); ?></label>
+                                                <div class="col-xl-6 m-form__group-sub">
+                                                    <div class="m-checkbox-inline">
+                                                        <?php foreach($options as $k => $vals):?>
+                                                        <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                                            <input type="checkbox" name="options[]"  value="<?php echo $k;?>" class="option" data-text="<?php echo $vals;?>"> <?php echo $vals;?>
+                                                            <span></span>
+                                                        </label>
+                                                        <?php endforeach;?>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-2">
+                                                    <a href="javascript:void(0);" class="btn btn-success m-btn m-btn--custom m-btn--icon add-attribute"><span>Tambah Varian Produk</span></a>
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="m-accordion m-accordion--bordered form-dynamic" id="m_accordion_2" role="tablist">
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <!--end: Form Wizard Step 2-->
+
+
                                 <!--begin: Form Wizard Step 3-->
                                 <div class="m-wizard__form-step" id="m_wizard_form_step_3">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="m-form__section m-form__section--first">
-                                                <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title"><?= __d('AdminPanel',  'Inventory'); ?></h3>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-form-label">* <?= __d('AdminPanel',  'Model'); ?></label>
-                                                    <div class="col-xl-3">
-                                                        <?php echo $this->Form->control('model',['label' => false,'class' => $default_class]);?>
-                                                    </div>
-                                                    <label class="col-xl-2 offset-1 col-form-label">* <?= __d('AdminPanel',  'Code'); ?></label>
-                                                    <div class="col-xl-3">
-                                                        <?php echo $this->Form->control('code',['label' => false,'class' => $default_class]);?>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-form-label">* <?= __d('AdminPanel',  'Sku'); ?></label>
-                                                    <div class="col-xl-3">
-                                                        <?php echo $this->Form->control('sku',['label' => false,'class' => $default_class]);?>
-                                                    </div>
-                                                    <label class="col-xl-2 offset-1 col-form-label">* <?= __d('AdminPanel',  'Isbn'); ?></label>
-                                                    <div class="col-xl-3">
-                                                        <?php echo $this->Form->control('isbn',['label' => false,'class' => $default_class]);?>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Stock Status'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <?php echo $this->Form->control('product_stock_status_id', ['options' => $productStockStatuses,'label' => false, 'class' => $default_class . ' .select-picker']);?>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="m-form__section">
-                                                <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title"><?= __d('AdminPanel',  'Pricing'); ?></h3>
-                                                </div>
-
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Regular Price'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
-                                                            <?php echo $this->Form->control('price',['div' => false, 'label' => false,'class' => $default_class]);?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Sale Price'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
-                                                            <?php echo $this->Form->control('price_sale', ['div' => false, 'label' => false,'class' => $default_class, 'type' => 'number']);?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Discount'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend"><span class="input-group-text">%</span></div>
-                                                            <?php echo $this->Form->control('price_discount', ['div' => false, 'label' => false, 'class' => $default_class, 'disabled' => 'disabled']);?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group m-form__group row">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?></label>
-                                                    <div class="col-xl-9 col-lg-9">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend"><span class="input-group-text">IDR</span></div>
-                                                            <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class]);?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end: Form Wizard Step 3-->
-
-                                <!--begin: Form Wizard Step 4-->
-                                <div class="m-wizard__form-step" id="m_wizard_form_step_4">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="m-form__section m-form__section--first">
-                                                <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title"><?= __d('AdminPanel',  'Shippings'); ?></h3>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <div class="col-lg-12 m-form__group-sub">
-                                                        <label class="form-control-label"><?= __d('AdminPanel',  'Courier'); ?></label>
-                                                        <div class="m-checkbox-inline">
-                                                            <?php foreach($courriers as $k => $vals):?>
-                                                                <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                                    <input type="checkbox" name="ProductToCourriers[]" value="<?php echo $k;?>"> <?php echo $vals;?>
-                                                                    <span></span>
-                                                                </label>
-                                                            <?php endforeach;?>
-                                                        </div>
-                                                        <span class="m-form__help"><?= __d('AdminPanel',  'Select courier options'); ?></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="m-form__section">
-                                                <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title"><?= __d('AdminPanel',  'Attributes'); ?></h3>
-                                                </div>
-                                                <div class="form-group m-form__group row">
-                                                    <div class="col-lg-6 m-form__group-sub">
-                                                        <div class="m-checkbox-inline">
-                                                            <?php foreach($options as $k => $vals):?>
-                                                                <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                                                    <input type="checkbox" name="options[]"  value="<?php echo $k;?>" class="option" data-text="<?php echo $vals;?>"> <?php echo $vals;?>
-                                                                    <span></span>
-                                                                </label>
-                                                            <?php endforeach;?>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <a href="javascript:void(0);" class="btn btn-success m-btn m-btn--custom m-btn--icon add-attribute"><span>Add Product Variant</span></a>
-                                                    </div>
-                                                </div>
-
-                                                <div class="m-accordion m-accordion--bordered form-dynamic" id="m_accordion_2" role="tablist">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end: Form Wizard Step 4-->
-
-                                <!--begin: Form Wizard Step 5-->
-                                <div class="m-wizard__form-step" id="m_wizard_form_step_5">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             review
@@ -630,6 +599,36 @@
 
 
 
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modal-attribute" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Atribut <span class="title-variant"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <?= $this->Form->create(null,['action' => 'addOptions','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form', 'id' => 'form-attribute']); ?>
+                <?php echo $this->Form->hidden('code_attribute', ['div' => false, 'label' => false, 'id' => 'code-attribute']);?>
+                <div class="form-group m-form__group row">
+                    <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Nama Atribut'); ?></label>
+                    <div class="col-xl-8">
+                        <?php echo $this->Form->control('name', ['div' => false, 'label' => false, 'class' => $default_class]);?>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <?= $this->Form->submit(__('Simpan Atribut'),['class' => 'btn btn-brand']) ?>
+            </div>
+            <?= $this->Form->end(); ?>
         </div>
     </div>
 </div>

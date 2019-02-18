@@ -23,7 +23,7 @@ echo $this->Html->script([
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Product Category') ?>
+                    <?= __('Kategori Produk') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -37,7 +37,7 @@ echo $this->Html->script([
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Product Category') ?>
+                                <?= __('Kategori Produk') ?>
                             </span>
                         </a>
                     </li>
@@ -47,7 +47,7 @@ echo $this->Html->script([
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Product Category') ?>
+                                <?= __('Daftar Kategori Produk') ?>
                             </span>
                         </a>
                     </li>
@@ -57,7 +57,7 @@ echo $this->Html->script([
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Add Product Category') ?>
+                                <?= __('Tambah Kategori') ?>
                             </span>
                         </a>
                     </li>
@@ -72,7 +72,7 @@ echo $this->Html->script([
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Add Product Category') ?>
+                            <?= __('Tambah Kategori') ?>
                         </h3>
                     </div>
                 </div>
@@ -99,7 +99,7 @@ echo $this->Html->script([
                 <div class="m-form__actions m-form__actions">
                     <div class="row">
                         <div class="col-lg-9 ml-lg-auto">
-                            <?= $this->Form->submit(__('Submit'),['class' => 'btn btn-brand']) ?>
+                            <?= $this->Form->submit(__('Simpan'),['class' => 'btn btn-brand']) ?>
                         </div>
                     </div>
                 </div>

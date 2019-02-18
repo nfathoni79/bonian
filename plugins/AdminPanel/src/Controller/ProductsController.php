@@ -116,79 +116,115 @@ class ProductsController extends AppController
             case '2':
                 $validator
                     ->requirePresence('name')
-                    ->notBlank('name');
+                    ->notBlank('name', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('title')
-                    ->notBlank('title');
+                    ->notBlank('title', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('slug')
-                    ->notBlank('slug');
+                    ->notBlank('slug', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('condition')
-                    ->notBlank('condition');
+                    ->notBlank('condition', 'tidak boleh kosong');
 
                 $meta = new Validator();
                 $meta
                     ->requirePresence('keyword')
-                    ->notBlank('keyword');
+                    ->notBlank('keyword', 'tidak boleh kosong');
 
                 $validator->addNested('ProductMetaTags', $meta);
 
-
-                break;
-
-            case '3':
                 $validator
                     ->requirePresence('model')
-                    ->notBlank('model');
+                    ->notBlank('model', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('sku')
-                    ->notBlank('sku');
+                    ->notBlank('sku', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('code')
-                    ->notBlank('code');
+                    ->notBlank('code', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('price')
-                    ->notBlank('price');
-
-                break;
-
-            case '4':
+                    ->notBlank('price', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('ProductToCourriers')
-                    ->hasAtLeast('ProductToCourriers', 2, __d('AdminPanel', __d('AdminPanel','please fill at least two')));
+                    ->hasAtLeast('ProductToCourriers', 2, __d('AdminPanel', __d('AdminPanel','pilihan minimal 2 kurir')));
 
                 $productOption = new Validator();
 
                 $productOption
-                    ->notBlank('warna');
+                    ->notBlank('warna', 'tidak boleh kosong');
 
                 $productOption
-                    ->notBlank('ukuran');
+                    ->notBlank('ukuran', 'tidak boleh kosong');
 
                 $validator->addNestedMany('ProductOptionValues', $productOption);
 
                 $productPrice = new Validator();
                 $productPrice
                     ->requirePresence('price')
-                    ->numeric('price');
+                    ->numeric('price', 'tidak boleh kosong');
 
                 $validator->addNestedMany('ProductOptionPrices', $productPrice);
+                break;
 
+            case '3':
 
                 break;
+
         }
 
         $error = $validator->errors($this->request->getData());
         return $this->response->withType('application/json')
             ->withStringBody(json_encode($error));
+    }
+
+
+    public function addOptions(){
+        $this->disableAutoRender();
+        $validator = new Validator();
+        $validator
+            ->notBlank('name', 'tidak boleh kosong');
+        $error = $validator->errors($this->request->getData());
+        if(empty($error)){
+
+            $code = $this->request->getData('code_attribute');
+            $name = $this->request->getData('name');
+
+            $getOptions = $this->Options->find()
+                ->where(['Options.name' => $code])
+                ->first();
+
+
+            if($getOptions){
+
+                $idOptions = $getOptions->get('id');
+                $newEntity = $this->OptionValues->newEntity();
+                $newEntity = $this->OptionValues->patchEntity($newEntity,$this->request->getData());
+                $newEntity->set('option_id', $idOptions);
+                $newEntity->set('name', $name);
+
+                if($this->OptionValues->save($newEntity)){
+                    $data = ['id' => $newEntity->get('id'), 'name' => $name];
+                    $respon = ['is_error' => false, 'message' => 'Atribute berhasil didaftarkan', 'data' => $data];
+                }else{
+                    $respon = ['is_error' => true, 'message' => 'Gagal menyimpan data / pilihan sudah terdaftar'];
+                }
+            }else{
+                $respon = ['is_error' => true, 'message' => 'Gagal menyimpan data / opsi utama tidak tersedia'];
+            }
+        }else{
+            $respon = ['is_error' => true, 'message' => 'Gagal menyimpan data'];
+        }
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($respon));
     }
 
     /**
