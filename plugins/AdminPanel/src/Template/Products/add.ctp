@@ -458,6 +458,36 @@
                                             <div class="m-form__section">
                                                 <div class="m-form__heading">
                                                     <h3 class="m-form__heading-title">
+                                                        <?= __d('AdminPanel',  'SEO Produk'); ?>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xl-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Kata Kunci Pencarian'); ?></label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('ProductMetaTags.keyword',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 4]);?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Deskripsi SEO'); ?></label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('ProductMetaTags.description',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 4]);?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-xl-12">
+                                            <div class="m-form__section">
+                                                <div class="m-form__heading">
+                                                    <h3 class="m-form__heading-title">
                                                         <?= __d('AdminPanel',  'Informasi Produk'); ?>
                                                     </h3>
                                                 </div>
