@@ -4,6 +4,20 @@
  * @var \Cake\Datasource\EntityInterface $productCategory
  */
 ?>
+<?php $this->append('script'); ?>
+<?php
+echo $this->Html->script([
+    '/admin-assets/vendors/custom/slugify/speakingurl.min',
+    '/admin-assets/vendors/custom/slugify/slugify.min',
+    '/admin-assets/vendors/custom/libs/validation-render',
+]);
+?>
+<script>
+    $(document).ready(function() {
+        $('#slug').slugify('#title'); // Type as you slug
+    })
+</script>
+<?php $this->end(); ?>
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
@@ -75,8 +89,8 @@
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
                 echo $this->Form->control('parent_id', ['options' => $parentProductCategories, 'empty' => true, 'class' => $default_class]);
-                echo $this->Form->control('name',['class' => $default_class]);
-                echo $this->Form->control('slug',['class' => $default_class]);
+                echo $this->Form->control('name',['class' => $default_class, 'id' => 'title']);
+                echo $this->Form->control('slug',['class' => $default_class, 'id' => 'slug']);
                 echo $this->Form->control('description',['class' => $default_class]);
                 echo $this->Form->control('path',['class' => $default_class, 'type' => 'file']);
             ?>

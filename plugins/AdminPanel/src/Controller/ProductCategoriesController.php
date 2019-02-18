@@ -109,6 +109,8 @@ class ProductCategoriesController extends AppController
     {
         $productCategory = $this->ProductCategories->newEntity();
         if ($this->request->is('post')) {
+            debug($this->request->getData());
+            exit;
             $productCategory = $this->ProductCategories->patchEntity($productCategory, $this->request->getData());
             if ($this->ProductCategories->save($productCategory)) {
                 $this->Flash->success(__('The product category has been saved.'));
@@ -117,8 +119,70 @@ class ProductCategoriesController extends AppController
             }
             $this->Flash->error(__('The product category could not be saved. Please, try again.'));
         }
-        $parentProductCategories = $this->ProductCategories->ParentProductCategories->find('list', ['limit' => 200]);
+        $parentProductCategories = $this->ProductCategories->ParentProductCategories->find('list', ['limit' => 200, 'order' => 'ParentProductCategories.lft ASC']);
         $this->set(compact('productCategory', 'parentProductCategories'));
+    }
+
+
+    public function import(){
+        if ($this->request->is('post')) {
+
+            $data = $this->request->data['files'];
+            $file = $data['tmp_name'];
+            $handle = fopen($file, "r");
+            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+//                0 main, 1 submain, 2 subsubmain, 3 desctioption
+                for($i=0;$i<=3;$i++){
+                    switch ($i) {
+                        case 0:
+                            $findMainCategory = $this->ProductCategories->find()
+                            ->where(['ProductCategories.name' => $row[0]])
+                            ->first();
+                            if(empty($findMainCategory)){
+                                $newEntity = $this->ProductCategories->newEntity();
+                                $newEntity = $this->ProductCategories->patchEntity($newEntity, $this->request->getData());
+                                $newEntity->set('parent_id', null);
+                                $newEntity->set('name', $row[$i]);
+                                $newEntity->set('slug', strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $row[$i]))));
+                                $newEntity->set('description', '-');
+                                $this->ProductCategories->save($newEntity);
+                            }
+                        break;
+                        case 1:
+                            $findMainCategory = $this->ProductCategories->find()
+                            ->where(['ProductCategories.name' => $row[0]])
+                            ->first();
+                            if(!empty($findMainCategory)){
+                                $newEntity = $this->ProductCategories->newEntity();
+                                $newEntity = $this->ProductCategories->patchEntity($newEntity, $this->request->getData());
+                                $newEntity->set('parent_id', $findMainCategory->get('id'));
+                                $newEntity->set('name', $row[$i]);
+                                $newEntity->set('slug', strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $row[$i]))));
+                                $newEntity->set('description', '-');
+                                $this->ProductCategories->save($newEntity);
+                            }
+                        break;
+                        case 2:
+                            $findMainCategory = $this->ProductCategories->find()
+                            ->where(['ProductCategories.name' => $row[1]])
+                            ->first();
+                            if(!empty($findMainCategory)){
+                                $newEntity = $this->ProductCategories->newEntity();
+                                $newEntity = $this->ProductCategories->patchEntity($newEntity, $this->request->getData());
+                                $newEntity->set('parent_id', $findMainCategory->get('id'));
+                                $newEntity->set('name', $row[$i]);
+                                $newEntity->set('slug', strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $row[$i]))));
+                                $newEntity->set('description', '-');
+                                $this->ProductCategories->save($newEntity);
+                            }
+                        break;
+                    }
+                }
+
+            }
+            $this->Flash->success(__('Success import file'));
+            $this->redirect(['action' => 'index']);
+        }
     }
 
     /**

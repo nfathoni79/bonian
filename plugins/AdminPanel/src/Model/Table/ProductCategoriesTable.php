@@ -56,66 +56,66 @@ class ProductCategoriesTable extends Table
             'className' => 'AdminPanel.ProductToCategories'
         ]);
 
-        $this->addBehavior('Josegonzalez/Upload.Upload', [
-            'path' => [
-                'nameCallback' => function ($tableObj, $entity, $data, $field, $settings) {
-                    $ext = substr(strrchr($data['name'], '.'), 1);
-                    return time() . rand(100, 999) . '.' . $ext;
-                },
-                'transformer' =>  function ($table, \AdminPanel\Model\Entity\ProductCategory $entity, $data, $field, $settings) {
-                    $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
-
-
-                    // Store the thumbnail in a temporary file
-                    $tmp = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
-
-                    $tmp_name = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
-
-                    $size = new \Imagine\Image\Box(300, 300);
-                    $mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
-                    $imagine = new \Imagine\Gd\Imagine();
-
-                    // Save that modified file to our temp file
-                    $imagine->open($data['tmp_name'])
-                        ->thumbnail($size, $mode)
-                        ->save($tmp_name);
-
-                    $data['tmp_name'] = $tmp_name;
-
-                    // Use the Imagine library to DO THE THING
-                    $size = new \Imagine\Image\Box(80, 80);
-                    $mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
-                    $imagine = new \Imagine\Gd\Imagine();
-
-                    // Save that modified file to our temp file
-                    $imagine->open($data['tmp_name'])
-                        ->thumbnail($size, $mode)
-                        ->save($tmp);
-
-                    //process delete old image
-                    $original = $entity->getOriginal('path');
-                    if ($original) {
-                        $path = $this->getPathProcessor($entity, $data, $field, $settings);
-                        $basename = rtrim(ROOT, DS) . DS . $path->basepath();
-
-                        if (file_exists($basename . $original)) {
-                            unlink($basename . $original);
-                        }
-
-                        if (file_exists($basename . 'thumbnail-' . $original)) {
-                            unlink($basename . 'thumbnail-' . $original);
-                        }
-                    }
-
-
-                    // Now return the original *and* the thumbnail
-                    return [
-                        $data['tmp_name'] => $data['name'],
-                        $tmp => 'thumbnail-' . $data['name'],
-                    ];
-                }
-            ],
-        ]);
+//        $this->addBehavior('Josegonzalez/Upload.Upload', [
+//            'path' => [
+//                'nameCallback' => function ($tableObj, $entity, $data, $field, $settings) {
+//                    $ext = substr(strrchr($data['name'], '.'), 1);
+//                    return time() . rand(100, 999) . '.' . $ext;
+//                },
+//                'transformer' =>  function ($table, \AdminPanel\Model\Entity\ProductCategory $entity, $data, $field, $settings) {
+//                    $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
+//
+//
+//                    // Store the thumbnail in a temporary file
+//                    $tmp = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
+//
+//                    $tmp_name = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
+//
+//                    $size = new \Imagine\Image\Box(300, 300);
+//                    $mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+//                    $imagine = new \Imagine\Gd\Imagine();
+//
+//                    // Save that modified file to our temp file
+//                    $imagine->open($data['tmp_name'])
+//                        ->thumbnail($size, $mode)
+//                        ->save($tmp_name);
+//
+//                    $data['tmp_name'] = $tmp_name;
+//
+//                    // Use the Imagine library to DO THE THING
+//                    $size = new \Imagine\Image\Box(80, 80);
+//                    $mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+//                    $imagine = new \Imagine\Gd\Imagine();
+//
+//                    // Save that modified file to our temp file
+//                    $imagine->open($data['tmp_name'])
+//                        ->thumbnail($size, $mode)
+//                        ->save($tmp);
+//
+//                    //process delete old image
+//                    $original = $entity->getOriginal('path');
+//                    if ($original) {
+//                        $path = $this->getPathProcessor($entity, $data, $field, $settings);
+//                        $basename = rtrim(ROOT, DS) . DS . $path->basepath();
+//
+//                        if (file_exists($basename . $original)) {
+//                            unlink($basename . $original);
+//                        }
+//
+//                        if (file_exists($basename . 'thumbnail-' . $original)) {
+//                            unlink($basename . 'thumbnail-' . $original);
+//                        }
+//                    }
+//
+//
+//                    // Now return the original *and* the thumbnail
+//                    return [
+//                        $data['tmp_name'] => $data['name'],
+//                        $tmp => 'thumbnail-' . $data['name'],
+//                    ];
+//                }
+//            ],
+//        ]);
     }
 
     /**
@@ -143,24 +143,24 @@ class ProductCategoriesTable extends Table
             ->allowEmptyString('slug', false)
             ->add('slug', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
-        $validator
-            ->scalar('description')
-            ->maxLength('description', 255)
-            ->requirePresence('description', 'create')
-            ->allowEmptyString('description', false);
+//        $validator
+//            ->scalar('description')
+//            ->maxLength('description', 255)
+//            ->requirePresence('description', 'create')
+//            ->allowEmptyString('description', false);
 
-        $validator
-            ->notEmpty('avatar')
-            ->add('avatar', 'mime', [
-                'rule' => ['mimeType', ['image/jpeg', 'image/png']],
-                'message' => __d('MemberPanel', 'These files extension are allowed: .{0}', '.png .jpeg and .jpg')
-            ])
-            ->add('avatar', 'size', [
-                'rule' => function($field) {
-                    return $field['size'] <= (1024 * 1024 * 4);
-                },
-                'message' => __d('MemberPanel', 'max File size are allowed: {0}', '4MB')
-            ]);
+//        $validator
+//            ->notEmpty('path')
+//            ->add('path', 'mime', [
+//                'rule' => ['mimeType', ['image/jpeg', 'image/png']],
+//                'message' => __d('MemberPanel', 'These files extension are allowed: .{0}', '.png .jpeg and .jpg')
+//            ])
+//            ->add('path', 'size', [
+//                'rule' => function($field) {
+//                    return $field['size'] <= (1024 * 1024 * 4);
+//                },
+//                'message' => __d('MemberPanel', 'max File size are allowed: {0}', '4MB')
+//            ]);
 
         return $validator;
     }

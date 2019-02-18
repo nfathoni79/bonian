@@ -59,7 +59,23 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New Product Category') ?></span>
+                                    <span><?= __('New Category') ?></span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air" data-toggle="modal" data-target="#m_modal_1">
+                                <span>
+                                    <i class="la la-upload"></i>
+                                    <span><?= __('Import Category') ?></span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="<?= $this->Url->build('/files/csv/categories.csv'); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                                <span>
+                                    <i class="la la-download"></i>
+                                    <span><?= __('Example CSV Category') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -266,3 +282,36 @@
 
 
 
+
+<!--begin::Modal-->
+<div class="modal fade" id="m_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Import Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <?= $this->Form->create('ProductCategories',['action' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file']); ?>
+
+                <div class="form-group m-form__group">
+                    <label for="files">File Browser</label>
+                    <div></div>
+                    <div class="custom-file">
+                        <?php
+                             echo $this->Form->control('files',['class' => 'custom-file-input', 'type' => 'file']);
+                        ?>
+                        <label class="custom-file-label" for="files">Choose file</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <?= $this->Form->submit(__('Import'),['class' => 'btn btn-brand']) ?>
+            </div>
+            <?= $this->Form->end(); ?>
+        </div>
+    </div>
+</div>
