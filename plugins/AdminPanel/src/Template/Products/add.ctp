@@ -63,6 +63,7 @@
         });
 
 
+        var optbranchs = getList();
 
         $.ajax({
             url: "<?= $this->Url->build(['action' => 'getoptionvalues']); ?>",
@@ -73,8 +74,16 @@
                 var i = 1;
                 $('.add-attribute').on('click',function(){
 
+                    var radioValue = $("input[name='ShippingOption[]']:checked").val();
+                    $("input[name='ShippingOption[]']").attr('disabled', true);
+                    $("input[name='options[]']").attr('disabled', true);
+
+
 
                     var formTemplate = '';
+
+
+
                     $('.option:checked').each(function(){
                         var values = $(this).val();
                         var text = $(this).data('text');
@@ -96,6 +105,7 @@
                             '</div>';
                     });
 
+
                     var template = '\n' +
                         '<div class="m-accordion__item item-'+i+'">\n' +
                         '<div class="m-accordion__item-head" role="tab" id="m_accordion_2_item_'+i+'_head" data-toggle="collapse" href="#m_accordion_2_item_'+i+'_body" aria-expanded="    false">\n' +
@@ -106,31 +116,55 @@
                         '<div class="m-accordion__item-content"> \n' +
                         '<div class="row">\n' +
                         '<div class="col-xl-4">'+formTemplate+'</div>\n' +
-                        '<div class="col-xl-8">\n' +
+                        '<div class="col-xl-8"> \n' +
                         '<div class="form-group m-form__group row">\n' +
-                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="Harga"></div>\n' +
-                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][stock]"  class="form-control m-input" placeholder="Stok"></div>\n' +
-                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][weight]" class="form-control m-input" placeholder="Berat"></div>\n' +
+                        '<label class="col-xl-4 col-form-label">Harga Tambahan</label>\n' +
+                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="Harga"></div> \n' +
+                        '</div>  \n' +
+                        '<div class="m-form__group form-group row berat" style="display:none;">\n' +
+                        '<label class="col-xl-4 col-form-label">Berat</label>\n' +
+                        '<div class="col-xl-2"> \n' +
+                        '<input type="number" name="ProductOptionPrices['+i+'][weight]" class="form-control m-input" placeholder="Berat (gram)">\n' +
                         '</div> \n' +
-                        '<div class="form-group m-form__group row">\n' +
-                        '<label class="col-xl-3 col-form-label">Dimension</label>\n' +
-                        '<label class="col-xl-9">\n' +
-                        '<div class="row">\n' +
-                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
-                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
-                        '<div class="col-xl-3"><input type="number" name="ProductOptionPrices['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
-                        '<div class="col-xl-3"><a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item='+i+'><i class="la la-trash"></i></a></div>\n' +
+                        '</div>\n' +
+                        '<div class="m-form__group form-group row dimensi" style="display:none;">\n' +
+                        '<label class="col-xl-4 col-form-label">Dimensi</label>\n' +
+                        '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
+                        '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
+                        '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
+                        '</div>  \n' +
+                        '<div class="m-form__group form-group row">\n' +
+                        '<label class="col-xl-4 col-form-label">Stock Cabang</label>\n' +
+                        '<div class="col-xl-2">\n' +
+                        '<select name="ProductOptionValues['+i+'][branches]" class="form-control  m-input " >'+optbranchs+'</select>\t\n' +
                         '</div> \n' +
+                        '<div class="col-xl-2">\n' +
+                        '<input type="number" name="ProductOptionPrices['+i+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
+                        '</div>\n' +
+                        '<div class="col-xl-2">\n' +
+                        '<a href="javascript:void(0);" class="btn btn-info m-btn m-btn--icon m-btn--icon-only" data-item='+i+'><i class="la la-plus"></i></a>\n' +
                         '</div> \n' +
+                        '</div>  \n' +
                         '</div> \n' +
                         '</div> \n' +
                         '</div> \n' +
                         '</div>\n' +
-                        '</div>\n' +
-                        '</div>\n';
+                        '</div> ';
 
                     if(formTemplate != ''){
                         $('.form-dynamic').append(template);
+
+                        if(radioValue == 'Berat'){
+                            $('.berat').show();
+                        }else{
+                            $('.dimensi').show();
+                        }
+
+                        var radioValue = $("input[name='gender']:checked").val();
+                        if(radioValue){
+                            alert("Your are a - " + radioValue);
+                        }
+
                         $('.remove-row').on('click',function(){
                             var item = $(this).data('item');
                             $('div').remove('.item-'+item);
@@ -176,6 +210,21 @@
             });
         });
 
+
+        function getList(){
+            var optbranch = '<option value="">-- Pilih Cabang --</option>';
+            $.ajax({
+                url: "<?= $this->Url->build(['action' => 'getListBranch']); ?>",
+                cache: false,
+                method: 'GET',
+                success: function (responseBranchs) {
+                    $.each(responseBranchs, function(k,v){
+                        optbranch += '<option value="'+k+'">'+v+'</option>';
+                    })
+                }
+            })
+            return optbranch;
+        }
     })
 </script>
 <script>
@@ -431,21 +480,9 @@
                                                 </div>
                                             </div>
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Code'); ?></label>
-                                                <div class="col-xl-4">
-                                                    <?php echo $this->Form->control('code',['label' => false,'class' => $default_class]);?>
-                                                </div>
-                                            </div>
-                                            <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Sku'); ?></label>
                                                 <div class="col-xl-4">
                                                     <?php echo $this->Form->control('sku',['label' => false,'class' => $default_class]);?>
-                                                </div>
-                                            </div>
-                                            <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Isbn'); ?></label>
-                                                <div class="col-xl-4">
-                                                    <?php echo $this->Form->control('isbn',['label' => false,'class' => $default_class]);?>
                                                 </div>
                                             </div>
                                             <div class="form-group m-form__group row">
@@ -486,7 +523,7 @@
                                                 <div class="col-xl-4">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend"><span class="input-group-text">%</span></div>
-                                                        <?php echo $this->Form->control('price_discount', ['div' => false, 'label' => false, 'class' => $default_class, 'disabled' => 'disabled']);?>
+                                                        <?php echo $this->Form->control('price_discount', ['div' => false, 'label' => false, 'class' => $default_class, 'readonly' => true]);?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -515,6 +552,21 @@
                                                         <?php endforeach;?>
                                                     </div>
                                                     <span class="m-form__help"><?= __d('AdminPanel',  'Pilihan Kurir'); ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-2 col-form-label">Opsi Pengiriman Berdasarkan?</label>
+                                                <div class="col-xl-10 m-form__group-sub">
+                                                    <div class="m-radio-inline">
+                                                        <label class="m-radio">
+                                                            <input type="radio" name="ShippingOption[]" value="Berat" checked="checked"> Berat
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="m-radio">
+                                                            <input type="radio" name="ShippingOption[]" value="Dimensi"> Dimensi
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="form-group m-form__group row">

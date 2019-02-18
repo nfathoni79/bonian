@@ -10,6 +10,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\CourriersTable $Courriers
  * @property \AdminPanel\Model\Table\OptionsTable $Options
  * @property \AdminPanel\Model\Table\OptionValuesTable $OptionValues
+ * @property \AdminPanel\Model\Table\BranchesTable $Branches
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -22,6 +23,7 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.Courriers');
         $this->loadModel('AdminPanel.Options');
         $this->loadModel('AdminPanel.OptionValues');
+        $this->loadModel('AdminPanel.Branches');
     }
     /**
      * Index method
@@ -273,6 +275,17 @@ class ProductsController extends AppController
 
             return $this->response->withType('application/json')
                 ->withStringBody(json_encode($listOptions));
+        }
+    }
+    public function getListBranch(){
+
+
+        if ($this->request->is('ajax')) {
+            $this->viewBuilder()->setLayout('ajax');
+            $options = $this->Branches->find('list')->toArray();
+
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($options));
         }
     }
 
