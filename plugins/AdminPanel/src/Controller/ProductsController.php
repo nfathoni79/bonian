@@ -189,6 +189,15 @@ class ProductsController extends AppController
     }
 
 
+    public function upload()
+    {
+        $this->disableAutoRender();
+        $error = [];
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($error));
+    }
+
+
     public function addOptions(){
         $this->disableAutoRender();
         $validator = new Validator();

@@ -41,6 +41,12 @@ class AppController extends BaseController
 
 	}
 
+
+	public function beforeFilter(Event $event)
+    {
+        return parent::beforeFilter($event);
+    }
+
     /**
      * @param Event $event
      * @return \Cake\Http\Response|void|null
@@ -50,6 +56,5 @@ class AppController extends BaseController
 
         parent::beforeRender($event);
         $this->viewBuilder()->setClassName('AdminPanel.App');
-
     }
 }

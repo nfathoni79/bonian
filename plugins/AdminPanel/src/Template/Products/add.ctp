@@ -121,7 +121,7 @@
                     '<div class="form-group m-form__group row">\n' +
                     '<label class="col-xl-4 col-form-label">Gambar Produk</label>\n' +
                     '<div class="col-xl-8"> \n' +
-                    '<div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone-two">\n' +
+                    '<div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone'+i+'">\n' +
                     '<div class="m-dropzone__msg dz-message needsclick">\n' +
                     '<h3 class="m-dropzone__msg-title">Drop files disini atau click untuk upload.</h3>\n' +
                     '<span class="m-dropzone__msg-desc">Upload sampai 10 file</span>\n' +
@@ -214,6 +214,22 @@
                     });
 
                     $('.select2').select2();
+
+                    //process dropzone m-dropzone dropzone
+                    new Dropzone("#m-dropzone" + i, {
+                        url: "<?= $this->Url->build(['action' => 'upload']); ?>",
+                        maxFiles: 2,
+                        maxFilesize: 10, // MB
+                        addRemoveLinks: true,
+                        acceptedFiles: "image/*",
+                        maxfilesexceeded: function(file) {
+                            this.removeFile(file);
+                        },
+                        sending: function(file, xhr, formData) {
+                            formData.append('_csrfToken', $('input[name=_csrfToken]').val());
+                        }
+                    });
+
                 }
 
 
