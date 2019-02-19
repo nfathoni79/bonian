@@ -70,6 +70,7 @@
         });*/
 
         var optbranchs, optvalues; //initial on first
+        var dropzones = [];
         async function initial() {
             optbranchs = await getList();
             optvalues = await getOptionValue();
@@ -166,13 +167,14 @@
                     '</div> ';
 
                 if(formTemplate != ''){
-                    $('.form-dynamic').append(template);
+                    var appendTemplate = $('.form-dynamic').append(template);
                     if(radioValue == 'Berat'){
-                        $('.berat').show();
+                        appendTemplate.find('.berat').show();
                     }else{
-                        $('.dimensi').show();
+                        appendTemplate.find('.dimensi').show();
                     }
-                    $('.remove-row').on('click',function(){
+
+                    $('.remove-row').off('click').on('click',function() {
                         var item = $(this).data('item');
                         $('div').remove('.item-'+item);
                         var total = $('.m-accordion__item').length;
@@ -180,14 +182,23 @@
                             $("input[name='ShippingOption[]']").attr('disabled', false);
                             $("input[name='options[]']").attr('disabled', false);
                         }
+
+                        //remove dropzone index
+                        for(var z in dropzones) {
+                            if (dropzones[z].index == item) {
+                                dropzones.splice(z, 1);
+                            }
+                        }
+                        console.log(dropzones);
+
                     });
-                    $('.add-variant').on('click',function(){
+                    $('.add-variant').off('click').on('click',function() {
                         var variant = $(this).data('variant');
                         $('.title-variant').html(variant);
                         $('#code-attribute').val(variant);
                     });
                     var y = 1;
-                    $('.add-cabang').on('click',function(){
+                    $('.add-cabang').off('click').on('click',function() {
                         var item = $(this).data('item');
                         var rowcabang = '<div class="m-form__group form-group row cabang-'+item+'-'+y+'">\n' +
                             '<label class="col-xl-4 col-form-label"></label>\n' +
@@ -198,13 +209,13 @@
                             '<input type="number" name="ProductOptionPrices['+item+']['+y+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
                             '</div>\n' +
                             '<div class="col-xl-2">\n' +
-                            '<a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-cabang" data-item="'+item+'" data-row="'+y+'"><i class="la la-minus"></i></a>\n' +
+                            '<a href="javascript:void(0);" style="width:40px; height: 40px;" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-cabang" data-item="'+item+'" data-row="'+y+'"><i class="la la-minus"></i></a>\n' +
                             '</div> \n' +
                             '<div>';
 
                         $('.multi-cabang-'+item).append(rowcabang);
 
-                        $('.remove-cabang').on('click',function(){
+                        $('.remove-cabang').off('click').on('click',function() {
                             var items = $(this).data('item');
                             var row = $(this).data('row');
                             $('div').remove('.cabang-'+items+'-'+row);
@@ -216,12 +227,27 @@
                     $('.select2').select2();
 
                     //process dropzone m-dropzone dropzone
-                    new Dropzone("#m-dropzone" + i, {
+                    let dropzone = new Dropzone("#m-dropzone" + i, {
                         url: "<?= $this->Url->build(['action' => 'upload']); ?>",
                         maxFiles: 2,
                         maxFilesize: 10, // MB
                         addRemoveLinks: true,
                         acceptedFiles: "image/*",
+                        autoProcessQueue: false,
+                        autoQueue: false,
+                        thumbnail: function(file, dataUrl) {
+                            if (file.previewElement) {
+                                $(file.previewElement.querySelectorAll('div.dz-progress')).hide()
+                                file.previewElement.classList.remove("dz-file-preview");
+                                for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                                    thumbnailElement.alt = file.name;
+                                    thumbnailElement.src = dataUrl;
+                                }
+
+                                return setTimeout((() => file.previewElement.classList.add("dz-image-preview")), 1);
+                            }
+
+                        },
                         maxfilesexceeded: function(file) {
                             this.removeFile(file);
                         },
@@ -229,6 +255,8 @@
                             formData.append('_csrfToken', $('input[name=_csrfToken]').val());
                         }
                     });
+
+                    dropzones.push({index: i, dropzone: dropzone});
 
                 }
 
