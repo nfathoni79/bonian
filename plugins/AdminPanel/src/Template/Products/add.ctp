@@ -62,164 +62,170 @@
             }
         });
 
-        var optbranchs = getList();
+
+
+        /*var optbranchs = getList();
         getList().then(function(value){
             optbranchs += value;
-        });
-        // setTimeout(function() { console.log(optbranchs); }, 2000);
-        $.ajax({
-            url: "<?= $this->Url->build(['action' => 'getoptionvalues']); ?>",
-            cache: false,
-            method: 'GET',
-            success: function(response){
-                var options = response;
-                var i = 1;
-                $('.add-attribute').on('click',function(){
+        });*/
 
-                    var radioValue = $("input[name='ShippingOption[]']:checked").val();
-                    $("input[name='ShippingOption[]']").attr('disabled', true);
-                    $("input[name='options[]']").attr('disabled', true);
+        var optbranchs, optvalues; //initial on first
+        async function initial() {
+            optbranchs = await getList();
+            optvalues = await getOptionValue();
+            var i = 1;
+            $('.add-attribute').on('click',function(){
+
+                var radioValue = $("input[name='ShippingOption[]']:checked").val();
+                $("input[name='ShippingOption[]']").attr('disabled', true);
+                $("input[name='options[]']").attr('disabled', true);
 
 
 
-                    var formTemplate = '';
+                var formTemplate = '';
 
 
 
-                    $('.option:checked').each(function(){
-                        var values = $(this).val();
-                        var text = $(this).data('text');
-                        if(text == ''){
-                            return false;
+                $('.option:checked').each(function(){
+                    var values = $(this).val();
+                    var text = $(this).data('text');
+                    if(text == ''){
+                        return false;
+                    }
+                    var opt = '<option value="">-- Pilih '+text+' --</option>';
+                    $.each(optvalues[text], function(k,v){
+                        opt += '<option value="'+v.id+'">'+v.name+'</option>';
+                    })
+                    formTemplate += '<div class="form-group m-form__group row">\n' +
+                        '<label class="col-xl-4 col-form-label">'+text+'</label>\n' +
+                        '<div class="col-xl-6">\n' +
+                        '<select name="ProductOptionValues['+i+']['+text.toLowerCase()+']" class="form-control select2 m-input select-'+text.toLowerCase()+'" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
+                        '</div>\n' +
+                        '<div class="col-xl-2">\n' +
+                        '<a href="#" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-variant" style="width:40px; height: 40px;"  data-toggle="modal" data-target="#modal-attribute" data-variant="'+text.toLowerCase()+'"><i class="la la-plus"></i></a>\n' +
+                        '</div>\n' +
+                        '</div>';
+                });
+
+
+                var template = '<div class="m-accordion__item item-'+i+'">\n' +
+                    '<div class="m-accordion__item-head" role="tab" id="m_accordion_2_item_'+i+'_head" data-toggle="collapse" href="#m_accordion_2_item_'+i+'_body" aria-expanded="    false">\n' +
+                    '<span class="m-accordion__item-title">Varian Produk <a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item='+i+'><i class="la la-trash"></i></a></span>\n' +
+                    '<span class="m-accordion__item-mode"></span>\n' +
+                    '</div>\n' +
+                    '<div class="m-accordion__item-body collapse show" id="m_accordion_2_item_'+i+'_body" class=" " role="tabpanel" aria-labelledby="m_accordion_2_item_'+i+'_head" data-parent="#m_accordion_2">\n' +
+                    '<div class="m-accordion__item-content"> \n' +
+                    '<div class="row">\n' +
+                    '<div class="col-xl-4">'+formTemplate+'</div>\n' +
+                    '<div class="col-xl-8"> \n' +
+                    '<div class="form-group m-form__group row">\n' +
+                    '<label class="col-xl-4 col-form-label">Gambar Produk</label>\n' +
+                    '<div class="col-xl-8"> \n' +
+                    '<div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone-two">\n' +
+                    '<div class="m-dropzone__msg dz-message needsclick">\n' +
+                    '<h3 class="m-dropzone__msg-title">Drop files disini atau click untuk upload.</h3>\n' +
+                    '<span class="m-dropzone__msg-desc">Upload sampai 10 file</span>\n' +
+                    '</div>\n' +
+                    '</div>\n' +
+                    '</div> \n' +
+                    '</div>  \n' +
+                    '<div class="form-group m-form__group row">\n' +
+                    '<label class="col-xl-4 col-form-label">Harga Tambahan</label>\n' +
+                    '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="Harga"></div> \n' +
+                    '</div>  \n' +
+                    '<div class="m-form__group form-group row berat" style="display:none;">\n' +
+                    '<label class="col-xl-4 col-form-label">Berat</label>\n' +
+                    '<div class="col-xl-2"> \n' +
+                    '<input type="number" name="ProductOptionPrices['+i+'][weight]" class="form-control m-input" placeholder="Berat (gram)">\n' +
+                    '</div> \n' +
+                    '</div>\n' +
+                    '<div class="m-form__group form-group row dimensi" style="display:none;">\n' +
+                    '<label class="col-xl-4 col-form-label">Dimensi</label>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
+                    '</div>  \n' +
+                    '<div class="m-form__group form-group row">\n' +
+                    '<label class="col-xl-4 col-form-label">Stock Cabang</label>\n' +
+                    '<div class="col-xl-2">\n' +
+                    '<select name="ProductOptionValues['+i+'][0][branches]" class="form-control select2  m-input " >'+optbranchs+'</select>\n' +
+                    '</div> \n' +
+                    '<div class="col-xl-2">\n' +
+                    '<input type="number" name="ProductOptionPrices['+i+'][0][stock]"  class="form-control m-input" placeholder="Stok">\n' +
+                    '</div>\n' +
+                    '<div class="col-xl-2">\n' +
+                    '<a href="javascript:void(0);" style="width:40px; height: 40px;" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-cabang" data-item='+i+'><i class="la la-plus"></i></a>\n' +
+                    '</div> \n' +
+                    '</div>  \n' +
+                    '<div class="multi-cabang-'+i+'">\n' +
+                    '</div>  \n' +
+                    '</div> \n' +
+                    '</div> \n' +
+                    '</div> \n' +
+                    '</div>\n' +
+                    '</div> ';
+
+                if(formTemplate != ''){
+                    $('.form-dynamic').append(template);
+                    if(radioValue == 'Berat'){
+                        $('.berat').show();
+                    }else{
+                        $('.dimensi').show();
+                    }
+                    $('.remove-row').on('click',function(){
+                        var item = $(this).data('item');
+                        $('div').remove('.item-'+item);
+                        var total = $('.m-accordion__item').length;
+                        if (total == 0) {
+                            $("input[name='ShippingOption[]']").attr('disabled', false);
+                            $("input[name='options[]']").attr('disabled', false);
                         }
-                        var opt = '<option value="">-- Pilih '+text+' --</option>';
-                        $.each(response[text], function(k,v){
-                            opt += '<option value="'+v.id+'">'+v.name+'</option>';
-                        })
-                        formTemplate += '<div class="form-group m-form__group row">\n' +
-                            '<label class="col-xl-4 col-form-label">'+text+'</label>\n' +
-                            '<div class="col-xl-6">\n' +
-                            '<select name="ProductOptionValues['+i+']['+text.toLowerCase()+']" class="form-control select2 m-input select-'+text.toLowerCase()+'" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
+                    });
+                    $('.add-variant').on('click',function(){
+                        var variant = $(this).data('variant');
+                        $('.title-variant').html(variant);
+                        $('#code-attribute').val(variant);
+                    });
+                    var y = 1;
+                    $('.add-cabang').on('click',function(){
+                        var item = $(this).data('item');
+                        var rowcabang = '<div class="m-form__group form-group row cabang-'+item+'-'+y+'">\n' +
+                            '<label class="col-xl-4 col-form-label"></label>\n' +
+                            '<div class="col-xl-2">\n' +
+                            '<select name="ProductOptionValues['+item+']['+y+'][branches]" class="form-control select2  m-input " >'+optbranchs+'</select>\t\n' +
+                            '</div> \n' +
+                            '<div class="col-xl-2">\n' +
+                            '<input type="number" name="ProductOptionPrices['+item+']['+y+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
                             '</div>\n' +
                             '<div class="col-xl-2">\n' +
-                            '<a href="#" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-variant"  data-toggle="modal" data-target="#modal-attribute" data-variant="'+text.toLowerCase()+'"><i class="la la-plus"></i></a>\n' +
-                            '</div>\n' +
-                            '</div>';
+                            '<a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-cabang" data-item="'+item+'" data-row="'+y+'"><i class="la la-minus"></i></a>\n' +
+                            '</div> \n' +
+                            '<div>';
+
+                        $('.multi-cabang-'+item).append(rowcabang);
+
+                        $('.remove-cabang').on('click',function(){
+                            var items = $(this).data('item');
+                            var row = $(this).data('row');
+                            $('div').remove('.cabang-'+items+'-'+row);
+                        });
+                        $('.select2').select2();
+                        y++;
                     });
 
-
-                    var template = '<div class="m-accordion__item item-'+i+'">\n' +
-                        '<div class="m-accordion__item-head" role="tab" id="m_accordion_2_item_'+i+'_head" data-toggle="collapse" href="#m_accordion_2_item_'+i+'_body" aria-expanded="    false">\n' +
-                        '<span class="m-accordion__item-title">Varian Produk <a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item='+i+'><i class="la la-trash"></i></a></span>\n' +
-                        '<span class="m-accordion__item-mode"></span>\n' +
-                        '</div>\n' +
-                        '<div class="m-accordion__item-body collapse show" id="m_accordion_2_item_'+i+'_body" class=" " role="tabpanel" aria-labelledby="m_accordion_2_item_'+i+'_head" data-parent="#m_accordion_2">\n' +
-                        '<div class="m-accordion__item-content"> \n' +
-                        '<div class="row">\n' +
-                        '<div class="col-xl-4">'+formTemplate+'</div>\n' +
-                        '<div class="col-xl-8"> \n' +
-                        '<div class="form-group m-form__group row">\n' +
-                        '<label class="col-xl-4 col-form-label">Gambar Produk</label>\n' +
-                        '<div class="col-xl-8"> \n' +
-                        '<div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone-two">\n' +
-                        '<div class="m-dropzone__msg dz-message needsclick">\n' +
-                        '<h3 class="m-dropzone__msg-title">Drop files disini atau click untuk upload.</h3>\n' +
-                        '<span class="m-dropzone__msg-desc">Upload sampai 10 file</span>\n' +
-                        '</div>\n' +
-                        '</div>\n' +
-                        '</div> \n' +
-                        '</div>  \n' +
-                        '<div class="form-group m-form__group row">\n' +
-                        '<label class="col-xl-4 col-form-label">Harga Tambahan</label>\n' +
-                        '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="Harga"></div> \n' +
-                        '</div>  \n' +
-                        '<div class="m-form__group form-group row berat" style="display:none;">\n' +
-                        '<label class="col-xl-4 col-form-label">Berat</label>\n' +
-                        '<div class="col-xl-2"> \n' +
-                        '<input type="number" name="ProductOptionPrices['+i+'][weight]" class="form-control m-input" placeholder="Berat (gram)">\n' +
-                        '</div> \n' +
-                        '</div>\n' +
-                        '<div class="m-form__group form-group row dimensi" style="display:none;">\n' +
-                        '<label class="col-xl-4 col-form-label">Dimensi</label>\n' +
-                        '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
-                        '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
-                        '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
-                        '</div>  \n' +
-                        '<div class="m-form__group form-group row">\n' +
-                        '<label class="col-xl-4 col-form-label">Stock Cabang</label>\n' +
-                        '<div class="col-xl-2">\n' +
-                        '<select name="ProductOptionValues['+i+'][0][branches]" class="form-control select2  m-input " >'+optbranchs+'</select>\n' +
-                        '</div> \n' +
-                        '<div class="col-xl-2">\n' +
-                        '<input type="number" name="ProductOptionPrices['+i+'][0][stock]"  class="form-control m-input" placeholder="Stok">\n' +
-                        '</div>\n' +
-                        '<div class="col-xl-2">\n' +
-                        '<a href="javascript:void(0);" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-cabang" data-item='+i+'><i class="la la-plus"></i></a>\n' +
-                        '</div> \n' +
-                        '</div>  \n' +
-                        '<div class="multi-cabang-'+i+'">\n' +
-                        '</div>  \n' +
-                        '</div> \n' +
-                        '</div> \n' +
-                        '</div> \n' +
-                        '</div>\n' +
-                        '</div> ';
-
-                    if(formTemplate != ''){
-                        $('.form-dynamic').append(template);
-                        if(radioValue == 'Berat'){
-                            $('.berat').show();
-                        }else{
-                            $('.dimensi').show();
-                        }
-                        $('.remove-row').on('click',function(){
-                            var item = $(this).data('item');
-                            $('div').remove('.item-'+item);
-                        });
-                        $('.add-variant').on('click',function(){
-                            var variant = $(this).data('variant');
-                            $('.title-variant').html(variant);
-                            $('#code-attribute').val(variant);
-                        });
-                        var y = 1;
-                        $('.add-cabang').on('click',function(){
-                            var item = $(this).data('item');
-                            var rowcabang = '<div class="m-form__group form-group row cabang-'+item+'-'+y+'">\n' +
-                                '<label class="col-xl-4 col-form-label"></label>\n' +
-                                '<div class="col-xl-2">\n' +
-                                '<select name="ProductOptionValues['+item+']['+y+'][branches]" class="form-control select2  m-input " >'+optbranchs+'</select>\t\n' +
-                                '</div> \n' +
-                                '<div class="col-xl-2">\n' +
-                                '<input type="number" name="ProductOptionPrices['+item+']['+y+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
-                                '</div>\n' +
-                                '<div class="col-xl-2">\n' +
-                                '<a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-cabang" data-item="'+item+'" data-row="'+y+'"><i class="la la-minus"></i></a>\n' +
-                                '</div> \n' +
-                                '<div>';
-
-                            $('.multi-cabang-'+item).append(rowcabang);
-
-                            $('.remove-cabang').on('click',function(){
-                                var items = $(this).data('item');
-                                var row = $(this).data('row');
-                                $('div').remove('.cabang-'+items+'-'+row);
-                            });
-                            $('.select2').select2();
-                            y++;
-                        });
-
-                        $('.select2').select2();
-                    }
+                    $('.select2').select2();
+                }
 
 
 
 
-                    i++;
-                })
+                i++;
+            })
+        }
+
+        initial();
 
 
-            }
-        });
 
 
         var frm = $('#form-attribute');
@@ -233,9 +239,15 @@
                    if(data.is_error){
                        return false;
                    }
+
                    var code = $('#code-attribute').val();
                     $(".select-"+code).append('<option value="'+data.data.id+'">'+data.data.name+'</option>');
                     $('.select-'+code).trigger('change');
+                    //update data optvalues
+                    getOptionValue().then(function(data) {
+                        optvalues = data;
+                    });
+
                     $('#form-attribute').trigger('reset');
                     $('#modal-attribute').modal('toggle');
 
@@ -255,10 +267,26 @@
                             optbranch += '<option value="'+k+'">'+v+'</option>';
                         });
                         resolve(optbranch);
+                    },
+                    always: function() {
+                        resolve(optbranch);
                     }
                 })
             });
 
+        }
+
+        function getOptionValue() {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "<?= $this->Url->build(['action' => 'getoptionvalues']); ?>",
+                    cache: false,
+                    method: 'GET',
+                    success: function (response) {
+                        resolve(response);
+                    }
+                });
+            });
         }
     })
 </script>
@@ -553,7 +581,7 @@
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Status Stok'); ?></label>
                                                 <div class="col-xl-4">
-                                                    <?php echo $this->Form->control('product_stock_status_id', ['options' => $productStockStatuses,'label' => false, 'class' => $default_class . ' .select-picker']);?>
+                                                    <?php echo $this->Form->control('product_stock_status_id', ['options' => $productStockStatuses,'label' => false, 'class' => $default_class . ' select-picker']);?>
                                                 </div>
                                             </div>
                                         </div>
@@ -563,7 +591,7 @@
                                         <div class="col-xl-6">
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Harga Reguler'); ?></label>
-                                                <div class="col-xl-4">
+                                                <div class="col-xl-5">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
                                                         <?php echo $this->Form->control('price',['div' => false, 'label' => false,'class' => $default_class]);?>
@@ -573,7 +601,7 @@
 
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Harga Jual'); ?></label>
-                                                <div class="col-xl-4">
+                                                <div class="col-xl-5">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
                                                         <?php echo $this->Form->control('price_sale', ['div' => false, 'label' => false,'class' => $default_class, 'type' => 'number']);?>
@@ -585,7 +613,7 @@
                                         <div class="col-xl-6">
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Diskon'); ?></label>
-                                                <div class="col-xl-4">
+                                                <div class="col-xl-5">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend"><span class="input-group-text">%</span></div>
                                                         <?php echo $this->Form->control('price_discount', ['div' => false, 'label' => false, 'class' => $default_class, 'readonly' => true]);?>
@@ -595,7 +623,7 @@
 
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?></label>
-                                                <div class="col-xl-4">
+                                                <div class="col-xl-5">
                                                     <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class]);?>
                                                 </div>
                                             </div>
@@ -681,7 +709,7 @@
                                     <div class="row">
                                         <div class="col-lg-1"></div>
                                         <div class="col-lg-5 m--align-left">
-                                            <a href="#" class="btn btn-secondary m-btn m-btn--custom m-btn--icon" data-wizard-action="prev">
+                                            <a href="javascript:void(0)" class="btn btn-secondary m-btn m-btn--custom m-btn--icon" data-wizard-action="prev">
                                 <span>
                                 <i class="la la-arrow-left"></i>&nbsp;&nbsp;
                                 <span><?= __d('AdminPanel',  'Back'); ?></span>
@@ -689,13 +717,13 @@
                                             </a>
                                         </div>
                                         <div class="col-lg-5 m--align-right">
-                                            <a href="#" class="btn btn-primary m-btn m-btn--custom m-btn--icon" data-wizard-action="submit">
+                                            <a href="javascript:void(0)" class="btn btn-primary m-btn m-btn--custom m-btn--icon" data-wizard-action="submit">
                                 <span>
                                 <i class="la la-check"></i>&nbsp;&nbsp;
                                 <span><?= __d('AdminPanel',  'Submit'); ?></span>
                                 </span>
                                             </a>
-                                            <a href="#" class="btn btn-warning m-btn m-btn--custom m-btn--icon" data-wizard-action="next2">
+                                            <a href="javascript:void(0)" class="btn btn-warning m-btn m-btn--custom m-btn--icon" data-wizard-action="next2">
                                 <span>
                                 <span><?= __d('AdminPanel',  'Continue'); ?></span>&nbsp;&nbsp;
                                 <i class="la la-arrow-right"></i>

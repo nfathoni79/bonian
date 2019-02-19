@@ -153,6 +153,12 @@ ajaxValidation.prototype.appendTextInput = function (el, message) {
     } else if (el.attr('type') === 'checkbox') {
         el.parents('.m-checkbox-inline').after(out);
     } else {
-        el.after(out);
+
+        if (el.hasClass('select2-hidden-accessible')) {
+            el.next().after(out);
+        } else {
+            el.after(out);
+        }
+
     }
 }
