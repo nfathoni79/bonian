@@ -803,8 +803,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <?= $this->Form->create(null,['action' => 'addOptions','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form', 'id' => 'form-attribute']); ?>
             <div class="modal-body">
-                <?= $this->Form->create(null,['action' => 'addOptions','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form', 'id' => 'form-attribute']); ?>
                 <?php echo $this->Form->hidden('code_attribute', ['div' => false, 'label' => false, 'id' => 'code-attribute']);?>
                 <div class="form-group m-form__group row">
                     <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Nama Atribut'); ?></label>
