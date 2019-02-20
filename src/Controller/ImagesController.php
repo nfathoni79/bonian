@@ -19,9 +19,10 @@ class ImagesController extends AppController
     }
 
     /**
-     * Index method
-     *
-     * @return \Cake\Http\Response
+     * @param $dimension
+     * @param $name
+     * @param $ext
+     * @return \Cake\Http\Response|null
      */
     public function index($dimension, $name, $ext)
     {
