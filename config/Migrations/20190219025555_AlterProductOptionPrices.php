@@ -14,10 +14,6 @@ class AlterProductOptionPrices extends AbstractMigration
     {
         $table = $this->table('product_option_prices');
 
-        if ($table->hasColumn('key_form')) {
-            $table->removeColumn('key_form');
-        }
-
         if ($table->hasColumn('weight')) {
             $table->removeColumn('weight');
         }
@@ -42,7 +38,11 @@ class AlterProductOptionPrices extends AbstractMigration
             $table->removeIndex(['key_form']);
         }
 
+        if ($table->hasColumn('key_form')) {
+            $table->removeColumn('key_form');
+        }
 
-        $table->save();
+
+        $table->update();
     }
 }

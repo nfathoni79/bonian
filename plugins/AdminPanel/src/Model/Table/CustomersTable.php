@@ -258,8 +258,8 @@ class CustomersTable extends Table
     public function findAuth(\Cake\ORM\Query $query, array $options)
     {
         $query
-            ->select(['id', 'email', 'password'])
-            ->where(['Customers.status' => 1]);
+            ->select(['id', 'username', 'password'])
+            ->where(['Customers.is_verified' => 1]);
 
         return $query;
     }

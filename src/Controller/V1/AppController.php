@@ -34,6 +34,8 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
+        $this->loadComponent('SendAuth');
+        $this->loadComponent('Mailer', ['transport' => 'default']);
     }
 
     /**

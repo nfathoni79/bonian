@@ -39,8 +39,10 @@ class AjaxAuthenticate extends BaseAuthenticate
      */
     protected function _checkFields(ServerRequest $request, array $fields)
     {
+
         foreach ([$fields['username'], $fields['password']] as $field) {
             $value = $request->getData($field);
+
             if (empty($value) || !is_string($value)) {
                 return false;
             }

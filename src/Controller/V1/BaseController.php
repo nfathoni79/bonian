@@ -42,7 +42,7 @@ class BaseController extends AppController
                 'Ajax' => [
                     //'finder' => 'auth',
                     'userModel' => 'AdminPanel.Customers',
-                    'fields' => ['username' => 'email', 'password' => 'password']
+                    'fields' => ['username' => 'username', 'password' => 'password']
                 ]
             ],
             'unauthorizedRedirect' => false,

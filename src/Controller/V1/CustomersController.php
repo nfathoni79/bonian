@@ -27,8 +27,6 @@ class CustomersController  extends AppController
         $this->loadModel('AdminPanel.CustomerMutationPoints');
         $this->loadModel('AdminPanel.CustomerAddreses');
 
-        $this->loadComponent('SendAuth');
-        $this->loadComponent('Mailer', ['transport' => 'default']);
     }
 
     private function reffcode($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'){
