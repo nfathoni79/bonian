@@ -229,7 +229,7 @@
                     //process dropzone m-dropzone dropzone
                     let dropzone = new Dropzone("#m-dropzone" + i, {
                         url: "<?= $this->Url->build(['action' => 'upload']); ?>",
-                        maxFiles: 2,
+                        maxFiles: 10,
                         maxFilesize: 10, // MB
                         addRemoveLinks: true,
                         acceptedFiles: "image/*",
@@ -579,7 +579,7 @@
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Slug URL'); ?></label>
                                                 <div class="col-xl-9">
-                                                    <?php echo $this->Form->control('slug',['label' => false,'class' => $default_class,'disabled' => 'disabled']);?>
+                                                    <?php echo $this->Form->control('slug',['label' => false,'class' => $default_class,'readonly' => 'readonly']);?>
                                                 </div>
                                             </div>
                                         </div>

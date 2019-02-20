@@ -120,9 +120,9 @@ class ProductsController extends AppController
                     ->requirePresence('name')
                     ->notBlank('name', 'tidak boleh kosong');
 
-                $validator
-                    ->requirePresence('title')
-                    ->notBlank('title', 'tidak boleh kosong');
+                //$validator
+                //    ->requirePresence('title')
+                //    ->notBlank('title', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('slug')
@@ -147,9 +147,9 @@ class ProductsController extends AppController
                     ->requirePresence('sku')
                     ->notBlank('sku', 'tidak boleh kosong');
 
-                $validator
-                    ->requirePresence('code')
-                    ->notBlank('code', 'tidak boleh kosong');
+                //$validator
+                //    ->requirePresence('code')
+                //    ->notBlank('code', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('price')
