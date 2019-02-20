@@ -22,11 +22,12 @@ class ImagesController extends AppController
      * @param $dimension
      * @param $name
      * @param $ext
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response
      */
     public function index($dimension, $name, $ext)
     {
         $this->disableAutoRender();
+
         $find = $this->ProductImageSizes->ProductImages->find('all')
             ->select()
             ->where([
@@ -42,11 +43,16 @@ class ImagesController extends AppController
              * @var \AdminPanel\Model\Entity\ProductImage $data
              */
             $data = $find->first();
+            
             if (count($data->get('product_image_sizes')) == 0) {
                 //processing and resize on the fly
                 list($width, $height) = explode('x', $dimension);
-                $this->ProductImageSizes->resize($data, $width, $height);
-                return $this->redirect($this->request->here());
+                if ($entity = $this->ProductImageSizes->resize($data, $width, $height)) {
+                    return $this->response->withAddedHeader('content-type', $data->get('type'))
+                        ->withStringBody(file_get_contents(ROOT . DS . $entity->get('path')));
+                }
+
+
             }
         }
     }
