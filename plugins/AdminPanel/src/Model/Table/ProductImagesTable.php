@@ -1,0 +1,150 @@
+<?php
+namespace AdminPanel\Model\Table;
+
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+use Cake\Utility\Text;
+
+/**
+ * ProductImages Model
+ *
+ * @property \AdminPanel\Model\Table\ProductsTable|\Cake\ORM\Association\BelongsTo $Products
+ * @property \AdminPanel\Model\Table\ProductImageSizesTable|\Cake\ORM\Association\HasMany $ProductImageSizes
+ *
+ * @method \AdminPanel\Model\Entity\ProductImage get($primaryKey, $options = [])
+ * @method \AdminPanel\Model\Entity\ProductImage newEntity($data = null, array $options = [])
+ * @method \AdminPanel\Model\Entity\ProductImage[] newEntities(array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\ProductImage|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \AdminPanel\Model\Entity\ProductImage|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \AdminPanel\Model\Entity\ProductImage patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\ProductImage[] patchEntities($entities, array $data, array $options = [])
+ * @method \AdminPanel\Model\Entity\ProductImage findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ */
+class ProductImagesTable extends Table
+{
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this->setTable('product_images');
+        $this->setDisplayField('name');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'name' => [
+                'fields' => [
+                    // if these fields or their defaults exist
+                    // the values will be set.
+                    'dir' => 'dir', // defaults to `dir`
+                    'size' => 'size', // defaults to `size`
+                    'type' => 'type', // defaults to `type`
+                ],
+                'path' => 'webroot{DS}files{DS}{model}{DS}{field}{DS}{year}{DS}{month}{DS}',
+                'nameCallback' => function ($tableObj, $entity, $data, $field, $settings) {
+                    $ext = substr(strrchr($data['name'], '.'), 1);
+                    return str_replace('-', '', Text::uuid()) . '.' . 'jpg'; //strtolower($ext);
+                },
+                'transformer' =>  function ($table, \AdminPanel\Model\Entity\ProductImage $entity, $data, $field, $settings) {
+
+                    //$extension = pathinfo($data['name'], PATHINFO_EXTENSION);
+
+
+                    $tmp_name = tempnam(sys_get_temp_dir(), 'upload') . '.' . 'jpg'; //force convert to jpg
+
+
+                    $imagine = new \Imagine\Gd\Imagine();
+
+                    // Save that modified file to our temp file
+                    $imagine->open($data['tmp_name'])
+                        ->save($tmp_name);
+
+                    //after
+                    $data['tmp_name'] = $tmp_name;
+
+
+                    // Now return the original *and* the thumbnail
+                    return [
+                        $data['tmp_name'] => $data['name'],
+                    ];
+                }
+            ],
+        ]);
+
+        $this->belongsTo('Products', [
+            'foreignKey' => 'product_id',
+            'joinType' => 'INNER',
+            'className' => 'AdminPanel.Products'
+        ]);
+        $this->hasMany('ProductImageSizes', [
+            'foreignKey' => 'product_image_id',
+            'className' => 'AdminPanel.ProductImageSizes'
+        ]);
+
+
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', 'create');
+
+        /*$validator
+            ->scalar('name')
+            ->maxLength('name', 100)
+            ->allowEmptyString('name');*/
+
+        /*$validator
+            ->integer('primary')
+            ->requirePresence('primary', 'create')
+            ->allowEmptyString('primary', false);*/
+
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        //$rules->add($rules->existsIn(['product_id'], 'Products'));
+
+        return $rules;
+    }
+
+    /**
+     * @param \Cake\Event\Event $event
+     * @param \AdminPanel\Model\Entity\ProductImage $entity
+     * @param \ArrayObject $options
+     */
+    public function afterSave(\Cake\Event\Event $event,  \AdminPanel\Model\Entity\ProductImage $entity, \ArrayObject $options)
+    {
+        if ($entity->isNew()) {
+            $this->ProductImageSizes->resize($entity, 300, 300);
+            $this->ProductImageSizes->resize($entity, 450, 450);
+        }
+    }
+}

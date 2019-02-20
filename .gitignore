@@ -5,6 +5,8 @@
 /logs/*
 /tmp/*
 /vendor/*
+/webroot/files/ProductImages/name/*
+/webroot/images/*
 
 # OS generated files #
 ######################

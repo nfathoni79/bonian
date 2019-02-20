@@ -233,11 +233,12 @@
                         maxFilesize: 10, // MB
                         addRemoveLinks: true,
                         acceptedFiles: "image/*",
-                        autoProcessQueue: false,
-                        autoQueue: false,
+                        paramName: "name",
+                        //autoProcessQueue: false,
+                        //autoQueue: false,
                         thumbnail: function(file, dataUrl) {
                             if (file.previewElement) {
-                                $(file.previewElement.querySelectorAll('div.dz-progress')).hide()
+                                //$(file.previewElement.querySelectorAll('div.dz-progress')).hide()
                                 file.previewElement.classList.remove("dz-file-preview");
                                 for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
                                     thumbnailElement.alt = file.name;
@@ -247,6 +248,9 @@
                                 return setTimeout((() => file.previewElement.classList.add("dz-image-preview")), 1);
                             }
 
+                        },
+                        success: function(file, response) {
+                            console.log(file, response)
                         },
                         maxfilesexceeded: function(file) {
                             this.removeFile(file);

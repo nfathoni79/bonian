@@ -11,11 +11,14 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\OptionsTable $Options
  * @property \AdminPanel\Model\Table\OptionValuesTable $OptionValues
  * @property \AdminPanel\Model\Table\BranchesTable $Branches
+ * @property \AdminPanel\Model\Table\ProductImageSizesTable $ProductImageSizes
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class ProductsController extends AppController
 {
+
+    protected $allowedFileType = [];
 
     public function initialize()
     {
@@ -24,6 +27,13 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.Options');
         $this->loadModel('AdminPanel.OptionValues');
         $this->loadModel('AdminPanel.Branches');
+        $this->loadModel('AdminPanel.ProductImageSizes');
+
+        $this->allowedFileType = [
+            'image/jpg',
+            'image/png',
+            'image/jpeg'
+        ];
     }
     /**
      * Index method
@@ -191,10 +201,42 @@ class ProductsController extends AppController
 
     public function upload()
     {
+        $this->request->allowMethod('post');
         $this->disableAutoRender();
-        $error = [];
-        return $this->response->withType('application/json')
-            ->withStringBody(json_encode($error));
+
+        $file = $this->request->getData('name');
+
+        $Response = $this->response->withType('application/json');
+
+        $out = [];
+        $out['error'] = '';
+        $out['data'] = $file;
+
+        $mime = mime_content_type($file['tmp_name']);
+
+        if (in_array($mime, $this->allowedFileType)) {
+            $entity = $this->ProductImageSizes->ProductImages->newEntity();
+
+            $this->ProductImageSizes->ProductImages->patchEntity($entity, $this->request->getData());
+
+
+            if ($this->ProductImageSizes->ProductImages->save($entity)) {
+
+                $Response = $Response->withStatus('200');
+            } else {
+                $out['error'] = __d('AdminPanel', 'Gagal upload');
+                $out['message'] = $entity->getErrors();
+
+                $Response = $Response->withStatus('401');
+            }
+        } else {
+            $out['error'] = __d('AdminPanel', 'file harus jpg, png');
+            $Response = $Response->withStatus('401');
+        }
+
+
+        return $Response
+            ->withStringBody(json_encode($out));
     }
 
 
