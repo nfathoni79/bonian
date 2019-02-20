@@ -69,6 +69,11 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
+    $routes->connect('/images/:dimension/:filename',
+        ['controller' => 'Images', 'action' => 'index'],
+        ['dimension' => '\d+x\d+', 'pass' => ['dimension', 'filename', '_ext']]
+    )->setExtensions(['jpg', 'png']);
+
     /**
      * Connect catchall routes for all controllers.
      *
@@ -90,6 +95,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->fallbacks(DashedRoute::class);
 });
+
 
 /**
  * If you need a different set of middleware or none at all,
