@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $cities
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $productDeals
  * nevix
  */
 ?>
@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Data Master') ?>
+                    <?= __('Promosi Penjualan') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,17 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Data Master') ?>
-                            </span>
-                        </a>
-                    </li>
-                    <li class="m-nav__separator">
-                        -
-                    </li>
-                    <li class="m-nav__item">
-                        <a href="#" class="m-nav__link">
-                            <span class="m-nav__link-text">
-                                <?= __('Kota') ?>
+                                <?= __('Promosi Penjualan') ?>
                             </span>
                         </a>
                     </li>
@@ -44,7 +34,17 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Kota') ?>
+                                <?= __('Flash Sale') ?>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">
+                        -
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
+                            <span class="m-nav__link-text">
+                                <?= __('Daftar Flash Sale') ?>
                             </span>
                         </a>
                     </li>
@@ -59,7 +59,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Daftar Kota') ?>
+                            <?= __('Daftar Flash Sale') ?>
                         </h3>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('Tambah Kota') ?></span>
+                                    <span><?= __('Tambah Flash Sale') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -98,7 +98,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-cities"></div>
+                <div class="m_datatable" id="table-productDeals"></div>
 
             </div>
         </div>
@@ -142,7 +142,7 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-cities').mDatatable({
+            var datatable = $('#table-productDeals').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -198,34 +198,35 @@
                         }
                     },
                     {
-                        field: 'Provinces.name',
-                        title: 'Nama Propinsi',
-                        template: function(row) {
-                            return row.province.name;
-                        }
-                    },
-
-                    {
-                        field: 'Cities.name',
-                        title: 'Nama Kota',
+                        field: 'ProductDeals.name',
+                        title: 'Judul Promosi',
                         template: function(row) {
                             return row.name;
                         }
                     },
 
                     {
-                        field: 'Cities.type',
-                        title: 'Tipe',
+                        field: 'ProductDeals.date_start',
+                        title: 'Mulai Promosi',
                         template: function(row) {
-                            return row.type;
+                            return row.date_start;
                         }
                     },
 
                     {
-                        field: 'Cities.postal_code',
-                        title: 'Kode POS',
+                        field: 'ProductDeals.date_end',
+                        title: 'Selesai Promosi',
                         template: function(row) {
-                            return row.postal_code;
+                            return row.date_end;
+                        }
+                    },
+
+                    {
+                        field: 'ProductDeals.status',
+                        title: 'Status',
+                        template: function(row) {
+                            var stts = {'0' : 'Pending','1' : 'Berjalan','2' : 'Berakhir'};
+                            return stts[row.status];
                         }
                     },
 

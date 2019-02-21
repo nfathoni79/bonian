@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface $option
+ * @var \Cake\Datasource\EntityInterface $productDeal
  */
 ?>
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
@@ -9,7 +9,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Option') ?>
+                    <?= __('Promosi Penjualan') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -23,7 +23,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Produk') ?>
+                                <?= __('Promosi Penjualan') ?>
                             </span>
                         </a>
                     </li>
@@ -33,7 +33,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Manajemen Varian') ?>
+                                <?= __('Flash Sale') ?>
                             </span>
                         </a>
                     </li>
@@ -43,7 +43,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Pilihan') ?>
+                                <?= __('Daftar Flash Sale') ?>
                             </span>
                         </a>
                     </li>
@@ -53,7 +53,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Edit Pilihan') ?>
+                                <?= __('Tambah Flash Sale') ?>
                             </span>
                         </a>
                     </li>
@@ -68,7 +68,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Edit Pilihan') ?>
+                            <?= __('Tambah Flash Sale') ?>
                         </h3>
                     </div>
                 </div>
@@ -78,13 +78,18 @@
             </div>
 
 
-            <?= $this->Form->create($option,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form']); ?>
+            <?= $this->Form->create($productDeal,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.form_mini']); ?>
             <div class="m-portlet__body">
 
             <?php
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
-                echo $this->Form->control('name',['class' => $default_class,'label' => 'Nama Pilihan']);
+                echo $this->Form->control('name',['class' => $default_class,'label' => 'Judul Promosi']);
+            ?>
+            <?php
+                echo $this->Form->control('date_start',['type' => 'text','class' => $default_class, 'id' => 'm_datetimepicker_start', 'label' => 'Mulai Promosi']);
+                echo $this->Form->control('date_end',['type' => 'text','class' => $default_class, 'id' => 'm_datetimepicker_end','label' => 'Selesai Promosi']);
+                echo $this->Form->control('status',['options' => ['0' => 'Pending', '1' => 'Berjalan', '2' => 'Berakhir'],'class' => $default_class, 'id' => 'm_datetimepicker_end','label' => 'Status']);
             ?>
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">
@@ -103,5 +108,20 @@
 </div>
 <script>
     $('select').selectpicker();
+
+    $('#m_datetimepicker_start').datetimepicker({
+        startDate: '-0d',
+        todayHighlight: true,
+        autoclose: true,
+        pickerPosition: 'bottom-left',
+        format: 'yyyy-mm-dd hh:ii',
+    });
+    $('#m_datetimepicker_end').datetimepicker({
+        startDate: '-0d',
+        todayHighlight: true,
+        autoclose: true,
+        pickerPosition: 'bottom-left',
+        format: 'yyyy-mm-dd hh:ii',
+    });
 </script>
 

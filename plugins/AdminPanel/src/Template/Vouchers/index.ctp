@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $cities
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $vouchers
  * nevix
  */
 ?>
@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Data Master') ?>
+                    <?= __('Promosi Penjualan') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Data Master') ?>
+                                <?= __('Promosi Penjualan') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Kota') ?>
+                                <?= __('Voucher') ?>
                             </span>
                         </a>
                     </li>
@@ -44,7 +44,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Kota') ?>
+                                <?= __('Daftar Voucher') ?>
                             </span>
                         </a>
                     </li>
@@ -59,7 +59,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Daftar Kota') ?>
+                            <?= __('Daftar Voucher') ?>
                         </h3>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('Tambah Kota') ?></span>
+                                    <span><?= __('Tambah Voucher') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -98,7 +98,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-cities"></div>
+                <div class="m_datatable" id="table-vouchers"></div>
 
             </div>
         </div>
@@ -142,7 +142,7 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-cities').mDatatable({
+            var datatable = $('#table-vouchers').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -198,34 +198,61 @@
                         }
                     },
                     {
-                        field: 'Provinces.name',
-                        title: 'Nama Propinsi',
+                        field: 'Vouchers.code_voucher',
+                        title: 'Kode Voucher',
                         template: function(row) {
-                            return row.province.name;
+                            return row.code_voucher;
                         }
                     },
 
                     {
-                        field: 'Cities.name',
-                        title: 'Nama Kota',
+                        field: 'Vouchers.date_start',
+                        title: 'Tanggal Mulai',
                         template: function(row) {
-                            return row.name;
+                            return row.date_start;
                         }
                     },
 
                     {
-                        field: 'Cities.type',
+                        field: 'Vouchers.date_end',
+                        title: 'Tanggal Berakhir',
+                        template: function(row) {
+                            return row.date_end;
+                        }
+                    },
+
+                    {
+                        field: 'Vouchers.qty',
+                        title: 'Quantity',
+                        template: function(row) {
+                            return row.qty;
+                        }
+                    },
+
+                    {
+                        field: 'Vouchers.type',
                         title: 'Tipe',
                         template: function(row) {
+                            var stts = {'0' : 'Diskon','1' : 'Potongan Harga'};
+                            return stts[row.status];
                             return row.type;
                         }
                     },
 
                     {
-                        field: 'Cities.postal_code',
-                        title: 'Kode POS',
+                        field: 'Vouchers.value',
+                        title: 'Value',
                         template: function(row) {
-                            return row.postal_code;
+                            return row.value;
+                        }
+                    },
+
+                    {
+                        field: 'Vouchers.status',
+                        title: 'Status',
+                        template: function(row) {
+                            var stts = {'0' : 'Aktif','1' : 'Tidak Aktif'};
+                            return stts[row.status];
                         }
                     },
 
@@ -233,7 +260,7 @@
                     {
                         field: "Actions",
                         width: 110,
-                        title: "Aksi",
+                        title: "Actions",
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {

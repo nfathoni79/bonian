@@ -4,6 +4,7 @@ namespace AdminPanel\Controller;
 
 use App\Controller\AppController as BaseController;
 use Cake\Event\Event;
+use Cake\I18n\FrozenTime;
 
 class AppController extends BaseController
 {
@@ -39,6 +40,9 @@ class AppController extends BaseController
             ],
         ]);
 
+        $timeJsonFormat = 'yyyy-MM-dd HH:mm';
+
+        FrozenTime::setJsonEncodeFormat($timeJsonFormat);
 	}
 
 

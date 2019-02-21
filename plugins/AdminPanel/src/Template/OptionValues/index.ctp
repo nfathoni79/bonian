@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Option Values') ?>
+                    <?= __('Produk') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Option Values') ?>
+                                <?= __('Produk') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,17 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Option Values') ?>
+                                <?= __('Manajemen Varian') ?>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">
+                        -
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
+                            <span class="m-nav__link-text">
+                                <?= __('Daftar Varian') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +59,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List Option Values') ?>
+                            <?= __('Daftar Varian') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +69,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New Option Value') ?></span>
+                                    <span><?= __('Tambah Varian') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -75,7 +85,7 @@
                             <div class="form-group m-form__group row align-items-center">
                                 <div class="col-md-8">
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                                        <input type="text" class="form-control m-input" placeholder="Pencarian..." id="generalSearch">
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="la la-search"></i>
@@ -189,7 +199,7 @@
                     },
                     {
                         field: 'Options.name',
-                        title: 'Option Name',
+                        title: 'Nama Pilihan',
                         template: function(row) {
                             return row.option.name;
                         }
@@ -197,7 +207,7 @@
 
                     {
                         field: 'OptionValues.name',
-                        title: 'Name',
+                        title: 'Nama Varian',
                         template: function(row) {
                             return row.name;
                         }
@@ -207,7 +217,7 @@
                     {
                         field: "Actions",
                         width: 110,
-                        title: "Actions",
+                        title: "Aksi",
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {

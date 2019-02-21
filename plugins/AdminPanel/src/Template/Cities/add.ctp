@@ -9,7 +9,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('City') ?>
+                    <?= __('Data Master') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -23,7 +23,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('City') ?>
+                                <?= __('Data Master') ?>
                             </span>
                         </a>
                     </li>
@@ -31,9 +31,9 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                        <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
+                        <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List City') ?>
+                                <?= __('Kota') ?>
                             </span>
                         </a>
                     </li>
@@ -43,11 +43,10 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Add City') ?>
+                                <?= __('Tambah Kota') ?>
                             </span>
                         </a>
                     </li>
-
                 </ul>
             </div>
         </div>
@@ -58,7 +57,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Add City') ?>
+                            <?= __('Tambah Kota') ?>
                         </h3>
                     </div>
                 </div>
@@ -74,17 +73,17 @@
             <?php
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
-                echo $this->Form->control('province_id', ['options' => $provinces, 'class' => $default_class]);
-                echo $this->Form->control('name',['class' => $default_class]);
-                echo $this->Form->control('type',['class' => $default_class]);
-                echo $this->Form->control('postal_code',['class' => $default_class]);
+                echo $this->Form->control('province_id', ['options' => $provinces, 'class' => $default_class.' select2', 'label' => 'Propinsi']);
+                echo $this->Form->control('name',['class' => $default_class, 'label' => 'Nama Kota']);
+                echo $this->Form->control('type',['class' => $default_class, 'label' => 'Tipe', 'placeholder' => 'Kota / Kabupaten']);
+                echo $this->Form->control('postal_code',['class' => $default_class, 'label' => 'Kode POS']);
             ?>
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">
                 <div class="m-form__actions m-form__actions">
                     <div class="row">
                         <div class="col-lg-9 ml-lg-auto">
-                            <?= $this->Form->submit(__('Submit'),['class' => 'btn btn-brand']) ?>
+                            <?= $this->Form->submit(__('Simpan'),['class' => 'btn btn-brand']) ?>
                         </div>
                     </div>
                 </div>
@@ -95,6 +94,6 @@
     </div>
 </div>
 <script>
-    $('select').selectpicker();
+    $('.select2').select2();
 </script>
 

@@ -76,6 +76,18 @@
                         'children' => []
                     ],
                     [
+                        'name' => 'Manajemen Stok',
+                        'url' => ['controller' => 'Products', 'action' => 'stock'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Manajemen Kategori',
+                        'url' => ['controller' => 'ProductCategories', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
                         'name' => 'Manajemen Atribut',
                         'url' => ['controller' => 'Attributes', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
@@ -84,12 +96,6 @@
                     [
                         'name' => 'Manajemen Penandaan',
                         'url' => ['controller' => 'Tags', 'action' => 'index'],
-                        'icon' => 'm-menu__link-bullet',
-                        'children' => []
-                    ],
-                    [
-                        'name' => 'Manajemen Kategori',
-                        'url' => ['controller' => 'ProductCategories', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
@@ -107,13 +113,13 @@
                             [
                                 'name' => 'Daftar Pilihan',
                                 'url' => ['controller' => 'Options', 'action' => 'index'],
-                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                                'icon' => 'm-menu__link-bullet',
                                 'children' => []
                             ],
                             [
                                 'name' => 'Daftar Varian',
                                 'url' => ['controller' => 'OptionValues', 'action' => 'index'],
-                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
+                                'icon' => 'm-menu__link-bullet',
                                 'children' => []
                             ],
                         ]
@@ -146,7 +152,7 @@
                 'children' => [
                     [
                         'name' => 'Flash Sales',
-                        'url' => '#',
+                        'url' => ['controller' => 'ProductDeals', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
@@ -177,7 +183,7 @@
                 'children' => []
             ],
             [
-                'name' => 'Master Data Kota Pengiriman',
+                'name' => 'Data Master',
                 'url' => '#',
                 'icon' => 'm-menu__link-icon flaticon-settings',
                 'children' => [
