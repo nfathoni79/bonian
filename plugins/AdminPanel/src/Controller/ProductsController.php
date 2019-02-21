@@ -186,7 +186,7 @@ class ProductsController extends AppController
                                 ->first();
                         }
 
-                        $productToCategoryEntity = !empty($getProductToCategory) ? $getProductToCategory :  $getProductToCategory;
+                        $productToCategoryEntity = !empty($getProductToCategory) ? $getProductToCategory :  $productToCategoryEntity;
 
                         $this->ProductToCategories->patchEntity($productToCategoryEntity, [
                             'product_id' => $productEntity->get('id'),
