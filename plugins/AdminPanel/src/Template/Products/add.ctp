@@ -23,6 +23,8 @@
         var formEl = $("#m_form");
 
         var url = '<?= $this->Url->build(['action' => 'validationWizard']); ?>';
+        var url_category = '<?= $this->Url->build(['action' => 'getCategory']); ?>';
+        var product;
 
 
         var ajaxRequest = new ajaxValidation(formEl);
@@ -43,8 +45,27 @@
         //override next2 with validation ajax
         $("[data-wizard-action=next2]").click(function() {
             var current = formEl.find('.m-wizard__form-step--current :input');
-            ajaxRequest.post(url + '/' + wizard.getStep(), current, function(data) {
+
+            //additional input hidden
+            var elem_id = formEl.find('input[name=id]');
+            if (elem_id.length > 0) {
+                var len = Object(current).length++;
+                current[len] = elem_id[0];
+            }
+
+            ajaxRequest.post(url + '/' + wizard.getStep(), current, function(data, saved) {
                 if (data.success) {
+                    if (typeof saved.data != 'undefined') {
+                        product = saved.data; //to get product id use: product.id
+                        if (formEl.find('input[name=id]').length == 0) {
+                            var addInput = $('<input/>')
+                                .attr('name', 'id')
+                                .attr('value', product.id)
+                                .attr('type', 'hidden');
+                            formEl.append(addInput);
+                        }
+                    }
+
                     wizard.goNext();
                 }
             });
@@ -59,6 +80,39 @@
         wizard.on('change', function(wizard) {
             if (wizard.getStep() === 1) {
                 //alert(1);
+            }
+        });
+
+        function setChainCategory(target, parent_id) {
+            $.ajax({
+                type: 'POST',
+                url: url_category,
+                data: {parent_id: parent_id, _csrfToken : $('input[name=_csrfToken]').val()},
+                success: function (data) {
+                    $(target + ' option').remove();
+                    var o = [];
+                    for(var i in data) {
+                        $(target).append($('<option/>').attr('value', i).text(data[i]));
+                    }
+                }
+            });
+        }
+
+        $("#level1").change(function(e) {
+           var val = $(this).val();
+           if (val.length == 1) {
+               setChainCategory('#level2', val[0]);
+           } else {
+               e.preventDefault();
+           }
+        });
+
+        $("#level2").change(function(e) {
+            var val = $(this).val();
+            if (val.length == 1) {
+                setChainCategory('#level3', val[0]);
+            } else {
+                e.preventDefault();
             }
         });
 
@@ -257,6 +311,7 @@
                         },
                         sending: function(file, xhr, formData) {
                             formData.append('_csrfToken', $('input[name=_csrfToken]').val());
+                            formData.append('product_id', $('input[name=id]').val());
                         }
                     });
 
@@ -497,30 +552,15 @@
                                         <div class="col-md-12">
                                             <div class="form-group m-form__group row">
                                                 <div class="col-lg-4 col-md-9 col-sm-12">
-                                                    <select class="form-control" id="m_multipleselectsplitter_1" size="7" multiple="false">
-                                                        <option value="1" >Choice 1</option>
-                                                        <option value="2">Choice 2</option>
-                                                        <option value="3">Choice 3</option>
-                                                        <option value="4">Choice 4</option>
-                                                    </select>
+                                                    <?= $this->Form->select('parent', $parent_categories, ['id' => 'level1', 'class' => 'form-control product-category', 'size' => 7, 'multiple' => 1]); ?>
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-9 col-sm-12">
-                                                    <select class="form-control" id="m_multipleselectsplitter_2" size="7" multiple="false">
-                                                        <option value="1" >Choice 1</option>
-                                                        <option value="2">Choice 2</option>
-                                                        <option value="3">Choice 3</option>
-                                                        <option value="4">Choice 4</option>
-                                                    </select>
+                                                    <?= $this->Form->select('level2', [], ['id' => 'level2', 'class' => 'form-control product-category', 'size' => 7, 'multiple' => 1]); ?>
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-9 col-sm-12">
-                                                    <select class="form-control" id="m_multipleselectsplitter_2" size="7" multiple="false">
-                                                        <option value="1" >Choice 1</option>
-                                                        <option value="2">Choice 2</option>
-                                                        <option value="3">Choice 3</option>
-                                                        <option value="4">Choice 4</option>
-                                                    </select>
+                                                    <?= $this->Form->select('product_category_id', [], ['id' => 'level3', 'class' => 'form-control product-category', 'size' => 7, 'multiple' => 1]); ?>
                                                 </div>
                                             </div>
                                         </div>

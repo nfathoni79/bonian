@@ -84,12 +84,12 @@ ajaxValidation.prototype.post = function(url, input, callback) {
                 //var obj = jQuery.parseJSON(data); if the dataType is not specified as json uncomment this
                 // do what ever you want with the server response
                 mApp.unblock(that.blockUIelement);
-                if (data instanceof Array) {
-                    callback({success: true});
+                if (data.error instanceof Array) {
+                    callback({success: true}, data);
 
-                } else if (typeof data === 'object') {
+                } else if (typeof data.error === 'object') {
                     if (typeof callback === 'function') {
-                        callback({success: false});
+                        callback({success: false}, data);
                     }
 
                     /*for (let [key, value] of Object.entries(data)) {
@@ -102,7 +102,7 @@ ajaxValidation.prototype.post = function(url, input, callback) {
                         //that.appendTextInput(input, value);
                     }*/
 
-                    let fields = that.extractFields(data);
+                    let fields = that.extractFields(data.error);
                     for(var field in fields) {
                         //console.log(fields[field].field)
                         that.checkFieldName(that.form, fields[field].field, function(m) {

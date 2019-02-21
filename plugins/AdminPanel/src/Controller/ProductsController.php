@@ -2,6 +2,7 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use AdminPanel\Model\Entity\Product;
 use Cake\Validation\Validator;
 
 /**
@@ -12,6 +13,8 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\OptionValuesTable $OptionValues
  * @property \AdminPanel\Model\Table\BranchesTable $Branches
  * @property \AdminPanel\Model\Table\ProductImageSizesTable $ProductImageSizes
+ * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
+ * @property \AdminPanel\Model\Table\ProductToCategoriesTable $ProductToCategories
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -28,6 +31,8 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.OptionValues');
         $this->loadModel('AdminPanel.Branches');
         $this->loadModel('AdminPanel.ProductImageSizes');
+        $this->loadModel('AdminPanel.ProductCategories');
+        $this->loadModel('AdminPanel.ProductToCategories');
 
         $this->allowedFileType = [
             'image/jpg',
@@ -119,10 +124,51 @@ class ProductsController extends AppController
     public function validationWizard($step = 1)
     {
         $this->disableAutoRender();
+        $response = [];
         $validator = new Validator();
+
+        /**
+         * @var \AdminPanel\Model\Entity\Product $productEntity
+         */
+        $productEntity = null;
 
         switch ($step) {
             case '1':
+                $validator
+                    ->requirePresence('product_category_id')
+                    ->hasAtLeast('product_category_id', 1, __d('AdminPanel', __d('AdminPanel','Silahkan pilih kategori')));
+
+                //process insert new product here
+                $error = $validator->errors($this->request->getData());
+
+                if (empty($error)) {
+
+                    $productEntity = $this->Products->newEntity([
+                        'name' => '',
+                        'qty' => 0,
+                        'product_stock_status_id' => 1, //TODO for this
+                        'shipping' => 1,
+                        'price' => 0,
+                        'price_discount' => 0,
+                        'weight' => 0,
+                        'product_weight_class_id' => null,
+                        'product_status_id' => 2,
+                        'highlight' => '',
+                        'condition' => '', //TODO default value not null
+                        'profile' => ''
+                    ], ['validate' => false]); //disable validation rule
+
+
+                    $product_category_id = $this->request->getData('product_category_id');
+                    if ($this->Products->save($productEntity)) {
+                        $productToCategoryEntity = $this->ProductToCategories->newEntity([
+                            'product_id' => $productEntity->get('id'),
+                            'product_category_id' => $product_category_id[0]
+                        ]);
+                        $this->ProductToCategories->save($productToCategoryEntity);
+                        $response['data'] = $productEntity;
+                    }
+                }
 
                 break;
             case '2':
@@ -185,6 +231,28 @@ class ProductsController extends AppController
                     ->numeric('price', 'tidak boleh kosong');
 
                 $validator->addNestedMany('ProductOptionPrices', $productPrice);
+
+                $error = $validator->errors($this->request->getData());
+
+                if (empty($error)) {
+
+                    $productEntity = $this->Products->find()
+                        ->where([
+                            'Products.id' => $this->request->getData('id')
+                        ])
+                        ->first();
+
+
+
+                    $this->Products->patchEntity($productEntity, $this->request->getData(), ['validate' => false]);
+
+                    //debug($productEntity);
+
+                    $this->Products->save($productEntity);
+
+                    //debug($productEntity->getErrors());
+                }
+
                 break;
 
             case '3':
@@ -193,9 +261,26 @@ class ProductsController extends AppController
 
         }
 
-        $error = $validator->errors($this->request->getData());
+        //global response error
+        $response['error'] = $validator->errors($this->request->getData());
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode($error));
+            ->withStringBody(json_encode($response));
+    }
+
+    public function getCategory()
+    {
+        $this->disableAutoRender();
+        $this->request->allowMethod('Post');
+        $parent_id = $this->request->getData('parent_id');
+        $parent_categories = [];
+        if ($parent_id) {
+            $parent_categories = $this->ProductCategories->find('list')
+                ->where([
+                    'parent_id' => $parent_id
+                ])->toArray();
+        }
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($parent_categories));
     }
 
 
@@ -305,9 +390,13 @@ class ProductsController extends AppController
         $courriers = $this->Courriers->find('list')->toArray();
         $options = $this->Options->find('list')->toArray();
 
+        $parent_categories = $this->ProductCategories->find('list')
+            ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
+                return $exp->isNull('parent_id');
+            })->toArray();
+        //debug($parent_categories->toArray());
 
-
-        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options'));
+        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories'));
     }
 
     public function getoptionvalues(){

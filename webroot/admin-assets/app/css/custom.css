@@ -17,3 +17,7 @@ div[class^="col-"] {
 .has-danger label:not([class]), .has-danger label.col-form-label, .has-danger label.form-control-label {
     color: inherit;
 }
+
+.m-wizard__form-step  .product-category option {
+    padding: 5px;
+}
