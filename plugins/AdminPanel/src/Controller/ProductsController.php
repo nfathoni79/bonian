@@ -132,6 +132,11 @@ class ProductsController extends AppController
          */
         $productEntity = null;
 
+        /**
+         * @var \AdminPanel\Model\Entity\ProductToCategory $productToCategoryEntity
+         */
+        $productToCategoryEntity = $this->ProductToCategories->newEntity();
+
         switch ($step) {
             case '1':
                 $validator
@@ -143,7 +148,17 @@ class ProductsController extends AppController
 
                 if (empty($error)) {
 
-                    $productEntity = $this->Products->newEntity([
+                    $getProduct = null;
+                    if ($this->request->getData('id')) {
+                        $getProduct = $this->Products->find()
+                            ->where([
+                                'Products.id' => $this->request->getData('id')
+                            ])
+                            ->first();
+                    }
+
+
+                    $productEntity = !empty($getProduct) ? $getProduct : $this->Products->newEntity([
                         'name' => '',
                         'qty' => 0,
                         'product_stock_status_id' => 1, //TODO for this
@@ -161,11 +176,25 @@ class ProductsController extends AppController
 
                     $product_category_id = $this->request->getData('product_category_id');
                     if ($this->Products->save($productEntity)) {
-                        $productToCategoryEntity = $this->ProductToCategories->newEntity([
+
+                        $getProductToCategory = null;
+                        if ($this->request->getData('id')) {
+                            $getProductToCategory = $this->ProductToCategories->find()
+                                ->where([
+                                    'ProductToCategories.product_id' => $this->request->getData('id')
+                                ])
+                                ->first();
+                        }
+
+                        $productToCategoryEntity = !empty($getProductToCategory) ? $getProductToCategory :  $getProductToCategory;
+
+                        $this->ProductToCategories->patchEntity($productToCategoryEntity, [
                             'product_id' => $productEntity->get('id'),
                             'product_category_id' => $product_category_id[0]
                         ]);
+
                         $this->ProductToCategories->save($productToCategoryEntity);
+
                         $response['data'] = $productEntity;
                     }
                 }
