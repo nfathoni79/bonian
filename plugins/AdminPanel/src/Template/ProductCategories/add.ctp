@@ -88,7 +88,7 @@ echo $this->Html->script([
             <?php
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
-                echo $this->Form->control('parent_id', ['options' => $parentProductCategories, 'empty' => true, 'class' => $default_class]);
+                echo $this->Form->control('parent_id', ['options' => $parentProductCategories, 'empty' => true, 'class' => $default_class, 'escape' => false]);
                 echo $this->Form->control('name',['class' => $default_class, 'id' => 'title']);
                 echo $this->Form->control('slug',['class' => $default_class, 'id' => 'slug']);
                 echo $this->Form->control('description',['class' => $default_class]);
