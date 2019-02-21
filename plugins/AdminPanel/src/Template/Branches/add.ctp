@@ -102,7 +102,7 @@
     </div>
 </div>
 
-<?php $this->append('script');debug($cities); ?>
+<?php $this->append('script'); ?>
 <script>
     // $cities
     // $subdistricts
