@@ -206,7 +206,12 @@ class ProductCategoriesController extends AppController
             }
             $this->Flash->error(__('The product category could not be saved. Please, try again.'));
         }
-        $parentProductCategories = $this->ProductCategories->ParentProductCategories->find('list', ['limit' => 200]);
+        //$parentProductCategories = $this->ProductCategories->ParentProductCategories->find('list', ['limit' => 2000]);
+        $parentProductCategories = $this->ProductCategories->ParentProductCategories->find('treeList', [
+            'keyPath' => 'id',
+            'valuePath' => 'name',
+            'spacer' => '&nbsp;&nbsp;&nbsp;'
+        ]);
         $this->set(compact('productCategory', 'parentProductCategories'));
     }
 
