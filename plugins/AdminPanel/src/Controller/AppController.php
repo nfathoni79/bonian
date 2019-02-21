@@ -43,6 +43,7 @@ class AppController extends BaseController
         $timeJsonFormat = 'yyyy-MM-dd HH:mm';
 
         FrozenTime::setJsonEncodeFormat($timeJsonFormat);
+        FrozenTime::setToStringFormat($timeJsonFormat);
 	}
 
 
