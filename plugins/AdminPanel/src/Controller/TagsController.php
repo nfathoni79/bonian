@@ -158,4 +158,27 @@ class TagsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function import(){
+        if ($this->request->is('post')) {
+
+            $data = $this->request->data['files'];
+            $file = $data['tmp_name'];
+            $handle = fopen($file, "r");
+            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $Tags = $this->Tags->find()
+                    ->where(['Tags.name' => $row[0]])
+                    ->first();
+                if(empty($Tags)){
+                    $newEntity = $this->Tags->newEntity();
+                    $newEntity = $this->Tags->patchEntity($newEntity, $this->request->getData());
+                    $newEntity->set('name', $row[0]);
+                    $this->Tags->save($newEntity);
+                }
+            }
+
+        }
+            $this->Flash->success(__('Success import file'));
+            $this->redirect(['action' => 'index']);
+    }
 }

@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Branches') ?>
+                    <?= __('Toko Cabang') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Branches') ?>
+                                <?= __('Toko Cabang') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Branches') ?>
+                                <?= __('Daftar Cabang') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List Branches') ?>
+                            <?= __('Daftar Cabang') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New Branch') ?></span>
+                                    <span><?= __('Tambah Cabang') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -75,7 +75,7 @@
                             <div class="form-group m-form__group row align-items-center">
                                 <div class="col-md-8">
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                                        <input type="text" class="form-control m-input" placeholder="Pencarian..." id="generalSearch">
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="la la-search"></i>
@@ -189,7 +189,7 @@
                     },
                     {
                         field: 'Branches.name',
-                        title: 'Name',
+                        title: 'Nama Cabang',
                         template: function(row) {
                             return row.name;
                         }
@@ -197,7 +197,7 @@
 
                     {
                         field: 'Branches.phone',
-                        title: 'Phone',
+                        title: 'Telepon',
                         template: function(row) {
                             return row.phone;
                         }
@@ -205,7 +205,7 @@
 
                     {
                         field: 'Provinces.name',
-                        title: 'Province Name',
+                        title: 'Provinsi',
                         template: function(row) {
                             return row.province.name;
                         }
@@ -213,7 +213,7 @@
 
                     {
                         field: 'Cities.name',
-                        title: 'City Name',
+                        title: 'Kota',
                         template: function(row) {
                             return row.city.name;
                         }
@@ -221,7 +221,7 @@
 
                     {
                         field: 'Subdistricts.name',
-                        title: 'Subdistrict Name',
+                        title: 'Kabupaten',
                         template: function(row) {
                             return row.subdistrict.name;
                         }
@@ -245,7 +245,7 @@
 
                     {
                         field: 'Branches.created',
-                        title: 'Created',
+                        title: 'Tanggal Didaftarkan',
                         template: function(row) {
                             return row.created;
                         }
@@ -253,7 +253,7 @@
 
                     {
                         field: 'Branches.modified',
-                        title: 'Modified',
+                        title: 'Tanggal Modifikasi',
                         template: function(row) {
                             return row.modified;
                         }
@@ -263,7 +263,7 @@
                     {
                         field: "Actions",
                         width: 110,
-                        title: "Actions",
+                        title: "Aksi",
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {

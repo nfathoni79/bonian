@@ -13,112 +13,154 @@
                 'icon' => 'm-menu__link-icon flaticon-line-graph'
             ],
             [
-                'name' => 'Users & Groups',
+                'name' => 'Pengaturan Pengguna',
                 'url' => '#',
                 'icon' => 'm-menu__link-icon flaticon-users',
                 'children' => [
                     [
-                        'name' => 'List Users',
+                        'name' => 'Daftar Pengguna',
                         'url' => ['controller' => 'Users', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet'
                     ],
                     [
-                        'name' => 'List Groups',
+                        'name' => 'Daftar Jenis Pengguna',
                         'url' => ['controller' => 'Groups', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet'
                     ],
                 ]
             ],
             [
-                'name' => 'Pages CMS',
+                'name' => 'Konten Halaman',
                 'url' => '#',
                 'icon' => 'm-menu__link-icon  flaticon-browser',
                 'children' => [
                     [
-                        'name' => 'All Pages',
+                        'name' => 'Daftar Halaman',
                         'url' => ['controller' => 'Pages', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet'
                     ],
                     [
-                        'name' => 'New Pages',
+                        'name' => 'Halaman Baru',
                         'url' => ['controller' => 'Pages', 'action' => 'add'],
                         'icon' => 'm-menu__link-bullet'
                     ],
                 ]
             ],
             [
-                'name' => 'Customers',
+                'name' => 'Pelanggan',
                 'url' => ['controller' => 'Customers', 'action' => 'index'],
                 'icon' => 'm-menu__link-icon flaticon-users',
                 'children' => []
             ],
             [
-                'name' => 'Products',
-                'url' => ['controller' => 'Products', 'action' => 'index'],
+                'name' => 'Toko Cabang',
+                'url' => ['controller' => 'Branches', 'action' => 'index'],
+                'icon' => 'm-menu__link-icon flaticon-settings',
+                'children' => []
+            ],
+            [
+                'name' => 'Produk',
+                'url' => '#',
                 'icon' => 'm-menu__link-icon flaticon-box',
                 'children' => [
                     [
-                        'name' => 'All Products',
+                        'name' => 'Manajemen Produk',
                         'url' => ['controller' => 'Products', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
                     [
-                        'name' => 'Categories',
+                        'name' => 'Manajemen Harga',
+                        'url' => ['controller' => 'Products', 'action' => 'prices'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Manajemen Atribut',
+                        'url' => ['controller' => 'Attributes', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Manajemen Penandaan',
+                        'url' => ['controller' => 'Tags', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Manajemen Kategori',
                         'url' => ['controller' => 'ProductCategories', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
                     [
-                        'name' => 'Options',
+                        'name' => 'Manajemen Gambar',
+                        'url' => ['controller' => 'ImagesCategories', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Manajemen Varian',
                         'url' => '#',
                         'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                         'children' => [
                             [
-                                'name' => 'All Options',
+                                'name' => 'Daftar Pilihan',
                                 'url' => ['controller' => 'Options', 'action' => 'index'],
                                 'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                                 'children' => []
                             ],
                             [
-                                'name' => 'Option Values',
+                                'name' => 'Daftar Varian',
                                 'url' => ['controller' => 'OptionValues', 'action' => 'index'],
                                 'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
                                 'children' => []
                             ],
                         ]
                     ],
-                    [
-                        'name' => 'Tags',
-                        'url' => ['controller' => 'Tags', 'action' => 'index'],
-                        'icon' => 'm-menu__link-bullet',
-                        'children' => []
-                    ],
                 ]
             ],
             [
-                'name' => 'Promotion Sales',
+                'name' => 'Pembelian',
+                    'url' => '#',
+                    'icon' => 'm-menu__link-icon flaticon-box',
+                    'children' => [
+                        [
+                            'name' => 'Daftar Pembelian',
+                            'url' => ['controller' => 'Products', 'action' => 'index'],
+                            'icon' => 'm-menu__link-bullet',
+                            'children' => []
+                        ],
+                        [
+                            'name' => 'Export Data Pembelian',
+                            'url' => ['controller' => 'Products', 'action' => 'prices'],
+                            'icon' => 'm-menu__link-bullet',
+                            'children' => []
+                        ],
+                    ]
+                ],
+            [
+                'name' => 'Promosi Penjualan',
                 'url' => '#',
                 'icon' => 'm-menu__link-icon flaticon-cart',
                 'children' => [
                     [
-                        'name' => 'Sales Method',
+                        'name' => 'Flash Sales',
                         'url' => '#',
-                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
-                        'children' => [
-                            [
-                                'name' => 'Flash Sales',
-                                'url' => ['controller' => 'Provinces', 'action' => 'index'],
-                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
-                                'children' => []
-                            ],
-                            [
-                                'name' => 'Group Sales',
-                                'url' => ['controller' => 'Cities', 'action' => 'index'],
-                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
-                                'children' => []
-                            ]
-                        ]
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Group Sales',
+                        'url' => '#',
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Buy 1 GET 1',
+                        'url' => '#',
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
                     ],
                     [
                         'name' => 'Voucher',
@@ -135,41 +177,28 @@
                 'children' => []
             ],
             [
-                'name' => 'Configurations',
-                'url' => ['controller' => 'Customers', 'action' => 'index'],
+                'name' => 'Master Data Kota Pengiriman',
+                'url' => '#',
                 'icon' => 'm-menu__link-icon flaticon-settings',
                 'children' => [
                     [
-                        'name' => 'Branches',
-                        'url' => ['controller' => 'Branches', 'action' => 'index'],
+                        'name' => 'Propinsi',
+                        'url' => ['controller' => 'Provinces', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
                     [
-                        'name' => 'Master Data',
-                        'url' => '#',
-                        'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
-                        'children' => [
-                            [
-                                'name' => 'Province',
-                                'url' => ['controller' => 'Provinces', 'action' => 'index'],
-                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
-                                'children' => []
-                            ],
-                            [
-                                'name' => 'Cities',
-                                'url' => ['controller' => 'Cities', 'action' => 'index'],
-                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
-                                'children' => []
-                            ],
-                            [
-                                'name' => 'Subdistrict',
-                                'url' => ['controller' => 'Subdistricts', 'action' => 'index'],
-                                'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',
-                                'children' => []
-                            ],
-                        ]
-                    ]
+                        'name' => 'Kota',
+                        'url' => ['controller' => 'Cities', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Kabupaten',
+                        'url' => ['controller' => 'Subdistricts', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
                 ]
             ],
         ];

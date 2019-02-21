@@ -13,6 +13,7 @@ use Cake\ORM\Rule\IsUnique;
  * @package App\Controller\V1
  * @property \AdminPanel\Model\Table\CustomersTable $Customers
  * @property \AdminPanel\Model\Table\CustomerBalancesTable $CustomerBalances
+ * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  */
 
 class PartialsController  extends AppController
@@ -25,12 +26,13 @@ class PartialsController  extends AppController
         $this->loadModel('AdminPanel.CustomerMutationAmounts');
         $this->loadModel('AdminPanel.CustomerMutationPoints');
         $this->loadModel('AdminPanel.CustomerAddreses');
+        $this->loadModel('AdminPanel.ProductCategories');
 
     }
 
     public function topmenu(){
 
-        $result = [
+        $response = [
             'is_logged' =>  false, //true or false boolean
             'topnav' => [
                 [
@@ -42,7 +44,7 @@ class PartialsController  extends AppController
                     'url' => '#'
                 ],
                 [
-                    'title' => 'Tranck Order',
+                    'title' => 'Track Order',
                     'url' => '#'
                 ],
                 [
@@ -107,11 +109,11 @@ class PartialsController  extends AppController
         ];
 
         $this->setResponse($this->response->withStatus(200));
-        $this->set(compact('result'));
+        $this->set(compact('response'));
     }
 
     public function mainOne(){
-        $result = [
+        $response = [
             'left' => [
                 'promotion_banners' => [
                     ['image' => 'default.jpg', 'link_url' => '#'],
@@ -142,11 +144,11 @@ class PartialsController  extends AppController
             ],
         ];
         $this->setResponse($this->response->withStatus(200));
-        $this->set(compact('result'));
+        $this->set(compact('response'));
     }
 
     public function mainTwo(){
-        $result = [
+        $response = [
             'left' => [
                 'title' => 'Bonus & Game',
                 'game_lists' => [
@@ -174,11 +176,11 @@ class PartialsController  extends AppController
             ],
         ];
         $this->setResponse($this->response->withStatus(200));
-        $this->set(compact('result'));
+        $this->set(compact('response'));
     }
 
     public function mainThree(){
-        $result = [
+        $response = [
             'tabs' => [
                 'Flash Sales',
                 'New Arrivals',
@@ -191,7 +193,8 @@ class PartialsController  extends AppController
                     'product_lists' => [
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -199,7 +202,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -207,7 +211,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -215,7 +220,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -223,7 +229,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -231,7 +238,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -239,7 +247,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -252,7 +261,8 @@ class PartialsController  extends AppController
                     'product_lists' => [
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -260,7 +270,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -268,7 +279,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -276,7 +288,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -284,7 +297,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -292,7 +306,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -300,7 +315,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -313,7 +329,8 @@ class PartialsController  extends AppController
                     'product_lists' => [
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -321,7 +338,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -329,7 +347,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -337,7 +356,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -345,7 +365,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -353,7 +374,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -361,7 +383,8 @@ class PartialsController  extends AppController
                         ],
                         [
                             'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
-                            'images' => 'default.jpg',
+                            'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                            'image' => 'default.jpg',
                             'regular_price' => '330000',
                             'sale_price' => '300000',
                             'point' => '300',
@@ -372,8 +395,168 @@ class PartialsController  extends AppController
             ],
         ];
         $this->setResponse($this->response->withStatus(200));
-        $this->set(compact('result'));
+        $this->set(compact('response'));
     }
 
+
+    public function categories(){
+
+        $response =$this->ProductCategories
+            ->find('treeList')
+        ;
+
+//        $response =$this->ProductCategories
+//            ->find('treeList')
+//            ->select(['id', 'name', 'slug'])
+//        ;
+
+        $this->setResponse($this->response->withStatus(200));
+        $this->set(compact('response'));
+
+    }
+
+    public function productLists(){
+
+        $this->request->allowMethod('post');
+
+
+        $category = $this->request->getParam('category'); // Dress
+//        if(isset($category)){
+//            /* SHOW DATA BY FILTERING CATEGORY*/
+//
+//        }else{
+//            /* SHOW DATA BY RANDOM CATEGORY*/
+//
+//        }
+
+
+        $response = [
+            'lists' => [
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => 'Best Seller',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => 'Top Rate',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => '',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => '',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => '',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => '',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => '',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => '',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => '',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => '',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => '',
+                ],
+                [
+                    'name' => 'Sepatu Pdh Slip-On Kilap Tampa Semir',
+                    'slug' => 'sepatu-pdh-slip-on-kilap-tampa-semir',
+                    'image' => 'default.jpg',
+                    'regular_price' => '330000',
+                    'sale_price' => '300000',
+                    'point' => '300',
+                    'star' => '4',
+                    'ribbon' => '',
+                ],
+            ]
+
+        ];
+        $this->setResponse($this->response->withStatus(200));
+        $this->set(compact('response'));
+    }
 
 }

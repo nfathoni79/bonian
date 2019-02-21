@@ -4,7 +4,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    User &amp; Group
+                    Pengaturan Pengguna
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -17,9 +17,9 @@
                     </li>
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
-											<span class="m-nav__link-text">
-												User &amp; Group
-											</span>
+                        <span class="m-nav__link-text">
+                            Pengaturan Pengguna
+                        </span>
                         </a>
                     </li>
                     <li class="m-nav__separator">
@@ -27,9 +27,9 @@
                     </li>
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
-											<span class="m-nav__link-text">
-												List Group
-											</span>
+                            <span class="m-nav__link-text">
+                                Daftar Jenis Pengguna
+                            </span>
                         </a>
                     </li>
 
@@ -44,7 +44,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            List Groups
+                            Daftar Jenis Pengguna
                             <!-- <small>
                                 data loaded from remote data source
                             </small> -->
@@ -64,24 +64,24 @@
                             <div class="form-group m-form__group row align-items-center">
                                 <div class="col-md-4">
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                                        <input type="text" class="form-control m-input" placeholder="Pencarian..." id="generalSearch">
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
-															<span>
-																<i class="la la-search"></i>
-															</span>
-														</span>
+                                            <span>
+                                                <i class="la la-search"></i>
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-4 order-1 order-xl-2 m--align-right">
-                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-info m-btn m-btn--custom m-btn--icon m-btn--air">
-												<span>
-													<i class="fa fa-plus-circle"></i>
-													<span>
-														New Group
-													</span>
-												</span>
+                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                                <span>
+                                    <i class="la la-plus"></i>
+                                    <span>
+                                        Tambah Jenis Pengguna
+                                    </span>
+                                </span>
                             </a>
                             <div class="m-separator m-separator--dashed d-xl-none"></div>
                         </div>
@@ -183,7 +183,7 @@
                         }
                     }, {
                         field: 'name',
-                        title: 'name',
+                        title: 'Jenis Pengguna',
                         // sortable: 'asc', // default sort
                         filterable: false, // disable or enable filtering
                         width: 150,
@@ -192,14 +192,14 @@
                     },
                     {
                         field: 'Groups.created',
-                        title: 'Create',
+                        title: 'Tanggal Didaftarkan',
                         template: function(row) {
                             return row.created;
                         }
                     },
                     {
                         field: 'Groups.modified',
-                        title: 'Modified',
+                        title: 'Tanggal Modifikasi',
                         template: function(row) {
                             return row.modified;
                         }
@@ -207,7 +207,7 @@
                     {
                         field: "Actions",
                         width: 110,
-                        title: "Actions",
+                        title: "Aksi",
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {

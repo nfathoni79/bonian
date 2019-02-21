@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Tags') ?>
+                    <?= __('Produk') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Tags') ?>
+                                <?= __('Produk') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,17 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Tags') ?>
+                                <?= __('Manajemen Penandaan') ?>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">
+                        -
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
+                            <span class="m-nav__link-text">
+                                <?= __('Daftar Penandaan') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +59,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List Tags') ?>
+                            <?= __('Daftar Penandaan') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +69,23 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New Tag') ?></span>
+                                    <span><?= __('Tambah Penandaan') ?></span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air" data-toggle="modal" data-target="#m_modal_1">
+                                <span>
+                                    <i class="la la-upload"></i>
+                                    <span><?= __('Import Penandaan') ?></span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="<?= $this->Url->build('/files/csv/tags.csv'); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                                <span>
+                                    <i class="la la-download"></i>
+                                    <span><?= __('Contoh CSV Penandaan') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -75,7 +101,7 @@
                             <div class="form-group m-form__group row align-items-center">
                                 <div class="col-md-8">
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                                        <input type="text" class="form-control m-input" placeholder="Pencarian..." id="generalSearch">
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="la la-search"></i>
@@ -189,7 +215,7 @@
                     },
                     {
                         field: 'Tags.name',
-                        title: 'Name',
+                        title: 'Nama Penandaan',
                         template: function(row) {
                             return row.name;
                         }
@@ -199,7 +225,7 @@
                     {
                         field: "Actions",
                         width: 110,
-                        title: "Actions",
+                        title: "Aksi",
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {
@@ -226,3 +252,36 @@
 
 
 
+
+<!--begin::Modal-->
+<div class="modal fade" id="m_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Import Penandaan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <?= $this->Form->create('Tags',['action' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file']); ?>
+
+                <div class="form-group m-form__group">
+                    <label for="files">Cari FIle</label>
+                    <div></div>
+                    <div class="custom-file">
+                        <?php
+                             echo $this->Form->control('files',['class' => 'custom-file-input', 'type' => 'file']);
+                        ?>
+                        <label class="custom-file-label" for="files">Pilih file</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <?= $this->Form->submit(__('Import'),['class' => 'btn btn-brand']) ?>
+            </div>
+            <?= $this->Form->end(); ?>
+        </div>
+    </div>
+</div>

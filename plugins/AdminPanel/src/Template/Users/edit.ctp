@@ -4,7 +4,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    User &amp; Group
+                    Pengaturan Pengguna
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -17,9 +17,9 @@
                     </li>
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
-											<span class="m-nav__link-text">
-												User &amp; Group
-											</span>
+                            <span class="m-nav__link-text">
+                                Pengaturan Pengguna
+                            </span>
                         </a>
                     </li>
                     <li class="m-nav__separator">
@@ -27,9 +27,9 @@
                     </li>
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
-											<span class="m-nav__link-text">
-												List User
-											</span>
+                            <span class="m-nav__link-text">
+                                Daftar Pengguna
+                            </span>
                         </a>
                     </li>
                     <li class="m-nav__separator">
@@ -37,9 +37,9 @@
                     </li>
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
-											<span class="m-nav__link-text">
-												Edit User
-											</span>
+                            <span class="m-nav__link-text">
+                                Edit Pengguna
+                            </span>
                         </a>
                     </li>
 
@@ -54,7 +54,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            Edit Users
+                            Edit Pengguna
                             <!-- <small>
                                 data loaded from remote data source
                             </small> -->
@@ -72,13 +72,13 @@
                     echo $this->Flash->render();
                     $default_class = 'form-control form-control-danger m-input m-input--air';
                     echo $this->Form->controls([
-                            'email' => ['class' => $default_class],
-                            'password' => ['class' => $default_class, 'required' => false, 'value' => ''],
-                            'repeat_password' => ['type' => 'password', 'class' => $default_class, 'required' => false, 'value' => ''],
-                            'group_id' => ['class' => $default_class, 'empty' => 'Select'],
-                            'user_status_id' => ['class' => $default_class, 'empty' => 'Select', 'options' => $user_status],
-                            'first_name' => ['class' => $default_class],
-                            'last_name' => ['class' => $default_class]
+                            'email' => ['class' => $default_class,'label' => 'Alamat Email'],
+                            'first_name' => ['class' => $default_class,'label' => 'Nama Depan'],
+                            'last_name' => ['class' => $default_class,'label' => 'Nama Belakang'],
+                            'password' => ['class' => $default_class, 'required' => false, 'value' => '','label' => 'Password'],
+                            'repeat_password' => ['type' => 'password', 'class' => $default_class, 'required' => false, 'value' => '','label' => 'Konfirmasi Password'],
+                            'group_id' => ['class' => $default_class, 'empty' => 'Pilihan','label' => 'Jenis Pengguna'],
+                            'user_status_id' => ['class' => $default_class, 'empty' => 'Pilihan', 'options' => $user_status,'label' => 'Status Pengguna'],
                     ], ['fieldset' => false])
                     ?>
                 </div>
@@ -87,10 +87,10 @@
                         <div class="row">
                             <div class="col-lg-9 ml-lg-auto">
                                 <button type="submit" class="btn btn-brand">
-                                    Submit
+                                    Simpan
                                 </button>
                                 <button type="submit" class="btn btn-secondary">
-                                    Cancel
+                                    Batal
                                 </button>
                             </div>
                         </div>

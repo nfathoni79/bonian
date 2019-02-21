@@ -6,6 +6,8 @@ use AdminPanel\Controller\AppController;
 /**
  * Branches Controller
  * @property \AdminPanel\Model\Table\BranchesTable $Branches
+ * @property \AdminPanel\Model\Table\CitiesTable $Cities
+ * @property \AdminPanel\Model\Table\SubdistrictsTable $Subdistricts
  *
  * @method \AdminPanel\Model\Entity\Branch[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -17,6 +19,13 @@ class BranchesController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('AdminPanel.Cities');
+        $this->loadModel('AdminPanel.Subdistricts');
+    }
+
     public function index()
     {
 
@@ -110,11 +119,39 @@ class BranchesController extends AppController
             $this->Flash->error(__('The branch could not be saved. Please, try again.'));
         }
         $provinces = $this->Branches->Provinces->find('list', ['limit' => 200]);
-        $cities = $this->Branches->Cities->find('list', ['limit' => 200]);
-        $subdistricts = $this->Branches->Subdistricts->find('list', ['limit' => 200]);
+        $cities = $this->Branches->Cities->find('list', ['limit' => 200])->toArray();
+        $subdistricts = $this->Branches->Subdistricts->find('list', ['limit' => 200])->toArray();
         $this->set(compact('branch', 'provinces', 'cities', 'subdistricts'));
     }
 
+    public function getCities(){
+        if ($this->request->is('ajax')) {
+            $this->viewBuilder()->setLayout('ajax');
+            $options = $this->Cities->find('list', [
+                    'keyField' => 'id',
+                    'valueField' => 'name'
+                ])
+                ->where(['province_id' => $this->request->getData('province')])
+                ->toArray();
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($options));
+        }
+
+    }
+    public function getDistricts(){
+        if ($this->request->is('ajax')) {
+            $this->viewBuilder()->setLayout('ajax');
+            $options = $this->Subdistricts->find('list', [
+                    'keyField' => 'id',
+                    'valueField' => 'name'
+                ])
+                ->where(['city_id' => $this->request->getData('city')])
+                ->toArray();
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($options));
+        }
+
+    }
     /**
      * Edit method
      *
@@ -137,8 +174,8 @@ class BranchesController extends AppController
             $this->Flash->error(__('The branch could not be saved. Please, try again.'));
         }
         $provinces = $this->Branches->Provinces->find('list', ['limit' => 200]);
-        $cities = $this->Branches->Cities->find('list', ['limit' => 200]);
-        $subdistricts = $this->Branches->Subdistricts->find('list', ['limit' => 200]);
+        $cities = $this->Branches->Cities->find('list', ['limit' => 200])->toArray();
+        $subdistricts = $this->Branches->Subdistricts->find('list', ['limit' => 200])->toArray();
         $this->set(compact('branch', 'provinces', 'cities', 'subdistricts'));
     }
 
