@@ -18,7 +18,8 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductDiscountsTable|\Cake\ORM\Association\HasMany $ProductDiscounts
  * @property \AdminPanel\Model\Table\ProductImagesTable|\Cake\ORM\Association\HasMany $ProductImages
  * @property \AdminPanel\Model\Table\ProductMetaTagsTable|\Cake\ORM\Association\HasMany $ProductMetaTags
- * @property \AdminPanel\Model\Table\ProductOptionValuesTable|\Cake\ORM\Association\HasMany $ProductOptionValues
+ * @property \AdminPanel\Model\Table\ProductOptionPricesTable|\Cake\ORM\Association\HasMany $ProductOptionPrices
+ * @property \AdminPanel\Model\Table\ProductOptionStocksTable|\Cake\ORM\Association\HasMany $ProductOptionStocks
  * @property \AdminPanel\Model\Table\ProductStockMutationsTable|\Cake\ORM\Association\HasMany $ProductStockMutations
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable|\Cake\ORM\Association\HasMany $ProductToCategories
  *
@@ -89,9 +90,13 @@ class ProductsTable extends Table
             'foreignKey' => 'product_id',
             'className' => 'AdminPanel.ProductMetaTags'
         ]);
-        $this->hasMany('ProductOptionValues', [
+        $this->hasMany('ProductOptionPrices', [
             'foreignKey' => 'product_id',
-            'className' => 'AdminPanel.ProductOptionValues'
+            'className' => 'AdminPanel.ProductOptionPrices'
+        ]);
+        $this->hasMany('ProductOptionStocks', [
+            'foreignKey' => 'product_id',
+            'className' => 'AdminPanel.ProductOptionStocks'
         ]);
         $this->hasMany('ProductStockMutations', [
             'foreignKey' => 'product_id',

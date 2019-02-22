@@ -191,22 +191,22 @@
                     '<div class="m-form__group form-group row berat" style="display:none;">\n' +
                     '<label class="col-xl-4 col-form-label">Berat</label>\n' +
                     '<div class="col-xl-2"> \n' +
-                    '<input type="number" name="ProductOptionPrices['+i+'][weight]" class="form-control m-input" placeholder="Berat (gram)">\n' +
+                    '<input type="number" name="ProductOptionStocks['+i+'][weight]" class="form-control m-input" placeholder="Berat (gram)">\n' +
                     '</div> \n' +
                     '</div>\n' +
                     '<div class="m-form__group form-group row dimensi" style="display:none;">\n' +
                     '<label class="col-xl-4 col-form-label">Dimensi</label>\n' +
-                    '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
-                    '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
-                    '<div class="col-xl-2"><input type="number" name="ProductOptionPrices['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
                     '</div>  \n' +
                     '<div class="m-form__group form-group row">\n' +
                     '<label class="col-xl-4 col-form-label">Stock Cabang</label>\n' +
                     '<div class="col-xl-2">\n' +
-                    '<select name="ProductOptionValues['+i+'][0][branches]" class="form-control select2  m-input " >'+optbranchs+'</select>\n' +
+                    '<select name="ProductOptionStocks['+i+'][branches][0][branch_id]" class="form-control select2  m-input " >'+optbranchs+'</select>\n' +
                     '</div> \n' +
                     '<div class="col-xl-2">\n' +
-                    '<input type="number" name="ProductOptionPrices['+i+'][0][stock]"  class="form-control m-input" placeholder="Stok">\n' +
+                    '<input type="number" name="ProductOptionStocks['+i+'][branches][0][stock]"  class="form-control m-input" placeholder="Stok">\n' +
                     '</div>\n' +
                     '<div class="col-xl-2">\n' +
                     '<a href="javascript:void(0);" style="width:40px; height: 40px;" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-cabang" data-item='+i+'><i class="la la-plus"></i></a>\n' +
@@ -257,10 +257,10 @@
                         var rowcabang = '<div class="m-form__group form-group row cabang-'+item+'-'+y+'">\n' +
                             '<label class="col-xl-4 col-form-label"></label>\n' +
                             '<div class="col-xl-2">\n' +
-                            '<select name="ProductOptionValues['+item+']['+y+'][branches]" class="form-control select2  m-input " >'+optbranchs+'</select>\t\n' +
+                            '<select name="ProductOptionStocks['+item+'][branches]['+y+'][branch_id]" class="form-control select2  m-input " >'+optbranchs+'</select>\t\n' +
                             '</div> \n' +
                             '<div class="col-xl-2">\n' +
-                            '<input type="number" name="ProductOptionPrices['+item+']['+y+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
+                            '<input type="number" name="ProductOptionStocks['+item+'][branches]['+y+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
                             '</div>\n' +
                             '<div class="col-xl-2">\n' +
                             '<a href="javascript:void(0);" style="width:40px; height: 40px;" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-cabang" data-item="'+item+'" data-row="'+y+'"><i class="la la-minus"></i></a>\n' +

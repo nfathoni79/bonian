@@ -164,7 +164,7 @@ class ProductsController extends AppController
                         'product_stock_status_id' => 1, //TODO for this
                         'shipping' => 1,
                         'price' => 0,
-                        'price_discount' => 0,
+                        'price_sale' => 0,
                         'weight' => 0,
                         'product_weight_class_id' => null,
                         'product_status_id' => 2,
@@ -241,6 +241,10 @@ class ProductsController extends AppController
                     ->notBlank('price', 'tidak boleh kosong');
 
                 $validator
+                    ->requirePresence('price_sale')
+                    ->notBlank('price_sale', 'tidak boleh kosong');
+
+                $validator
                     ->requirePresence('ProductToCourriers')
                     ->hasAtLeast('ProductToCourriers', 2, __d('AdminPanel', __d('AdminPanel','pilihan minimal 2 kurir')));
 
@@ -271,13 +275,118 @@ class ProductsController extends AppController
                         ])
                         ->first();
 
-
-
                     $this->Products->patchEntity($productEntity, $this->request->getData(), ['validate' => false]);
 
                     //debug($productEntity);
 
-                    $this->Products->save($productEntity);
+                    if ($this->Products->save($productEntity)) {
+
+                        //processing save ProductMetaTags
+                        $getMetaTag = $this->Products->ProductMetaTags->find()
+                            ->where([
+                                'product_id' => $productEntity->get('id')
+                            ])
+                            ->first();
+
+                        $metaTagEntity = !empty($getMetaTag) ?
+                            $getMetaTag :
+                            $this
+                                ->Products
+                                ->ProductMetaTags
+                                ->newEntity(['product_id' => $productEntity->get('id')]);
+
+                        $this
+                            ->Products
+                            ->ProductMetaTags
+                            ->patchEntity($metaTagEntity, $this->request->getData('ProductMetaTags'));
+
+                        $this
+                            ->Products
+                            ->ProductMetaTags
+                            ->save($metaTagEntity);
+
+
+                        if ($option_prices = $this->request->getData('ProductOptionPrices')) {
+                            $idx = 1;
+                            foreach($option_prices as $key => $price) {
+
+                                $getOptionPrice = $this
+                                    ->Products
+                                    ->ProductOptionPrices
+                                    ->find()
+                                    ->where([
+                                        'product_id' => $productEntity->get('id'),
+                                        'idx' => $idx
+                                    ])
+                                    ->first();
+
+                                $OptionPriceEntity = !empty($getOptionPrice) ? $getOptionPrice : $this
+                                    ->Products
+                                    ->ProductOptionPrices
+                                    ->newEntity(['product_id' => $productEntity->get('id')]);
+
+                                $this
+                                    ->Products
+                                    ->ProductOptionPrices
+                                    ->patchEntity($OptionPriceEntity, $price);
+
+                                $saveOptionPrice = $this
+                                    ->Products
+                                    ->ProductOptionPrices
+                                    ->save($OptionPriceEntity);
+
+                                if ($saveOptionPrice) {
+                                    if ($option_stocks = $this->request->getData('ProductOptionStocks')) {
+                                        foreach($option_stocks as $k => $stock) {
+                                            if (isset($stock['branches'])) {
+                                                foreach($stock['branches'] as $branch) {
+
+                                                    $stock['branch_id'] = $branch['branch_id'];
+                                                    $stock['stock'] = $branch['stock'];
+
+                                                    $getOptionStock = $this
+                                                        ->Products
+                                                        ->ProductOptionStocks
+                                                        ->find()
+                                                        ->where([
+                                                            'product_id' => $productEntity->get('id'),
+                                                            'product_option_price_id' => $OptionPriceEntity->get('id'),
+                                                            'branch_id' => $branch['branch_id']
+                                                        ])
+                                                        ->first();
+
+                                                    $OptionStockEntity = !empty($getOptionStock) ? $getOptionStock : $this
+                                                        ->Products
+                                                        ->ProductOptionStocks
+                                                        ->newEntity([
+                                                            'product_id' => $productEntity->get('id'),
+                                                            'product_option_price_id' => $OptionPriceEntity->get('id')
+                                                        ]);
+
+                                                    $this
+                                                        ->Products
+                                                        ->ProductOptionStocks
+                                                        ->patchEntity($OptionStockEntity, $stock, ['validate' => false]);
+
+                                                    $this
+                                                        ->Products
+                                                        ->ProductOptionStocks
+                                                        ->save($OptionStockEntity);
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
+
+                                $idx++;
+                            }
+                        }
+
+                        debug($this->request->getData('ProductOptionPrices'));
+                        debug($this->request->getData('ProductOptionStocks'));
+
+                    }
 
                     //debug($productEntity->getErrors());
                 }

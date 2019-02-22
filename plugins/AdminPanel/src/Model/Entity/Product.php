@@ -13,12 +13,11 @@ use Cake\ORM\Entity;
  * @property string|null $model
  * @property string|null $code
  * @property string|null $sku
- * @property string|null $isbn
  * @property int $qty
  * @property int|null $product_stock_status_id
  * @property int $shipping
  * @property float $price
- * @property float $price_discount
+ * @property float $price_sale
  * @property float|null $weight
  * @property int|null $product_weight_class_id
  * @property int $product_status_id
@@ -38,7 +37,8 @@ use Cake\ORM\Entity;
  * @property \AdminPanel\Model\Entity\ProductDiscount[] $product_discounts
  * @property \AdminPanel\Model\Entity\ProductImage[] $product_images
  * @property \AdminPanel\Model\Entity\ProductMetaTag[] $product_meta_tags
- * @property \AdminPanel\Model\Entity\ProductOptionValue[] $product_option_values
+ * @property \AdminPanel\Model\Entity\ProductOptionPrice[] $product_option_prices
+ * @property \AdminPanel\Model\Entity\ProductOptionStock[] $product_option_stocks
  * @property \AdminPanel\Model\Entity\ProductStockMutation[] $product_stock_mutations
  * @property \AdminPanel\Model\Entity\ProductToCategory[] $product_to_categories
  */
@@ -61,12 +61,11 @@ class Product extends Entity
         'model' => true,
         'code' => true,
         'sku' => true,
-        'isbn' => true,
         'qty' => true,
         'product_stock_status_id' => true,
         'shipping' => true,
         'price' => true,
-        'price_discount' => true,
+        'price_sale' => true,
         'weight' => true,
         'product_weight_class_id' => true,
         'product_status_id' => true,
@@ -85,7 +84,8 @@ class Product extends Entity
         'product_discounts' => true,
         'product_images' => true,
         'product_meta_tags' => true,
-        'product_option_values' => true,
+        'product_option_prices' => true,
+        'product_option_stocks' => true,
         'product_stock_mutations' => true,
         'product_to_categories' => true
     ];
