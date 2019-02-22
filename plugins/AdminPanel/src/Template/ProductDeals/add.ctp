@@ -126,7 +126,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-lg-6 info-detail-0">
+                            <div class="col-lg-5 offset-1 info-detail-0">
                             </div>
                         </div>
                     </div>
@@ -169,7 +169,7 @@ echo $this->Html->script([
             '<input type="text" name="ProductDealDetails['+rows+'][produk]" placeholder="Pencarian Produk" class="form-control form-control-danger m-input m-input--air k_typeahead'+rows+'" dir="ltr" data-row="'+rows+'"><a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--custom m-btn--icon delete-flash-sale mt-3" data-row="'+rows+'"> <span><i class="la la-trash"></i> Hapus dari daftar produk</span></a>\n' +
             '</div>\n' +
             '</div>\n' +
-            '<div class="col-lg-6 info-detail-'+rows+'">\n' +
+            '<div class="col-lg-5 offset-1 info-detail-'+rows+'">\n' +
             '</div>\n' +
             '</div>\n' +
             '</div>';

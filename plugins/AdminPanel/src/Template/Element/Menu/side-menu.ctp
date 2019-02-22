@@ -100,12 +100,6 @@
                         'children' => []
                     ],
                     [
-                        'name' => 'Manajemen Gambar',
-                        'url' => ['controller' => 'ImagesCategories', 'action' => 'index'],
-                        'icon' => 'm-menu__link-bullet',
-                        'children' => []
-                    ],
-                    [
                         'name' => 'Manajemen Varian',
                         'url' => '#',
                         'icon' => 'm-menu__link-bullet m-menu__link-bullet--dot',

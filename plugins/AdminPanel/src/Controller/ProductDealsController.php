@@ -282,13 +282,17 @@ class ProductDealsController extends AppController
         if ($this->request->is('ajax')) {
             $this->viewBuilder()->setLayout('ajax');
             $options = $this->Products->find('all')
-                ->select(['sku','name'])
+                ->select(['id','sku','name'])
                 ->toArray();
             $opt = [];
             foreach($options as $k => $vals){
-                $opt[$k]['sku'] = $vals['sku'];
-                $opt[$k]['name'] = $vals['name'];
+                $stock =$this->ProductOptionStocks->sumStock($vals['id']);
+                if($stock > 1){
+                    $opt[$k]['sku'] = $vals['sku'];
+                    $opt[$k]['name'] = $vals['name'];
+                }
             }
+
             return $this->response->withType('application/json')
                 ->withStringBody(json_encode($opt));
         }

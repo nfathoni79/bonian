@@ -9,7 +9,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Product Deal') ?>
+                    <?= __('Promosi Penjualan') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -23,7 +23,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Product Deal') ?>
+                                <?= __('Promosi Penjualan') ?>
                             </span>
                         </a>
                     </li>
@@ -33,7 +33,17 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Product Deal') ?>
+                                <?= __('Flash Sale') ?>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="m-nav__separator">
+                        -
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
+                            <span class="m-nav__link-text">
+                                <?= __('Daftar Flash Sale') ?>
                             </span>
                         </a>
                     </li>
@@ -43,7 +53,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Edit Product Deal') ?>
+                                <?= __('Edit Flash Sale') ?>
                             </span>
                         </a>
                     </li>
@@ -58,7 +68,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Edit Product Deal') ?>
+                            <?= __('Edit Flash Sale') ?>
                         </h3>
                     </div>
                 </div>
