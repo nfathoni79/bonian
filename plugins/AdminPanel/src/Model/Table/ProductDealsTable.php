@@ -71,10 +71,10 @@ class ProductDealsTable extends Table
             ->requirePresence('date_end', 'create')
             ->allowEmptyDateTime('date_end', false);
 
-//        $validator
-//            ->integer('status')
-//            ->requirePresence('status', 'create')
-//            ->allowEmptyString('status', false);
+        $validator
+            ->integer('status')
+            ->requirePresence('status', 'create')
+            ->allowEmptyString('status', false);
 
         return $validator;
     }

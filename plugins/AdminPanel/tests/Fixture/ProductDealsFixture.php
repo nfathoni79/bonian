@@ -43,8 +43,8 @@ class ProductDealsFixture extends TestFixture
             [
                 'id' => 1,
                 'name' => 'Lorem ipsum d',
-                'date_start' => '2019-02-21 06:42:03',
-                'date_end' => '2019-02-21 06:42:03',
+                'date_start' => '2019-02-22 10:21:05',
+                'date_end' => '2019-02-22 10:21:05',
                 'status' => 1
             ],
         ];
