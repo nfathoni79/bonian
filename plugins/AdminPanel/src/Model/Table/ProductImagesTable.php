@@ -121,6 +121,13 @@ class ProductImagesTable extends Table
         return $validator;
     }
 
+    public function getNameImageById($id = null){
+        $getImage = $this->find()
+            ->where(['product_id' => $id])
+            ->first();
+        return $getImage['name'];
+    }
+
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.

@@ -8,6 +8,8 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductDealsTable $ProductDeals
  * @property \AdminPanel\Model\Table\ProductsTable $Products
  * @property \AdminPanel\Model\Table\ProductDealDetailsTable $ProductDealDetails
+ * @property \AdminPanel\Model\Table\ProductImagesTable $ProductImages
+ * @property \AdminPanel\Model\Table\ProductOptionStocksTable $ProductOptionStocks
  *
  * @method \AdminPanel\Model\Entity\ProductDeal[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -18,6 +20,8 @@ class ProductDealsController extends AppController
         parent::initialize();
         $this->loadModel('AdminPanel.Products');
         $this->loadModel('AdminPanel.ProductDealDetails');
+        $this->loadModel('AdminPanel.ProductImages');
+        $this->loadModel('AdminPanel.ProductOptionStocks');
     }
 
     /**
@@ -138,22 +142,35 @@ class ProductDealsController extends AppController
             $error = $validator->errors($this->request->getData());
 
             if (empty($error)) {
+                if(!empty(@$this->request->getData('id'))){
+                    $productDeal = $this->ProductDeals->get($this->request->getData('id'));
+                }else{
+                    $productDeal = $this->ProductDeals->newEntity();
+                }
 
-                $productDeal = $this->ProductDeals->newEntity();
                 $productDeal = $this->ProductDeals->patchEntity($productDeal, $this->request->getData());
                 if ($this->ProductDeals->save($productDeal)) {
                     $productDealId = $productDeal->get('id');
                     foreach($this->request->getData('ProductDealDetails') as $vals){
 
-                        $productDealDetails = $this->ProductDealDetails->newEntity([
-                            'product_deal_id' => $productDealId,
-                            'product_id' => $vals['produk_id'],
-                            'price_sale' => $vals['price_sale']
-                        ] , ['validate' => false]);
+                        if(!empty(@$vals['idx'])){
+                            $productDealDetails = $this->ProductDealDetails->get($vals['idx']);
+                            $productDealDetails = $this->ProductDealDetails->patchEntity($productDealDetails, [
+                                'product_deal_id' => $productDealId,
+                                'product_id' => $vals['produk_id'],
+                                'price_sale' => $vals['price_sale']
+                            ] , ['validate' => false]);
+                        }else{
+                            $productDealDetails = $this->ProductDealDetails->newEntity([
+                                'product_deal_id' => $productDealId,
+                                'product_id' => $vals['produk_id'],
+                                'price_sale' => $vals['price_sale']
+                            ] , ['validate' => false]);
+                        }
                         $this->ProductDealDetails->save($productDealDetails);
 
                     }
-                    $this->Flash->success(__('The product deal has been saved.'));
+                    $this->Flash->success(__('The Flash sale has been saved.'));
                 }
             }
 
@@ -166,15 +183,7 @@ class ProductDealsController extends AppController
     public function add()
     {
         $productDeal = $this->ProductDeals->newEntity();
-//        if ($this->request->is('post')) {
-//            $productDeal = $this->ProductDeals->patchEntity($productDeal, $this->request->getData());
-//            if ($this->ProductDeals->save($productDeal)) {
-//                $this->Flash->success(__('The product deal has been saved.'));
-//
-//                return $this->redirect(['action' => 'index']);
-//            }
-//            $this->Flash->error(__('The product deal could not be saved. Please, try again.'));
-//        }
+
         $this->set(compact('productDeal'));
 
     }
@@ -188,19 +197,29 @@ class ProductDealsController extends AppController
      */
     public function edit($id = null)
     {
+
         $productDeal = $this->ProductDeals->get($id, [
             'contain' => []
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $productDeal = $this->ProductDeals->patchEntity($productDeal, $this->request->getData());
-            if ($this->ProductDeals->save($productDeal)) {
-                $this->Flash->success(__('The product deal has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The product deal could not be saved. Please, try again.'));
+        $ProductDealDetail = $this->ProductDealDetails->find()
+            ->where(['ProductDealDetails.product_deal_id' => $id])
+            ->select([
+                'Products.id',
+                'Products.sku',
+                'Products.name',
+                'Products.price',
+                'Products.price_sale',
+                'ProductDealDetails.id',
+                'ProductDealDetails.price_sale',
+            ])
+            ->contain(['Products'])
+            ->all()->toArray();
+        foreach($ProductDealDetail as $k => $vals){
+            $ProductDealDetail[$k]['product']['images'] = $this->ProductImages->getNameImageById($vals['product']['id']);
+            $ProductDealDetail[$k]['product']['stock'] = $this->ProductOptionStocks->sumStock($vals['product']['id']);
         }
-        $this->set(compact('productDeal'));
+
+        $this->set(compact('productDeal','ProductDealDetail'));
     }
 
     /**
@@ -225,6 +244,36 @@ class ProductDealsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Delete Detail method
+     *
+     * @param string|null $id Product Deal id.
+     * @return \Cake\Http\Response|null Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function deleteDetail()
+    {
+        if ($this->request->is('ajax')) {
+            $this->viewBuilder()->setLayout('ajax');
+            $productDeal = $this->ProductDealDetails->get($this->request->getData('id'));
+            try {
+                if ($this->ProductDealDetails->delete($productDeal)) {
+                    $this->Flash->success(__('The product deal detail has been deleted.'));
+                    $response['is_error'] = false;
+                } else {
+                    $this->Flash->error(__('The product deal detail could not be deleted. Please, try again.'));
+                    $response['is_error'] = true;
+                }
+            } catch (Exception $e) {
+                $this->Flash->error(__('The product deal detail could not be deleted. Please, try again.'));
+                $response['is_error'] = true;
+            }
+
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($response));
+        }
     }
 
 
@@ -256,12 +305,14 @@ class ProductDealsController extends AppController
                     'Products.sku',
                     'Products.name',
                     'Products.price',
-                    'Products.price_discount',
+                    'Products.price_sale',
                 ])
                 ->where(['Products.sku' => $this->request->getData('sku')])
                 ->contain(['ProductImages'])
                 ->first()
                 ->toArray();
+            $options['stock'] = $this->ProductOptionStocks->sumStock($options['id']);
+
             return $this->response->withType('application/json')
                 ->withStringBody(json_encode($options));
         }

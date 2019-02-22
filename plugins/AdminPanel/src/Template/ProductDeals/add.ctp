@@ -31,7 +31,7 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
+                        <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
                                 <?= __('Flash Sale') ?>
                             </span>
@@ -41,7 +41,7 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
+                        <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
                                 <?= __('Daftar Flash Sale') ?>
                             </span>
@@ -123,6 +123,7 @@
                             <div class="col-lg-4">
                                 <div class="m-typeahead">
                                 <input type="text" name="ProductDealDetails[0][produk]" placeholder="Pencarian Produk" class="form-control form-control-danger m-input m-input--air k_typeahead" dir="ltr" data-row="0">
+
                                 </div>
                             </div>
                             <div class="col-lg-6 info-detail-0">
@@ -160,12 +161,12 @@ echo $this->Html->script([
 
     $('.add-flash-sale').on('click',function(){
         var rows = $('.m-typeahead').length + 1;
-        var template = '<div class="col-md-12 mt-5">\n' +
+        var template = '<div class="col-md-12 mt-5 rowing-'+rows+'">\n' +
             '<div class="form-group m-form__group row">\n' +
             '<label class="col-form-label col-lg-2">Nama Produk</label>\n' +
             '<div class="col-lg-4">\n' +
             '<div class="m-typeahead">\n' +
-            '<input type="text" name="ProductDealDetails['+rows+'][produk]" placeholder="Pencarian Produk" class="form-control form-control-danger m-input m-input--air k_typeahead'+rows+'" dir="ltr" data-row="'+rows+'">\n' +
+            '<input type="text" name="ProductDealDetails['+rows+'][produk]" placeholder="Pencarian Produk" class="form-control form-control-danger m-input m-input--air k_typeahead'+rows+'" dir="ltr" data-row="'+rows+'"><a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--custom m-btn--icon delete-flash-sale mt-3" data-row="'+rows+'"> <span><i class="la la-trash"></i> Hapus dari daftar produk</span></a>\n' +
             '</div>\n' +
             '</div>\n' +
             '<div class="col-lg-6 info-detail-'+rows+'">\n' +
@@ -174,6 +175,9 @@ echo $this->Html->script([
             '</div>';
         $('.p-flash-sale').append(template);
 
+        $('.delete-flash-sale').on('click',function(){
+            $('div').remove('.rowing-'+$(this).data('row'));
+        });
         var bestPictures = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -210,6 +214,7 @@ echo $this->Html->script([
                     '<h4 class="m-widget5__title">'+data.name+'</h4>\n' +
                     '<span class="m-widget5__info"> Harga Reguler : <s>Rp. ' + data.price +'</s></span><br>\n' +
                     '<span class="m-widget5__info"> Harga Jual : Rp. ' + data.price_discount +'</span><br>\n' +
+                    '<span class="m-widget5__info"> Sisa Stock : ' + data.stock +'</span><br>\n' +
                     '<input type="hidden" name="ProductDealDetails['+row+'][produk_id]" class="form-control form-control-danger m-input m-input--air" value="'+data.id+'">\n'+
                     '<input type="text" name="ProductDealDetails['+row+'][price_sale]" class="form-control form-control-danger m-input m-input--air" placeholder="Harga Flash Sale">\n' +
                     '</div>\n' +
@@ -293,6 +298,7 @@ echo $this->Html->script([
                     '<h4 class="m-widget5__title">'+data.name+'</h4>\n' +
                     '<span class="m-widget5__info"> Harga Reguler : <s>Rp. ' + data.price +'</s></span><br>\n' +
                     '<span class="m-widget5__info"> Harga Jual : Rp. ' + data.price_discount +'</span><br>\n' +
+                    '<span class="m-widget5__info"> Sisa Stock : ' + data.stock +'</span><br>\n' +
                     '<input type="hidden" name="ProductDealDetails['+row+'][produk_id]" class="form-control form-control-danger m-input m-input--air" value="'+data.id+'">\n'+
                     '<input type="text" name="ProductDealDetails['+row+'][price_sale]" class="form-control form-control-danger m-input m-input--air" placeholder="Harga Flash Sale">\n' +
                     '</div>\n' +

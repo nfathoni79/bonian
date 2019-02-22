@@ -108,4 +108,13 @@ class ProductOptionStocksTable extends Table
 
         return $rules;
     }
+
+    public function sumStock($productId = null){
+        $query = $this->find();
+        $result = $query
+            ->select(['sum' => $query->func()->sum('ProductOptionStocks.stock')])
+            ->where(['product_id' => $productId])
+            ->toArray();
+        return $result[0]['sum'] ? $result[0]['sum'] : 0;
+    }
 }
