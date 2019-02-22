@@ -25,6 +25,7 @@ use Cake\ORM\Entity;
  * @property string|null $condition
  * @property string|null $profile
  * @property int $view
+ * @property int $point
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
@@ -73,6 +74,7 @@ class Product extends Entity
         'condition' => true,
         'profile' => true,
         'view' => true,
+        'point' => true,
         'created' => true,
         'modified' => true,
         'product_stock_status' => true,
