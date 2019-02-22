@@ -10,6 +10,10 @@ use Cake\ORM\Entity;
  * @property int $product_id
  * @property string|null $name
  * @property int $primary
+ * @property string|null $dir
+ * @property int $size
+ * @property string|null $type
+ * @property int $idx
  * @property \Cake\I18n\FrozenTime $created
  *
  * @property \AdminPanel\Model\Entity\Product $product
@@ -34,6 +38,7 @@ class ProductImage extends Entity
         'dir' => true,
         'size' => true,
         'type' => true,
+        'idx' => true,
         'created' => true,
         'product' => true,
         'product_image_sizes' => true

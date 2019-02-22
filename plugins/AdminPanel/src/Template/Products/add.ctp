@@ -116,7 +116,11 @@
             }
         });
 
-
+        function reindexProduct(formEl) {
+            formEl.find('.product-variant-item').each(function(index) {
+                $(this).attr('data-index', ++index);
+            });
+        }
 
         /*var optbranchs = getList();
         getList().then(function(value){
@@ -154,7 +158,7 @@
                     formTemplate += '<div class="form-group m-form__group row">\n' +
                         '<label class="col-xl-4 col-form-label">'+text+'</label>\n' +
                         '<div class="col-xl-6">\n' +
-                        '<select name="ProductOptionValues['+i+']['+text.toLowerCase()+']" class="form-control select2 m-input select-'+text.toLowerCase()+'" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
+                        '<select name="ProductOptionValueLists['+i+']['+values+']" class="form-control select2 m-input select-'+text.toLowerCase()+'" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
                         '</div>\n' +
                         '<div class="col-xl-2">\n' +
                         '<a href="#" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-variant" style="width:40px; height: 40px;"  data-toggle="modal" data-target="#modal-attribute" data-variant="'+text.toLowerCase()+'"><i class="la la-plus"></i></a>\n' +
@@ -163,7 +167,7 @@
                 });
 
 
-                var template = '<div class="m-accordion__item item-'+i+'">\n' +
+                var template = '<div class="m-accordion__item product-variant-item item-'+i+'">\n' +
                     '<div class="m-accordion__item-head" role="tab" id="m_accordion_2_item_'+i+'_head" data-toggle="collapse" href="#m_accordion_2_item_'+i+'_body" aria-expanded="    false">\n' +
                     '<span class="m-accordion__item-title">Varian Produk <a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item='+i+'><i class="la la-trash"></i></a></span>\n' +
                     '<span class="m-accordion__item-mode"></span>\n' +
@@ -222,6 +226,10 @@
 
                 if(formTemplate != ''){
                     var appendTemplate = $('.form-dynamic').append(template);
+                    //after append reindex product variant options
+
+                    reindexProduct(formEl);
+
                     if(radioValue == 'Berat'){
                         appendTemplate.find('.berat').show();
                     }else{
@@ -237,6 +245,7 @@
                             $("input[name='options[]']").attr('disabled', false);
                         }
 
+                        reindexProduct(formEl);
                         //remove dropzone index
                         for(var z in dropzones) {
                             if (dropzones[z].index == item) {
@@ -281,7 +290,7 @@
                     $('.select2').select2();
 
                     //process dropzone m-dropzone dropzone
-                    let dropzone = new Dropzone("#m-dropzone" + i, {
+                    var dropzone = new Dropzone("#m-dropzone" + i, {
                         url: "<?= $this->Url->build(['action' => 'upload']); ?>",
                         maxFiles: 10,
                         maxFilesize: 10, // MB
@@ -304,7 +313,7 @@
 
                         },
                         success: function(file, response) {
-                            console.log(file, response)
+                            //console.log(file, response)
                         },
                         maxfilesexceeded: function(file) {
                             this.removeFile(file);
@@ -312,6 +321,8 @@
                         sending: function(file, xhr, formData) {
                             formData.append('_csrfToken', $('input[name=_csrfToken]').val());
                             formData.append('product_id', $('input[name=id]').val());
+                            formData.append('idx', $(file.previewElement).parents('.product-variant-item').attr('data-index'));
+
                         }
                     });
 

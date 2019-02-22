@@ -250,13 +250,20 @@ class ProductsController extends AppController
 
                 $productOption = new Validator();
 
-                $productOption
+                /*$productOption
                     ->notBlank('warna', 'tidak boleh kosong');
 
                 $productOption
-                    ->notBlank('ukuran', 'tidak boleh kosong');
+                    ->notBlank('ukuran', 'tidak boleh kosong');*/
 
-                $validator->addNestedMany('ProductOptionValues', $productOption);
+                //dynamic validation from table options
+                $getOption = $this->Options->find('list');
+                foreach($getOption as $option_id => $option_name) {
+                    $productOption
+                        ->notBlank($option_id, 'tidak boleh kosong');
+                }
+
+                $validator->addNestedMany('ProductOptionValueLists', $productOption);
 
                 $productPrice = new Validator();
                 $productPrice
@@ -264,6 +271,22 @@ class ProductsController extends AppController
                     ->numeric('price', 'tidak boleh kosong');
 
                 $validator->addNestedMany('ProductOptionPrices', $productPrice);
+
+
+                $productSize = new Validator();
+                $productSize
+                    ->notBlank('weight');
+
+
+                //added nested validation on branches -> 0 -> branch_id
+                $branches = new Validator();
+                $branches
+                    ->requirePresence('branch_id')
+                    ->notBlank('branch_id');
+
+                $productSize->addNestedMany('branches', $branches);
+
+                $validator->addNestedMany('ProductOptionStocks', $productSize);
 
                 $error = $validator->errors($this->request->getData());
 
@@ -310,6 +333,7 @@ class ProductsController extends AppController
                             $idx = 1;
                             foreach($option_prices as $key => $price) {
 
+                                $price['idx'] = $idx;
                                 $getOptionPrice = $this
                                     ->Products
                                     ->ProductOptionPrices
@@ -351,9 +375,10 @@ class ProductsController extends AppController
                                                         ->where([
                                                             'product_id' => $productEntity->get('id'),
                                                             'product_option_price_id' => $OptionPriceEntity->get('id'),
-                                                            'branch_id' => $branch['branch_id']
+                                                            'branch_id' => $stock['branch_id']
                                                         ])
                                                         ->first();
+
 
                                                     $OptionStockEntity = !empty($getOptionStock) ? $getOptionStock : $this
                                                         ->Products
@@ -383,8 +408,7 @@ class ProductsController extends AppController
                             }
                         }
 
-                        debug($this->request->getData('ProductOptionPrices'));
-                        debug($this->request->getData('ProductOptionStocks'));
+
 
                     }
 
