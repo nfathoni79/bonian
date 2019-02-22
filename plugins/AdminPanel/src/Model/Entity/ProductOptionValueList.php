@@ -8,6 +8,7 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int|null $product_option_price_id
+ * @property int|null $option_id
  * @property int|null $option_value_id
  *
  * @property \AdminPanel\Model\Entity\ProductOptionPrice $product_option_price
@@ -27,6 +28,7 @@ class ProductOptionValueList extends Entity
      */
     protected $_accessible = [
         'product_option_price_id' => true,
+        'option_id' => true,
         'option_value_id' => true,
         'product_option_price' => true,
         'option_value' => true

@@ -15,6 +15,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductImageSizesTable $ProductImageSizes
  * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable $ProductToCategories
+ * @property \AdminPanel\Model\Table\ProductOptionValueListsTable $ProductOptionValueLists
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -33,6 +34,7 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.ProductImageSizes');
         $this->loadModel('AdminPanel.ProductCategories');
         $this->loadModel('AdminPanel.ProductToCategories');
+        $this->loadModel('AdminPanel.ProductOptionValueLists');
 
         $this->allowedFileType = [
             'image/jpg',
@@ -283,6 +285,9 @@ class ProductsController extends AppController
                 $branches
                     ->requirePresence('branch_id')
                     ->notBlank('branch_id');
+                $branches
+                    ->requirePresence('stock')
+                    ->notBlank('stock');
 
                 $productSize->addNestedMany('branches', $branches);
 
@@ -398,6 +403,41 @@ class ProductsController extends AppController
                                                         ->ProductOptionStocks
                                                         ->save($OptionStockEntity);
                                                 }
+                                            }
+
+                                        }
+                                    }
+
+                                    if ($option_value_lists = $this->request->getData('ProductOptionValueLists')) {
+                                        foreach($option_value_lists as $k => $lists) {
+
+                                            foreach($lists as $option_id => $option_value_id) {
+
+                                                $getValueList = $this
+                                                    ->ProductOptionValueLists
+                                                    ->find()
+                                                    ->where([
+                                                        'product_option_price_id' => $OptionPriceEntity->get('id'),
+                                                        'option_id' => $option_id
+                                                    ])
+                                                    ->first();
+
+                                                $OptionValueListEntity = !empty($getValueList) ? $getValueList : $this
+                                                    ->ProductOptionValueLists
+                                                    ->newEntity([
+                                                        'product_option_price_id' => $OptionPriceEntity->get('id'),
+                                                        'option_id' => $option_id
+                                                    ]);
+
+                                                $this
+                                                    ->ProductOptionValueLists
+                                                    ->patchEntity($OptionValueListEntity, ['option_value_id' => $option_value_id]);
+
+                                                $this
+                                                    ->ProductOptionValueLists
+                                                    ->save($OptionValueListEntity);
+
+
                                             }
 
                                         }

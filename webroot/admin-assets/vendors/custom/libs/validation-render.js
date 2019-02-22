@@ -60,7 +60,7 @@ ajaxValidation.prototype.ObjectLength = function( object ) {
 };
 
 /**
- * serialize form :input all https://jsfiddle.net/7Lwfx8ty/1/
+ * serialize form :input all https://jsfiddle.net/7Lwfx8ty/
  * @param input
  */
 ajaxValidation.prototype.post = function(url, input, callback) {
