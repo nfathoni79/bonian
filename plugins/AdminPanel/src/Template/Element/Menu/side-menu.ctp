@@ -152,12 +152,12 @@
                     ],
                     [
                         'name' => 'Group Sales',
-                        'url' => '#',
+                        'url' => ['controller' => 'ProductGroups', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
                     [
-                        'name' => 'Buy 1 GET 1',
+                        'name' => 'Promotion Sale',
                         'url' => '#',
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
