@@ -858,7 +858,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <?= $this->Form->create(null,['action' => 'addOptions','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form', 'id' => 'form-attribute']); ?>
+            <?= $this->Form->create(null,['url' => ['action' => 'addOptions'],'class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form', 'id' => 'form-attribute']); ?>
             <div class="modal-body">
                 <?php echo $this->Form->hidden('code_attribute', ['div' => false, 'label' => false, 'id' => 'code-attribute']);?>
                 <div class="form-group m-form__group row">
