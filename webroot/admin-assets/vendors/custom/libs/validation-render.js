@@ -202,7 +202,7 @@ ajaxValidation.prototype.removeError = function() {
 }
 
 /**
- * 
+ *
  * @param el
  * @param message
  */

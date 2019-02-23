@@ -109,8 +109,8 @@ class ProductCategoriesController extends AppController
     {
         $productCategory = $this->ProductCategories->newEntity();
         if ($this->request->is('post')) {
-            debug($this->request->getData());
-            exit;
+            //debug($this->request->getData());
+            //exit;
             $productCategory = $this->ProductCategories->patchEntity($productCategory, $this->request->getData());
             if ($this->ProductCategories->save($productCategory)) {
                 $this->Flash->success(__('The product category has been saved.'));
@@ -132,7 +132,7 @@ class ProductCategoriesController extends AppController
     public function import(){
         if ($this->request->is('post')) {
 
-            $data = $this->request->data['files'];
+            $data = $this->request->getData('files');
             $file = $data['tmp_name'];
             $handle = fopen($file, "r");
             while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
