@@ -1,10 +1,18 @@
-
+/**
+ *
+ * @param formEL
+ */
 function ajaxValidation(formEL) {
     this.form = formEL;
     this.blockUIelement = '';
 }
 
-
+/**
+ *
+ * @param element
+ * @param field
+ * @param matched
+ */
 ajaxValidation.prototype.checkFieldName = function(element, field, matched) {
     let inputs = [];
     element.find(':input:visible').each(function() {
@@ -18,12 +26,23 @@ ajaxValidation.prototype.checkFieldName = function(element, field, matched) {
     });
 }
 
+/**
+ *
+ * @param object
+ * @returns {*}
+ */
 ajaxValidation.prototype.extractMessage = function (object) {
     if (this.ObjectLength(object) === 0) {
         return object;
     }
 }
 
+/**
+ *
+ * @param object
+ * @returns {Array}
+ * @private
+ */
 ajaxValidation.prototype.extractFields_ = function (object) {
     var o = [];
     var self = this;
@@ -48,7 +67,11 @@ ajaxValidation.prototype.extractFields_ = function (object) {
     });
     return o;
 };
-
+/**
+ *
+ * @param object
+ * @returns {Array}
+ */
 ajaxValidation.prototype.extractFields = function (object) {
     var form = this.flattenObject(object);
     var o = [];
@@ -59,7 +82,13 @@ ajaxValidation.prototype.extractFields = function (object) {
     return o;
 };
 
-
+/**
+ * https://jsfiddle.net/089qtpfh/2/
+ * @param obj
+ * @param inRet
+ * @param inPrefix
+ * @returns {*|{}}
+ */
 ajaxValidation.prototype.flattenObject = function(obj, inRet, inPrefix) {
     const ret = inRet || {};
     const prefix = inPrefix || '';
@@ -76,9 +105,12 @@ ajaxValidation.prototype.flattenObject = function(obj, inRet, inPrefix) {
 }
 
 
-
-
-
+/**
+ *
+ * @param object
+ * @returns {number}
+ * @constructor
+ */
 ajaxValidation.prototype.ObjectLength = function( object ) {
     var length = 0;
     for( var [key, value] of Object.entries(object) ) {
@@ -152,16 +184,28 @@ ajaxValidation.prototype.post = function(url, input, callback) {
     }
 }
 
+/**
+ * set blocking element while ajax request
+ * @param el
+ */
 ajaxValidation.prototype.setblockUI = function(el) {
     this.blockUIelement = el;
 }
 
+/**
+ * remove error message
+ */
 ajaxValidation.prototype.removeError = function() {
     this.form.find('.form-group.is-invalid').removeClass('is-invalid');
     this.form.find('.error.form-control-feedback').remove();
     this.form.find('.is-invalid').removeClass('is-invalid');
 }
 
+/**
+ * 
+ * @param el
+ * @param message
+ */
 ajaxValidation.prototype.appendTextInput = function (el, message) {
     let out = '<div class="error form-control-feedback">';
     let len = Object.entries(message).length;
