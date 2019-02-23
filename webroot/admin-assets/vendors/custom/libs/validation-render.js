@@ -24,7 +24,7 @@ ajaxValidation.prototype.extractMessage = function (object) {
     }
 }
 
-ajaxValidation.prototype.extractFields = function (object) {
+ajaxValidation.prototype.extractFields_ = function (object) {
     var o = [];
     var self = this;
     Object.keys(object).map(e => {
@@ -48,6 +48,36 @@ ajaxValidation.prototype.extractFields = function (object) {
     });
     return o;
 };
+
+ajaxValidation.prototype.extractFields = function (object) {
+    var form = this.flattenObject(object);
+    var o = [];
+    for(var [key, value] of Object.entries(form)) {
+
+        o.push({field: key, message: value});
+    }
+    return o;
+};
+
+
+ajaxValidation.prototype.flattenObject = function(obj, inRet, inPrefix) {
+    const ret = inRet || {};
+    const prefix = inPrefix || '';
+    var self = this;
+    if (typeof obj === 'object' && obj != null && self.ObjectLength(obj) >= 1) {
+        Object.keys(obj).forEach((key) => {
+            self.flattenObject(obj[key], ret, prefix === '' ? key : `${prefix}[${key}]`);
+        });
+    } else if (prefix !== '') {
+        ret[prefix] = obj;
+    }
+
+    return ret;
+}
+
+
+
+
 
 ajaxValidation.prototype.ObjectLength = function( object ) {
     var length = 0;
