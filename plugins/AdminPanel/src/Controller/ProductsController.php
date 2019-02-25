@@ -333,6 +333,14 @@ class ProductsController extends AppController
                             ->ProductMetaTags
                             ->save($metaTagEntity);
 
+                        //product tags
+                        if ($productTags = $this->request->getData('ProductTags')) {
+                            foreach($productTags as $tag_id) {
+                                $productTagEntity = $this->Products->ProductTags->newEntity(['product_id' => $productEntity->get('id')]);
+                                
+                            }
+                        }
+
                         //save product to couriers
                         if ($couriers = $this->request->getData('ProductToCourriers')) {
                             /**

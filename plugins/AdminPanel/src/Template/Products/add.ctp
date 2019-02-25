@@ -405,6 +405,18 @@
                 });
             });
         }
+
+
+        $('#product-tagging').select2({
+            placeholder: "Tambah Tag Produk",
+            tags: true
+        }).on("change", function(e) {
+            var isNew = $(this).find('[data-select2-tag="true"]');
+            if(isNew.length && $.inArray(isNew.val(), $(this).val()) !== -1){
+                //isNew.replaceWith('<option selected value="' + isNew.val() + '">' + isNew.val() + '</option>');
+                console.log('New tag: ', isNew.val());
+            }
+        });
     })
 </script>
 <script>
@@ -731,6 +743,18 @@
                                             </div>
 
                                         </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-xl-6">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Produk Tagging'); ?></label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('ProductTags', ['options' => [5 => 'keren bgt', 6 => 'Product tags'], 'label' => false, 'class' => $default_class . ' m-select2', 'id' => 'product-tagging', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     <div class="row mt-3">
