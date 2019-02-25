@@ -66,6 +66,16 @@
                         'url' => ['controller' => 'Customers', 'action' => 'point'],
                         'icon' => 'm-menu__link-bullet'
                     ],
+                    [
+                        'name' => 'Networking',
+                        'url' => ['controller' => 'Customers', 'action' => 'network'],
+                        'icon' => 'm-menu__link-bullet'
+                    ],
+                    [
+                        'name' => 'Statistik Share',
+                        'url' => ['controller' => 'Customers', 'action' => 'share'],
+                        'icon' => 'm-menu__link-bullet'
+                    ],
                 ]
             ],
             [
@@ -174,7 +184,7 @@
                     ],
                     [
                         'name' => 'Promotion Sale',
-                        'url' => '#',
+                        'url' => ['controller' => 'ProductPromotions', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
@@ -190,7 +200,14 @@
                 'name' => 'Gamification',
                 'url' => '#',
                 'icon' => 'm-menu__link-icon flaticon-apps',
-                'children' => []
+                'children' => [
+                    [
+                    'name' => 'Wheel Of Fortune',
+                    'url' => ['controller' => 'GameWheels', 'action' => 'index'],
+                    'icon' => 'm-menu__link-bullet',
+                    'children' => []
+                    ],
+                ]
             ],
             [
                 'name' => 'Data Master',
