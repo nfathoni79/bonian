@@ -12,6 +12,7 @@ class AppController extends BaseController
     {
         //parent::initialize();
         $this->loadComponent('Flash');
+        $this->loadComponent('AdminPanel.DataTable');
         $this->loadComponent('Acl.Acl');
         $this->loadComponent('Auth', [
             'authorize' => [

@@ -48,9 +48,25 @@
             ],
             [
                 'name' => 'Pelanggan',
-                'url' => ['controller' => 'Customers', 'action' => 'index'],
+                'url' => '#',
                 'icon' => 'm-menu__link-icon flaticon-users',
-                'children' => []
+                'children' => [
+                    [
+                        'name' => 'Daftar Pelanggan',
+                        'url' => ['controller' => 'Customers', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet'
+                    ],
+                    [
+                        'name' => 'Mutasi Saldo',
+                        'url' => ['controller' => 'Customers', 'action' => 'balance'],
+                        'icon' => 'm-menu__link-bullet'
+                    ],
+                    [
+                        'name' => 'Mutasi Point',
+                        'url' => ['controller' => 'Customers', 'action' => 'point'],
+                        'icon' => 'm-menu__link-bullet'
+                    ],
+                ]
             ],
             [
                 'name' => 'Toko Cabang',

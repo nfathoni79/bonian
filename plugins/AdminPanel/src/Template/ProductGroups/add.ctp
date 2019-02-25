@@ -91,24 +91,22 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group m-form__group row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <?php  echo $this->Form->control('name',['class' => $default_class,'required' => false,'label' => 'Judul Promosi']); ?>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <?php  echo $this->Form->control('value',['class' => $default_class,'required' => false,'label' => 'Volume Group']); ?>
                             </div>
-                        </div>
-                        <div class="form-group m-form__group row">
-                            <div class="col-lg-6">
-                                <?php echo $this->Form->control('date_start',['type' => 'text','required' => false,'class' => $default_class, 'id' => 'm_datetimepicker_start', 'label' => 'Start']); ?>
-                            </div>
-                            <div class="col-lg-6">
-                                <?php echo $this->Form->control('date_end',['type' => 'text','required' => false,'class' => $default_class, 'id' => 'm_datetimepicker_end', 'label' => 'End']); ?>
-                            </div>
-                        </div>
-                        <div class="form-group m-form__group row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <?php  echo $this->Form->control('status',['options' => ['0' => 'Pending', '1' => 'Berjalan', '2' => 'Berakhir'],'class' => $default_class,'label' => 'Status']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-4">
+                                <?php echo $this->Form->control('date_start',['type' => 'text','required' => false,'class' => $default_class, 'id' => 'm_datetimepicker_start', 'label' => 'Schedule Start']); ?>
+                            </div>
+                            <div class="col-lg-4">
+                                <?php echo $this->Form->control('date_end',['type' => 'text','required' => false,'class' => $default_class, 'id' => 'm_datetimepicker_end', 'label' => 'Schedule giEnd']); ?>
                             </div>
                         </div>
                     </div>
