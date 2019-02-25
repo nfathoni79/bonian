@@ -16,6 +16,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable $ProductToCategories
  * @property \AdminPanel\Model\Table\ProductOptionValueListsTable $ProductOptionValueLists
+ * @property \AdminPanel\Model\Table\TagsTable $Tags
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -35,6 +36,7 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.ProductCategories');
         $this->loadModel('AdminPanel.ProductToCategories');
         $this->loadModel('AdminPanel.ProductOptionValueLists');
+        $this->loadModel('AdminPanel.Tags');
 
         $this->allowedFileType = [
             'image/jpg',
@@ -334,10 +336,44 @@ class ProductsController extends AppController
                             ->save($metaTagEntity);
 
                         //product tags
-                        if ($productTags = $this->request->getData('ProductTags')) {
-                            foreach($productTags as $tag_id) {
+                        if ($product_tags = $this->request->getData('ProductTags')) {
+                            /**
+                             * @var \AdminPanel\Model\Entity\ProductTag[] $getProductTag
+                             */
+                            $getProductTag = $this->Products->ProductTags->find()
+                                ->where([
+                                    'product_id' => $productEntity->get('id')
+                                ]);
+
+                            //remove exists if not in request
+                            foreach($getProductTag as $tags) {
+                                if (!in_array($tags->get('tag_id'), $product_tags)) {
+                                    $this->Products->ProductTags->delete($tags);
+                                } else {
+                                    $key = array_search($tags->get('tag_id'), $product_tags);
+                                    if ($key >= 0) {
+                                        unset($product_tags[$key]);
+                                    }
+                                }
+                            }
+                            foreach($product_tags as $tag_id) {
                                 $productTagEntity = $this->Products->ProductTags->newEntity(['product_id' => $productEntity->get('id')]);
-                                
+                                if (!is_numeric($tag_id)) {
+                                    //save new data to tags and product_tags
+                                    $tagEntity = $this->Tags->newEntity(['name' => $tag_id]);
+                                    if ($this->Tags->save($tagEntity)) {
+                                        $tag_id = $tagEntity->get('id');
+                                    } else {
+                                        $tag_id = null;
+                                    }
+
+                                }
+                                if ($tag_id) {
+                                    $this->Products->ProductTags->patchEntity($productTagEntity, ['tag_id' => $tag_id]);
+                                    $this->Products->ProductTags->save($productTagEntity);
+                                }
+
+
                             }
                         }
 
@@ -353,10 +389,10 @@ class ProductsController extends AppController
 
                             //remove exists if not in request
                             foreach($getCourriers as $courier) {
-                                if (!in_array($courier->get('id'), $couriers)) {
+                                if (!in_array($courier->get('courrier_id'), $couriers)) {
                                     $this->Products->ProductToCourriers->delete($courier);
                                 } else {
-                                    $key = array_search($courier->get('id'), $couriers);
+                                    $key = array_search($courier->get('courrier_id'), $couriers);
                                     if ($key >= 0) {
                                         unset($couriers[$key]);
                                     }
@@ -636,7 +672,9 @@ class ProductsController extends AppController
             })->toArray();
         //debug($parent_categories->toArray());
 
-        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories'));
+        $product_tags = $this->Tags->find('list')->toArray();
+
+        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags'));
     }
 
     public function getoptionvalues(){

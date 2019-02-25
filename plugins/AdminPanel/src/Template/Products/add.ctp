@@ -290,7 +290,7 @@
                         y++;
                     });
 
-                    $('.select2').select2();
+                    appendTemplate.find('.select2').select2();
 
                     //process dropzone m-dropzone dropzone
                     var dropzone = new Dropzone("#m-dropzone" + i, {
@@ -750,7 +750,7 @@
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Produk Tagging'); ?></label>
                                                 <div class="col-xl-9">
-                                                    <?php echo $this->Form->control('ProductTags', ['options' => [5 => 'keren bgt', 6 => 'Product tags'], 'label' => false, 'class' => $default_class . ' m-select2', 'id' => 'product-tagging', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
+                                                    <?php echo $this->Form->control('ProductTags', ['options' => $product_tags, 'label' => false, 'class' => $default_class . ' m-select2', 'id' => 'product-tagging', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
                                                 </div>
                                             </div>
                                         </div>
