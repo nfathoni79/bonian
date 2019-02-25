@@ -333,6 +333,36 @@ class ProductsController extends AppController
                             ->ProductMetaTags
                             ->save($metaTagEntity);
 
+                        //save product to couriers
+                        if ($couriers = $this->request->getData('ProductToCourriers')) {
+                            /**
+                             * @var \AdminPanel\Model\Entity\ProductToCourrier[] $getCourriers
+                             */
+                            $getCourriers = $this->Products->ProductToCourriers->find()
+                                ->where([
+                                    'product_id' => $productEntity->get('id')
+                                ]);
+
+                            //remove exists if not in request
+                            foreach($getCourriers as $courier) {
+                                if (!in_array($courier->get('id'), $couriers)) {
+                                    $this->Products->ProductToCourriers->delete($courier);
+                                } else {
+                                    $key = array_search($courier->get('id'), $couriers);
+                                    if ($key >= 0) {
+                                        unset($couriers[$key]);
+                                    }
+                                }
+                            }
+
+                            //insert new request
+                            foreach($couriers as $val) {
+                                $courierEntity = $this->Products->ProductToCourriers->newEntity(['product_id' => $productEntity->get('id')]);
+                                $this->Products->ProductToCourriers->patchEntity($courierEntity, ['courrier_id' => $val]);
+                                $this->Products->ProductToCourriers->save($courierEntity);
+                            }
+                        }
+
 
                         if ($option_prices = $this->request->getData('ProductOptionPrices')) {
                             $idx = 1;

@@ -22,6 +22,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductOptionStocksTable|\Cake\ORM\Association\HasMany $ProductOptionStocks
  * @property \AdminPanel\Model\Table\ProductStockMutationsTable|\Cake\ORM\Association\HasMany $ProductStockMutations
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable|\Cake\ORM\Association\HasMany $ProductToCategories
+ * @property \AdminPanel\Model\Table\ProductToCourriersTable|\Cake\ORM\Association\HasMany $ProductToCourriers
  *
  * @method \AdminPanel\Model\Entity\Product get($primaryKey, $options = [])
  * @method \AdminPanel\Model\Entity\Product newEntity($data = null, array $options = [])
@@ -105,6 +106,10 @@ class ProductsTable extends Table
         $this->hasMany('ProductToCategories', [
             'foreignKey' => 'product_id',
             'className' => 'AdminPanel.ProductToCategories'
+        ]);
+        $this->hasMany('ProductToCourriers', [
+            'foreignKey' => 'product_id',
+            'className' => 'AdminPanel.ProductToCourriers'
         ]);
     }
 

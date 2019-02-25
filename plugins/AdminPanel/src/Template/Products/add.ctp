@@ -78,8 +78,11 @@
 
         //== Change event
         wizard.on('change', function(wizard) {
-            if (wizard.getStep() === 1) {
-                //alert(1);
+            var nextAction = $('[data-wizard-action="next2"]');
+            if (wizard.isLastStep()) {
+                nextAction.hide();
+            } else {
+                nextAction.show();
             }
         });
 
