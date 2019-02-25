@@ -6,6 +6,8 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Utility\Text;
+use Cake\Core\Configure;
+use Intervention\Image\ImageManagerStatic as Image;
 
 /**
  * ProductImages Model
@@ -64,12 +66,43 @@ class ProductImagesTable extends Table
 
                     $tmp_name = tempnam(sys_get_temp_dir(), 'upload') . '.' . 'jpg'; //force convert to jpg
 
-
+                    /*
                     $imagine = new \Imagine\Gd\Imagine();
 
                     // Save that modified file to our temp file
-                    $imagine->open($data['tmp_name'])
-                        ->save($tmp_name);
+                    $image = $imagine->open($data['tmp_name']);
+
+
+                    //processing watermark
+                    if ($path = Configure::read('Images.watermark')) {
+                        $watermark_full_path = ROOT . DS . $path;
+                        if (file_exists($watermark_full_path)) {
+                            $size      = $image->getSize();
+                            $watermark = $imagine->open($watermark_full_path);
+                            $transparent = $watermark->palette()->color(array(0, 0, 0), 80);
+                            $transparent->darken(10);
+                            $watermark->effects()->colorize($transparent);
+                            $wSize     = $watermark->getSize();
+                            $bottomRight = new \Imagine\Image\Point($size->getWidth() - $wSize->getWidth(),
+                                $size->getHeight() - $wSize->getHeight() - 10);
+                            $image->paste($watermark, $bottomRight, 90);
+                        }
+                    }
+
+                    $image->save($tmp_name);
+                    */
+                    Image::configure(array('driver' => 'gd'));
+                    $img = Image::make($data['tmp_name']);
+                    if ($path = Configure::read('Images.watermark')) {
+                        $watermark_full_path = ROOT . DS . $path;
+                        if (file_exists($watermark_full_path)) {
+                            $png = Image::make($watermark_full_path);
+                            $img->insert($png, 'bottom-right', 10, 10);
+                        }
+                    }
+
+                    $img->save($tmp_name);
+
 
                     //after
                     $data['tmp_name'] = $tmp_name;

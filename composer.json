@@ -12,10 +12,11 @@
         "cakephp/plugin-installer": "^1.0",
         "icings/menu": "^3.0",
         "imagine/imagine": "^1.2",
+        "intervention/image": "^2.4",
         "josegonzalez/cakephp-upload": "^4.0",
-		"narendravaghela/cakephp-mailgun": "^3.0",
         "josegonzalez/dotenv": "3.*",
-        "mobiledetect/mobiledetectlib": "2.*"
+        "mobiledetect/mobiledetectlib": "2.*",
+        "narendravaghela/cakephp-mailgun": "^3.0"
     },
     "require-dev": {
         "cakephp/bake": "^1.9.0",

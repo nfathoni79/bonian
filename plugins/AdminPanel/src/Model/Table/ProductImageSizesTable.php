@@ -6,6 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+
 /**
  * ProductImageSizes Model
  *
@@ -107,6 +108,7 @@ class ProductImageSizesTable extends Table
         return $this->cachePath;
     }
 
+
     /**
      * @param \AdminPanel\Model\Entity\ProductImage $entity
      * @param $width
@@ -120,6 +122,7 @@ class ProductImageSizesTable extends Table
         if (file_exists($path)) {
             $imagine = new \Imagine\Gd\Imagine();
             $o = $imagine->open($path);
+
 
             $size = new \Imagine\Image\Box($width, $height);
             $mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
