@@ -115,6 +115,11 @@
 </div>
 
 <?php $this->append('script'); ?>
+<?php
+echo $this->Html->script([
+            '/admin-assets/app/js/lib-tools.js',
+    ]);
+?>
 <script>
 
     function delete_data(id) {
@@ -192,6 +197,17 @@
                         title: 'Image',
                         template: function(row) {
                             // return row.name;
+                            var primary_image = '<img src="<?= $this->Url->build('/admin-assets/app/media/img/products/no-image.png');?>" style="width: 50px;" />';
+                            if (typeof row.product_images != 'undefined' && row.product_images.length > 0) {
+                                primary_image = row.product_images[0].name;
+                                for(var i in row.product_images) {
+                                    if (row.product_images[i].primary === 1) {
+                                        primary_image = row.product_images[i].name;
+                                    }
+                                }
+                                primary_image = '<img src="<?= $this->Url->build('/images/50x50/');?>' + primary_image + '" style="width: 50px;" />';
+                            }
+                            return primary_image;
                         }
                     },
                     {
@@ -231,15 +247,15 @@
                         field: 'Products.price',
                         title: 'Price',
                         template: function(row) {
-                            return row.price;
+                            return parseInt(row.price).format(0, 3, '.', ',');
                         }
                     },
 
                     {
-                        field: 'Products.price_discount',
-                        title: 'Price_discount',
+                        field: 'Products.price_sale',
+                        title: 'Price Sale',
                         template: function(row) {
-                            return row.price_discount;
+                            return parseInt(row.price_sale).format(0, 3, '.', ',');
                         }
                     },
                     {

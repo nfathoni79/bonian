@@ -61,7 +61,7 @@ class ProductsController extends AppController
             /** custom default query : select, where, contain, etc. **/
             $data = $this->Products->find('all')
                 ->select();
-            $data->contain(['ProductStockStatuses', 'ProductWeightClasses', 'ProductStatuses']);
+            $data->contain(['ProductStockStatuses', 'ProductWeightClasses', 'ProductStatuses', 'ProductImages']);
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
@@ -168,7 +168,7 @@ class ProductsController extends AppController
                         'price' => 0,
                         'price_sale' => 0,
                         'weight' => 0,
-                        'product_weight_class_id' => null,
+                        'product_weight_class_id' => 1, // 1 mean gram
                         'product_status_id' => 2,
                         'highlight' => '',
                         'condition' => '', //TODO default value not null
