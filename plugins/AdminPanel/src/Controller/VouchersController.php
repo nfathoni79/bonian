@@ -74,6 +74,8 @@ class VouchersController extends AppController
         $this->set(compact('vouchers'));
     }
 
+
+
     /**
      * View method
      *
@@ -87,6 +89,15 @@ class VouchersController extends AppController
         $voucher = $this->Vouchers->get($id, [
             'contain' => ['Orders']
         ]);
+
+        if ($voucher) {
+            $type = $voucher->get('type');
+            $type_name = ($type == 1) ? 'Diskon (%)' : 'Potongan Harga';
+            $voucher->type = $type_name;
+
+            $status = $voucher->get('status');
+            $voucher->status = ($status == 1) ? 'Aktif' : 'Tidak Aktif';
+        }
 
         $this->set('voucher', $voucher);
     }

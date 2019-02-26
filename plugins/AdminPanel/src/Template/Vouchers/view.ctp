@@ -23,7 +23,7 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Type') ?></th>
-            <td><?= $this->Number->format($voucher->type) ?></td>
+            <td><?= $voucher->type ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Value') ?></th>
@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Status') ?></th>
-            <td><?= $this->Number->format($voucher->status) ?></td>
+            <td><?= $voucher->status; ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Date Start') ?></th>

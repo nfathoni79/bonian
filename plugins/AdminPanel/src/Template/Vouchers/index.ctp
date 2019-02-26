@@ -233,8 +233,8 @@
                         field: 'Vouchers.type',
                         title: 'Tipe',
                         template: function(row) {
-                            var stts = {'0' : 'Diskon','1' : 'Potongan Harga'};
-                            return stts[row.status];
+                            var stts = {'1' : 'Diskon (%)', '2' : 'Potongan Harga'};
+                            return stts[row.type];
                             return row.type;
                         }
                     },
@@ -251,7 +251,7 @@
                         field: 'Vouchers.status',
                         title: 'Status',
                         template: function(row) {
-                            var stts = {'0' : 'Aktif','1' : 'Tidak Aktif'};
+                            var stts = {'1' : 'Aktif','2' : 'Tidak Aktif'};
                             return stts[row.status];
                         }
                     },
