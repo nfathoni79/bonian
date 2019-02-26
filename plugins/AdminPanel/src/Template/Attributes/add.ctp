@@ -108,13 +108,13 @@
                             <div data-repeatable data-repeater-list="" class="col-lg-12">
                                 <div data-repeater-item class="row m--margin-bottom-10">
                                     <div class="col-lg-3">
-                                        <?php echo $this->Form->control('attribute[0][name]', ['label' => false, 'class' => $default_class]);?>
+                                        <?php echo $this->Form->control('attribute[0][name]', ['label' => false, 'class' => $default_class . ' attribute-name']);?>
                                     </div>
                                     <div class="col-lg-5">
-                                        <?php echo $this->Form->control('attribute[0][value]', ['options' => [], 'label' => false, 'class' => $default_class . ' attribute-value', 'id' => 'tags', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
+                                        <?php echo $this->Form->control('attribute[0][value]', ['options' => [], 'label' => false, 'class' => $default_class . ' attribute-value', 'id' => 'tags-0', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
                                     </div>
                                     <div class="col-lg-2">
-                                        <a href="#" data-repeater-delete="" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only">
+                                        <a href="javascript:void(0);" data-repeater-delete="" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row">
                                             <i class="la la-remove"></i>
                                         </a>
                                     </div>
@@ -196,26 +196,29 @@ echo $this->Html->script([
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
 
+    var count = 1;
     $('.repeater').on('click', '.button', function(e) {
         e.preventDefault();
 
         var $this = $(this),
             $repeater = $this.closest('.repeater').find('[data-repeatable]'),
-            count = $repeater.length,
+            //count = $repeater.length,
             $clone = $repeater.first().clone();
 
         $clone.find('.select2-container').remove();
+        $clone.find('.remove-row').show();
+        $clone.find('.form-control-feedback').remove();
 
 
         $clone.find('[id]').each(function() {
-            this.id = this.id + '-' + count;
+            this.id = this.id.replace(/\d+/, count);
         });
 
         $clone.find('[data-select2-id]').each(function() {
             $(this).attr('data-select2-id', this.id)
         });
 
-        $clone.find(':input').each(function() {
+        $clone.find('.attribute-name, attribute-value').each(function() {
             $(this).val('');
         });
 
@@ -223,7 +226,8 @@ echo $this->Html->script([
             this.name = this.name.replace(/\[\d+\]/, '[' + count + ']');
         });
 
-        createAttributeValues($clone.find('#tags-' + count))
+        createAttributeValues($clone.find('#tags-' + count));
+        removeRow($clone.find('.remove-row'));
 
         $clone.find('label').each(function() {
             var $this = $(this);
@@ -231,7 +235,17 @@ echo $this->Html->script([
         });
 
         $clone.insertBefore($this);
+        count++;
     });
+
+    function removeRow(selector) {
+        selector.on('click', function() {
+            $(this).parents('[data-repeatable]').remove();
+        });
+    }
+
+    removeRow($('.remove-row'));
+    $('[data-repeatable]').first().find('.remove-row').hide();
 
 
     function setChainCategory(target, parent_id) {
@@ -280,7 +294,7 @@ echo $this->Html->script([
         });
     }
 
-    createAttributeValues($('#tags'));
+    createAttributeValues($('#tags-0'));
 
 
 

@@ -185,7 +185,10 @@ class AttributesController extends AppController
 
                         }
                     }
-                    $this->Flash->success(__('The attribute has been saved.'));
+                    if ($attributeEntity->get('id')) {
+                        $this->Flash->success(__('The attribute has been saved.'));
+                    }
+
                 }
             }
 
