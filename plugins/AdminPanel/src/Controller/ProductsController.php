@@ -17,6 +17,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable $ProductToCategories
  * @property \AdminPanel\Model\Table\ProductOptionValueListsTable $ProductOptionValueLists
  * @property \AdminPanel\Model\Table\ProductWarrantiesTable $ProductWarranties
+ * @property \AdminPanel\Model\Table\AttributesTable $Attributes
  * @property \AdminPanel\Model\Table\TagsTable $Tags
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
@@ -39,6 +40,7 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.ProductOptionValueLists');
         $this->loadModel('AdminPanel.Tags');
         $this->loadModel('AdminPanel.ProductWarranties');
+        $this->loadModel('AdminPanel.Attributes');
 
         $this->allowedFileType = [
             'image/jpg',
@@ -678,6 +680,19 @@ class ProductsController extends AppController
         $product_warranties = $this->ProductWarranties->find('list')->toArray();
 
         $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags','product_warranties'));
+    }
+
+
+    public function getAttribute(){
+        if ($this->request->is('ajax')) {
+            $this->viewBuilder()->setLayout('ajax');
+            $listAttribute = $this->Attributes->find('threaded')
+                ->where(['Attributes.product_category_id' => $this->request->getData('categories.0')])
+                ->toArray();
+
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($listAttribute));
+        }
     }
 
     public function getoptionvalues(){

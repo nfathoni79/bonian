@@ -26,6 +26,7 @@
 
         var url = '<?= $this->Url->build(['action' => 'validationWizard']); ?>';
         var url_category = '<?= $this->Url->build(['action' => 'getCategory']); ?>';
+        var url_attribute = '<?= $this->Url->build(['action' => 'getAttribute']); ?>';
         var product;
 
 
@@ -119,6 +120,40 @@
             } else {
                 e.preventDefault();
             }
+        });
+
+        $("#level3").change(function(e) {
+            var val = $(this).val();
+
+            $.ajax({
+                type: 'POST',
+                url: url_attribute,
+                data: {categories: val, _csrfToken : $('input[name=_csrfToken]').val()},
+                success: function (data) {
+                    var attrForm = '';
+                    $.each(data,function(k, v){
+                        attrForm += '<div class="form-group m-form__group row">\n' +
+                            '<label class="col-xl-2 col-form-label">'+v.name+'</label>\n' +
+                            '<div class="col-xl-10 m-form__group-sub">\n' +
+                            '<div class="m-checkbox-inline">';
+
+                        $.each(v.children, function (ky, vl) {
+                            attrForm += '<label class="m-checkbox m-checkbox--solid m-checkbox--brand">\n' +
+                                '<input type="checkbox" name="ProductToAttributes['+k+'][]" value="'+vl.id+'"> '+vl.name+'\n' +
+                                '<span></span>\n' +
+                                '</label>';
+                        })
+
+                        attrForm += '</div>\n' +
+                            '</div>\n' +
+                            '</div>';
+                    })
+
+                    $('.dynamic-form-attribute').append(attrForm);
+
+                }
+            });
+            console.log(val);
         });
 
         function reindexProduct(formEl) {
@@ -597,6 +632,10 @@
 
 
 
+                                </div>
+                                <!--end: Form Wizard Step 1-->
+                                <!--begin: Form Wizard Step 2-->
+                                <div class="m-wizard__form-step" id="m_wizard_form_step_2">
 
                                     <div class="row mt-5">
                                         <div class="col-sm-12">
@@ -643,6 +682,11 @@
                                         </div>
                                     </div>
                                     <div class="m-form__seperator m-form__seperator--dashed"></div>
+                                    <div class="row mt-3">
+                                        <div class="col-xl-12 dynamic-form-attribute">
+
+                                        </div>
+                                    </div>
 
                                     <div class="row mt-5">
                                         <div class="col-sm-12">
@@ -686,7 +730,6 @@
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Harga Reguler'); ?></label>
                                                 <div class="col-xl-8">
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
                                                         <?php echo $this->Form->control('price',['div' => false, 'label' => false,'class' => $default_class]);?>
                                                     </div>
                                                 </div>
@@ -696,7 +739,6 @@
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Harga Jual'); ?></label>
                                                 <div class="col-xl-8">
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
                                                         <?php echo $this->Form->control('price_sale', ['div' => false, 'label' => false,'class' => $default_class, 'type' => 'number']);?>
                                                     </div>
                                                 </div>
@@ -705,7 +747,6 @@
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Diskon'); ?></label>
                                                 <div class="col-xl-8">
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend"><span class="input-group-text">%</span></div>
                                                         <?php echo $this->Form->control('price_discount', ['div' => false, 'label' => false, 'class' => $default_class, 'readonly' => true]);?>
                                                     </div>
                                                 </div>
@@ -829,12 +870,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-                                </div>
-                                <!--end: Form Wizard Step 1-->
-                                <!--begin: Form Wizard Step 2-->
-                                <div class="m-wizard__form-step" id="m_wizard_form_step_2">
 
 
                                 </div>
