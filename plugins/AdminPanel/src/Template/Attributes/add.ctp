@@ -68,16 +68,78 @@
             </div>
 
 
-            <?= $this->Form->create($attribute,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form']); ?>
+            <?= $this->Form->create($attribute,['class' => 'm-form add-attribute-form', 'id' => 'm_form']); ?>
             <div class="m-portlet__body">
 
             <?php
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
-                echo $this->Form->control('parent_id', ['options' => $parentAttributes, 'empty' => true, 'class' => $default_class]);
-                echo $this->Form->control('product_category_id', ['options' => $productCategories, 'empty' => true, 'class' => $default_class]);
-                echo $this->Form->control('name',['class' => $default_class]);
+                //echo $this->Form->control('parent_id', ['options' => $parentAttributes, 'empty' => true, 'class' => $default_class]);
+                //echo $this->Form->control('product_category_id', ['options' => $productCategories, 'empty' => true, 'class' => $default_class]);
+                //echo $this->Form->control('name',['class' => $default_class]);
             ?>
+
+                <div class="form-group  m-form__group row">
+                    <label  class="col-lg-3 col-form-label">Category: </label>
+                    <div class="col-lg-9">
+                        <div class="col-md-12">
+                            <div class="form-group m-form__group row">
+                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                    <?= $this->Form->select('parent', $productCategories, ['id' => 'level1', 'class' => 'form-control product-category', 'size' => 7, 'multiple' => 1]); ?>
+                                </div>
+
+                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                    <?= $this->Form->select('level2', [], ['id' => 'level2', 'class' => 'form-control product-category', 'size' => 7, 'multiple' => 1]); ?>
+                                </div>
+
+                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                    <?= $this->Form->select('product_category_id', [], ['id' => 'level3', 'class' => 'form-control product-category', 'size' => 7, 'multiple' => 1]); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group  m-form__group row">
+                    <label  class="col-lg-3 col-form-label">Attribute: </label>
+                    <div class="col-lg-9">
+                        <div class="repeater">
+                            <div data-repeatable data-repeater-list="" class="col-lg-12">
+                                <div data-repeater-item class="row m--margin-bottom-10">
+                                    <div class="col-lg-3">
+                                        <?php echo $this->Form->control('attribute[0][name]', ['label' => false, 'class' => $default_class]);?>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <?php echo $this->Form->control('attribute[0][value]', ['options' => [], 'label' => false, 'class' => $default_class . ' attribute-value', 'id' => 'tags', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <a href="#" data-repeater-delete="" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only">
+                                            <i class="la la-remove"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div data-repeater-create="" class="btn btn btn-primary m-btn m-btn--icon button">
+                                        <span>
+                                            <i class="la la-plus"></i>
+                                            <span>Add</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row mt-3">
+
+
+                </div>
+
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">
                 <div class="m-form__actions m-form__actions">
@@ -93,7 +155,134 @@
         </div>
     </div>
 </div>
+<?php $this->append('script'); ?>
+<?php
+echo $this->Html->script([
+    '/admin-assets/vendors/custom/libs/validation-render',
+]);
+?>
 <script>
-    $('select').selectpicker();
-</script>
+    $('.select2').selectpicker();
 
+    $('#m_repeater_3x').repeater({
+        initEmpty: false,
+
+
+        show: function() {
+            $(this).slideDown();
+            createAttributeValues($(this).find('.attribute-value'));
+        },
+
+        hide: function(deleteElement) {
+            if(confirm('Are you sure you want to delete this element?')) {
+                $(this).slideUp(deleteElement);
+            }
+        },
+        isFirstItemUndeletable: true
+    });
+
+    var formEl = $("#m_form");
+    var url = '<?= $this->Url->build(['action' => 'add']); ?>';
+    var ajaxRequest = new ajaxValidation(formEl);
+    ajaxRequest.setblockUI('.m-portlet m-portlet--mobile');
+
+
+    $("#m_form").submit(function(e) {
+        ajaxRequest.post(url, formEl.find(':input'), function(data,saved) {
+            if (data.success) {
+                location.reload();
+            }
+        });
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
+
+    $('.repeater').on('click', '.button', function(e) {
+        e.preventDefault();
+
+        var $this = $(this),
+            $repeater = $this.closest('.repeater').find('[data-repeatable]'),
+            count = $repeater.length,
+            $clone = $repeater.first().clone();
+
+        $clone.find('.select2-container').remove();
+
+
+        $clone.find('[id]').each(function() {
+            this.id = this.id + '-' + count;
+        });
+
+        $clone.find('[data-select2-id]').each(function() {
+            $(this).attr('data-select2-id', this.id)
+        });
+
+        $clone.find(':input').each(function() {
+            $(this).val('');
+        });
+
+        $clone.find('[name]').each(function() {
+            this.name = this.name.replace(/\[\d+\]/, '[' + count + ']');
+        });
+
+        createAttributeValues($clone.find('#tags-' + count))
+
+        $clone.find('label').each(function() {
+            var $this = $(this);
+            $this.attr('for', $this.attr('for') + '_' + count);
+        });
+
+        $clone.insertBefore($this);
+    });
+
+
+    function setChainCategory(target, parent_id) {
+        $.ajax({
+            type: 'POST',
+            url: '<?= $this->Url->build(['action' => 'getCategory']); ?>',
+            data: {parent_id: parent_id, _csrfToken : $('input[name=_csrfToken]').val()},
+            success: function (data) {
+                $(target + ' option').remove();
+                var o = [];
+                for(var i in data) {
+                    $(target).append($('<option/>').attr('value', i).text(data[i]));
+                }
+            }
+        });
+    }
+
+    $("#level1").change(function(e) {
+        var val = $(this).val();
+        if (val.length == 1) {
+            setChainCategory('#level2', val[0]);
+        } else {
+            e.preventDefault();
+        }
+    });
+
+    $("#level2").change(function(e) {
+        var val = $(this).val();
+        if (val.length == 1) {
+            setChainCategory('#level3', val[0]);
+        } else {
+            e.preventDefault();
+        }
+    });
+
+    function createAttributeValues(selector) {
+        selector.select2({
+            placeholder: "Tambah Attribut Nilai",
+            tags: true
+        }).on("change", function(e) {
+            var isNew = $(this).find('[data-select2-tag="true"]');
+            if(isNew.length && $.inArray(isNew.val(), $(this).val()) !== -1){
+                //isNew.replaceWith('<option selected value="' + isNew.val() + '">' + isNew.val() + '</option>');
+                console.log('New tag: ', isNew.val());
+            }
+        });
+    }
+
+    createAttributeValues($('#tags'));
+
+
+
+</script>
+<?php $this->end(); ?>

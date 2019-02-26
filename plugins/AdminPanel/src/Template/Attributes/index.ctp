@@ -188,26 +188,17 @@
                         }
                     },
                     {
-                        field: 'ParentAttributes.name',
-                        title: 'Parent_attribute Name',
-                        template: function(row) {
-                            return row.parent_attribute.name;
-                        }
-                    },
-
-                    {
-                        field: 'ProductCategories.name',
-                        title: 'Product_category Name',
-                        template: function(row) {
-                            return row.product_category.name;
-                        }
-                    },
-
-                    {
                         field: 'Attributes.name',
-                        title: 'Name',
+                        title: 'Nama Atribut',
                         template: function(row) {
                             return row.name;
+                        }
+                    },
+                    {
+                        field: 'product_category',
+                        title: 'Produk kategori',
+                        template: function(row) {
+                            return row.product_category['name'];
                         }
                     },
 
