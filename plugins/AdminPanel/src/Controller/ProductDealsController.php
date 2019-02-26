@@ -281,8 +281,27 @@ class ProductDealsController extends AppController
 
         if ($this->request->is('ajax')) {
             $this->viewBuilder()->setLayout('ajax');
+            $search = $this->request->getQuery('search');
+            $exclude = $this->request->getQuery('exl');
+            $exclude_product_id = [];
+            if ($exclude) {
+                $lists = explode(',', $exclude);
+                foreach($lists as $val) {
+                    $product_id = trim($val);
+                    if (is_numeric($product_id)) {
+                        $exclude_product_id[] = $product_id;
+                    }
+                }
+            }
             $options = $this->Products->find('all')
                 ->select(['id','sku','name'])
+                ->where(function (\Cake\Database\Expression\QueryExpression $exp) use ($search, $exclude_product_id) {
+                    $expresion = $exp->like('name', '%' . $search . '%');
+                    if (count($exclude_product_id) > 0) {
+                        $expresion->notIn('id', $exclude_product_id);
+                    }
+                    return $expresion;
+                })
                 ->toArray();
             $opt = [];
             foreach($options as $k => $vals){

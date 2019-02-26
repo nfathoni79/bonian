@@ -178,53 +178,7 @@ echo $this->Html->script([
         $('.delete-flash-sale').on('click',function(){
             $('div').remove('.rowing-'+$(this).data('row'));
         });
-        var bestPictures = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: '<?= $this->Url->build(['action' => 'productExist']); ?>'
-        });
-        bestPictures.clearPrefetchCache();
-        bestPictures.initialize();
-
-        $('.k_typeahead'+rows).typeahead(null, {
-            display: 'name',
-            source: bestPictures,
-            templates: {
-                empty: [
-                    '<div class="empty-message" style="padding: 10px 15px; text-align: center;">',
-                    'Produk tidak ditemukan dalam daftar produk',
-                    '</div>'
-                ].join('\n'),
-                suggestion: Handlebars.compile('<div><strong>{{name}}</strong> (SKU:{{sku}})</div>')
-            },
-        });
-        $('.k_typeahead'+rows).on('typeahead:select', function(evt, item) {
-            var row = $(this).data('row');
-
-            $.ajax({
-                type: 'POST',
-                url: '<?= $this->Url->build(['action' => 'productDetails']); ?>',
-                data: {sku: item.sku, _csrfToken : $('input[name=_csrfToken]').val()},
-                success: function (data) {
-                    var template = '<div class="m-widget5 pull-left">\n' +
-                        '<div class="m-widget5__item">\n' +
-                        '<div class="m-widget5__content">\n' +
-                        '<div class="m-widget5__pic"><img class="m-widget3__img" src="<?= $this->Url->build('/images/100x100'); ?>/'+data.product_images[0]['name']+'" alt=""></div>\n' +
-                    '<div class="m-widget5__section">\n' +
-                    '<h4 class="m-widget5__title">'+data.name+'</h4>\n' +
-                    '<span class="m-widget5__info"> Harga Reguler : <s>Rp. ' + data.price +'</s></span><br>\n' +
-                    '<span class="m-widget5__info"> Harga Jual : Rp. ' + data.price_discount +'</span><br>\n' +
-                    '<span class="m-widget5__info"> Sisa Stock : ' + data.stock +'</span><br>\n' +
-                    '<input type="hidden" name="ProductDealDetails['+row+'][produk_id]" class="form-control form-control-danger m-input m-input--air" value="'+data.id+'">\n'+
-                    '<input type="text" name="ProductDealDetails['+row+'][price_sale]" class="form-control form-control-danger m-input m-input--air" placeholder="Harga Flash Sale">\n' +
-                    '</div>\n' +
-                    '</div>\n' +
-                    '</div>\n' +
-                    '</div>';
-                    $('.info-detail-'+row).html(template);
-                }
-            });
-        })
+        init(rows);
     })
 
     $('#m_datetimepicker_start').datetimepicker({
@@ -259,19 +213,35 @@ echo $this->Html->script([
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
 
-    function init(){
+    function PopulateProductLists () {
+        var products = [];
+        $('.product-lists').each(function(i) {
+            products.push($(this).attr('data-product-id'));
+        });
+        return products.join(',');
+    }
 
-        var bestPictures = new Bloodhound({
+    function init(rows) {
+        rows = rows || '';
+        var productLists = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: '<?= $this->Url->build(['action' => 'productExist']); ?>'
+            //prefetch: '<?= $this->Url->build(['action' => 'productExist']); ?>'
+            remote: {
+                wildcard: '%QUERY',
+                url: '<?= $this->Url->build(['action' => 'productExist']); ?>',
+                prepare: function(query, setting) {
+                    setting.url += '?search=' + encodeURI(query) + '&exl=' + PopulateProductLists();
+                    return setting;
+                }
+            }
         });
-        bestPictures.clearPrefetchCache();
-        bestPictures.initialize();
+        //productLists.clearPrefetchCache();
+        productLists.initialize();
 
-        $('.k_typeahead').typeahead(null, {
+        $('.k_typeahead' + rows).typeahead(null, {
             display: 'name',
-            source: bestPictures,
+            source: productLists.ttAdapter(),
             templates: {
                 empty: [
                     '<div class="empty-message" style="padding: 10px 15px; text-align: center;">',
@@ -282,7 +252,7 @@ echo $this->Html->script([
             },
         });
 
-        $('.k_typeahead').on('typeahead:select', function(evt, item) {
+        $('.k_typeahead' + rows).on('typeahead:select', function(evt, item) {
             var row = $(this).data('row');
 
             $.ajax({
@@ -290,7 +260,7 @@ echo $this->Html->script([
                 url: '<?= $this->Url->build(['action' => 'productDetails']); ?>',
                 data: {sku: item.sku, _csrfToken : $('input[name=_csrfToken]').val()},
                 success: function (data) {
-                    var template = '<div class="m-widget5 pull-left">\n' +
+                    var template = '<div class="m-widget5 pull-left product-lists" data-product-id="' + data.id + '">\n' +
                         '<div class="m-widget5__item">\n' +
                         '<div class="m-widget5__content">\n' +
                         '<div class="m-widget5__pic"><img class="m-widget3__img" src="<?= $this->Url->build('/images/100x100'); ?>/'+data.product_images[0]['name']+'" alt=""></div>\n' +
@@ -305,7 +275,7 @@ echo $this->Html->script([
                     '</div>\n' +
                     '</div>\n' +
                     '</div>';
-                    $('.info-detail-'+row).html(template);
+                    $('.info-detail-' + row).html(template);
                 }
             });
         })
