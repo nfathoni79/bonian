@@ -778,8 +778,8 @@
                                         </div>
                                         <div class="col-xl-4">
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Harga Reguler'); ?>*</label>
-                                                <div class="col-xl-8">
+                                                <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Harga Reguler'); ?>*</label>
+                                                <div class="col-xl-4">
                                                     <div class="input-group">
                                                         <?php echo $this->Form->control('price',['type' => 'text','div' => false, 'label' => false,'class' => $default_class. ' numberinput']);?>
                                                     </div>
@@ -787,16 +787,16 @@
                                             </div>
 
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Harga Jual'); ?>*</label>
-                                                <div class="col-xl-8">
+                                                <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Harga Jual'); ?>*</label>
+                                                <div class="col-xl-4">
                                                     <div class="input-group">
                                                         <?php echo $this->Form->control('price_sale', ['type' => 'text','div' => false, 'label' => false,'class' => $default_class. ' numberinput']);?>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Diskon'); ?></label>
-                                                <div class="col-xl-8">
+                                                <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Diskon'); ?></label>
+                                                <div class="col-xl-3">
                                                     <div class="input-group">
                                                         <?php echo $this->Form->control('price_discount', ['div' => false, 'label' => false, 'class' => $default_class, 'disabled' => 'disabled']);?>
                                                     </div>
@@ -804,7 +804,7 @@
                                             </div>
 
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?>*</label>
+                                                <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?>*</label>
                                                 <div class="col-xl-3">
                                                     <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class . ' numberinput']);?>
                                                 </div>
