@@ -31,6 +31,7 @@ class AttributesController extends AppController
             /** custom default query : select, where, contain, etc. **/
             $data = $this->Attributes->find('all')
                 ->select();
+            $data->contain(['ParentAttributes', 'ProductCategories']);
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
@@ -85,7 +86,7 @@ class AttributesController extends AppController
     {
         $this->viewBuilder()->setLayout('ajax');
         $attribute = $this->Attributes->get($id, [
-            'contain' => ['ProductAttributes']
+            'contain' => ['ParentAttributes', 'ProductCategories', 'ChildAttributes', 'ProductAttributes']
         ]);
 
         $this->set('attribute', $attribute);
@@ -108,7 +109,9 @@ class AttributesController extends AppController
             }
             $this->Flash->error(__('The attribute could not be saved. Please, try again.'));
         }
-        $this->set(compact('attribute'));
+        $parentAttributes = $this->Attributes->ParentAttributes->find('list', ['limit' => 200]);
+        $productCategories = $this->Attributes->ProductCategories->find('list', ['limit' => 200]);
+        $this->set(compact('attribute', 'parentAttributes', 'productCategories'));
     }
 
     /**
@@ -132,7 +135,9 @@ class AttributesController extends AppController
             }
             $this->Flash->error(__('The attribute could not be saved. Please, try again.'));
         }
-        $this->set(compact('attribute'));
+        $parentAttributes = $this->Attributes->ParentAttributes->find('list', ['limit' => 200]);
+        $productCategories = $this->Attributes->ProductCategories->find('list', ['limit' => 200]);
+        $this->set(compact('attribute', 'parentAttributes', 'productCategories'));
     }
 
     /**

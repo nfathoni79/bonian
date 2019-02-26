@@ -16,6 +16,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable $ProductToCategories
  * @property \AdminPanel\Model\Table\ProductOptionValueListsTable $ProductOptionValueLists
+ * @property \AdminPanel\Model\Table\ProductWarrantiesTable $ProductWarranties
  * @property \AdminPanel\Model\Table\TagsTable $Tags
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
@@ -37,6 +38,7 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.ProductToCategories');
         $this->loadModel('AdminPanel.ProductOptionValueLists');
         $this->loadModel('AdminPanel.Tags');
+        $this->loadModel('AdminPanel.ProductWarranties');
 
         $this->allowedFileType = [
             'image/jpg',
@@ -673,8 +675,9 @@ class ProductsController extends AppController
         //debug($parent_categories->toArray());
 
         $product_tags = $this->Tags->find('list')->toArray();
+        $product_warranties = $this->ProductWarranties->find('list')->toArray();
 
-        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags'));
+        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags','product_warranties'));
     }
 
     public function getoptionvalues(){

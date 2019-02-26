@@ -74,6 +74,8 @@
             <?php
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
+                echo $this->Form->control('parent_id', ['options' => $parentAttributes, 'empty' => true, 'class' => $default_class]);
+                echo $this->Form->control('product_category_id', ['options' => $productCategories, 'empty' => true, 'class' => $default_class]);
                 echo $this->Form->control('name',['class' => $default_class]);
             ?>
             </div>
