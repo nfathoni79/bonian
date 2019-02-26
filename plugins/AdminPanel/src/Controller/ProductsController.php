@@ -18,6 +18,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductOptionValueListsTable $ProductOptionValueLists
  * @property \AdminPanel\Model\Table\ProductWarrantiesTable $ProductWarranties
  * @property \AdminPanel\Model\Table\AttributesTable $Attributes
+ * @property \AdminPanel\Model\Table\BrandsTable Brands
  * @property \AdminPanel\Model\Table\TagsTable $Tags
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
@@ -41,6 +42,7 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.Tags');
         $this->loadModel('AdminPanel.ProductWarranties');
         $this->loadModel('AdminPanel.Attributes');
+        $this->loadModel('AdminPanel.Brands');
 
         $this->allowedFileType = [
             'image/jpg',
@@ -645,6 +647,44 @@ class ProductsController extends AppController
             ->withStringBody(json_encode($respon));
     }
 
+
+    public function addBrands(){
+        $this->disableAutoRender();
+        $validator = new Validator();
+        $validator
+            ->notBlank('name', 'tidak boleh kosong');
+        $error = $validator->errors($this->request->getData());
+        if(empty($error)){
+            $cat = $this->request->getData('code_cat');
+            $name = $this->request->getData('name');
+
+            $getBrands = $this->Brands->find()
+                ->where(['Brands.product_category_id' => $cat, 'Brands.name' => $name ])
+                ->first();
+
+
+            if(empty($getBrands)){
+                $newEntity = $this->Brands->newEntity();
+                $newEntity = $this->Brands->patchEntity($newEntity,$this->request->getData());
+                $newEntity->set('product_category_id', $cat);
+                $newEntity->set('name', $name);
+
+                if($this->Brands->save($newEntity)){
+                    $data = ['id' => $newEntity->get('id'), 'name' => $name];
+                    $respon = ['is_error' => false, 'message' => 'Brands berhasil didaftarkan', 'data' => $data];
+                }else{
+                    $respon = ['is_error' => true, 'message' => 'Gagal menyimpan data / pilihan sudah terdaftar'];
+                }
+            }else{
+                $respon = ['is_error' => true, 'message' => 'Brand telah terdaftar'];
+            }
+        }else{
+            $respon = ['is_error' => true, 'message' => 'Gagal menyimpan data'];
+        }
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($respon));
+    }
+
     /**
      * Add method
      *
@@ -683,15 +723,18 @@ class ProductsController extends AppController
     }
 
 
-    public function getAttribute(){
+    public function getAttributeAndBrand(){
         if ($this->request->is('ajax')) {
             $this->viewBuilder()->setLayout('ajax');
             $listAttribute = $this->Attributes->find('threaded')
                 ->where(['Attributes.product_category_id' => $this->request->getData('categories.0')])
                 ->toArray();
-
+            $listBrands = $this->Brands->find('list')
+                ->where(['Brands.product_category_id' => $this->request->getData('categories.0')])
+                ->toArray();
+            $listdata = ['attribute' => $listAttribute,'brand' => $listBrands,];
             return $this->response->withType('application/json')
-                ->withStringBody(json_encode($listAttribute));
+                ->withStringBody(json_encode($listdata));
         }
     }
 
