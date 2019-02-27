@@ -230,9 +230,40 @@ class AttributesController extends AppController
             }
             $this->Flash->error(__('The attribute could not be saved. Please, try again.'));
         }
-        $parentAttributes = $this->Attributes->ParentAttributes->find('list', ['limit' => 200]);
-        $productCategories = $this->Attributes->ProductCategories->find('list', ['limit' => 200]);
-        $this->set(compact('attribute', 'parentAttributes', 'productCategories'));
+
+        //$parentAttributes = $this->Attributes->ParentAttributes->find('list', ['limit' => 200]);
+
+        $productCategories = $this->Attributes->ProductCategories->find('list')
+            ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
+                return $exp->isNull('parent_id');
+            })->toArray();
+
+        /**
+         * @var \AdminPanel\Model\Entity\ProductCategory[] $path
+         */
+        $path = $this->Attributes->ProductCategories->find('path', ['for' => $attribute->get('product_category_id')])->toArray();
+        $levels = $selected =  [];
+        $levels[1] = $productCategories;
+        foreach($path as $key => $val) {
+            $selected[$key + 1] = $val->get('id');
+            $levels[$key + 2] = $this->Attributes->ProductCategories->find('list')
+                ->where([
+                    'parent_id' => $val->get('id')
+                ])->toArray();
+        }
+        $levels = array_filter($levels);
+
+        /**
+         * get value list from parent
+         */
+
+        $childValues = $this->Attributes->find('list')
+            ->where(['parent_id' => $id])
+            ->toArray();
+
+
+
+        $this->set(compact('attribute', 'productCategories', 'levels', 'selected', 'childValues'));
     }
 
     /**
