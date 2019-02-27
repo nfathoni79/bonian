@@ -223,9 +223,9 @@ class ProductsController extends AppController
                     ->requirePresence('slug')
                     ->notBlank('slug', 'tidak boleh kosong');
 
-                $validator
-                    ->requirePresence('condition')
-                    ->notBlank('condition', 'tidak boleh kosong');
+                //$validator
+                //    ->requirePresence('condition')
+                //    ->notBlank('condition', 'tidak boleh kosong');
 
                 $meta = new Validator();
                 $meta
@@ -380,6 +380,64 @@ class ProductsController extends AppController
                                 }
 
 
+                            }
+                        }
+
+                        //save product to attribute
+                        if ($attributes = $this->request->getData('ProductToAttributes')) {
+
+                            //exists product attribute
+                            /**
+                             * @var \AdminPanel\Model\Entity\ProductAttribute[] $getProductAttributes
+                             */
+                            $getProductAttributes = $this->Products->ProductAttributes->find()
+                                ->where([
+                                    'product_id' => $productEntity->get('id')
+                                ]);
+
+                            //loop attribute request data
+                            $attribute_requests = [];
+                            foreach($attributes as $key => $attribute) {
+                                foreach($attribute as $attribute_id) {
+                                    array_push($attribute_requests, $attribute_id);
+                                }
+                            }
+
+
+
+                            foreach($attributes as $key => $attribute) {
+
+                                foreach($getProductAttributes as $val) {
+                                    if (in_array($val->get('attribute_id'), $attribute_requests)) {
+                                        $key = array_search($val->get('attribute_id'), $attribute);
+                                        if ($key >= 0) {
+                                            unset($attribute[$key]);
+                                        }
+                                    } else {
+                                        $this->Products->ProductAttributes->delete($val);
+                                    }
+                                }
+
+                                foreach($attribute as $attribute_id) {
+                                    $parent = $this->Attributes->find('path', ['for' => $attribute_id])->first();
+
+                                    $productAttributeEntity = $this->Products->ProductAttributes->newEntity([
+                                        'product_id' => $productEntity->get('id'),
+                                        'attribute_name_id' => $parent->get('id')
+                                    ]);
+
+                                    $this
+                                        ->Products
+                                        ->ProductAttributes
+                                        ->patchEntity($productAttributeEntity, ['attribute_id' => $attribute_id], ['validate' => false]);
+
+                                    $this
+                                        ->Products
+                                        ->ProductAttributes
+                                        ->save($productAttributeEntity);
+
+
+                                }
                             }
                         }
 

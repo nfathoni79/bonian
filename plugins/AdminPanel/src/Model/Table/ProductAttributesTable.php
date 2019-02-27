@@ -62,10 +62,10 @@ class ProductAttributesTable extends Table
             ->integer('id')
             ->allowEmptyString('id', 'create');
 
-        $validator
+        /*$validator
             ->scalar('description')
             ->requirePresence('description', 'create')
-            ->allowEmptyString('description', false);
+            ->allowEmptyString('description', false);*/
 
         return $validator;
     }
