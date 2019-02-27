@@ -246,6 +246,10 @@
                     '<div class="col-xl-4">'+formTemplate+'</div>\n' +
                     '<div class="col-xl-4"> \n' +
                     '<div class="form-group m-form__group row">\n' +
+                    '<label class="col-xl-4 col-form-label">Expired</label>\n' +
+                    '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][expired]" class="form-control m-input datepicker" placeholder="Expired"></div> \n' +
+                    '</div>  \n' +
+                    '<div class="form-group m-form__group row">\n' +
                     '<label class="col-xl-4 col-form-label">Harga Tambahan  *</label>\n' +
                     '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="Harga"></div> \n' +
                     '</div>  \n' +
@@ -296,6 +300,28 @@
                 if(formTemplate != ''){
                     var appendTemplate = $('.form-dynamic').append(template);
                     //after append reindex product variant options
+
+                    var arrows;
+                    if (mUtil.isRTL()) {
+                        arrows = {
+                            leftArrow: '<i class="la la-angle-right"></i>',
+                            rightArrow: '<i class="la la-angle-left"></i>'
+                        }
+                    } else {
+                        arrows = {
+                            leftArrow: '<i class="la la-angle-left"></i>',
+                            rightArrow: '<i class="la la-angle-right"></i>'
+                        }
+                    }
+                    $('.datepicker').datepicker({
+                        startDate: '-0d',
+                        rtl: mUtil.isRTL(),
+                        todayHighlight: true,
+                        orientation: "bottom left",
+                        format: 'yyyy-mm-dd',
+                        autoclose: true,
+                        templates: arrows
+                    });
 
                     reindexProduct(formEl);
 
@@ -842,28 +868,25 @@
                                     </div>
 
                                     <div class="row mt-5">
-                                        <div class="col-sm-12">
+                                        <div class="col-xl-6">
                                             <h6><?= __d('AdminPanel',  'Deskripsi Produk'); ?></h6>
-                                        </div>
-                                    </div>
-                                    <div class="m-form__seperator m-form__seperator--dashed"></div>
-                                    <div class="row mt-3">
-                                        <div class="col-xl-4">
+                                            <div class="m-form__seperator m-form__seperator--dashed"></div>
                                             <div class="form-group m-form__group">
-                                                <label class="col-form-label"><?= __d('AdminPanel',  'Highlight Produk'); ?></label>
                                                 <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1, 'placeholder' => 'Highlight Produk']);?>
                                             </div>
                                         </div>
-                                        <div class="col-xl-4">
+                                        <div class="col-xl-6">
+                                            <h6><?= __d('AdminPanel',  'Gambar Produk'); ?></h6>
+                                            <div class="m-form__seperator m-form__seperator--dashed"></div>
                                             <div class="form-group m-form__group">
-                                                <label class="col-form-label"><?= __d('AdminPanel',  'Kondisi Produk'); ?></label>
-                                                <?php echo $this->Form->control('condition',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1]);?>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4">
-                                            <div class="form-group m-form__group">
-                                                <label class="col-form-label"><?= __d('AdminPanel',  'Profil Produk'); ?></label>
-                                                <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1]);?>
+                                                <div class="form-group m-form__group">
+                                                    <div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone" style="min-height:190px !important;">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">Drop files disini atau click untuk upload.</h3>
+                                                            <span class="m-dropzone__msg-desc">Upload sampai 10 file</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -893,7 +916,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                         <div class="col-xl-4">
                                             <div class="form-group m-form__group row">

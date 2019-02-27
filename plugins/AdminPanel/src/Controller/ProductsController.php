@@ -792,7 +792,19 @@ class ProductsController extends AppController
         $productStockStatuses = $this->Products->ProductStockStatuses->find('list', ['limit' => 200]);
         $productWeightClasses = $this->Products->ProductWeightClasses->find('list', ['limit' => 200]);
         $productStatuses = $this->Products->ProductStatuses->find('list', ['limit' => 200]);
-        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses'));
+        $courriers = $this->Courriers->find('list')->toArray();
+        $options = $this->Options->find('list')->toArray();
+
+        $parent_categories = $this->ProductCategories->find('list')
+            ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
+                return $exp->isNull('parent_id');
+            })->toArray();
+        //debug($parent_categories->toArray());
+
+        $product_tags = $this->Tags->find('list')->toArray();
+        $product_warranties = $this->ProductWarranties->find('list')->toArray();
+
+        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags','product_warranties'));
     }
 
     /**
