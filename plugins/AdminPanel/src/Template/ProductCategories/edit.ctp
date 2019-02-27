@@ -78,7 +78,7 @@
                 echo $this->Form->control('name',['class' => $default_class]);
                 echo $this->Form->control('slug',['class' => $default_class]);
                 echo $this->Form->control('description',['class' => $default_class]);
-                echo $this->Form->control('path',['class' => $default_class, 'type' => 'file']);
+                // echo $this->Form->control('path',['class' => $default_class, 'type' => 'file']);
             ?>
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">
