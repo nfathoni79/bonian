@@ -112,12 +112,12 @@
                     <label  class="col-lg-3 col-form-label">Nilai: </label>
                     <div class="col-lg-9">
                         <div class="repeater">
-                            <?php foreach($childValues as $id => $val) : ?>
+                            <?php $key = 0; foreach($childValues as $id => $val) : ?>
                             <div data-repeatable data-repeater-list="" class="col-lg-12">
                                 <div data-repeater-item class="row m--margin-bottom-10">
                                     <div class="col-lg-3">
-                                        <?php echo $this->Form->control('attribute[0][name]', ['label' => false, 'value' => $val, 'class' => $default_class . ' attribute-name']);?>
-
+                                        <?php echo $this->Form->control('attribute['.$key.'][name]', ['label' => false, 'value' => $val, 'class' => $default_class . ' attribute-name']);?>
+                                        <?php echo $this->Form->control('attribute['.$key.'][id]', ['label' => false, 'value' => $id, 'type' => 'hidden']);?>
                                     </div>
                                     <div class="col-lg-2">
                                         <a href="javascript:void(0);" data-repeater-delete="" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row">
@@ -126,7 +126,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php endforeach; ?>
+                            <?php $key++; endforeach; ?>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div data-repeater-create="" class="btn btn btn-primary m-btn m-btn--icon button">
@@ -190,7 +190,7 @@ echo $this->Html->script([
     });
 
     var formEl = $("#m_form");
-    var url = '<?= $this->Url->build(['action' => 'add']); ?>';
+    var url = '<?= $this->Url->build(); ?>';
     var ajaxRequest = new ajaxValidation(formEl);
     ajaxRequest.setblockUI('.m-portlet m-portlet--mobile');
 
@@ -204,7 +204,7 @@ echo $this->Html->script([
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
 
-    var count = 1;
+    var count = $('[data-repeatable]').length;
     $('.repeater').on('click', '.button', function(e) {
         e.preventDefault();
 
@@ -226,7 +226,7 @@ echo $this->Html->script([
         //    $(this).attr('data-select2-id', this.id)
         //});
 
-        $clone.find('.attribute-name, attribute-value').each(function() {
+        $clone.find(':input').each(function() {
             $(this).val('');
         });
 

@@ -144,8 +144,6 @@ class AttributesController extends AppController
             $response = [];
             $validator = new Validator();
 
-
-
             $validator
                 ->requirePresence('product_category_id')
                 ->hasAtLeast('product_category_id', 1, __d('AdminPanel', __d('AdminPanel','Silahkan pilih kategori')));
@@ -221,6 +219,8 @@ class AttributesController extends AppController
         $attribute = $this->Attributes->get($id, [
             'contain' => []
         ]);
+
+        /*
         if ($this->request->is(['patch', 'post', 'put'])) {
             $attribute = $this->Attributes->patchEntity($attribute, $this->request->getData());
             if ($this->Attributes->save($attribute)) {
@@ -229,6 +229,90 @@ class AttributesController extends AppController
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The attribute could not be saved. Please, try again.'));
+        }
+        */
+
+        if ($this->request->is('ajax')) {
+            $this->disableAutoRender();
+
+            $response = [];
+            $validator = new Validator();
+
+            $validator
+                ->requirePresence('product_category_id')
+                ->hasAtLeast('product_category_id', 1, __d('AdminPanel', __d('AdminPanel','Silahkan pilih kategori')));
+
+
+            $attributeDetail = new Validator();
+            $attributeDetail
+                ->requirePresence('name')
+                ->notBlank('name', 'Atribut nama harus diisi');
+
+
+
+            $validator->addNestedMany('attribute', $attributeDetail);
+
+
+            if (empty($error)) {
+                $product_category_id = $this->request->getData('product_category_id.0');
+
+                $attribute = $this->Attributes->patchEntity($attribute, [
+                    'product_category_id' => $product_category_id,
+                    'name' => $this->request->getData('name'),
+                ]);
+
+                if ($this->Attributes->save($attribute)) {
+
+                    if ($attributes = $this->request->getData('attribute')) {
+
+                        //populate request child id
+                        $attributeLists = [];
+                        foreach($attributes as $val) {
+                            array_push($attributeLists, $val['id']);
+                        }
+
+                        //get exists list from db
+                        /**
+                         * @var \AdminPanel\Model\Entity\Attribute[] $lists
+                         */
+                        $lists = $this->Attributes->find()
+                            ->where([
+                                'parent_id' => $id
+                            ]);
+
+                        foreach($lists as $val) {
+                            if(!in_array($val->get('id'), $attributeLists)) {
+                                $this->Attributes->delete($val);
+                            }
+                        }
+
+
+                        foreach($attributes as $val) {
+
+                            $getChild = $this->Attributes->find()
+                                ->where(['id' => $val['id']])
+                                ->first();
+
+                            $childEntity = !empty($getChild) ? $getChild : $this->Attributes->newEntity([
+                                'product_category_id' => $product_category_id,
+                                'parent_id' => $id
+                            ]);
+
+                            $this->Attributes->patchEntity($childEntity, ['name' => $val['name']]);
+
+                            $this->Attributes->save($childEntity);
+                        }
+                    }
+
+                    $this->Flash->success(__('The attribute has been saved.'));
+                }
+
+            }
+
+            $response['error'] = $validator->errors($this->request->getData());
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($response));
+
         }
 
         //$parentAttributes = $this->Attributes->ParentAttributes->find('list', ['limit' => 200]);
