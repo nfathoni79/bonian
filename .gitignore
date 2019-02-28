@@ -7,6 +7,7 @@
 /vendor/*
 /webroot/files/ProductImages/name/*
 /webroot/images/*
+/webroot/files/ProductCategories/*
 
 # OS generated files #
 ######################
