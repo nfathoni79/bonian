@@ -60,7 +60,9 @@ class ProductStocksController  extends AppController
 
 
         $validator->addNestedMany('ProductOptionStocks', $productStockMutations);
-        $error = $validator->errors($product_option_stocks);
+        $allData = $this->request->getData();
+        $allData['ProductOptionStocks'] = $product_option_stocks;
+        $error = $validator->errors($allData);
         if (empty($error)) {
             debug('process here');
             debug($product_option_stocks);
