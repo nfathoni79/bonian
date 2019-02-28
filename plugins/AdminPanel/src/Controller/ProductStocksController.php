@@ -177,10 +177,10 @@ class ProductStocksController  extends AppController
                         if($findStocks){
                             switch ($row[2]) {
                                 case 'penambahan':
-                                    $this->ProductStockMutations->saving($findStocks->get('id'),'1', $row[3],$row[4]);
+                                    $this->ProductStockMutations->saving($findStocks->get('id'),'5', $row[3],$row[4]);
                                 break;
                                 case 'pengurangan':
-                                    $this->ProductStockMutations->saving($findStocks->get('id'),'2', ($row[3] * -1),$row[4]);
+                                    $this->ProductStockMutations->saving($findStocks->get('id'),'6', ($row[3] * -1),$row[4]);
                                 break;
                             }
                         }
