@@ -34,13 +34,6 @@ class ProductStocksController  extends AppController
 
         $this->disableAutoRender();
         $response = [];
-        foreach($this->request->getData('ProductOptionStocks') as $k => $vals){
-            if(empty($vals['id'])){
-                //debug($vals); // form radio kok hilang?? form name ProductOptionStocks[1]['tipe']
-//                debug($this->request->getData('ProductOptionStocks.'.$k));
-//                exit;
-            }
-        }
 
         $product_option_stocks = $this->request->getData('ProductOptionStocks');
         $validator = new Validator();
@@ -64,11 +57,17 @@ class ProductStocksController  extends AppController
         $allData['ProductOptionStocks'] = $product_option_stocks;
         $error = $validator->errors($allData);
         if (empty($error)) {
-            debug('process here');
-            debug($product_option_stocks);
             foreach($product_option_stocks as $key => $val) {
-                //process here
+                switch ($val['tipe']) {
+                    case 'penambahan':
+                        $this->ProductStockMutations->saving($val['id'],'1', $val['stock'],$val['description']);
+                    break;
+                    case 'pengurangan':
+                        $this->ProductStockMutations->saving($val['id'],'2', ($val['stock'] * -1),$val['description']);
+                    break;
+                }
             }
+            $this->Flash->success(__('The product stock has been update.'));
         }
 
         $response['error'] = $error;
@@ -77,6 +76,8 @@ class ProductStocksController  extends AppController
     }
 
     public function index(){
+
+//        $this->ProductStockMutations->saving('1','1', '1','Test mutation'); //mutation amount
 
         if ($this->request->is('ajax')) {
             $this->viewBuilder()->setLayout('ajax');

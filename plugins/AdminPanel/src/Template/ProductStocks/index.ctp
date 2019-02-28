@@ -385,21 +385,10 @@ $this->Html->script([
         var datax = table.$('input,select,textarea');
         ajaxRequest.post("<?= $this->Url->build(['action' => 'validate']); ?>", datax, function(data, saved) {
             if (data.success) {
-
+                location.href = '';
             }
         });
 
-        // Serialize form data
-
-
-        // Include extra data if necessary
-        // data.push({'name': 'extra_param', 'value': 'extra_value'});
-
-        // Submit form data via Ajax
-        // $.post({
-        //     url: 'echo_request.php',
-        //     data: data
-        // });
     });
 
     $('#export_print').on('click', function(e) {
