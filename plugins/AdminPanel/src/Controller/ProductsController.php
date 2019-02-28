@@ -252,6 +252,10 @@ class ProductsController extends AppController
                     ->requirePresence('slug')
                     ->notBlank('slug', 'tidak boleh kosong');
 
+                $validator
+                    ->requirePresence('brand_id')
+                    ->notBlank('brand_id', 'tidak boleh kosong');
+
                 //$validator
                 //    ->requirePresence('condition')
                 //    ->notBlank('condition', 'tidak boleh kosong');
@@ -269,7 +273,16 @@ class ProductsController extends AppController
 
                 $validator
                     ->requirePresence('sku')
-                    ->notBlank('sku', 'tidak boleh kosong');
+                    ->notBlank('sku', 'tidak boleh kosong')
+                    ->add('sku', 'unique', [
+                        'rule' => function($value) {
+                            return $this->Products->find()
+                                ->select(['sku'])
+                                ->where(['sku' => $value])
+                                ->count() == 0;
+                        },
+                        'message' => 'sku sudah terdaftar'
+                    ]);
 
                 //$validator
                 //    ->requirePresence('code')
