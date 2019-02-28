@@ -670,6 +670,35 @@ class ProductsController extends AppController
                                 $this->Products->ProductImages->patchEntity($productImageEntity, ['primary' => 1]);
                                 $this->Products->ProductImages->save($productImageEntity);
                             }
+
+                            //processing and insert stock
+                            /**
+                             * @var \AdminPanel\Model\Entity\ProductOptionStock[] $getStocks
+                             */
+                            $getStocks = $this->Products->ProductOptionStocks->find()
+                                ->where([
+                                    'product_id' => $productEntity->get('id')
+                                ]);
+                            foreach($getStocks as $stock) {
+                                $productStockEntity = $this
+                                    ->Products
+                                    ->ProductStockMutations
+                                    ->newEntity([
+                                        'product_id' => $productEntity->get('id'),
+                                        'branch_id' => $stock->get('branch_id'),
+                                        'product_option_stock_id' => $stock->get('product_option_stock_id'),
+                                        'product_stock_mutation_type_id' => null, //TODO
+                                        'description' => 'initial stock',
+                                        'amount' => $stock->get('stock'),
+                                        'balance' => $stock->get('stock'),
+                                    ]);
+                                $this
+                                    ->Products
+                                    ->ProductStockMutations
+                                    ->save($productStockEntity);
+                            }
+
+
                             $this->Flash->success(__('The product has been saved.'));
                         }
                     }
