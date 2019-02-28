@@ -84,4 +84,11 @@ class OptionValuesTable extends Table
 
         return $rules;
     }
+
+    public function getNameById($id = null){
+        $getValues = $this->find()
+            ->where(['id' => $id])
+            ->first();
+        return $getValues['name'];
+    }
 }

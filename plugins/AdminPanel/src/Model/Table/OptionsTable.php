@@ -68,4 +68,12 @@ class OptionsTable extends Table
 
         return $validator;
     }
+
+    public function getNameById($id = null){
+        $getOption = $this->find()
+            ->where(['id' => $id])
+            ->first();
+        return $getOption['name'];
+    }
+
 }
