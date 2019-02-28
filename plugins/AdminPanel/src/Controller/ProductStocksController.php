@@ -36,34 +36,40 @@ class ProductStocksController  extends AppController
         $response = [];
         foreach($this->request->getData('ProductOptionStocks') as $k => $vals){
             if(empty($vals['id'])){
-                debug($vals); // form radio kok hilang?? form name ProductOptionStocks[1]['tipe']
+                //debug($vals); // form radio kok hilang?? form name ProductOptionStocks[1]['tipe']
 //                debug($this->request->getData('ProductOptionStocks.'.$k));
 //                exit;
             }
         }
-        debug($this->request->getData('ProductOptionStocks'));
-        exit;
+
+        $product_option_stocks = $this->request->getData('ProductOptionStocks');
         $validator = new Validator();
         $productStockMutations = new Validator();
-        foreach($this->request->getData('ProductOptionStocks') as $k => $vals){
-            if(!empty($vals['id'])){
+        foreach($product_option_stocks as $k => $vals){
+            if(!empty($vals['id'])) {
                 $productStockMutations
                     ->notBlank('tipe', 'tidak boleh kosong');
                 $productStockMutations
                     ->notBlank('stock', 'tidak boleh kosong');
                 $productStockMutations
                     ->notBlank('description', 'tidak boleh kosong');
+            } else {
+                unset($product_option_stocks[$k]);
             }
         }
 
 
         $validator->addNestedMany('ProductOptionStocks', $productStockMutations);
-        $error = $validator->errors($this->request->getData());
+        $error = $validator->errors($product_option_stocks);
         if (empty($error)) {
-
+            debug('process here');
+            debug($product_option_stocks);
+            foreach($product_option_stocks as $key => $val) {
+                //process here
+            }
         }
 
-        $response['error'] = $validator->errors($this->request->getData());
+        $response['error'] = $error;
         return $this->response->withType('application/json')
             ->withStringBody(json_encode($response));
     }
