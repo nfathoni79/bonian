@@ -103,7 +103,13 @@
                     ],
                     [
                         'name' => 'Manajemen Stok',
-                        'url' => ['controller' => 'Products', 'action' => 'stock'],
+                        'url' => ['controller' => 'ProductStocks', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Manajemen Brand',
+                        'url' => ['controller' => 'Brands', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],

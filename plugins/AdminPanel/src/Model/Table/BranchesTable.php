@@ -142,4 +142,10 @@ class BranchesTable extends Table
 
         return $rules;
     }
+    public function getNameById($id = null){
+        $getBranch = $this->find()
+            ->where(['id' => $id])
+            ->first();
+        return $getBranch['name'];
+    }
 }
