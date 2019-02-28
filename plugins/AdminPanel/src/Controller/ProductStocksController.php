@@ -12,6 +12,8 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\OptionValuesTable OptionValues
  * @property \AdminPanel\Model\Table\BranchesTable Branches
  * @property \AdminPanel\Model\Table\ProductStockMutationsTable ProductStockMutations
+ * @property \AdminPanel\Model\Table\ProductOptionStocksTable ProductOptionStocks
+ * @property \AdminPanel\Model\Table\ProductOptionValueListsTable ProductOptionValueLists
  *
  * @method \AdminPanel\Model\Entity\Brand[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -26,6 +28,8 @@ class ProductStocksController  extends AppController
         $this->loadModel('AdminPanel.ProductStockMutations');
         $this->loadModel('AdminPanel.Options');
         $this->loadModel('AdminPanel.OptionValues');
+        $this->loadModel('AdminPanel.ProductOptionValueLists');
+        $this->loadModel('AdminPanel.ProductOptionStocks');
         $this->loadModel('AdminPanel.Branches');
     }
 
@@ -87,9 +91,9 @@ class ProductStocksController  extends AppController
             $query = $this->request->getData('query');
 
             /** custom default query : select, where, contain, etc. **/
-            $data = $this->ProductOptionPrices->find('all')
+            $data = $this->ProductOptionStocks->find('all')
                 ->select();
-            $data->contain(['Products','ProductOptionStocks','ProductOptionValueLists']);
+            $data->contain(['Products','ProductOptionPrices']);
 //            ,'Options','OptionValues'
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
@@ -121,12 +125,15 @@ class ProductStocksController  extends AppController
             $result['data'] = $data->toArray();
 
             foreach($result['data'] as $k => $vals){
-                foreach($vals['product_option_value_lists'] as $x => $val){
-                    $result['data'][$k]['product_option_value_lists'][$x]['option'] = $this->Options->getNameById($val['option_id']);
-                    $result['data'][$k]['product_option_value_lists'][$x]['values'] = $this->OptionValues->getNameById($val['option_value_id']);
-                }
-                foreach($vals['product_option_stocks'] as $x => $val){
-                    $result['data'][$k]['product_option_stocks'][$x]['branches'] = $this->Branches->getNameById($val['branch_id']);
+                $priceId = $vals['product_option_price_id'];
+                $result['data'][$k]['branches'] = $this->Branches->getNameById($vals['branch_id']);
+                $result['data'][$k]['value_lists'] = $this->ProductOptionValueLists->find()
+                    ->where(['ProductOptionValueLists.product_option_price_id' => $priceId])
+                    ->all()
+                    ->toArray();
+                foreach($result['data'][$k]['value_lists'] as $x => $val){
+                    $result['data'][$k]['value_lists'][$x]['option'] = $this->Options->getNameById($val['option_id']);
+                    $result['data'][$k]['value_lists'][$x]['values'] = $this->OptionValues->getNameById($val['option_value_id']);
                 }
             }
 

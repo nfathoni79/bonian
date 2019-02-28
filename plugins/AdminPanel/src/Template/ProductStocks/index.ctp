@@ -127,24 +127,6 @@
 
             <div class="m-portlet__body">
                 <?= $this->Flash->render() ?>
-                <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
-                    <div class="row align-items-center">
-                        <div class="col-xl-8 order-2 order-xl-1">
-                            <div class="form-group m-form__group row align-items-center">
-                                <div class="col-md-8">
-                                    <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Pencarian..." id="generalSearch">
-                                        <span class="m-input-icon__icon m-input-icon__icon--left">
-                                            <span>
-                                                <i class="la la-search"></i>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="m_datatable" >
                     <form  id="frm-example" method="POST">
@@ -293,7 +275,7 @@ $this->Html->script([
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return row.sku;
+                    return row.product_option_price.sku;
                 }
             },
             {
@@ -305,29 +287,29 @@ $this->Html->script([
             {
                 targets: 3,
                 render: function (data, type, row, meta) {
-                    return row.product_option_value_lists[0]['option']+' - '+row.product_option_value_lists[0]['values'];
+                    var combo = '';
+                    $.each(row.value_lists, function (k,v) {
+                        combo += v.option +' : '+v.values+ '<br>';
+                    })
+                    return combo;
                 }
             },
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
-                    return row.product_option_stocks[0]['branches'];
+                    return row.branches;
                 }
             },
             {
                 targets: 5,
                 render: function (data, type, row, meta) {
-                    var status = {
-                        1: "In Stock",
-                        2: "Out Of Stock",
-                    };
-                    return status[row.product.product_stock_status_id];
+                    return row.stock > 0 ? 'In Stock' : 'Out Of Stock';
                 }
             },
             {
                 targets: 6,
                 render: function (data, type, row, meta) {
-                    return row.product_option_stocks[0]['stock'];
+                    return row.stock;
                 }
             },
             {
@@ -354,7 +336,7 @@ $this->Html->script([
             {
                 targets: 8,
                 render: function (data, type, row, meta) {
-                    return row.product_option_stocks[0]['stock'];
+                    return row.stock;
                 }
             },
             {
