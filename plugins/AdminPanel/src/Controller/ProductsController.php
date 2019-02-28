@@ -360,7 +360,14 @@ class ProductsController extends AppController
                         ])
                         ->first();
 
-                    $this->Products->patchEntity($productEntity, $this->request->getData(), ['validate' => false]);
+                    $getData = $this->request->getData();
+
+                    foreach(['price', 'price_sale'] as $val) {
+                        $getData[$val] = preg_replace('/[,.]/', '', $getData[$val]);
+                    }
+
+                    
+                    $this->Products->patchEntity($productEntity, $getData, ['validate' => false]);
 
                     //debug($productEntity);
 
