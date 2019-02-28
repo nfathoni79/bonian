@@ -562,43 +562,58 @@ class ProductsController extends AppController
 
                                 if ($saveOptionPrice) {
 
-                                    if ($option_value_lists = $this->request->getData('ProductOptionValueLists')) {
-                                        foreach($option_value_lists as $k => $lists) {
 
-                                            foreach($lists as $option_id => $option_value_id) {
-
-                                                $getValueList = $this
-                                                    ->ProductOptionValueLists
-                                                    ->find()
-                                                    ->where([
-                                                        'product_option_price_id' => $OptionPriceEntity->get('id'),
-                                                        'option_id' => $option_id
-                                                    ])
-                                                    ->first();
-
-                                                $OptionValueListEntity = !empty($getValueList) ? $getValueList : $this
-                                                    ->ProductOptionValueLists
-                                                    ->newEntity([
-                                                        'product_option_price_id' => $OptionPriceEntity->get('id'),
-                                                        'option_id' => $option_id
-                                                    ]);
-
-                                                $this
-                                                    ->ProductOptionValueLists
-                                                    ->patchEntity($OptionValueListEntity, ['option_value_id' => $option_value_id]);
-
-                                                $this
-                                                    ->ProductOptionValueLists
-                                                    ->save($OptionValueListEntity);
-
-
-                                            }
-
-                                        }
-                                    }
                                 }
 
                                 $idx++;
+                            }
+
+
+
+                            if ($option_value_lists = $this->request->getData('ProductOptionValueLists')) {
+                                $idx = 1;
+                                foreach($option_value_lists as $k => $lists) {
+
+                                    $OptionPriceEntity = $this
+                                        ->Products
+                                        ->ProductOptionPrices
+                                        ->find()
+                                        ->where([
+                                            'product_id' => $productEntity->get('id'),
+                                            'idx' => $idx
+                                        ])
+                                        ->first();
+
+                                    foreach($lists as $option_id => $option_value_id) {
+
+                                        $getValueList = $this
+                                            ->ProductOptionValueLists
+                                            ->find()
+                                            ->where([
+                                                'product_option_price_id' => $OptionPriceEntity->get('id'),
+                                                'option_id' => $option_id
+                                            ])
+                                            ->first();
+
+                                        $OptionValueListEntity = !empty($getValueList) ? $getValueList : $this
+                                            ->ProductOptionValueLists
+                                            ->newEntity([
+                                                'product_option_price_id' => $OptionPriceEntity->get('id'),
+                                                'option_id' => $option_id
+                                            ]);
+
+                                        $this
+                                            ->ProductOptionValueLists
+                                            ->patchEntity($OptionValueListEntity, ['option_value_id' => $option_value_id]);
+
+                                        $this
+                                            ->ProductOptionValueLists
+                                            ->save($OptionValueListEntity);
+
+
+                                    }
+                                    $idx++;
+                                }
                             }
 
                             if ($option_stocks = $this->request->getData('ProductOptionStocks')) {
