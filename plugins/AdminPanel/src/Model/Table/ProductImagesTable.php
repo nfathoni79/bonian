@@ -112,7 +112,15 @@ class ProductImagesTable extends Table
                     return [
                         $data['tmp_name'] => $data['name'],
                     ];
-                }
+                },
+                'deleteCallback' => function ($path, $entity, $field, $settings) {
+                    // When deleting the entity, both the original and the thumbnail will be removed
+                    // when keepFilesOnDelete is set to false
+                    return [
+                        $path . $entity->{$field}
+                    ];
+                },
+                'keepFilesOnDelete' => false
             ],
         ]);
 

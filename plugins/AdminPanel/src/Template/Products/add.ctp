@@ -276,6 +276,22 @@
             });
         }
 
+        function dropZoneRemoveFile(file) {
+
+            for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= $this->Url->build(['action' => 'add']); ?>',
+                    data: {action: "removeImage", image_id: $(thumbnailElement).attr('data-image-id'), _csrfToken : $('input[name=_csrfToken]').val()},
+                    success: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+
+
+        }
+
         /*var optbranchs = getList();
         getList().then(function(value){
             optbranchs += value;
@@ -498,6 +514,7 @@
                         maxfilesexceeded: function(file) {
                             this.removeFile(file);
                         },
+                        removedfile: dropZoneRemoveFile,
                         sending: function(file, xhr, formData) {
                             formData.append('_csrfToken', $('input[name=_csrfToken]').val());
                             formData.append('product_id', $('input[name=id]').val());
@@ -662,6 +679,7 @@
             maxfilesexceeded: function(file) {
                 this.removeFile(file);
             },
+            removedfile: dropZoneRemoveFile,
             sending: function(file, xhr, formData) {
                 formData.append('_csrfToken', $('input[name=_csrfToken]').val());
                 formData.append('product_id', $('input[name=id]').val());
