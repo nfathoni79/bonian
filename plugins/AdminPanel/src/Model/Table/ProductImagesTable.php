@@ -116,6 +116,7 @@ class ProductImagesTable extends Table
                 'deleteCallback' => function ($path, $entity, $field, $settings) {
                     // When deleting the entity, both the original and the thumbnail will be removed
                     // when keepFilesOnDelete is set to false
+
                     return [
                         $path . $entity->{$field}
                     ];
@@ -194,5 +195,28 @@ class ProductImagesTable extends Table
             $this->ProductImageSizes->resize($entity, 300, 300);
             $this->ProductImageSizes->resize($entity, 450, 450);
         }
+    }
+
+    /**
+     * @param \Cake\Event\Event $event
+     * @param \AdminPanel\Model\Entity\ProductImage $entity
+     * @param \ArrayObject $options
+     */
+    public function beforeDelete(\Cake\Event\Event $event,  \AdminPanel\Model\Entity\ProductImage $entity, \ArrayObject $options) {
+        /**
+         * @var \AdminPanel\Model\Entity\ProductImageSize[] $data
+         */
+        $data = $this->ProductImageSizes->find()
+            ->where([
+                'product_image_id' => $entity->get('id')
+            ]);
+
+        foreach($data as $file) {
+            if (file_exists(ROOT . DS . $file->get('path'))) {
+                @unlink(ROOT . DS . $file->get('path'));
+                $this->ProductImageSizes->delete($file);
+            }
+        }
+
     }
 }

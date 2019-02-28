@@ -284,7 +284,7 @@
                     url: '<?= $this->Url->build(['action' => 'add']); ?>',
                     data: {action: "removeImage", image_id: $(thumbnailElement).attr('data-image-id'), _csrfToken : $('input[name=_csrfToken]').val()},
                     success: function (data) {
-                        console.log(data);
+                        $(thumbnailElement).parents('.dz-preview').remove();
                     }
                 });
             }

@@ -531,7 +531,6 @@ class ProductsController extends AppController
                         if ($option_prices = $this->request->getData('ProductOptionPrices')) {
                             $idx = 1;
 
-
                             foreach($option_prices as $key => $price) {
 
                                 $price['idx'] = $idx;
@@ -560,13 +559,28 @@ class ProductsController extends AppController
                                     ->ProductOptionPrices
                                     ->save($OptionPriceEntity);
 
-                                if ($saveOptionPrice) {
-
-
-                                }
-
                                 $idx++;
                             }
+
+                            /**
+                             * @var \AdminPanel\Model\Entity\ProductOptionPrice[] $getOptionPriceEntity
+                             */
+                            $getOptionPriceEntity = $this
+                                ->Products
+                                ->ProductOptionPrices
+                                ->find()
+                                ->where([
+                                    'product_id' => $productEntity->get('id'),
+                                ]);
+
+                            /**
+                             * @var \AdminPanel\Model\Entity\ProductOptionPrice[] $OptionPriceEntity
+                             */
+                            $OptionPriceEntity = [];
+                            foreach($getOptionPriceEntity as $val) {
+                                $OptionPriceEntity[$val->get('idx')] = $val;
+                            }
+                            unset($getOptionPriceEntity);
 
 
 
@@ -574,23 +588,13 @@ class ProductsController extends AppController
                                 $idx = 1;
                                 foreach($option_value_lists as $k => $lists) {
 
-                                    $OptionPriceEntity = $this
-                                        ->Products
-                                        ->ProductOptionPrices
-                                        ->find()
-                                        ->where([
-                                            'product_id' => $productEntity->get('id'),
-                                            'idx' => $idx
-                                        ])
-                                        ->first();
-
                                     foreach($lists as $option_id => $option_value_id) {
 
                                         $getValueList = $this
                                             ->ProductOptionValueLists
                                             ->find()
                                             ->where([
-                                                'product_option_price_id' => $OptionPriceEntity->get('id'),
+                                                'product_option_price_id' => $OptionPriceEntity[$idx]->get('id'),
                                                 'option_id' => $option_id
                                             ])
                                             ->first();
@@ -598,7 +602,7 @@ class ProductsController extends AppController
                                         $OptionValueListEntity = !empty($getValueList) ? $getValueList : $this
                                             ->ProductOptionValueLists
                                             ->newEntity([
-                                                'product_option_price_id' => $OptionPriceEntity->get('id'),
+                                                'product_option_price_id' => $OptionPriceEntity[$idx]->get('id'),
                                                 'option_id' => $option_id
                                             ]);
 
@@ -620,16 +624,6 @@ class ProductsController extends AppController
                                 $idx = 1;
                                 foreach($option_stocks as $key => $stock) {
 
-                                    $OptionPriceEntity = $this
-                                        ->Products
-                                        ->ProductOptionPrices
-                                        ->find()
-                                        ->where([
-                                            'product_id' => $productEntity->get('id'),
-                                            'idx' => $idx
-                                        ])
-                                        ->first();
-
                                     if (isset($stock['branches'])) {
                                         foreach($stock['branches'] as $branch) {
 
@@ -642,12 +636,10 @@ class ProductsController extends AppController
                                                 ->find()
                                                 ->where([
                                                     'product_id' => $productEntity->get('id'),
-                                                    'product_option_price_id' => $OptionPriceEntity->get('id'),
+                                                    'product_option_price_id' => $OptionPriceEntity[$idx]->get('id'),
                                                     'branch_id' => $stock['branch_id']
                                                 ])
                                                 ->first();
-
-
 
 
                                             $OptionStockEntity = !empty($getOptionStock) ? $getOptionStock : $this
@@ -655,17 +647,15 @@ class ProductsController extends AppController
                                                 ->ProductOptionStocks
                                                 ->newEntity([
                                                     'product_id' => $productEntity->get('id'),
-                                                    'product_option_price_id' => $OptionPriceEntity->get('id')
+                                                    'product_option_price_id' => $OptionPriceEntity[$idx]->get('id')
                                                 ]);
 
-                                            //debug($OptionStockEntity);
 
                                             $this
                                                 ->Products
                                                 ->ProductOptionStocks
                                                 ->patchEntity($OptionStockEntity, $stock, ['validate' => false]);
 
-                                            //debug($OptionStockEntity);
 
                                             $this
                                                 ->Products
@@ -920,7 +910,12 @@ class ProductsController extends AppController
                     $response['data'] = $this->generateSku($getCategory->get('product_category_id'), $this->request->getData('brand_id'));
                     break;
                 case 'removeImage':
-                    $this->Products->ProductImages->removeImage($this->request->getData('image_id'));
+                    try {
+                        $productImageEntity = $this->Products->ProductImages->get($this->request->getData('image_id'));
+                        $response['data'] = $this->Products->ProductImages->delete($productImageEntity);
+                    } catch(\Exception $e) {}
+
+
                     break;
             }
             return $this->response->withType('application/json')
