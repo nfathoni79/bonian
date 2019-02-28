@@ -146,4 +146,51 @@ class ProductStocksController  extends AppController
         }
     }
 
+    public function import(){
+
+        if ($this->request->is('post')) {
+
+            $data = $this->request->getData('files');
+            $file = $data['tmp_name'];
+            $handle = fopen($file, "r");
+            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+
+                $findSKU = $this->ProductOptionPrices->find()
+                    ->where(['ProductOptionPrices.sku LIKE ' => $row[0].'%'])
+                    ->first();
+                if($findSKU){
+                    $productOptionPricesId = $findSKU->get('id');
+                    $productId = $findSKU->get('product_id');
+                    /*Find Branches*/
+                    $findBranch = $this->Branches->find()
+                        ->where(['Branches.name LIKE' => '%'.$row[1].'%'])
+                        ->first();
+
+                    if($findBranch){
+                        $findStocks = $this->ProductOptionStocks->find()
+                            ->where([
+                                'ProductOptionStocks.product_id' => $productId,
+                                'ProductOptionStocks.product_option_price_id' => $productOptionPricesId,
+                                'ProductOptionStocks.branch_id' => $findBranch->get('id'),
+                            ])
+                            ->first();
+                        if($findStocks){
+                            switch ($row[2]) {
+                                case 'penambahan':
+                                    $this->ProductStockMutations->saving($findStocks->get('id'),'1', $row[3],$row[4]);
+                                break;
+                                case 'pengurangan':
+                                    $this->ProductStockMutations->saving($findStocks->get('id'),'2', ($row[3] * -1),$row[4]);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            $this->Flash->success(__('Success import file'));
+            $this->redirect(['action' => 'index']);
+        }
+    }
+
+
 }

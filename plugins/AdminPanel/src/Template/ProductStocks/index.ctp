@@ -64,7 +64,7 @@
                             </a>
                         </li>
                         <li class="m-portlet__nav-item">
-                            <a href="<?= $this->Url->build('/files/csv/brand.csv'); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                            <a href="<?= $this->Url->build('/files/csv/stock.csv'); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-download"></i>
                                     <span><?= __('Contoh CSV Stock') ?></span>
@@ -180,7 +180,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import Brand</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Import Stock Mutation</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
