@@ -147,6 +147,7 @@
                 </div>
 
                 <div class="m_datatable" >
+                    <form  id="frm-example" method="POST">
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="table-stocks">
                         <thead>
                             <tr>
@@ -159,9 +160,13 @@
                                 <th>Stock</th>
                                 <th>Mutasi Stock</th>
                                 <th>Order Useable Quantity</th>
+                                <th>Resync WH</th>
                             </tr>
                         </thead>
                     </table>
+                    <button class="btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info mt-5">Simpan</button></p>
+                    <div id="example-console-form"></div>
+                    </form>
                 </div>
 
             </div>
@@ -226,7 +231,8 @@ $this->Html->css([
 '/admin-assets/vendors/custom/datatables/datatables.bundle.css'
 ], ['block' => true]);
 $this->Html->script([
-'/admin-assets/vendors/custom/datatables/datatables.bundle'
+'/admin-assets/vendors/custom/datatables/datatables.bundle',
+'/admin-assets/vendors/custom/libs/validation-render',
 ], ['block' => true]);
 ?>
 <?php $this->append('script'); ?>
@@ -281,7 +287,7 @@ $this->Html->script([
             {
                 targets: 0,
                 render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
+                    return '<input type="checkbox" name="ProductOptionStocks['+row.id+'][id]" value="'+row.id+'">';
                 }
             },
             {
@@ -327,7 +333,7 @@ $this->Html->script([
             {
                 targets: 7,
                 render: function (data, type, row, meta) {
-                    return '<div class="m-form__group form-group">\n' +
+                    return '<div class="m-form__group form-group mt-2">\n' +
                         '<div class="m-radio-inline">\n' +
                         '<label class="m-radio">\n' +
                         '<input type="radio" name="ProductOptionStocks['+row.id+'][tipe]" value="penambahan" class="mutasi" data-row="'+row.id+'"> Penambahan\n' +
@@ -338,6 +344,10 @@ $this->Html->script([
                         '<span></span>\n' +
                         '</label>\n' +
                         '</div>\n' +
+                        '</div>\n' +
+                        '<div class="m-form__group form-group row row-val-'+row.id+'" style="display:none;">\n' +
+                        '<div class="col-xl-4"><input type="number" class="form-control" name="ProductOptionStocks['+row.id+'][stock]" placeholder="Stock"/></div>\n' +
+                        '<div class="col-xl-8"><input type="text" class="form-control"  name="ProductOptionStocks['+row.id+'][description]" placeholder="Deskripsi"/></div>\n' +
                         '</div>';
                 }
             },
@@ -346,11 +356,51 @@ $this->Html->script([
                 render: function (data, type, row, meta) {
                     return row.product_option_stocks[0]['stock'];
                 }
+            },
+            {
+                targets: 9,
+                render: function (data, type, row, meta) {
+                    return '<button type="button" class="m-btn btn btn-primary"><i class="la la-refresh"></i></button>';
+                }
             }
         ],
     });
 
-    $(".mutasi")
+    $("#table-stocks").on('change', 'input.mutasi',function(){
+        $('.row-val-'+$(this).data('row')).show()
+    })
+
+
+    // Handle form submission event
+    $('#frm-example').on('submit', function(e){
+        // Prevent actual form submission
+        e.preventDefault();
+
+        var formEl = $("#frm-example");
+
+        $('input[type="hidden"]', formEl).remove();
+
+        var ajaxRequest = new ajaxValidation(formEl);
+        ajaxRequest.setblockUI('#m_wizard');
+        var datax = table.$('input,select,textarea');
+        ajaxRequest.post("<?= $this->Url->build(['action' => 'validate']); ?>", datax, function(data, saved) {
+            if (data.success) {
+
+            }
+        });
+
+        // Serialize form data
+
+
+        // Include extra data if necessary
+        // data.push({'name': 'extra_param', 'value': 'extra_value'});
+
+        // Submit form data via Ajax
+        // $.post({
+        //     url: 'echo_request.php',
+        //     data: data
+        // });
+    });
 
     $('#export_print').on('click', function(e) {
         e.preventDefault();

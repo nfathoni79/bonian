@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\OptionsTable Options
  * @property \AdminPanel\Model\Table\OptionValuesTable OptionValues
  * @property \AdminPanel\Model\Table\BranchesTable Branches
+ * @property \AdminPanel\Model\Table\ProductStockMutationsTable ProductStockMutations
  *
  * @method \AdminPanel\Model\Entity\Brand[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -22,9 +23,49 @@ class ProductStocksController  extends AppController
         parent::initialize();
         $this->loadModel('AdminPanel.Products');
         $this->loadModel('AdminPanel.ProductOptionPrices');
+        $this->loadModel('AdminPanel.ProductStockMutations');
         $this->loadModel('AdminPanel.Options');
         $this->loadModel('AdminPanel.OptionValues');
         $this->loadModel('AdminPanel.Branches');
+    }
+
+
+    public function validate(){
+
+        $this->disableAutoRender();
+        $response = [];
+        foreach($this->request->getData('ProductOptionStocks') as $k => $vals){
+            if(empty($vals['id'])){
+                debug($vals); // form radio kok hilang?? form name ProductOptionStocks[1]['tipe']
+//                debug($this->request->getData('ProductOptionStocks.'.$k));
+//                exit;
+            }
+        }
+        debug($this->request->getData('ProductOptionStocks'));
+        exit;
+        $validator = new Validator();
+        $productStockMutations = new Validator();
+        foreach($this->request->getData('ProductOptionStocks') as $k => $vals){
+            if(!empty($vals['id'])){
+                $productStockMutations
+                    ->notBlank('tipe', 'tidak boleh kosong');
+                $productStockMutations
+                    ->notBlank('stock', 'tidak boleh kosong');
+                $productStockMutations
+                    ->notBlank('description', 'tidak boleh kosong');
+            }
+        }
+
+
+        $validator->addNestedMany('ProductOptionStocks', $productStockMutations);
+        $error = $validator->errors($this->request->getData());
+        if (empty($error)) {
+
+        }
+
+        $response['error'] = $validator->errors($this->request->getData());
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($response));
     }
 
     public function index(){
