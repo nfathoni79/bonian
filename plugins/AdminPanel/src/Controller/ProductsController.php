@@ -279,6 +279,9 @@ class ProductsController extends AppController
                             return $this->Products->find()
                                 ->select(['sku'])
                                 ->where(['sku' => $value])
+                                ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
+                                    return $exp->notEq('id', $this->request->getData('id'));
+                                })
                                 ->count() == 0;
                         },
                         'message' => 'sku sudah terdaftar'
@@ -291,6 +294,10 @@ class ProductsController extends AppController
                 $validator
                     ->requirePresence('price')
                     ->notBlank('price', 'tidak boleh kosong');
+
+                $validator
+                    ->requirePresence('point')
+                    ->notBlank('point', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('price_sale')
