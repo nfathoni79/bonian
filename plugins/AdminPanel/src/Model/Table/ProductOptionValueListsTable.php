@@ -77,4 +77,11 @@ class ProductOptionValueListsTable extends Table
 
         return $rules;
     }
+
+//    public function getNameById($id = null){
+//        $getOption = $this->find()
+//            ->where(['id' => $id])
+//            ->first();
+//        return $getOption['name'];
+//    }
 }

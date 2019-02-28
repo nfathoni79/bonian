@@ -16,14 +16,18 @@
     ]);
 ?>
 <script>
+    Dropzone.autoDiscover = false;
     $(document).ready(function() {
-
+        $('.summernote').summernote({
+            height: 150
+        });
         $('#slug').slugify('#name'); // Type as you slug
 
         var formEl = $("#m_form");
 
         var url = '<?= $this->Url->build(['action' => 'validationWizard']); ?>';
         var url_category = '<?= $this->Url->build(['action' => 'getCategory']); ?>';
+        var url_attribute = '<?= $this->Url->build(['action' => 'getAttributeAndBrand']); ?>';
         var product;
 
 
@@ -43,7 +47,7 @@
         });
 
         //override next2 with validation ajax
-        $("[data-wizard-action=next2]").click(function() {
+        $("[data-wizard-action=next2], [data-wizard-action=submit]").click(function() {
             var current = formEl.find('.m-wizard__form-step--current :input');
 
             //additional input hidden
@@ -52,6 +56,8 @@
                 var len = Object(current).length++;
                 current[len] = elem_id[0];
             }
+
+            var self = this;
 
             ajaxRequest.post(url + '/' + wizard.getStep(), current, function(data, saved) {
                 if (data.success) {
@@ -65,8 +71,12 @@
                             formEl.append(addInput);
                         }
                     }
+                    if ($(self).attr('data-wizard-action') === 'submit') {
+                        location.href = '';
+                    } else {
+                        wizard.goNext();
+                    }
 
-                    wizard.goNext();
                 }
             });
         });
@@ -76,15 +86,90 @@
             mUtil.scrollTop();
         });
 
+
         //== Change event
         wizard.on('change', function(wizard) {
             var nextAction = $('[data-wizard-action="next2"]');
             if (wizard.isLastStep()) {
                 nextAction.hide();
+                renderImagePreview('#image-preview-wizard');
+                renderInputPreview('#input-preview-wizard');
             } else {
                 nextAction.show();
             }
         });
+
+
+
+        function renderTemplate(label, value) {
+            return `<div class="form-group m-form__group preview-template">
+                <label>${label}</label>
+                <div >${value}</div>
+            </div>`;
+        }
+
+        function renderInputPreview(element) {
+            var inputs = [];
+            [
+                'name',
+                'slug',
+                'brand_id',
+                'model',
+                'price',
+                'price_sale',
+                'sku',
+                'product_stock_status_id',
+                'point'
+            ].forEach(function(o, i) {
+                var input = formEl.find(`[name="${o}"]`);
+                var value = input.val();
+
+                if (input.prop("tagName") === 'SELECT') {
+                    value = input.find('option:selected').text();
+                }
+
+                var label = input.parents('.form-group').find('label').text().replace('*', '');
+                inputs.push(renderTemplate(label, value));
+            });
+            $(element).find('.preview-template').remove();
+            $(element).prepend(inputs.join(''));
+        }
+
+        function renderImagePreview(element) {
+            var imageRow = [];
+            $('[data-dz-thumbnail]').each(function(i) {
+                var image_id = $(this).attr('data-image-id');
+                var image_name = $(this).attr('data-image-name');
+                imageRow.push(`<div class="col-md-1 nopad text-center">
+                                <label class="image-radio">
+                                    <img src="<?= $this->Url->build('/images/100x100/'); ?>${image_name}" alt="" class="img-thumbnail img-responsive" />
+                                    <input type="radio" name="ProductImages[primary]" value="${image_id}" />
+                                    <i class="la la-check-square checked-icon d-none"></i>
+                                </label>
+                            </div>`);
+            });
+            $(element).html(imageRow.join(''));
+            // add/remove checked class
+            $(".image-radio").each(function(i) {
+                if (i === 0) {
+                    $(this).trigger('click');
+                }
+                if($(this).find('input[type="radio"]').first().attr("checked")){
+                    $(this).addClass('image-radio-checked');
+                }else{
+                    $(this).removeClass('image-radio-checked');
+                }
+            });
+
+            // sync the input state
+            $(".image-radio").on("click", function(e) {
+                $(".image-radio").removeClass('image-radio-checked');
+                $(this).addClass('image-radio-checked');
+                var $radio = $(this).find('input[type="radio"]');
+                $radio.prop("checked",!$radio.prop("checked"));
+                e.preventDefault();
+            });
+        }
 
         function setChainCategory(target, parent_id) {
             $.ajax({
@@ -119,10 +204,92 @@
             }
         });
 
+        $("#price-sale, #price").change(function() {
+            var percent = 100;
+
+            var reg_price = parseFloat($('#price').val().replace(/,/g, ''));
+            var sale_price = parseFloat($('#price-sale').val().replace(/,/g, ''));
+            percent = percent - ((sale_price / reg_price) * 100);
+            if(isNaN(percent)) {
+                percent = 0;
+            }
+            $('#price-discount').val(percent.toFixed(2)+' %');
+
+        })
+
+        $("#level3").change(function(e) {
+            var val = $(this).val();
+            $('#code-cat').val(val);
+            $.ajax({
+                type: 'POST',
+                url: url_attribute,
+                data: {categories: val, _csrfToken : $('input[name=_csrfToken]').val()},
+                success: function (data) {
+                    var attrForm = '';
+                    $.each(data.attribute,function(k, v){
+                        attrForm += '<div class="form-group m-form__group row">\n' +
+                            '<label class="col-xl-2 col-form-label">'+v.name+'</label>\n' +
+                            '<div class="col-xl-10 m-form__group-sub">\n' +
+                            '<div class="m-checkbox-inline">';
+
+                        $.each(v.children, function (ky, vl) {
+                            attrForm += '<label class="m-checkbox m-checkbox--solid m-checkbox--brand">\n' +
+                                '<input type="checkbox" name="ProductToAttributes['+k+'][]" value="'+vl.id+'"> '+vl.name+'\n' +
+                                '<span></span>\n' +
+                                '</label>';
+                        })
+
+                        attrForm += '</div>\n' +
+                            '</div>\n' +
+                            '</div>';
+                    });
+
+                    $('.dynamic-form-attribute').html(attrForm);
+
+                    var attrBrand = '<option value="">-- Pilih Brand --</option>';
+                    $.each(data.brand, function(k,v){
+                        attrBrand += '<option value="'+k+'">'+v+'</option>';
+                    })
+                    $('#brand-id').html(attrBrand);
+                    $('#brand-id').select2();
+                }
+            });
+        });
+
+        $('input.numberinput').keyup(function(event) {
+
+            // skip for arrow keys
+            if(event.which >= 37 && event.which <= 40) return;
+
+            // format number
+            $(this).val(function(index, value) {
+                return value
+                    .replace(/\D/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+            });
+        });
+
         function reindexProduct(formEl) {
             formEl.find('.product-variant-item').each(function(index) {
                 $(this).attr('data-index', ++index);
             });
+        }
+
+        function dropZoneRemoveFile(file) {
+
+            for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= $this->Url->build(['action' => 'add']); ?>',
+                    data: {action: "removeImage", image_id: $(thumbnailElement).attr('data-image-id'), _csrfToken : $('input[name=_csrfToken]').val()},
+                    success: function (data) {
+                        $(thumbnailElement).parents('.dz-preview').remove();
+                    }
+                });
+            }
+
+
         }
 
         /*var optbranchs = getList();
@@ -142,12 +309,7 @@
                 $("input[name='ShippingOption[]']").attr('disabled', true);
                 $("input[name='options[]']").attr('disabled', true);
 
-
-
                 var formTemplate = '';
-
-
-
                 $('.option:checked').each(function(){
                     var values = $(this).val();
                     var text = $(this).data('text');
@@ -159,7 +321,7 @@
                         opt += '<option value="'+v.id+'">'+v.name+'</option>';
                     })
                     formTemplate += '<div class="form-group m-form__group row">\n' +
-                        '<label class="col-xl-4 col-form-label">'+text+'</label>\n' +
+                        '<label class="col-xl-4 col-form-label">'+text+'  *</label>\n' +
                         '<div class="col-xl-6">\n' +
                         '<select name="ProductOptionValueLists['+i+']['+values+']" class="form-control select2 m-input select-'+text.toLowerCase()+'" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
                         '</div>\n' +
@@ -172,54 +334,59 @@
 
                 var template = '<div class="m-accordion__item product-variant-item item-'+i+'">\n' +
                     '<div class="m-accordion__item-head" role="tab" id="m_accordion_2_item_'+i+'_head" data-toggle="collapse" href="#m_accordion_2_item_'+i+'_body" aria-expanded="    false">\n' +
-                    '<span class="m-accordion__item-title">Varian Produk <a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item='+i+'><i class="la la-trash"></i></a></span>\n' +
+                    '<span class="m-accordion__item-title">Varian Produk <a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item='+i+'>  <i class="la la-trash"></i></a> </span>\n' +
                     '<span class="m-accordion__item-mode"></span>\n' +
                     '</div>\n' +
                     '<div class="m-accordion__item-body collapse show" id="m_accordion_2_item_'+i+'_body" class=" " role="tabpanel" aria-labelledby="m_accordion_2_item_'+i+'_head" data-parent="#m_accordion_2">\n' +
                     '<div class="m-accordion__item-content"> \n' +
                     '<div class="row">\n' +
                     '<div class="col-xl-4">'+formTemplate+'</div>\n' +
-                    '<div class="col-xl-8"> \n' +
+                    '<div class="col-xl-4"> \n' +
                     '<div class="form-group m-form__group row">\n' +
-                    '<label class="col-xl-4 col-form-label">Gambar Produk</label>\n' +
-                    '<div class="col-xl-8"> \n' +
-                    '<div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone'+i+'">\n' +
+                    '<label class="col-xl-4 col-form-label">Expired</label>\n' +
+                    '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][expired]" class="form-control m-input datepicker" placeholder="Expired"></div> \n' +
+                    '</div>  \n' +
+                    '<div class="form-group m-form__group row">\n' +
+                    '<label class="col-xl-4 col-form-label">Harga Tambahan  *</label>\n' +
+                    '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="Harga"></div> \n' +
+                    '</div>  \n' +
+                    '<div class="m-form__group form-group row berat" style="display:none;">\n' +
+                    '<label class="col-xl-4 col-form-label">Berat  *</label>\n' +
+                    '<div class="col-xl-3"> \n' +
+                    '<input type="number" name="ProductOptionStocks['+i+'][weight]" class="form-control m-input" placeholder="Berat (gram)">\n' +
+                    '</div> \n' +
+                    '</div>\n' +
+                    '<div class="m-form__group form-group row dimensi" style="display:none;">\n' +
+                    '<label class="col-xl-4 col-form-label">Dimensi  *</label>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
+                    '</div>  \n' +
+                    '<div class="m-form__group form-group row">\n' +
+                    '<label class="col-xl-4 col-form-label">Stock Cabang  *</label>\n' +
+                    '<div class="col-xl-3">\n' +
+                    '<select name="ProductOptionStocks['+i+'][branches][0][branch_id]" class="form-control select2  m-input " >'+optbranchs+'</select>\n' +
+                    '</div> \n' +
+                    '<div class="col-xl-3">\n' +
+                    '<input type="number" name="ProductOptionStocks['+i+'][branches][0][stock]"  class="form-control m-input" placeholder="Stok">\n' +
+                    '</div>\n' +
+                    '<div class="col-xl-1">\n' +
+                    '<a href="javascript:void(0);" style="width:40px; height: 40px;" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-cabang" data-item='+i+'><i class="la la-plus"></i></a>\n' +
+                    '</div> \n' +
+                    '</div>  \n' +
+                    '<div class="multi-cabang-'+i+'">\n' +
+                    '</div>  \n' +
+                    '</div>\n' +
+                    '<div class="col-xl-4"> \n' +
+                    '<div class="form-group m-form__group row">\n' +
+                    '<div class="col-xl-12"> \n' +
+                    '<div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone'+i+'" style="min-height:100px !important;">\n' +
                     '<div class="m-dropzone__msg dz-message needsclick">\n' +
                     '<h3 class="m-dropzone__msg-title">Drop files disini atau click untuk upload.</h3>\n' +
                     '<span class="m-dropzone__msg-desc">Upload sampai 10 file</span>\n' +
                     '</div>\n' +
                     '</div>\n' +
                     '</div> \n' +
-                    '</div>  \n' +
-                    '<div class="form-group m-form__group row">\n' +
-                    '<label class="col-xl-4 col-form-label">Harga Tambahan</label>\n' +
-                    '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="Harga"></div> \n' +
-                    '</div>  \n' +
-                    '<div class="m-form__group form-group row berat" style="display:none;">\n' +
-                    '<label class="col-xl-4 col-form-label">Berat</label>\n' +
-                    '<div class="col-xl-2"> \n' +
-                    '<input type="number" name="ProductOptionStocks['+i+'][weight]" class="form-control m-input" placeholder="Berat (gram)">\n' +
-                    '</div> \n' +
-                    '</div>\n' +
-                    '<div class="m-form__group form-group row dimensi" style="display:none;">\n' +
-                    '<label class="col-xl-4 col-form-label">Dimensi</label>\n' +
-                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
-                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
-                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
-                    '</div>  \n' +
-                    '<div class="m-form__group form-group row">\n' +
-                    '<label class="col-xl-4 col-form-label">Stock Cabang</label>\n' +
-                    '<div class="col-xl-2">\n' +
-                    '<select name="ProductOptionStocks['+i+'][branches][0][branch_id]" class="form-control select2  m-input " >'+optbranchs+'</select>\n' +
-                    '</div> \n' +
-                    '<div class="col-xl-2">\n' +
-                    '<input type="number" name="ProductOptionStocks['+i+'][branches][0][stock]"  class="form-control m-input" placeholder="Stok">\n' +
-                    '</div>\n' +
-                    '<div class="col-xl-2">\n' +
-                    '<a href="javascript:void(0);" style="width:40px; height: 40px;" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-cabang" data-item='+i+'><i class="la la-plus"></i></a>\n' +
-                    '</div> \n' +
-                    '</div>  \n' +
-                    '<div class="multi-cabang-'+i+'">\n' +
                     '</div>  \n' +
                     '</div> \n' +
                     '</div> \n' +
@@ -230,6 +397,28 @@
                 if(formTemplate != ''){
                     var appendTemplate = $('.form-dynamic').append(template);
                     //after append reindex product variant options
+
+                    var arrows;
+                    if (mUtil.isRTL()) {
+                        arrows = {
+                            leftArrow: '<i class="la la-angle-right"></i>',
+                            rightArrow: '<i class="la la-angle-left"></i>'
+                        }
+                    } else {
+                        arrows = {
+                            leftArrow: '<i class="la la-angle-left"></i>',
+                            rightArrow: '<i class="la la-angle-right"></i>'
+                        }
+                    }
+                    $('.datepicker').datepicker({
+                        startDate: '-0d',
+                        rtl: mUtil.isRTL(),
+                        todayHighlight: true,
+                        orientation: "bottom left",
+                        format: 'yyyy-mm-dd',
+                        autoclose: true,
+                        templates: arrows
+                    });
 
                     reindexProduct(formEl);
 
@@ -268,13 +457,13 @@
                         var item = $(this).data('item');
                         var rowcabang = '<div class="m-form__group form-group row cabang-'+item+'-'+y+'">\n' +
                             '<label class="col-xl-4 col-form-label"></label>\n' +
-                            '<div class="col-xl-2">\n' +
+                            '<div class="col-xl-3">\n' +
                             '<select name="ProductOptionStocks['+item+'][branches]['+y+'][branch_id]" class="form-control select2  m-input " >'+optbranchs+'</select>\t\n' +
                             '</div> \n' +
-                            '<div class="col-xl-2">\n' +
+                            '<div class="col-xl-3">\n' +
                             '<input type="number" name="ProductOptionStocks['+item+'][branches]['+y+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
                             '</div>\n' +
-                            '<div class="col-xl-2">\n' +
+                            '<div class="col-xl-1">\n' +
                             '<a href="javascript:void(0);" style="width:40px; height: 40px;" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-cabang" data-item="'+item+'" data-row="'+y+'"><i class="la la-minus"></i></a>\n' +
                             '</div> \n' +
                             '<div>';
@@ -317,10 +506,15 @@
                         },
                         success: function(file, response) {
                             //console.log(file, response)
+                            for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                                $(thumbnailElement).attr('data-image-id', response.data.image_id)
+                                    .attr('data-image-name', response.data.name);
+                            }
                         },
                         maxfilesexceeded: function(file) {
                             this.removeFile(file);
                         },
+                        removedfile: dropZoneRemoveFile,
                         sending: function(file, xhr, formData) {
                             formData.append('_csrfToken', $('input[name=_csrfToken]').val());
                             formData.append('product_id', $('input[name=id]').val());
@@ -345,13 +539,13 @@
 
 
 
-        var frm = $('#form-attribute');
-        frm.submit(function (e) {
+        var frmAttr = $('#form-attribute');
+        frmAttr.submit(function (e) {
             e.preventDefault();
             $.ajax({
-                type: frm.attr('method'),
-                url: frm.attr('action'),
-                data: frm.serialize(),
+                type: frmAttr.attr('method'),
+                url: frmAttr.attr('action'),
+                data: frmAttr.serialize(),
                 success: function (data) {
                    if(data.is_error){
                        return false;
@@ -368,6 +562,26 @@
                     $('#form-attribute').trigger('reset');
                     $('#modal-attribute').modal('toggle');
 
+                },
+            });
+        });
+
+        var frmBrand = $('#form-brand');
+        frmBrand.submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: frmBrand.attr('method'),
+                url: frmBrand.attr('action'),
+                data: frmBrand.serialize(),
+                success: function (data) {
+                   if(data.is_error){
+                       return false;
+                   }
+
+                   var code = $('#level3').val();
+                    $("#brand-id").append('<option value="'+data.data.id+'">'+data.data.name+'</option>');
+                    $('#form-brand').trigger('reset');
+                    $('#modal-brand').modal('toggle');
                 },
             });
         });
@@ -417,6 +631,64 @@
                 console.log('New tag: ', isNew.val());
             }
         });
+
+        $("#brand-id").change(function(){
+            var brand_id = $(this).val();
+            $.ajax({
+                url: "<?= $this->Url->build(['action' => 'add']); ?>",
+                cache: false,
+                method: 'POST',
+                data: {action: "getSku", brand_id: brand_id, product_id: $('input[name=id]').val(), _csrfToken: $('input[name=_csrfToken]').val()},
+                success: function (response) {
+                    if (typeof response.data != "undefined") {
+                        $("#sku").val(response.data);
+                    }
+                }
+            });
+        })
+
+        new Dropzone("#m-dropzone-parent", {
+            url: "<?= $this->Url->build(['action' => 'upload']); ?>",
+            maxFiles: 10,
+            maxFilesize: 10, // MB
+            addRemoveLinks: true,
+            acceptedFiles: "image/*",
+            paramName: "name",
+            //autoProcessQueue: false,
+            //autoQueue: false,
+            thumbnail: function(file, dataUrl) {
+                if (file.previewElement) {
+                    //$(file.previewElement.querySelectorAll('div.dz-progress')).hide()
+                    file.previewElement.classList.remove("dz-file-preview");
+                    for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                        thumbnailElement.alt = file.name;
+                        thumbnailElement.src = dataUrl;
+                    }
+
+                    return setTimeout((() => file.previewElement.classList.add("dz-image-preview")), 1);
+                }
+
+            },
+            success: function(file, response) {
+                //console.log(file.previewElement, response)
+                for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                    $(thumbnailElement).attr('data-image-id', response.data.image_id)
+                        .attr('data-image-name', response.data.name);
+                }
+            },
+            maxfilesexceeded: function(file) {
+                this.removeFile(file);
+            },
+            removedfile: dropZoneRemoveFile,
+            sending: function(file, xhr, formData) {
+                formData.append('_csrfToken', $('input[name=_csrfToken]').val());
+                formData.append('product_id', $('input[name=id]').val());
+                formData.append('idx', 0);
+
+            }
+        });
+
+
     })
 </script>
 <script>
@@ -505,7 +777,7 @@
                     </div>
                     <!--end: Message container -->
                     <!--begin: Form Wizard Head -->
-                    <div class="m-wizard__head m-portlet__padding-x">
+                    <div class="m-wizard__head m-portlet__padding-x" style="margin:3rem 0 0rem 0 !important; padding: 0px 0rem !important;">
                         <!--begin: Form Wizard Progress -->
                         <div class="m-wizard__progress">
                             <div class="progress">
@@ -521,7 +793,7 @@
                                         <span><i class="fa  flaticon-placeholder"></i></span>
                                     </a>
                                     <div class="m-wizard__step-info">
-                                        <div class="m-wizard__step-title">
+                                        <div class="m-wizard__step-title" style="font-size: 1rem;">
                                             1. <?= __d('AdminPanel', 'Pilih Kategori'); ?>
                                         </div>
                                         <div class="m-wizard__step-desc">
@@ -534,7 +806,7 @@
                                         <span><i class="fa flaticon-menu-2"></i></span>
                                     </a>
                                     <div class="m-wizard__step-info">
-                                        <div class="m-wizard__step-title">
+                                        <div class="m-wizard__step-title" style="font-size: 1rem;">
                                             2. <?= __d('AdminPanel', 'Input Data'); ?>
                                         </div>
                                         <div class="m-wizard__step-desc">
@@ -547,7 +819,7 @@
                                         <span><i class="fa  flaticon-layers"></i></span>
                                     </a>
                                     <div class="m-wizard__step-info">
-                                        <div class="m-wizard__step-title">
+                                        <div class="m-wizard__step-title" style="font-size: 1rem;">
                                             3. <?= __d('AdminPanel', 'Selesai'); ?>
                                         </div>
                                         <div class="m-wizard__step-desc">
@@ -572,6 +844,7 @@
                         ?>
                             <!--begin: Form Body -->
                             <div class="m-portlet__body">
+
                                 <!--begin: Form Wizard Step 1-->
                                 <div class="m-wizard__form-step m-wizard__form-step--current" id="m_wizard_form_step_1">
                                     <div class="row">
@@ -591,177 +864,152 @@
                                             </div>
                                         </div>
                                     </div>
+
+
+
+
+
                                 </div>
                                 <!--end: Form Wizard Step 1-->
                                 <!--begin: Form Wizard Step 2-->
                                 <div class="m-wizard__form-step" id="m_wizard_form_step_2">
-                                    <div class="row">
-                                        <div class="col-xl-12">
-                                            <div class="m-form__section">
-                                                <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title">
-                                                        <?= __d('AdminPanel',  'SEO Produk'); ?>
-                                                    </h3>
-                                                </div>
-                                            </div>
+
+                                    <div class="row mt-5">
+                                        <div class="col-sm-12">
+                                            <h6><?= __d('AdminPanel',  'Informasi Produk'); ?></h6>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-xl-6">
-                                            <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Kata Kunci Pencarian'); ?></label>
-                                                <div class="col-xl-9">
-                                                    <?php echo $this->Form->control('ProductMetaTags.keyword',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 4]);?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-6">
-                                            <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Deskripsi SEO'); ?></label>
-                                                <div class="col-xl-9">
-                                                    <?php echo $this->Form->control('ProductMetaTags.description',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 4]);?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <div class="m-form__seperator m-form__seperator--dashed"></div>
 
                                     <div class="row mt-3">
-                                        <div class="col-xl-12">
-                                            <div class="m-form__section">
-                                                <div class="m-form__heading">
-                                                    <h3 class="m-form__heading-title">
-                                                        <?= __d('AdminPanel',  'Informasi Produk'); ?>
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-xl-6">
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Nama Produk'); ?></label>
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Nama Produk'); ?>*</label>
                                                 <div class="col-xl-9">
                                                     <?php echo $this->Form->control('name',['label' => false,'class' => $default_class]);?>
                                                 </div>
                                             </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Kata Kunci'); ?>*</label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('ProductMetaTags.keyword',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 1]);?>
+                                                    <span class="m-form__help">Penggunaan Kata kunci SEO wajib menggunakan "koma" contoh : kamera, kamera handphone, dll</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-xl-6">
+                                        <div class="col-xl-5 offset-1">
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Slug URL'); ?></label>
                                                 <div class="col-xl-9">
                                                     <?php echo $this->Form->control('slug',['label' => false,'class' => $default_class,'readonly' => 'readonly']);?>
                                                 </div>
                                             </div>
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Deskripsi SEO'); ?></label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('ProductMetaTags.description',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 1]);?>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-
+                                    <div class="row mt-5">
+                                        <div class="col-sm-12">
+                                            <h6><?= __d('AdminPanel',  'Attribute Produk'); ?></h6>
+                                        </div>
+                                    </div>
+                                    <div class="m-form__seperator m-form__seperator--dashed"></div>
                                     <div class="row mt-3">
-                                        <div class="col-xl-6">
-
-                                            <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Highlight Produk'); ?></label>
-                                                <div class="col-xl-9">
-                                                    <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class, 'rows' => 4]);?>
-                                                </div>
-                                            </div>
-                                            <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Kondisi Produk'); ?></label>
-                                                <div class="col-xl-9">
-                                                    <?php echo $this->Form->control('condition',['label' => false,'class' => $default_class, 'rows' => 4]);?>
-                                                </div>
-                                            </div>
-                                            <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Profil Produk'); ?></label>
-                                                <div class="col-xl-9">
-                                                    <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class, 'rows' => 4]);?>
-                                                </div>
-                                            </div>
+                                        <div class="col-xl-12 dynamic-form-attribute">
 
                                         </div>
-                                        <div class="col-xl-6">
+                                    </div>
+
+                                    <div class="row mt-5">
+                                        <div class="col-sm-12">
+                                            <h6><?= __d('AdminPanel',  'Informasi Detail'); ?></h6>
+                                        </div>
+                                    </div>
+                                    <div class="m-form__seperator m-form__seperator--dashed"></div>
+
+
+                                    <div class="row mt-3">
+                                        <div class="col-xl-4">
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Model'); ?></label>
-                                                <div class="col-xl-4">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Brand'); ?>*</label>
+                                                <div class="col-xl-7">
+                                                    <?php echo $this->Form->control('brand_id', ['label' => false, 'class' => $default_class, 'style' => 'width: 100% !important;']);?>
+                                                </div>
+                                                <div class="col-xl-1">
+                                                    <a href="#" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-brand"  data-toggle="modal" data-target="#modal-brand""><i class="la la-plus"></i></a>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Model'); ?>*</label>
+                                                <div class="col-xl-8">
                                                     <?php echo $this->Form->control('model',['label' => false,'class' => $default_class]);?>
                                                 </div>
                                             </div>
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Sku'); ?></label>
-                                                <div class="col-xl-4">
-                                                    <?php echo $this->Form->control('sku',['label' => false,'class' => $default_class]);?>
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Sku'); ?>*</label>
+                                                <div class="col-xl-8">
+                                                    <?php echo $this->Form->control('sku', ['label' => false,'class' => $default_class, 'id' => 'sku']);?>
                                                 </div>
                                             </div>
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Status Stok'); ?></label>
-                                                <div class="col-xl-4">
+                                                <div class="col-xl-8">
                                                     <?php echo $this->Form->control('product_stock_status_id', ['options' => $productStockStatuses,'label' => false, 'class' => $default_class . ' select-picker']);?>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="row mt-3">
-                                        <div class="col-xl-6">
+                                        </div>
+                                        <div class="col-xl-4">
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Harga Reguler'); ?></label>
-                                                <div class="col-xl-5">
+                                                <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Harga Reguler'); ?>*</label>
+                                                <div class="col-xl-4">
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
-                                                        <?php echo $this->Form->control('price',['div' => false, 'label' => false,'class' => $default_class]);?>
+                                                        <?php echo $this->Form->control('price',['type' => 'text','div' => false, 'label' => false,'class' => $default_class. ' numberinput']);?>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Harga Jual'); ?></label>
-                                                <div class="col-xl-5">
+                                                <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Harga Jual'); ?>*</label>
+                                                <div class="col-xl-4">
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend"><span class="input-group-text"><?= __d('AdminPanel',  'IDR'); ?></span></div>
-                                                        <?php echo $this->Form->control('price_sale', ['div' => false, 'label' => false,'class' => $default_class, 'type' => 'number']);?>
+                                                        <?php echo $this->Form->control('price_sale', ['type' => 'text','div' => false, 'label' => false,'class' => $default_class. ' numberinput']);?>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                        </div>
-                                        <div class="col-xl-6">
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Diskon'); ?></label>
-                                                <div class="col-xl-5">
+                                                <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Diskon'); ?></label>
+                                                <div class="col-xl-3">
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend"><span class="input-group-text">%</span></div>
-                                                        <?php echo $this->Form->control('price_discount', ['div' => false, 'label' => false, 'class' => $default_class, 'readonly' => true]);?>
+                                                        <?php echo $this->Form->control('price_discount', ['div' => false, 'label' => false, 'class' => $default_class, 'disabled' => 'disabled']);?>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?></label>
-                                                <div class="col-xl-5">
-                                                    <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class]);?>
+                                                <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?>*</label>
+                                                <div class="col-xl-3">
+                                                    <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class . ' numberinput']);?>
                                                 </div>
                                             </div>
-
                                         </div>
-                                    </div>
-
-                                    <div class="row mt-3">
-                                        <div class="col-xl-6">
+                                        <div class="col-xl-4">
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Produk Tagging'); ?></label>
                                                 <div class="col-xl-9">
                                                     <?php echo $this->Form->control('ProductTags', ['options' => $product_tags, 'label' => false, 'class' => $default_class . ' m-select2', 'id' => 'product-tagging', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                    </div>
-
-                                    <div class="row mt-3">
-                                        <div class="col-xl-12">
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-2 col-form-label"><?= __d('AdminPanel',  'Kurir'); ?></label>
-                                                <div class="col-xl-10 m-form__group-sub">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Kurir'); ?>*</label>
+                                                <div class="col-xl-9 m-form__group-sub">
                                                     <div class="m-checkbox-inline">
                                                         <?php foreach($courriers as $k => $vals):?>
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
@@ -774,8 +1022,51 @@
                                                 </div>
                                             </div>
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-2 col-form-label">Opsi Pengiriman Berdasarkan?</label>
-                                                <div class="col-xl-10 m-form__group-sub">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Garansi'); ?></label>
+                                                <div class="col-xl-9">
+                                                    <?php echo $this->Form->control('product_warranty_id', ['options' => $product_warranties, 'label' => false, 'class' => $default_class . ' select-picker']);?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-5">
+                                        <div class="col-xl-6">
+                                            <h6><?= __d('AdminPanel',  'Deskripsi Produk'); ?></h6>
+                                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+                                            <div class="form-group m-form__group">
+                                                <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1, 'placeholder' => 'Highlight Produk']);?>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <h6><?= __d('AdminPanel',  'Gambar Produk'); ?></h6>
+                                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+                                            <div class="form-group m-form__group">
+                                                <div class="form-group m-form__group">
+                                                    <div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone-parent" style="min-height:190px !important;">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">Drop files disini atau click untuk upload.</h3>
+                                                            <span class="m-dropzone__msg-desc">Upload sampai 10 file</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row mt-5">
+                                        <div class="col-sm-12">
+                                            <h6><?= __d('AdminPanel',  'Varian Produk'); ?></h6>
+                                        </div>
+                                    </div>
+                                    <div class="m-form__seperator m-form__seperator--dashed"></div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-xl-4">
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-6 col-form-label">Opsi Pengiriman Berdasarkan?</label>
+                                                <div class="col-xl-6 m-form__group-sub">
                                                     <div class="m-radio-inline">
                                                         <label class="m-radio">
                                                             <input type="radio" name="ShippingOption[]" value="Berat" checked="checked"> Berat
@@ -788,9 +1079,11 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="col-xl-4">
                                             <div class="form-group m-form__group row">
-                                                <label class="col-xl-2 col-form-label"><?= __d('AdminPanel',  'Atribut'); ?></label>
-                                                <div class="col-xl-6 m-form__group-sub">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Combo Varian'); ?></label>
+                                                <div class="col-xl-9 m-form__group-sub">
                                                     <div class="m-checkbox-inline">
                                                         <?php foreach($options as $k => $vals):?>
                                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
@@ -800,17 +1093,20 @@
                                                         <?php endforeach;?>
                                                     </div>
                                                 </div>
-                                                <div class="col-xl-2">
-                                                    <a href="javascript:void(0);" class="btn btn-success m-btn m-btn--custom m-btn--icon add-attribute"><span>Tambah Varian Produk</span></a>
-                                                </div>
                                             </div>
+                                        </div>
+                                        <div class="col-xl-4">
+                                            <a href="javascript:void(0);" class="btn btn-success m-btn m-btn--custom m-btn--icon add-attribute pull-right"><span><i class="la la-plus-circle"></i> Tambah Varian Produk</span></a>
+                                        </div>
+                                    </div>
 
-
-
+                                    <div class="row mt-3">
+                                        <div class="col-xl-12">
                                             <div class="m-accordion m-accordion--bordered form-dynamic" id="m_accordion_2" role="tablist">
                                             </div>
                                         </div>
                                     </div>
+
 
                                 </div>
                                 <!--end: Form Wizard Step 2-->
@@ -819,8 +1115,19 @@
                                 <!--begin: Form Wizard Step 3-->
                                 <div class="m-wizard__form-step" id="m_wizard_form_step_3">
                                     <div class="row">
-                                        <div class="col-lg-12">
-                                            review
+                                        <div class="col-lg-12" id="input-preview-wizard">
+
+                                            <div class="form-group m-form__group">
+                                                <label for="exampleInputEmail1">Pilih Gambar utama</label>
+                                                <div class="row" id="image-preview-wizard">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group">
+                                                <label for="exampleInputEmail1">Status</label>
+                                                <?php echo $this->Form->control('product_status_id', ['label' => false, 'class' => $default_class . ' select-picker col-md-2']);?>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -898,6 +1205,34 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                 <?= $this->Form->submit(__('Simpan Atribut'),['class' => 'btn btn-brand']) ?>
+            </div>
+            <?= $this->Form->end(); ?>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-brand" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Brand <span class="title-variant"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?= $this->Form->create(null,['url' => ['action' => 'addBrands'],'class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form', 'id' => 'form-brand']); ?>
+            <div class="modal-body">
+                <?php echo $this->Form->hidden('code_cat', ['div' => false, 'label' => false, 'id' => 'code-cat']);?>
+                <div class="form-group m-form__group row">
+                    <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Nama Brand'); ?></label>
+                    <div class="col-xl-8">
+                        <?php echo $this->Form->control('name', ['div' => false, 'label' => false, 'class' => $default_class]);?>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <?= $this->Form->submit(__('Simpan Brand'),['class' => 'btn btn-brand']) ?>
             </div>
             <?= $this->Form->end(); ?>
         </div>

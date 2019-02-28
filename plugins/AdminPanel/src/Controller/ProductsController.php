@@ -16,6 +16,9 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable $ProductToCategories
  * @property \AdminPanel\Model\Table\ProductOptionValueListsTable $ProductOptionValueLists
+ * @property \AdminPanel\Model\Table\ProductWarrantiesTable $ProductWarranties
+ * @property \AdminPanel\Model\Table\AttributesTable $Attributes
+ * @property \AdminPanel\Model\Table\BrandsTable Brands
  * @property \AdminPanel\Model\Table\TagsTable $Tags
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
@@ -37,12 +40,16 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.ProductToCategories');
         $this->loadModel('AdminPanel.ProductOptionValueLists');
         $this->loadModel('AdminPanel.Tags');
+        $this->loadModel('AdminPanel.ProductWarranties');
+        $this->loadModel('AdminPanel.Attributes');
+        $this->loadModel('AdminPanel.Brands');
 
         $this->allowedFileType = [
             'image/jpg',
             'image/png',
             'image/jpeg'
         ];
+
     }
     /**
      * Index method
@@ -122,6 +129,34 @@ class ProductsController extends AppController
         ]);
 
         $this->set('product', $product);
+    }
+
+
+    /**
+     * @param $category_id
+     * @param $brand_id
+     * @return string
+     */
+    protected function generateSku($category_id, $brand_id)
+    {
+        $this->disableAutoRender();
+        /**
+         * @var \AdminPanel\Model\Entity\ProductCategory[] $paths
+         */
+        $paths = $this->ProductCategories->find('path', ['for' => $category_id])->toArray();
+        $codeSku = [];
+        array_push($codeSku, $brand_id);
+        foreach($paths as $key => $path) {
+            if ($key == 0) {
+                array_push($codeSku, $path->get('id'));
+            }
+            if (count($paths) == $key + 1) {
+                array_push($codeSku, str_pad($path->get('id'), 3, '0', STR_PAD_LEFT));
+            }
+        }
+        array_push($codeSku, date('m'));
+        array_push($codeSku, str_pad(rand(1, 999), 4, 0, STR_PAD_LEFT));
+        return join('', $codeSku);
     }
 
 
@@ -218,8 +253,12 @@ class ProductsController extends AppController
                     ->notBlank('slug', 'tidak boleh kosong');
 
                 $validator
-                    ->requirePresence('condition')
-                    ->notBlank('condition', 'tidak boleh kosong');
+                    ->requirePresence('brand_id')
+                    ->notBlank('brand_id', 'tidak boleh kosong');
+
+                //$validator
+                //    ->requirePresence('condition')
+                //    ->notBlank('condition', 'tidak boleh kosong');
 
                 $meta = new Validator();
                 $meta
@@ -234,7 +273,19 @@ class ProductsController extends AppController
 
                 $validator
                     ->requirePresence('sku')
-                    ->notBlank('sku', 'tidak boleh kosong');
+                    ->notBlank('sku', 'tidak boleh kosong')
+                    ->add('sku', 'unique', [
+                        'rule' => function($value) {
+                            return $this->Products->find()
+                                ->select(['sku'])
+                                ->where(['sku' => $value])
+                                ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
+                                    return $exp->notEq('id', $this->request->getData('id'));
+                                })
+                                ->count() == 0;
+                        },
+                        'message' => 'sku sudah terdaftar'
+                    ]);
 
                 //$validator
                 //    ->requirePresence('code')
@@ -243,6 +294,10 @@ class ProductsController extends AppController
                 $validator
                     ->requirePresence('price')
                     ->notBlank('price', 'tidak boleh kosong');
+
+                $validator
+                    ->requirePresence('point')
+                    ->notBlank('point', 'tidak boleh kosong');
 
                 $validator
                     ->requirePresence('price_sale')
@@ -305,7 +360,14 @@ class ProductsController extends AppController
                         ])
                         ->first();
 
-                    $this->Products->patchEntity($productEntity, $this->request->getData(), ['validate' => false]);
+                    $getData = $this->request->getData();
+
+                    foreach(['price', 'price_sale'] as $val) {
+                        $getData[$val] = preg_replace('/[,.]/', '', $getData[$val]);
+                    }
+
+
+                    $this->Products->patchEntity($productEntity, $getData, ['validate' => false]);
 
                     //debug($productEntity);
 
@@ -377,6 +439,64 @@ class ProductsController extends AppController
                             }
                         }
 
+                        //save product to attribute
+                        if ($attributes = $this->request->getData('ProductToAttributes')) {
+
+                            //exists product attribute
+                            /**
+                             * @var \AdminPanel\Model\Entity\ProductAttribute[] $getProductAttributes
+                             */
+                            $getProductAttributes = $this->Products->ProductAttributes->find()
+                                ->where([
+                                    'product_id' => $productEntity->get('id')
+                                ]);
+
+                            //loop attribute request data
+                            $attribute_requests = [];
+                            foreach($attributes as $key => $attribute) {
+                                foreach($attribute as $attribute_id) {
+                                    array_push($attribute_requests, $attribute_id);
+                                }
+                            }
+
+
+
+                            foreach($attributes as $key => $attribute) {
+
+                                foreach($getProductAttributes as $val) {
+                                    if (in_array($val->get('attribute_id'), $attribute_requests)) {
+                                        $key = array_search($val->get('attribute_id'), $attribute);
+                                        if ($key >= 0) {
+                                            unset($attribute[$key]);
+                                        }
+                                    } else {
+                                        $this->Products->ProductAttributes->delete($val);
+                                    }
+                                }
+
+                                foreach($attribute as $attribute_id) {
+                                    $parent = $this->Attributes->find('path', ['for' => $attribute_id])->first();
+
+                                    $productAttributeEntity = $this->Products->ProductAttributes->newEntity([
+                                        'product_id' => $productEntity->get('id'),
+                                        'attribute_name_id' => $parent->get('id')
+                                    ]);
+
+                                    $this
+                                        ->Products
+                                        ->ProductAttributes
+                                        ->patchEntity($productAttributeEntity, ['attribute_id' => $attribute_id], ['validate' => false]);
+
+                                    $this
+                                        ->Products
+                                        ->ProductAttributes
+                                        ->save($productAttributeEntity);
+
+
+                                }
+                            }
+                        }
+
                         //save product to couriers
                         if ($couriers = $this->request->getData('ProductToCourriers')) {
                             /**
@@ -410,6 +530,7 @@ class ProductsController extends AppController
 
                         if ($option_prices = $this->request->getData('ProductOptionPrices')) {
                             $idx = 1;
+
                             foreach($option_prices as $key => $price) {
 
                                 $price['idx'] = $idx;
@@ -438,89 +559,115 @@ class ProductsController extends AppController
                                     ->ProductOptionPrices
                                     ->save($OptionPriceEntity);
 
-                                if ($saveOptionPrice) {
-                                    if ($option_stocks = $this->request->getData('ProductOptionStocks')) {
-                                        foreach($option_stocks as $k => $stock) {
-                                            if (isset($stock['branches'])) {
-                                                foreach($stock['branches'] as $branch) {
-
-                                                    $stock['branch_id'] = $branch['branch_id'];
-                                                    $stock['stock'] = $branch['stock'];
-
-                                                    $getOptionStock = $this
-                                                        ->Products
-                                                        ->ProductOptionStocks
-                                                        ->find()
-                                                        ->where([
-                                                            'product_id' => $productEntity->get('id'),
-                                                            'product_option_price_id' => $OptionPriceEntity->get('id'),
-                                                            'branch_id' => $stock['branch_id']
-                                                        ])
-                                                        ->first();
-
-
-                                                    $OptionStockEntity = !empty($getOptionStock) ? $getOptionStock : $this
-                                                        ->Products
-                                                        ->ProductOptionStocks
-                                                        ->newEntity([
-                                                            'product_id' => $productEntity->get('id'),
-                                                            'product_option_price_id' => $OptionPriceEntity->get('id')
-                                                        ]);
-
-                                                    $this
-                                                        ->Products
-                                                        ->ProductOptionStocks
-                                                        ->patchEntity($OptionStockEntity, $stock, ['validate' => false]);
-
-                                                    $this
-                                                        ->Products
-                                                        ->ProductOptionStocks
-                                                        ->save($OptionStockEntity);
-                                                }
-                                            }
-
-                                        }
-                                    }
-
-                                    if ($option_value_lists = $this->request->getData('ProductOptionValueLists')) {
-                                        foreach($option_value_lists as $k => $lists) {
-
-                                            foreach($lists as $option_id => $option_value_id) {
-
-                                                $getValueList = $this
-                                                    ->ProductOptionValueLists
-                                                    ->find()
-                                                    ->where([
-                                                        'product_option_price_id' => $OptionPriceEntity->get('id'),
-                                                        'option_id' => $option_id
-                                                    ])
-                                                    ->first();
-
-                                                $OptionValueListEntity = !empty($getValueList) ? $getValueList : $this
-                                                    ->ProductOptionValueLists
-                                                    ->newEntity([
-                                                        'product_option_price_id' => $OptionPriceEntity->get('id'),
-                                                        'option_id' => $option_id
-                                                    ]);
-
-                                                $this
-                                                    ->ProductOptionValueLists
-                                                    ->patchEntity($OptionValueListEntity, ['option_value_id' => $option_value_id]);
-
-                                                $this
-                                                    ->ProductOptionValueLists
-                                                    ->save($OptionValueListEntity);
-
-
-                                            }
-
-                                        }
-                                    }
-                                }
-
                                 $idx++;
                             }
+
+                            /**
+                             * @var \AdminPanel\Model\Entity\ProductOptionPrice[] $getOptionPriceEntity
+                             */
+                            $getOptionPriceEntity = $this
+                                ->Products
+                                ->ProductOptionPrices
+                                ->find()
+                                ->where([
+                                    'product_id' => $productEntity->get('id'),
+                                ]);
+
+                            /**
+                             * @var \AdminPanel\Model\Entity\ProductOptionPrice[] $OptionPriceEntity
+                             */
+                            $OptionPriceEntity = [];
+                            foreach($getOptionPriceEntity as $val) {
+                                $OptionPriceEntity[$val->get('idx')] = $val;
+                            }
+                            unset($getOptionPriceEntity);
+
+
+
+                            if ($option_value_lists = $this->request->getData('ProductOptionValueLists')) {
+                                $idx = 1;
+                                foreach($option_value_lists as $k => $lists) {
+
+                                    foreach($lists as $option_id => $option_value_id) {
+
+                                        $getValueList = $this
+                                            ->ProductOptionValueLists
+                                            ->find()
+                                            ->where([
+                                                'product_option_price_id' => $OptionPriceEntity[$idx]->get('id'),
+                                                'option_id' => $option_id
+                                            ])
+                                            ->first();
+
+                                        $OptionValueListEntity = !empty($getValueList) ? $getValueList : $this
+                                            ->ProductOptionValueLists
+                                            ->newEntity([
+                                                'product_option_price_id' => $OptionPriceEntity[$idx]->get('id'),
+                                                'option_id' => $option_id
+                                            ]);
+
+                                        $this
+                                            ->ProductOptionValueLists
+                                            ->patchEntity($OptionValueListEntity, ['option_value_id' => $option_value_id]);
+
+                                        $this
+                                            ->ProductOptionValueLists
+                                            ->save($OptionValueListEntity);
+
+
+                                    }
+                                    $idx++;
+                                }
+                            }
+
+                            if ($option_stocks = $this->request->getData('ProductOptionStocks')) {
+                                $idx = 1;
+                                foreach($option_stocks as $key => $stock) {
+
+                                    if (isset($stock['branches'])) {
+                                        foreach($stock['branches'] as $branch) {
+
+                                            $stock['branch_id'] = $branch['branch_id'];
+                                            $stock['stock'] = $branch['stock'];
+
+                                            $getOptionStock = $this
+                                                ->Products
+                                                ->ProductOptionStocks
+                                                ->find()
+                                                ->where([
+                                                    'product_id' => $productEntity->get('id'),
+                                                    'product_option_price_id' => $OptionPriceEntity[$idx]->get('id'),
+                                                    'branch_id' => $stock['branch_id']
+                                                ])
+                                                ->first();
+
+
+                                            $OptionStockEntity = !empty($getOptionStock) ? $getOptionStock : $this
+                                                ->Products
+                                                ->ProductOptionStocks
+                                                ->newEntity([
+                                                    'product_id' => $productEntity->get('id'),
+                                                    'product_option_price_id' => $OptionPriceEntity[$idx]->get('id')
+                                                ]);
+
+
+                                            $this
+                                                ->Products
+                                                ->ProductOptionStocks
+                                                ->patchEntity($OptionStockEntity, $stock, ['validate' => false]);
+
+
+                                            $this
+                                                ->Products
+                                                ->ProductOptionStocks
+                                                ->save($OptionStockEntity);
+                                        }
+                                    }
+                                    $idx++;
+                                }
+                            }
                         }
+
 
 
 
@@ -533,6 +680,64 @@ class ProductsController extends AppController
 
             case '3':
 
+                $validator = new Validator();
+
+                $error = $validator->errors($this->request->getData());
+                if (empty($error)) {
+
+                    $productEntity = $this->Products->find()
+                        ->where([
+                            'Products.id' => $this->request->getData('id')
+                        ])
+                        ->first();
+                    if ($productEntity) {
+                        $this->Products->patchEntity($productEntity, $this->request->getData(), ['validate' => false]);
+                        if ($this->Products->save($productEntity)) {
+                            $this->Products->ProductImages->updateAll(['primary' => 0], ['product_id' => $productEntity->get('id')]);
+                            $primaryImage = $this->request->getData('ProductImages');
+                            $productImageEntity = $this->Products->ProductImages->find()
+                                ->where([
+                                    'id' => $primaryImage['primary']
+                                ])
+                                ->first();
+                            if ($productImageEntity) {
+                                $this->Products->ProductImages->patchEntity($productImageEntity, ['primary' => 1]);
+                                $this->Products->ProductImages->save($productImageEntity);
+                            }
+
+                            //processing and insert stock
+                            /**
+                             * @var \AdminPanel\Model\Entity\ProductOptionStock[] $getStocks
+                             */
+                            $getStocks = $this->Products->ProductOptionStocks->find()
+                                ->where([
+                                    'product_id' => $productEntity->get('id')
+                                ]);
+                            foreach($getStocks as $stock) {
+                                $productStockEntity = $this
+                                    ->Products
+                                    ->ProductStockMutations
+                                    ->newEntity([
+                                        'product_id' => $productEntity->get('id'),
+                                        'branch_id' => $stock->get('branch_id'),
+                                        'product_option_stock_id' => $stock->get('id'),
+                                        'product_stock_mutation_type_id' => 1, //TODO
+                                        'description' => 'initial stock',
+                                        'amount' => $stock->get('stock'),
+                                        'balance' => $stock->get('stock'),
+                                    ]);
+                                $this
+                                    ->Products
+                                    ->ProductStockMutations
+                                    ->save($productStockEntity);
+                            }
+
+
+                            $this->Flash->success(__('The product has been saved.'));
+                        }
+                    }
+
+                }
                 break;
 
         }
@@ -582,7 +787,11 @@ class ProductsController extends AppController
 
 
             if ($this->ProductImageSizes->ProductImages->save($entity)) {
-
+                $out['data'] = [
+                    'original_name' => $file['name'],
+                    'name' => $entity->get('name'),
+                    'image_id' => $entity->get('id')
+                ];
                 $Response = $Response->withStatus('200');
             } else {
                 $out['error'] = __d('AdminPanel', 'Gagal upload');
@@ -641,6 +850,44 @@ class ProductsController extends AppController
             ->withStringBody(json_encode($respon));
     }
 
+
+    public function addBrands(){
+        $this->disableAutoRender();
+        $validator = new Validator();
+        $validator
+            ->notBlank('name', 'tidak boleh kosong');
+        $error = $validator->errors($this->request->getData());
+        if(empty($error)){
+            $cat = $this->request->getData('code_cat');
+            $name = $this->request->getData('name');
+
+            $getBrands = $this->Brands->find()
+                ->where(['Brands.product_category_id' => $cat, 'Brands.name' => $name ])
+                ->first();
+
+
+            if(empty($getBrands)){
+                $newEntity = $this->Brands->newEntity();
+                $newEntity = $this->Brands->patchEntity($newEntity,$this->request->getData());
+                $newEntity->set('product_category_id', $cat);
+                $newEntity->set('name', $name);
+
+                if($this->Brands->save($newEntity)){
+                    $data = ['id' => $newEntity->get('id'), 'name' => $name];
+                    $respon = ['is_error' => false, 'message' => 'Brands berhasil didaftarkan', 'data' => $data];
+                }else{
+                    $respon = ['is_error' => true, 'message' => 'Gagal menyimpan data / pilihan sudah terdaftar'];
+                }
+            }else{
+                $respon = ['is_error' => true, 'message' => 'Brand telah terdaftar'];
+            }
+        }else{
+            $respon = ['is_error' => true, 'message' => 'Gagal menyimpan data'];
+        }
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($respon));
+    }
+
     /**
      * Add method
      *
@@ -649,7 +896,32 @@ class ProductsController extends AppController
     public function add()
     {
         $product = $this->Products->newEntity();
-        if ($this->request->is('post')) {
+        if ($this->request->is('ajax')) {
+            $response = [];
+            switch ($this->request->getData('action')) {
+                case 'getSku':
+                    /**
+                     * @var \AdminPanel\Model\Entity\ProductToCategory $getCategory
+                     */
+                    $getCategory = $this->Products->ProductToCategories->find()
+                        ->select(['product_category_id'])
+                        ->where(['product_id' => $this->request->getData('product_id')])
+                        ->first();
+                    $response['data'] = $this->generateSku($getCategory->get('product_category_id'), $this->request->getData('brand_id'));
+                    break;
+                case 'removeImage':
+                    try {
+                        $productImageEntity = $this->Products->ProductImages->get($this->request->getData('image_id'));
+                        $response['data'] = $this->Products->ProductImages->delete($productImageEntity);
+                    } catch(\Exception $e) {}
+
+
+                    break;
+            }
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($response));
+        }
+        else if ($this->request->is('post')) {
             debug($this->request->getData());
             exit;
             $product = $this->Products->patchEntity($product, $this->request->getData());
@@ -660,6 +932,9 @@ class ProductsController extends AppController
             }
             $this->Flash->error(__('The product could not be saved. Please, try again.'));
         }
+
+
+
         $productStockStatuses = $this->Products->ProductStockStatuses->find('list', ['limit' => 200]);
         $productWeightClasses = $this->Products->ProductWeightClasses->find('list', ['limit' => 200]);
         $productStatuses = $this->Products->ProductStatuses->find('list', ['limit' => 200]);
@@ -673,8 +948,25 @@ class ProductsController extends AppController
         //debug($parent_categories->toArray());
 
         $product_tags = $this->Tags->find('list')->toArray();
+        $product_warranties = $this->ProductWarranties->find('list')->toArray();
 
-        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags'));
+        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags','product_warranties'));
+    }
+
+
+    public function getAttributeAndBrand(){
+        if ($this->request->is('ajax')) {
+            $this->viewBuilder()->setLayout('ajax');
+            $listAttribute = $this->Attributes->find('threaded')
+                ->where(['Attributes.product_category_id' => $this->request->getData('categories.0')])
+                ->toArray();
+            $listBrands = $this->Brands->find('list')
+                ->where(['Brands.product_category_id' => $this->request->getData('categories.0')])
+                ->toArray();
+            $listdata = ['attribute' => $listAttribute,'brand' => $listBrands,];
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($listdata));
+        }
     }
 
     public function getoptionvalues(){
@@ -731,7 +1023,19 @@ class ProductsController extends AppController
         $productStockStatuses = $this->Products->ProductStockStatuses->find('list', ['limit' => 200]);
         $productWeightClasses = $this->Products->ProductWeightClasses->find('list', ['limit' => 200]);
         $productStatuses = $this->Products->ProductStatuses->find('list', ['limit' => 200]);
-        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses'));
+        $courriers = $this->Courriers->find('list')->toArray();
+        $options = $this->Options->find('list')->toArray();
+
+        $parent_categories = $this->ProductCategories->find('list')
+            ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
+                return $exp->isNull('parent_id');
+            })->toArray();
+        //debug($parent_categories->toArray());
+
+        $product_tags = $this->Tags->find('list')->toArray();
+        $product_warranties = $this->ProductWarranties->find('list')->toArray();
+
+        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags','product_warranties'));
     }
 
     /**

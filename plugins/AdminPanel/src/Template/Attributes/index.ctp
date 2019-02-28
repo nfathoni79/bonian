@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Attributes') ?>
+                                <?= __('Daftar Attributes') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List Attributes') ?>
+                            <?= __('Daftar Atribut') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +59,23 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New Attribute') ?></span>
+                                    <span><?= __('Tambah Atribut') ?></span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air" data-toggle="modal" data-target="#m_modal_1">
+                                <span>
+                                    <i class="la la-upload"></i>
+                                    <span><?= __('Import Atribut') ?></span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="<?= $this->Url->build('/files/csv/attribute.csv'); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                                <span>
+                                    <i class="la la-download"></i>
+                                    <span><?= __('Contoh CSV Atribut') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -75,7 +91,7 @@
                             <div class="form-group m-form__group row align-items-center">
                                 <div class="col-md-8">
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                                        <input type="text" class="form-control m-input" placeholder="Pencarian..." id="generalSearch">
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="la la-search"></i>
@@ -110,6 +126,39 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!--begin::Modal-->
+<div class="modal fade" id="m_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Import Brand</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <?= $this->Form->create('Attributes',['action' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file']); ?>
+
+                <div class="form-group m-form__group">
+                    <label>Cari FIle</label>
+                    <div></div>
+                    <div class="custom-file">
+                        <?php
+                             echo $this->Form->control('files',['class' => 'custom-file-input', 'type' => 'file']);
+                        ?>
+                        <label class="custom-file-label" for="files">Pilih file</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <?= $this->Form->submit(__('Import'),['class' => 'btn btn-brand']) ?>
+            </div>
+            <?= $this->Form->end(); ?>
         </div>
     </div>
 </div>
@@ -189,9 +238,16 @@
                     },
                     {
                         field: 'Attributes.name',
-                        title: 'Name',
+                        title: 'Nama Atribut',
                         template: function(row) {
                             return row.name;
+                        }
+                    },
+                    {
+                        field: 'product_category',
+                        title: 'Produk kategori',
+                        template: function(row) {
+                            return row.product_category['name'];
                         }
                     },
 

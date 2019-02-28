@@ -9,6 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Attributes Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $ParentAttributes
+ * @property |\Cake\ORM\Association\BelongsTo $ProductCategories
+ * @property |\Cake\ORM\Association\HasMany $ChildAttributes
  * @property \AdminPanel\Model\Table\ProductAttributesTable|\Cake\ORM\Association\HasMany $ProductAttributes
  *
  * @method \AdminPanel\Model\Entity\Attribute get($primaryKey, $options = [])
@@ -19,6 +22,8 @@ use Cake\Validation\Validator;
  * @method \AdminPanel\Model\Entity\Attribute patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \AdminPanel\Model\Entity\Attribute[] patchEntities($entities, array $data, array $options = [])
  * @method \AdminPanel\Model\Entity\Attribute findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TreeBehavior
  */
 class AttributesTable extends Table
 {
@@ -37,6 +42,20 @@ class AttributesTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Tree');
+
+        $this->belongsTo('ParentAttributes', [
+            'className' => 'AdminPanel.Attributes',
+            'foreignKey' => 'parent_id'
+        ]);
+        $this->belongsTo('ProductCategories', [
+            'foreignKey' => 'product_category_id',
+            'className' => 'AdminPanel.ProductCategories'
+        ]);
+        $this->hasMany('ChildAttributes', [
+            'className' => 'AdminPanel.Attributes',
+            'foreignKey' => 'parent_id'
+        ]);
         $this->hasMany('ProductAttributes', [
             'foreignKey' => 'attribute_id',
             'className' => 'AdminPanel.ProductAttributes'
@@ -62,5 +81,20 @@ class AttributesTable extends Table
             ->allowEmptyString('name', false);
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['parent_id'], 'ParentAttributes'));
+        $rules->add($rules->existsIn(['product_category_id'], 'ProductCategories'));
+
+        return $rules;
     }
 }

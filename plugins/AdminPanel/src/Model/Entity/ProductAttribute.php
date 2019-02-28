@@ -8,6 +8,7 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $product_id
+ * @property int $attribute_name_id
  * @property int $attribute_id
  * @property string $description
  *
@@ -28,6 +29,7 @@ class ProductAttribute extends Entity
      */
     protected $_accessible = [
         'product_id' => true,
+        'attribute_name_id' => true,
         'attribute_id' => true,
         'description' => true,
         'product' => true,

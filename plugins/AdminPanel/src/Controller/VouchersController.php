@@ -40,7 +40,7 @@ class VouchersController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Vouchers.name LIKE' => '%' . $search .'%']);
+                    $data->where(['Vouchers.code_voucher LIKE' => '%' . $search .'%']);
                 }
                 $data->where($query);
             }

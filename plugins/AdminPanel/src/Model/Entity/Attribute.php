@@ -7,6 +7,10 @@ use Cake\ORM\Entity;
  * Attribute Entity
  *
  * @property int $id
+ * @property int|null $parent_id
+ * @property int $lft
+ * @property int $rght
+ * @property int|null $product_category_id
  * @property string $name
  *
  * @property \AdminPanel\Model\Entity\ProductAttribute[] $product_attributes
@@ -24,6 +28,10 @@ class Attribute extends Entity
      * @var array
      */
     protected $_accessible = [
+        'parent_id' => true,
+        'lft' => true,
+        'rght' => true,
+        'product_category_id' => true,
         'name' => true,
         'product_attributes' => true
     ];

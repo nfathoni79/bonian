@@ -8,6 +8,8 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $product_id
+ * @property string $sku
+ * @property string $expired
  * @property float $price
  * @property int $idx
  *
@@ -29,6 +31,8 @@ class ProductOptionPrice extends Entity
      */
     protected $_accessible = [
         'product_id' => true,
+        'sku' => true,
+        'expired' => true,
         'price' => true,
         'idx' => true,
         'product' => true,
