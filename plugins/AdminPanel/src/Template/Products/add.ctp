@@ -16,6 +16,7 @@
     ]);
 ?>
 <script>
+    Dropzone.autoDiscover = false;
     $(document).ready(function() {
         $('.summernote').summernote({
             height: 150
@@ -529,6 +530,57 @@
                 console.log('New tag: ', isNew.val());
             }
         });
+
+        $("#brand-id").change(function(){
+            var brand_id = $(this).val();
+            $.ajax({
+                url: "<?= $this->Url->build(['action' => 'add']); ?>",
+                cache: false,
+                method: 'POST',
+                data: {action: "getSku", brand_id: brand_id, product_id: $('input[name=id]').val(), _csrfToken: $('input[name=_csrfToken]').val()},
+                success: function (response) {
+                    if (typeof response.data != "undefined") {
+                        $("#sku").val(response.data);
+                    }
+                }
+            });
+        })
+
+        new Dropzone("#m-dropzone-parent", {
+            url: "<?= $this->Url->build(['action' => 'upload']); ?>",
+            maxFiles: 10,
+            maxFilesize: 10, // MB
+            addRemoveLinks: true,
+            acceptedFiles: "image/*",
+            paramName: "name",
+            //autoProcessQueue: false,
+            //autoQueue: false,
+            thumbnail: function(file, dataUrl) {
+                if (file.previewElement) {
+                    //$(file.previewElement.querySelectorAll('div.dz-progress')).hide()
+                    file.previewElement.classList.remove("dz-file-preview");
+                    for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                        thumbnailElement.alt = file.name;
+                        thumbnailElement.src = dataUrl;
+                    }
+
+                    return setTimeout((() => file.previewElement.classList.add("dz-image-preview")), 1);
+                }
+
+            },
+            success: function(file, response) {
+                //console.log(file, response)
+            },
+            maxfilesexceeded: function(file) {
+                this.removeFile(file);
+            },
+            sending: function(file, xhr, formData) {
+                formData.append('_csrfToken', $('input[name=_csrfToken]').val());
+                formData.append('product_id', $('input[name=id]').val());
+                formData.append('idx', 0);
+
+            }
+        });
     })
 </script>
 <script>
@@ -791,7 +843,7 @@
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Sku'); ?>*</label>
                                                 <div class="col-xl-8">
-                                                    <?php echo $this->Form->control('sku',['label' => false,'class' => $default_class]);?>
+                                                    <?php echo $this->Form->control('sku', ['label' => false,'class' => $default_class, 'id' => 'sku']);?>
                                                 </div>
                                             </div>
                                             <div class="form-group m-form__group row">
@@ -880,7 +932,7 @@
                                             <div class="m-form__seperator m-form__seperator--dashed"></div>
                                             <div class="form-group m-form__group">
                                                 <div class="form-group m-form__group">
-                                                    <div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone" style="min-height:190px !important;">
+                                                    <div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone-parent" style="min-height:190px !important;">
                                                         <div class="m-dropzone__msg dz-message needsclick">
                                                             <h3 class="m-dropzone__msg-title">Drop files disini atau click untuk upload.</h3>
                                                             <span class="m-dropzone__msg-desc">Upload sampai 10 file</span>

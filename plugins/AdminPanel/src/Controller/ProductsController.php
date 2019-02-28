@@ -49,6 +49,7 @@ class ProductsController extends AppController
             'image/png',
             'image/jpeg'
         ];
+
     }
     /**
      * Index method
@@ -128,6 +129,34 @@ class ProductsController extends AppController
         ]);
 
         $this->set('product', $product);
+    }
+
+
+    /**
+     * @param $category_id
+     * @param $brand_id
+     * @return string
+     */
+    protected function generateSku($category_id, $brand_id)
+    {
+        $this->disableAutoRender();
+        /**
+         * @var \AdminPanel\Model\Entity\ProductCategory[] $paths
+         */
+        $paths = $this->ProductCategories->find('path', ['for' => $category_id])->toArray();
+        $codeSku = [];
+        array_push($codeSku, $brand_id);
+        foreach($paths as $key => $path) {
+            if ($key == 0) {
+                array_push($codeSku, $path->get('id'));
+            }
+            if (count($paths) == $key + 1) {
+                array_push($codeSku, str_pad($path->get('id'), 3, '0', STR_PAD_LEFT));
+            }
+        }
+        array_push($codeSku, date('m'));
+        array_push($codeSku, str_pad(rand(1, 999), 4, 0, STR_PAD_LEFT));
+        return join('', $codeSku);
     }
 
 
@@ -751,7 +780,24 @@ class ProductsController extends AppController
     public function add()
     {
         $product = $this->Products->newEntity();
-        if ($this->request->is('post')) {
+        if ($this->request->is('ajax')) {
+            $response = [];
+            switch ($this->request->getData('action')) {
+                case 'getSku':
+                    /**
+                     * @var \AdminPanel\Model\Entity\ProductToCategory $getCategory
+                     */
+                    $getCategory = $this->Products->ProductToCategories->find()
+                        ->select(['product_category_id'])
+                        ->where(['product_id' => $this->request->getData('product_id')])
+                        ->first();
+                    $response['data'] = $this->generateSku($getCategory->get('product_category_id'), $this->request->getData('brand_id'));
+                    break;
+            }
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($response));
+        }
+        else if ($this->request->is('post')) {
             debug($this->request->getData());
             exit;
             $product = $this->Products->patchEntity($product, $this->request->getData());
@@ -762,6 +808,9 @@ class ProductsController extends AppController
             }
             $this->Flash->error(__('The product could not be saved. Please, try again.'));
         }
+
+
+
         $productStockStatuses = $this->Products->ProductStockStatuses->find('list', ['limit' => 200]);
         $productWeightClasses = $this->Products->ProductWeightClasses->find('list', ['limit' => 200]);
         $productStatuses = $this->Products->ProductStatuses->find('list', ['limit' => 200]);
