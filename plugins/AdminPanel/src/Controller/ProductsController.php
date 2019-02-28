@@ -646,6 +646,35 @@ class ProductsController extends AppController
 
             case '3':
 
+                $validator = new Validator();
+
+                $error = $validator->errors($this->request->getData());
+                if (empty($error)) {
+
+                    $productEntity = $this->Products->find()
+                        ->where([
+                            'Products.id' => $this->request->getData('id')
+                        ])
+                        ->first();
+                    if ($productEntity) {
+                        $this->Products->patchEntity($productEntity, $this->request->getData(), ['validate' => false]);
+                        if ($this->Products->save($productEntity)) {
+                            $this->Products->ProductImages->updateAll(['primary' => 0], ['product_id' => $productEntity->get('id')]);
+                            $primaryImage = $this->request->getData('ProductImages');
+                            $productImageEntity = $this->Products->ProductImages->find()
+                                ->where([
+                                    'id' => $primaryImage['primary']
+                                ])
+                                ->first();
+                            if ($productImageEntity) {
+                                $this->Products->ProductImages->patchEntity($productImageEntity, ['primary' => 1]);
+                                $this->Products->ProductImages->save($productImageEntity);
+                            }
+                            $this->Flash->success(__('The product has been saved.'));
+                        }
+                    }
+
+                }
                 break;
 
         }
@@ -695,7 +724,11 @@ class ProductsController extends AppController
 
 
             if ($this->ProductImageSizes->ProductImages->save($entity)) {
-
+                $out['data'] = [
+                    'original_name' => $file['name'],
+                    'name' => $entity->get('name'),
+                    'image_id' => $entity->get('id')
+                ];
                 $Response = $Response->withStatus('200');
             } else {
                 $out['error'] = __d('AdminPanel', 'Gagal upload');

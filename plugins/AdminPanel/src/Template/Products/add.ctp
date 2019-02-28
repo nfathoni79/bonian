@@ -47,7 +47,7 @@
         });
 
         //override next2 with validation ajax
-        $("[data-wizard-action=next2]").click(function() {
+        $("[data-wizard-action=next2], [data-wizard-action=submit]").click(function() {
             var current = formEl.find('.m-wizard__form-step--current :input');
 
             //additional input hidden
@@ -56,6 +56,8 @@
                 var len = Object(current).length++;
                 current[len] = elem_id[0];
             }
+
+            var self = this;
 
             ajaxRequest.post(url + '/' + wizard.getStep(), current, function(data, saved) {
                 if (data.success) {
@@ -69,8 +71,12 @@
                             formEl.append(addInput);
                         }
                     }
+                    if ($(self).attr('data-wizard-action') === 'submit') {
+                        location.href = '';
+                    } else {
+                        wizard.goNext();
+                    }
 
-                    wizard.goNext();
                 }
             });
         });
@@ -86,10 +92,84 @@
             var nextAction = $('[data-wizard-action="next2"]');
             if (wizard.isLastStep()) {
                 nextAction.hide();
+                renderImagePreview('#image-preview-wizard');
+                renderInputPreview('#input-preview-wizard');
             } else {
                 nextAction.show();
             }
         });
+
+
+
+        function renderTemplate(label, value) {
+            return `<div class="form-group m-form__group preview-template">
+                <label>${label}</label>
+                <div >${value}</div>
+            </div>`;
+        }
+
+        function renderInputPreview(element) {
+            var inputs = [];
+            [
+                'name',
+                'slug',
+                'brand_id',
+                'model',
+                'price',
+                'price_sale',
+                'sku',
+                'product_stock_status_id',
+                'point'
+            ].forEach(function(o, i) {
+                var input = formEl.find(`[name="${o}"]`);
+                var value = input.val();
+
+                if (input.prop("tagName") === 'SELECT') {
+                    value = input.find('option:selected').text();
+                }
+
+                var label = input.parents('.form-group').find('label').text().replace('*', '');
+                inputs.push(renderTemplate(label, value));
+            });
+            $(element).find('.preview-template').remove();
+            $(element).prepend(inputs.join(''));
+        }
+
+        function renderImagePreview(element) {
+            var imageRow = [];
+            $('[data-dz-thumbnail]').each(function(i) {
+                var image_id = $(this).attr('data-image-id');
+                var image_name = $(this).attr('data-image-name');
+                imageRow.push(`<div class="col-md-1 nopad text-center">
+                                <label class="image-radio">
+                                    <img src="<?= $this->Url->build('/images/100x100/'); ?>${image_name}" alt="" class="img-thumbnail img-responsive" />
+                                    <input type="radio" name="ProductImages[primary]" value="${image_id}" />
+                                    <i class="la la-check-square checked-icon d-none"></i>
+                                </label>
+                            </div>`);
+            });
+            $(element).html(imageRow.join(''));
+            // add/remove checked class
+            $(".image-radio").each(function(i) {
+                if (i === 0) {
+                    $(this).trigger('click');
+                }
+                if($(this).find('input[type="radio"]').first().attr("checked")){
+                    $(this).addClass('image-radio-checked');
+                }else{
+                    $(this).removeClass('image-radio-checked');
+                }
+            });
+
+            // sync the input state
+            $(".image-radio").on("click", function(e) {
+                $(".image-radio").removeClass('image-radio-checked');
+                $(this).addClass('image-radio-checked');
+                var $radio = $(this).find('input[type="radio"]');
+                $radio.prop("checked",!$radio.prop("checked"));
+                e.preventDefault();
+            });
+        }
 
         function setChainCategory(target, parent_id) {
             $.ajax({
@@ -410,6 +490,10 @@
                         },
                         success: function(file, response) {
                             //console.log(file, response)
+                            for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                                $(thumbnailElement).attr('data-image-id', response.data.image_id)
+                                    .attr('data-image-name', response.data.name);
+                            }
                         },
                         maxfilesexceeded: function(file) {
                             this.removeFile(file);
@@ -569,7 +653,11 @@
 
             },
             success: function(file, response) {
-                //console.log(file, response)
+                //console.log(file.previewElement, response)
+                for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                    $(thumbnailElement).attr('data-image-id', response.data.image_id)
+                        .attr('data-image-name', response.data.name);
+                }
             },
             maxfilesexceeded: function(file) {
                 this.removeFile(file);
@@ -581,6 +669,8 @@
 
             }
         });
+
+
     })
 </script>
 <script>
@@ -736,6 +826,7 @@
                         ?>
                             <!--begin: Form Body -->
                             <div class="m-portlet__body">
+
                                 <!--begin: Form Wizard Step 1-->
                                 <div class="m-wizard__form-step m-wizard__form-step--current" id="m_wizard_form_step_1">
                                     <div class="row">
@@ -755,6 +846,8 @@
                                             </div>
                                         </div>
                                     </div>
+
+
 
 
 
@@ -1004,8 +1097,19 @@
                                 <!--begin: Form Wizard Step 3-->
                                 <div class="m-wizard__form-step" id="m_wizard_form_step_3">
                                     <div class="row">
-                                        <div class="col-lg-12">
-                                            review
+                                        <div class="col-lg-12" id="input-preview-wizard">
+
+                                            <div class="form-group m-form__group">
+                                                <label for="exampleInputEmail1">Pilih Gambar utama</label>
+                                                <div class="row" id="image-preview-wizard">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group">
+                                                <label for="exampleInputEmail1">Status</label>
+                                                <?php echo $this->Form->control('product_status_id', ['label' => false, 'class' => $default_class . ' select-picker col-md-2']);?>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
