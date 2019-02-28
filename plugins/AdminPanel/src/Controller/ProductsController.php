@@ -687,7 +687,7 @@ class ProductsController extends AppController
                                         'product_id' => $productEntity->get('id'),
                                         'branch_id' => $stock->get('branch_id'),
                                         'product_option_stock_id' => $stock->get('product_option_stock_id'),
-                                        'product_stock_mutation_type_id' => null, //TODO
+                                        'product_stock_mutation_type_id' => 1, //TODO
                                         'description' => 'initial stock',
                                         'amount' => $stock->get('stock'),
                                         'balance' => $stock->get('stock'),
