@@ -7,12 +7,18 @@ use Cake\Validation\Validator;
 /**
  * Brands Controller
  * @property \AdminPanel\Model\Table\BrandsTable $Brands
+ * @property \AdminPanel\Model\Table\ProductCategoriesTable ProductCategories
  *
  * @method \AdminPanel\Model\Entity\Brand[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class BrandsController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('AdminPanel.ProductCategories');
+    }
     /**
      * Index method
      *
@@ -219,4 +225,37 @@ class BrandsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function import(){
+
+        if ($this->request->is('post')) {
+
+            $data = $this->request->getData('files');
+            $file = $data['tmp_name'];
+            $handle = fopen($file, "r");
+            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+
+                $findMainCategory = $this->ProductCategories->find()
+                    ->where(['ProductCategories.name' => $row[2]])
+                    ->first();
+                if($findMainCategory){
+                    if(!empty($row[3])){
+                        $explode = explode(',', $row[3]);
+                        foreach($explode as $val){
+                            $newEntity = $this->Brands->newEntity();
+                            $newEntity = $this->Brands->patchEntity($newEntity, $this->request->getData());
+                            $newEntity->set('parent_id', null);
+                            $newEntity->set('product_category_id', $findMainCategory->get('id'));
+                            $newEntity->set('name', trim($val));
+                            $this->Brands->save($newEntity);
+                        }
+                    }
+                }
+            }
+            $this->Flash->success(__('Success import file'));
+            $this->redirect(['action' => 'index']);
+        }
+
+    }
+
 }

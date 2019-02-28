@@ -373,4 +373,66 @@ class AttributesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
+    public function import(){
+
+        if ($this->request->is('post')) {
+
+            $data = $this->request->getData('files');
+            $file = $data['tmp_name'];
+            $handle = fopen($file, "r");
+            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+
+                $findMainCategory = $this->ProductCategories->find()
+                    ->where(['ProductCategories.name' => $row[2]])
+                    ->first();
+                if($findMainCategory){
+                    if(!empty($row[3])){
+                        $explode = explode('|', $row[3]);
+                        foreach($explode as $vals){
+                            $explodes = explode(':', $vals);
+                            $parents = trim($explodes[0]);
+
+
+                            $findParentName = $this->Attributes->find()
+                                ->where(['Attributes.name' => $parents])
+                                ->first();
+                            if($findParentName){
+                                $id = $findParentName->get('id');
+                            }else{
+                                $newEntities = $this->Attributes->newEntity();
+                                $newEntities = $this->Attributes->patchEntity($newEntities, $this->request->getData());
+                                $newEntities->set('parent_id', null);
+                                $newEntities->set('product_category_id', $findMainCategory->get('id'));
+                                $newEntities->set('name', trim($parents));
+                                $this->Attributes->save($newEntities);
+                                $id = $newEntities->get('id');
+                            }
+                            if($id){
+                                $values = explode(',', $explodes[1]);
+                                foreach($values as $v){
+                                    $findValueName = $this->Attributes->find()
+                                        ->where(['Attributes.product_category_id' => $findMainCategory->get('id'),'Attributes.name' => trim($v), 'Attributes.parent_id !=' => NULL])
+                                        ->first();
+                                    if(empty($findValueName)){
+                                        $newEntity = $this->Attributes->newEntity();
+                                        $newEntity = $this->Attributes->patchEntity($newEntity, $this->request->getData());
+                                        $newEntity->set('parent_id', $id);
+                                        $newEntity->set('product_category_id', $findMainCategory->get('id'));
+                                        $newEntity->set('name', trim($v));
+                                        $this->Attributes->save($newEntity);
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            $this->Flash->success(__('Success import file'));
+            $this->redirect(['action' => 'index']);
+        }
+
+    }
 }
