@@ -76,6 +76,7 @@
                 $default_class = 'form-control form-control-danger m-input m-input--air';
                 echo $this->Form->control('title',['class' => $default_class]);
                 echo $this->Form->control('slug',['class' => $default_class, 'required' => false],['fieldset' => false]);
+                echo $this->Form->input('kategori', array('label'=>'Kategori', 'class' => 'form-control form-control-danger m-input', 'type'=>'select', 'options'=>['Satu', 'Dua']));
                 echo $this->Form->control('content',['class' => $default_class . ' froala-editor', 'required' => false]);
             ?>
                 <div class="input text form-group m-form__group row">

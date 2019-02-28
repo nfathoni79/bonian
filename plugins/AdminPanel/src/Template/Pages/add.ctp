@@ -9,7 +9,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Page') ?>
+                    <?= __('Halaman') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -23,7 +23,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Page') ?>
+                                <?= __('Halaman') ?>
                             </span>
                         </a>
                     </li>
@@ -33,7 +33,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Page') ?>
+                                <?= __('Daftar Halaman') ?>
                             </span>
                         </a>
                     </li>
@@ -43,7 +43,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Add Page') ?>
+                                <?= __('Tambah Halaman') ?>
                             </span>
                         </a>
                     </li>
@@ -58,7 +58,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Add Page') ?>
+                            <?= __('Tambah Halaman') ?>
                         </h3>
                     </div>
                 </div>
@@ -69,22 +69,22 @@
 
 
             <?= $this->Form->create($page,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form']); ?>
-            <div class="m-portlet__body">
-
+            <div class="m-portlet__body col-lg-8 ">
             <?php
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
-                echo $this->Form->control('title',['class' => $default_class]);
-                echo $this->Form->control('slug',['class' => $default_class, 'required' => false],['fieldset' => false]);
-                echo $this->Form->control('content',['class' => $default_class . ' froala-editor', 'required' => false]);
+                echo $this->Form->control('title',['class' => $default_class, 'label' => 'Judul']);
+                echo $this->Form->control('slug',['class' => $default_class, 'required' => false, 'label' => 'Slug URL'],['fieldset' => false]);
+                echo $this->Form->input('kategori', array('label'=>'Kategori', 'class' => 'form-control form-control-danger m-input', 'type'=>'select', 'options'=>['Satu', 'Dua']));
+                echo $this->Form->control('content',['class' => $default_class . ' froala-editor', 'required' => false, 'label' => 'Konten']);
+                ?>
 
-            ?>
                 <div class="input text form-group m-form__group row">
                     <label class="col-form-label col-lg-3"></label>
                     <div class="col-lg-9">
                         <div class="m-checkbox-list">
                             <label class="m-checkbox">
-                                <?php echo $this->Form->checkbox('enable', ['div' => false, 'label' => false, 'hiddenField' => true, 'required' => false]); ?>  Enable
+                                <?php echo $this->Form->checkbox('enable', ['div' => false, 'label' => false, 'hiddenField' => true, 'required' => false]); ?>  Tampilkan
                                 <span></span>
                             </label>
                         </div>
@@ -95,7 +95,7 @@
                 <div class="m-form__actions m-form__actions">
                     <div class="row">
                         <div class="col-lg-9 ml-lg-auto">
-                            <?= $this->Form->submit(__('Submit'),['class' => 'btn btn-brand']) ?>
+                            <?= $this->Form->submit(__('Simpan'),['class' => 'btn btn-brand']) ?>
                         </div>
                     </div>
                 </div>

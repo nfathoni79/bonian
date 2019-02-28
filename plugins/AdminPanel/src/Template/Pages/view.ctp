@@ -18,6 +18,10 @@
             <td><?= h($page->slug) ?></td>
         </tr>
         <tr>
+            <th scope="row"><?=__('Kategori') ?></th>
+            <td><?= h($page->kategori) ?></td>
+        </tr>
+        <tr>
             <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($page->id) ?></td>
         </tr>

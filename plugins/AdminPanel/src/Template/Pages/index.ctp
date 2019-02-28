@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Pages') ?>
+                    <?= __('Halaman') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Pages') ?>
+                                <?= __('Halaman') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Pages') ?>
+                                <?= __('Daftar Halaman') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List Pages') ?>
+                            <?= __('Daftar Halaman') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('New Page') ?></span>
+                                    <span><?= __('Halaman Baru') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -75,7 +75,7 @@
                             <div class="form-group m-form__group row align-items-center">
                                 <div class="col-md-8">
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                                        <input type="text" class="form-control m-input" placeholder="Cari..." id="generalSearch">
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="la la-search"></i>
@@ -189,16 +189,31 @@
                     },
                     {
                         field: 'Pages.title',
-                        title: 'Title',
+                        title: 'Judul',
                         template: function(row) {
                             return row.title;
                         }
                     },
 
+                     {
+                        field: 'Pages.slug',
+                        title: 'Slug URL',
+                        template: function(row) {
+                            return row.title;
+                        }
+                    },
+
+                     {
+                        field: 'Pages.Kategori',
+                        title: 'Kategori',
+                        template: function(row) {
+                            return row.title;
+                        }
+                    },
 
                     {
                         field: 'Pages.enable',
-                        title: 'Enable',
+                        title: 'Tampilkan',
                         template: function(row) {
                             return (row.enable == 1 ) ? 'Yes' : 'No' ;
                         }
@@ -206,7 +221,7 @@
 
                     {
                         field: 'Pages.created',
-                        title: 'Created',
+                        title: 'Konten',
                         template: function(row) {
                             return row.created;
                         }
@@ -216,7 +231,7 @@
                     {
                         field: "Actions",
                         width: 110,
-                        title: "Actions",
+                        title: "Aksi",
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {
