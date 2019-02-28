@@ -539,13 +539,13 @@
 
 
 
-        var frm = $('#form-attribute');
-        frm.submit(function (e) {
+        var frmAttr = $('#form-attribute');
+        frmAttr.submit(function (e) {
             e.preventDefault();
             $.ajax({
-                type: frm.attr('method'),
-                url: frm.attr('action'),
-                data: frm.serialize(),
+                type: frmAttr.attr('method'),
+                url: frmAttr.attr('action'),
+                data: frmAttr.serialize(),
                 success: function (data) {
                    if(data.is_error){
                        return false;
@@ -566,13 +566,13 @@
             });
         });
 
-        var frm = $('#form-brand');
-        frm.submit(function (e) {
+        var frmBrand = $('#form-brand');
+        frmBrand.submit(function (e) {
             e.preventDefault();
             $.ajax({
-                type: frm.attr('method'),
-                url: frm.attr('action'),
-                data: frm.serialize(),
+                type: frmBrand.attr('method'),
+                url: frmBrand.attr('action'),
+                data: frmBrand.serialize(),
                 success: function (data) {
                    if(data.is_error){
                        return false;
