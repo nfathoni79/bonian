@@ -76,3 +76,19 @@ Password  : zo101010
 username  : zolaku.online@gmail.com 
 Password  : Zo101010 
 ```
+
+## Activity logs
+run migrations
+```php
+php bin/cake.php migrations migrate -p Elastic/ActivityLogger
+```
+
+configuration behaviour 
+```php
+$this->addBehavior('Elastic/ActivityLogger.Logger', [
+            'scope' => [
+                'Cities'
+            ],
+            'issuer' => \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(Configure::read('User.id'))
+        ]);
+```
