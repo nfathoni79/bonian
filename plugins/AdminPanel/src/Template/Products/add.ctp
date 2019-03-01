@@ -10,6 +10,7 @@
 <?php
     //echo $this->Html->script('/admin-assets/demo/default/custom/crud/wizard/wizard');
     echo $this->Html->script([
+            '/admin-assets/app/js/lodash.min',
             '/admin-assets/vendors/custom/slugify/speakingurl.min',
             '/admin-assets/vendors/custom/slugify/slugify.min',
             '/admin-assets/vendors/custom/libs/validation-render',
@@ -18,6 +19,7 @@
 <script>
     Dropzone.autoDiscover = false;
     $(document).ready(function() {
+
         $('.summernote').summernote({
             height: 150
         });
@@ -29,6 +31,7 @@
         var url_category = '<?= $this->Url->build(['action' => 'getCategory']); ?>';
         var url_attribute = '<?= $this->Url->build(['action' => 'getAttributeAndBrand']); ?>';
         var product;
+        var sku_variant = {};
 
 
         var ajaxRequest = new ajaxValidation(formEl);
@@ -303,6 +306,7 @@
             optbranchs = await getList();
             optvalues = await getOptionValue();
             var i = 1;
+
             $('.add-attribute').on('click',function(){
 
                 var radioValue = $("input[name='ShippingOption[]']:checked").val();
@@ -323,7 +327,7 @@
                     formTemplate += '<div class="form-group m-form__group row">\n' +
                         '<label class="col-xl-4 col-form-label">'+text+'  *</label>\n' +
                         '<div class="col-xl-6">\n' +
-                        '<select name="ProductOptionValueLists['+i+']['+values+']" class="form-control select2 m-input select-'+text.toLowerCase()+'" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
+                        '<select name="ProductOptionValueLists['+i+']['+values+']" class="form-control select2 m-input sku-prefix select-'+text.toLowerCase()+'" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
                         '</div>\n' +
                         '<div class="col-xl-2">\n' +
                         '<a href="#" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-variant" style="width:40px; height: 40px;"  data-toggle="modal" data-target="#modal-attribute" data-variant="'+text.toLowerCase()+'"><i class="la la-plus"></i></a>\n' +
@@ -345,6 +349,10 @@
                     '<div class="form-group m-form__group row">\n' +
                     '<label class="col-xl-4 col-form-label">Expired</label>\n' +
                     '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][expired]" class="form-control m-input datepicker" placeholder="Expired"></div> \n' +
+                    '</div>  \n' +
+                    '<div class="form-group m-form__group row">\n' +
+                    '<label class="col-xl-4 col-form-label">SKU *</label>\n' +
+                    '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][sku]" class="form-control m-input sku-number" placeholder="Sku"></div> \n' +
                     '</div>  \n' +
                     '<div class="form-group m-form__group row">\n' +
                     '<label class="col-xl-4 col-form-label">Harga Tambahan  *</label>\n' +
@@ -397,6 +405,17 @@
                 if(formTemplate != ''){
                     var appendTemplate = $('.form-dynamic').append(template);
                     //after append reindex product variant options
+
+                    appendTemplate.find('.sku-prefix').each(function(index) {
+                        $(this).change(function(){
+                            var parentIndex = $(this).parents('.product-variant-item').attr('data-index');
+                            _.set(sku_variant, `${parentIndex}.${index}`, $(this).val());
+                            $(this)
+                                .parents('.product-variant-item')
+                                .find('.sku-number')
+                                .val($("#sku").val() + Number(_.get(sku_variant, `${parentIndex}`).join('')).toString(16).toUpperCase());
+                        });
+                    });
 
                     var arrows;
                     if (mUtil.isRTL()) {
@@ -641,10 +660,22 @@
                 data: {action: "getSku", brand_id: brand_id, product_id: $('input[name=id]').val(), _csrfToken: $('input[name=_csrfToken]').val()},
                 success: function (response) {
                     if (typeof response.data != "undefined") {
-                        $("#sku").val(response.data);
+                        let sku = $("#sku");
+                        sku.val(response.data);
+                        sku.trigger('change');
                     }
                 }
             });
+        });
+
+        $("#sku").on('change', function(){
+            var sku_number = $(this).val();
+            for(var index in sku_variant) {
+                console.log('hex',index,  sku_variant[index]);
+                $(`[data-index=${index}]`)
+                    .find('.sku-number')
+                    .val(sku_number + Number(sku_variant[index].join('')).toString(16).toUpperCase());
+            }
         })
 
         new Dropzone("#m-dropzone-parent", {

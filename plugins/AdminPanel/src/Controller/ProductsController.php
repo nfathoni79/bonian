@@ -329,6 +329,10 @@ class ProductsController extends AppController
                     ->requirePresence('price')
                     ->numeric('price', 'tidak boleh kosong');
 
+                $productPrice
+                    ->requirePresence('sku')
+                    ->notBlank('sku', 'tidak boleh kosong');
+
                 $validator->addNestedMany('ProductOptionPrices', $productPrice);
 
 
