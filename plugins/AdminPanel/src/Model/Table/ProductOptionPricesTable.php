@@ -84,6 +84,7 @@ class ProductOptionPricesTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['product_id'], 'Products'));
+        $rules->add($rules->isUnique(['sku']));
 
         return $rules;
     }

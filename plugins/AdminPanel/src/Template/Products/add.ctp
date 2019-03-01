@@ -671,7 +671,6 @@
         $("#sku").on('change', function(){
             var sku_number = $(this).val();
             for(var index in sku_variant) {
-                console.log('hex',index,  sku_variant[index]);
                 $(`[data-index=${index}]`)
                     .find('.sku-number')
                     .val(sku_number + Number(sku_variant[index].join('')).toString(16).toUpperCase());

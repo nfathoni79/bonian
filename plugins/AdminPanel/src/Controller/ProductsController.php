@@ -563,6 +563,14 @@ class ProductsController extends AppController
                                     ->ProductOptionPrices
                                     ->save($OptionPriceEntity);
 
+                                if (!$saveOptionPrice) {
+                                    $response['error']['ProductOptionPrices'][$key] = $OptionPriceEntity->getErrors();
+                                    //debug($response);exit;
+                                    //debug($option_prices);exit;
+                                    //debug($OptionPriceEntity->getErrors());
+                                    //exit;
+                                }
+
                                 $idx++;
                             }
 
@@ -593,7 +601,7 @@ class ProductsController extends AppController
                                 foreach($option_value_lists as $k => $lists) {
 
                                     foreach($lists as $option_id => $option_value_id) {
-
+                                        if (!isset($OptionPriceEntity[$idx])) continue;
                                         $getValueList = $this
                                             ->ProductOptionValueLists
                                             ->find()
@@ -630,7 +638,7 @@ class ProductsController extends AppController
 
                                     if (isset($stock['branches'])) {
                                         foreach($stock['branches'] as $branch) {
-
+                                            if (!isset($OptionPriceEntity[$idx])) continue;
                                             $stock['branch_id'] = $branch['branch_id'];
                                             $stock['stock'] = $branch['stock'];
 
@@ -747,7 +755,7 @@ class ProductsController extends AppController
         }
 
         //global response error
-        $response['error'] = $validator->errors($this->request->getData());
+        $response['error'] = !isset($response['error']) ? $validator->errors($this->request->getData()) : $response['error'];
         return $this->response->withType('application/json')
             ->withStringBody(json_encode($response));
     }
