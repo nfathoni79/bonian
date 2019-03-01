@@ -101,6 +101,8 @@ class OptionsController extends AppController
         $option = $this->Options->newEntity();
         if ($this->request->is('post')) {
             $option = $this->Options->patchEntity($option, $this->request->getData());
+            $option->set('option_type_id', 1);
+            $option->set('sort_order', 0);
             if ($this->Options->save($option)) {
                 $this->Flash->success(__('The option has been saved.'));
 
