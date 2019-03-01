@@ -19,8 +19,7 @@ class ProductStockMutationsController extends AppController
      */
     public function index()
     {
-
-
+        
         if ($this->request->is('ajax')) {
             $this->viewBuilder()->setLayout('ajax');
 
@@ -31,12 +30,14 @@ class ProductStockMutationsController extends AppController
             /** custom default query : select, where, contain, etc. **/
             $data = $this->ProductStockMutations->find('all')
                 ->select();
-            $data->contain(['Products', 'Branches', 'ProductOptionStocks', 'ProductStockMutationTypes']);
-            $data->contain('ProductOptionPrices', function (Query $q) {
-               return $q
-                   ->select(['sku'])
-                   ->where(['ProductOptionPrices.id' => 'ProductOptionStocks.product_option_price_id']);
-            });
+            $data->contain([
+                'Products',
+                'Branches',
+                'ProductOptionStocks' => [
+                    'ProductOptionPrices'
+                ],
+                'ProductStockMutationTypes'
+            ]);
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
