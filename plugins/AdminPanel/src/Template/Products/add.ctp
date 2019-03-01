@@ -352,7 +352,7 @@
                     '</div>  \n' +
                     '<div class="form-group m-form__group row">\n' +
                     '<label class="col-xl-4 col-form-label">SKU *</label>\n' +
-                    '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][sku]" class="form-control m-input sku-number" placeholder="Sku"></div> \n' +
+                    '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][sku]" class="form-control m-input sku-number" placeholder="Sku" readonly="readonly"></div> \n' +
                     '</div>  \n' +
                     '<div class="form-group m-form__group row">\n' +
                     '<label class="col-xl-4 col-form-label">Harga Tambahan  *</label>\n' +
@@ -984,7 +984,7 @@
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Sku'); ?>*</label>
                                                 <div class="col-xl-8">
-                                                    <?php echo $this->Form->control('sku', ['label' => false,'class' => $default_class, 'id' => 'sku']);?>
+                                                    <?php echo $this->Form->control('sku', ['label' => false,'class' => $default_class, 'id' => 'sku', 'readonly' => true]);?>
                                                 </div>
                                             </div>
                                             <div class="form-group m-form__group row">
