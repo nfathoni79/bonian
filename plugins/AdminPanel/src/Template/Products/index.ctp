@@ -219,10 +219,10 @@ echo $this->Html->script([
                     },
 
                     {
-                        field: 'Products.code',
-                        title: 'Code',
+                        field: 'Products.sku',
+                        title: 'SKU',
                         template: function(row) {
-                            return row.code;
+                            return row.sku;
                         }
                     },
 
