@@ -40,8 +40,6 @@ class CitiesTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('AdminPanel.Auditable');
-
         $this->belongsTo('Provinces', [
             'foreignKey' => 'province_id',
             'joinType' => 'INNER',
