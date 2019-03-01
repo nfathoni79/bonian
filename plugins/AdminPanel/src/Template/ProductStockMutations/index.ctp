@@ -121,7 +121,26 @@
             <div class="m-portlet__body">
                 <?= $this->Flash->render() ?>
 
-                <div class="m_datatable" id="table-productStockMutations"></div>
+                <div class="m_datatable">
+
+                    <table class="table table-striped- table-bordered table-hover table-checkable" id="table-productStockMutations">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tanggal</th>
+                            <th>Nama Produk</th>
+                            <th>SKU</th>
+                            <th>Warehouse</th>
+                            <th>SKU Name</th>
+                            <th>Tipe</th>
+                            <th>Deskripsi</th>
+                            <th>Mutasi Stock</th>
+                            <th>Sisa Stock</th>
+                        </tr>
+                        </thead>
+                    </table>
+
+                </div>
 
             </div>
         </div>
@@ -147,6 +166,14 @@
     </div>
 </div>
 
+<?php
+$this->Html->css([
+'/admin-assets/vendors/custom/datatables/datatables.bundle.css'
+], ['block' => true]);
+$this->Html->script([
+'/admin-assets/vendors/custom/datatables/datatables.bundle',
+], ['block' => true]);
+?>
 <?php $this->append('script'); ?>
 <script>
 
@@ -165,7 +192,7 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-productStockMutations').mDatatable({
+            var datatable = $('#table-productStockMutations').DataTable({
 
                 buttons: [
                     'print',
@@ -174,125 +201,87 @@
                     'csvHtml5',
                     'pdfHtml5',
                 ],
-                data: {
-                    type: 'remote',
-                    source: {
-                        read: {
-                            method: 'POST',
-                            url: '<?= $this->Url->build(); ?>',
-                            cache: false,
-                            params: {
-                                _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
-                            },
-                            map: function(raw) {
-                                var dataSet = raw;
-                                if (typeof raw.data !== 'undefined') {
-                                    dataSet = raw.data;
-                                }
-                                return dataSet;
-                            },
-                        },
-                    },
-                    pageSize: 10,
-                    serverPaging: true,
-                    serverFiltering: true,
-                    serverSorting: true,
-                },
-                layout: {
-                    scroll: true,
-                    height: 550,
-                    footer: false
-                },
-                sortable: true,
-                pagination: true,
-                toolbar: {
-                    items: {
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "<?= $this->Url->build(); ?>",
+                    type: 'POST',
+                    data: {
                         pagination: {
-                            pageSizeSelect: [10, 20, 30, 50, 100],
+                            perpage: 50,
                         },
+                        _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
                     },
                 },
-                search: {
-                    input: $('#generalSearch'),
-                },
-                order: [[ 0, "desc" ]],
-                columns: [
+                columnDefs: [
                     {
-                        field: 'id',
-                        title: '#',
-                        sortable: true,
-                        width: 40,
-                        selector: false,
-                        textAlign: 'center',
-                        template: function(row, index, datatable) {
-                            return ++index;
+                        targets: 0,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
                     {
-                        field: 'ProductStockMutations.created',
-                        title: 'Tanggal',
-                        template: function(row) {
-                            return row.created;
+                        targets: 1,
+                        render: function (data, type, row, meta) {
+                            return  row.created;
                         }
                     },
                     {
-                        field: 'Products.name',
-                        title: 'Nama Produk',
-                        template: function(row) {
+                        targets: 2,
+                        render: function (data, type, row, meta) {
                             return row.product.name;
                         }
                     },
-
                     {
-                        field: 'Branches.name',
-                        title: 'Werehouse',
-                        template: function(row) {
+                        targets: 3,
+                        render: function (data, type, row, meta) {
+                            return row.product_option_stock.product_option_price.sku;
+                        }
+                    },
+                    {
+                        targets: 4,
+                        render: function (data, type, row, meta) {
                             return row.branch.name;
                         }
                     },
-
                     {
-                        field: 'ProductOptionStocks.id',
-                        title: 'Product_option_stock Id',
-                        template: function(row) {
-                            return row.product_option_stock.id;
+                        targets: 5,
+                        render: function (data, type, row, meta) {
+                            var optlist = '';
+                            $.each(row.product_option_stock.product_option_price.product_option_value_lists, function(k,v){
+                                optlist += v.option.name + ' : '+v.option_value.name +'<br>';
+                            })
+                            return optlist;
                         }
                     },
-
                     {
-                        field: 'ProductStockMutationTypes.name',
-                        title: 'Tipe',
-                        template: function(row) {
+                        targets: 6,
+                        render: function (data, type, row, meta) {
                             return row.product_stock_mutation_type.name;
                         }
                     },
-
                     {
-                        field: 'ProductStockMutations.description',
-                        title: 'Deskripsi',
-                        template: function(row) {
+                        targets: 7,
+                        render: function (data, type, row, meta) {
                             return row.description;
                         }
                     },
                     {
-                        field: 'ProductStockMutations.amount',
-                        title: 'Mutasi Stok',
-                        template: function(row) {
+                        targets: 8,
+                        render: function (data, type, row, meta) {
                             return row.amount;
                         }
                     },
-
                     {
-                        field: 'ProductStockMutations.balance',
-                        title: 'Sisa Stok',
-                        template: function(row) {
+                        targets: 9,
+                        render: function (data, type, row, meta) {
                             return row.balance;
                         }
                     },
-
                 ]
+
             });
-            var query = datatable.getDataSourceQuery();
+            // var query = datatable.getDataSourceQuery();
 
             $('#export_print').on('click', function(e) {
                 e.preventDefault();

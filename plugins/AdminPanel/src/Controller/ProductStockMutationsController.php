@@ -39,26 +39,23 @@ class ProductStockMutationsController extends AppController
                 'Branches',
                 'ProductOptionStocks' => [
                     'ProductOptionPrices' => [
-//                        'fields' => [
-//                            'sku' => 'ProductOptionPrices.sku',
-//                        ],
                         'ProductOptionValueLists' => [
-                            'fields' => [
-                                'ProductOptionValueLists.product_option_price_id',
-                                'option_name' => 'Options.name',
-                                'option_value_name' => 'OptionValues.name'
-                            ],
+//                            'fields' => [
+//                                'ProductOptionValueLists.product_option_price_id',
+//                                'option_name' => 'Options.name',
+//                                'option_value_name' => 'OptionValues.name'
+//                            ],
                             'Options',
                             'OptionValues',
                         ]
                     ]
                 ],
                 'ProductStockMutationTypes' => [
-                    'fields' => [
-                        'tipe' => 'ProductStockMutationTypes.name'
-                    ]
+//                    'fields' => [
+//                        'tipe' => 'ProductStockMutationTypes.name'
+//                    ]
                 ]
-            ])
+            ])->order(['Products.created' => 'DESC'])
             ;
 
             if ($query && is_array($query)) {
