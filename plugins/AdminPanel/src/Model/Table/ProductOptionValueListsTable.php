@@ -42,6 +42,10 @@ class ProductOptionValueListsTable extends Table
             'foreignKey' => 'product_option_price_id',
             'className' => 'AdminPanel.ProductOptionPrices'
         ]);
+        $this->belongsTo('Options', [
+            'foreignKey' => 'option_id',
+            'className' => 'AdminPanel.Options'
+        ]);
         $this->belongsTo('OptionValues', [
             'foreignKey' => 'option_value_id',
             'className' => 'AdminPanel.OptionValues'

@@ -29,15 +29,32 @@ class ProductStockMutationsController extends AppController
 
             /** custom default query : select, where, contain, etc. **/
             $data = $this->ProductStockMutations->find('all')
-                ->select();
+                ->select([
+//                    'id' => 'Products.id',
+//                    'created' => 'Products.created',
+//                    'name' => 'Products.name',
+                ]);
             $data->contain([
                 'Products',
                 'Branches',
                 'ProductOptionStocks' => [
-                    'ProductOptionPrices'
+                    'ProductOptionPrices' => [
+//                        'fields' => [
+//                            'sku' => 'ProductOptionPrices.sku',
+//                        ],
+                        'ProductOptionValueLists' => [
+                            'Options',
+                            'OptionValues',
+                        ]
+                    ]
                 ],
-                'ProductStockMutationTypes'
-            ]);
+                'ProductStockMutationTypes' => [
+                    'fields' => [
+                        'tipe' => 'ProductStockMutationTypes.name'
+                    ]
+                ]
+            ])
+            ;
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
