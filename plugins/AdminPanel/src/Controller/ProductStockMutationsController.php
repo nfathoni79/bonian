@@ -43,6 +43,11 @@ class ProductStockMutationsController extends AppController
 //                            'sku' => 'ProductOptionPrices.sku',
 //                        ],
                         'ProductOptionValueLists' => [
+                            'fields' => [
+                                'ProductOptionValueLists.product_option_price_id',
+                                'option_name' => 'Options.name',
+                                'option_value_name' => 'OptionValues.name'
+                            ],
                             'Options',
                             'OptionValues',
                         ]
