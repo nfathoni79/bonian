@@ -1,6 +1,7 @@
 <?php
 namespace AdminPanel\Model\Table;
 
+use Cake\Core\Configure;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -39,6 +40,16 @@ class CitiesTable extends Table
         $this->setTable('cities');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
+        //sample activity logs
+        $this->addBehavior('Elastic/ActivityLogger.Logger', [
+            'scope' => [
+                'Cities'
+            ],
+            'issuer' => \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(Configure::read('User.id'))
+        ]);
+        //sample activity logs
+
 
         $this->belongsTo('Provinces', [
             'foreignKey' => 'province_id',

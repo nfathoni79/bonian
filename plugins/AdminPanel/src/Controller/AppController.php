@@ -3,6 +3,7 @@
 namespace AdminPanel\Controller;
 
 use App\Controller\AppController as BaseController;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\I18n\FrozenTime;
 
@@ -45,6 +46,7 @@ class AppController extends BaseController
 
         FrozenTime::setJsonEncodeFormat($timeJsonFormat);
         FrozenTime::setToStringFormat($timeJsonFormat);
+        Configure::write('User', $this->Auth->user());
 	}
 
 

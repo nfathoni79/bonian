@@ -208,4 +208,5 @@ Type::build('timestamp')
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
 
+Application::addPlugin('Elastic/ActivityLogger', ['bootstrap' => true, 'routes' => false]);
 Application::addPlugin('AdminPanel', ['bootstrap' => false, 'routes' => true]);
