@@ -23,11 +23,11 @@ div[class^="col-"] {
 }
 
 /* Crated by Iqbal */
-/* override || change background color head datatable */
+/* override || change background color head datatable
 .m-datatable>.m-datatable__table>.m-datatable__head .m-datatable__row>.m-datatable__cell, .m-datatable>.m-datatable__table>.m-datatable__foot .m-datatable__row>.m-datatable__cell {
 	background: #212529 !important;
 }
-/* override || change font color datatable */
+ override || change font color datatable
 .m-datatable>.m-datatable__table>.m-datatable__head .m-datatable__row>.m-datatable__cell>span, .m-datatable>.m-datatable__table>.m-datatable__foot .m-datatable__row>.m-datatable__cell>span {
 	color: white !important;
 }
