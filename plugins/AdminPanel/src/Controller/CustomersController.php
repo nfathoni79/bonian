@@ -94,6 +94,7 @@ class CustomersController extends AppController
 
 
 
+
     }
 
     public function point($id = null){

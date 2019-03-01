@@ -54,7 +54,7 @@ class ProductStockMutationsTable extends Table
             'foreignKey' => 'branch_id',
             'joinType' => 'INNER',
             'className' => 'AdminPanel.Branches'
-        ]);
+        ]); 
         $this->belongsTo('ProductOptionStocks', [
             'foreignKey' => 'product_option_stock_id',
             'className' => 'AdminPanel.ProductOptionStocks'

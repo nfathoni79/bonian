@@ -103,9 +103,22 @@
                     ],
                     [
                         'name' => 'Manajemen Stok',
-                        'url' => ['controller' => 'ProductStocks', 'action' => 'index'],
+                        'url' => '#',
                         'icon' => 'm-menu__link-bullet',
-                        'children' => []
+                        'children' => [
+                            [
+                                'name' => 'Stok',
+                                'url' => ['controller' => 'ProductStocks', 'action' => 'index'],
+                                'icon' => 'm-menu__link-bullet',
+                                'children' => []
+                            ],
+                            [
+                                'name' => 'Mutasi Stock',
+                                'url' => ['controller' => 'ProductStockMutations', 'action' => 'index'],
+                                'icon' => 'm-menu__link-bullet',
+                                'children' => []
+                            ],
+                        ]
                     ],
                     [
                         'name' => 'Manajemen Brand',
