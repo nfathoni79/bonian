@@ -97,7 +97,7 @@
                     ],
                     [
                         'name' => 'Manajemen Harga',
-                        'url' => ['controller' => 'Products', 'action' => 'prices'],
+                        'url' => ['controller' => 'ProductPrices', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],

@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Manajemen Stock') ?>
+                    <?= __('Manajemen Harga') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Manajemen Stock') ?>
+                                <?= __('Manajemen Harga') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Stock') ?>
+                                <?= __('Daftar Harga') ?>
                             </span>
                         </a>
                     </li>
@@ -49,29 +49,12 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Daftar Stock') ?>
+                            <?= __('Daftar Harga') ?>
                         </h3>
                     </div>
                 </div>
                 <div class="m-portlet__head-tools">
                     <ul class="m-portlet__nav">
-                        <li class="m-portlet__nav-item">
-                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air" data-toggle="modal" data-target="#m_modal_1">
-                                <span>
-                                    <i class="la la-upload"></i>
-                                    <span><?= __('Import Stock') ?></span>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="m-portlet__nav-item">
-                            <a href="<?= $this->Url->build('/files/csv/stock.csv'); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
-                                <span>
-                                    <i class="la la-download"></i>
-                                    <span><?= __('Contoh CSV Stock') ?></span>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="m-portlet__nav-item"></li>
                         <li class="m-portlet__nav-item m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover" aria-expanded="true">
                             <a href="#" class="m-portlet__nav-link m-dropdown__toggle dropdown-toggle btn btn--sm m-btn--pill btn-secondary m-btn m-btn--label-brand">
                                 Actions
@@ -129,81 +112,24 @@
                 <?= $this->Flash->render() ?>
 
                 <div class="m_datatable" >
-                    <form  id="frm-example" method="POST">
-                    <table class="table table-striped- table-bordered table-hover table-checkable" id="table-stocks">
+                    <?= $this->Form->create(null,['action' => 'validate','class' => 'm-form m-form--fit m-form--label-align-right','id' => 'frm-example']); ?>
+                    <table class="table table-striped table-bordered table-hover table-checkable" id="table-prices">
                         <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>SKU ID</th>
-                                <th>Product</th>
-                                <th>SKU Name</th>
-                                <th>Warehouse</th>
-                                <th>Inventory In Stock</th>
-                                <th>Stock</th>
-                                <th>Mutasi Stock</th>
-                                <th>Order Useable Quantity</th>
-                                <th>Resync WH</th>
-                            </tr>
+                        <tr class="text-center">
+                            <th>#</th>
+                            <th>Produk</th>
+                            <th>SKU Produk</th>
+                            <th>Harga</th>
+                            <th>Varian</th>
+                            <th>Harga Tambahan</th>
+                        </tr>
                         </thead>
                     </table>
                     <button class="btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info mt-5">Simpan</button></p>
-                    <div id="example-console-form"></div>
                     </form>
                 </div>
 
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modalView" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><span class="titleModal"></span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body contentModal">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--begin::Modal-->
-<div class="modal fade" id="m_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import Stock Mutation</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <?= $this->Form->create('ProductStocks',['action' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file']); ?>
-
-                <div class="form-group m-form__group">
-                    <label>Cari FIle</label>
-                    <div></div>
-                    <div class="custom-file">
-                        <?php
-                             echo $this->Form->control('files',['class' => 'custom-file-input', 'type' => 'file']);
-                        ?>
-                        <label class="custom-file-label" for="files">Pilih file</label>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                <?= $this->Form->submit(__('Import'),['class' => 'btn btn-brand']) ?>
-            </div>
-            <?= $this->Form->end(); ?>
         </div>
     </div>
 </div>
@@ -220,22 +146,10 @@ $this->Html->script([
 <?php $this->append('script'); ?>
 <script>
 
-    function delete_data(id) {
-        $.post( "<?= $this->Url->build(['action' => 'delete']); ?>/" + id, { _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>' } )
-            .done(function( data ) {
-                location.href = '<?= $this->Url->build();?>';
-            });
-    }
-
-    function view_data(id) {
-        $('#modalView').modal('show');
-        $('.titleModal').html('Provinces View');
-        $('.contentModal').load( "<?= $this->Url->build(['action' => 'view']); ?>/" + id);
-    }
     // begin first table
-    var table = $('#table-stocks').DataTable({
+    var table = $('#table-prices').DataTable({
         responsive: true,
-
+        autoWidth: false,
         buttons: [
             'print',
             'copyHtml5',
@@ -257,102 +171,76 @@ $this->Html->script([
         },
         columns: [
             {data: 'id'},
-            {data: 'skuid'},
-            {data: 'product'},
-            {data: 'skuname'},
-            {data: 'warehouse'},
-            {data: 'inventory'},
-            {data: 'stock'},
-            {data: 'order'},
+            {data: 'produk'},
+            {data: 'sku'},
+            {data: 'harga'},
+            {data: 'varian'},
+            {data: 'hargatambahan'},
         ],
         columnDefs: [
             {
+                orderable: false,
                 targets: 0,
                 render: function (data, type, row, meta) {
-                    return '<input type="checkbox" name="ProductOptionStocks['+row.id+'][id]" value="'+row.id+'">';
+                    return '<input type="checkbox" name="Products['+row.id+'][id]" value="'+row.id+'">';
                 }
             },
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return row.product_option_price.sku;
+                    return row.name;
                 }
             },
             {
                 targets: 2,
                 render: function (data, type, row, meta) {
-                    return row.product.name;
+                    return row.sku;
                 }
             },
             {
                 targets: 3,
                 render: function (data, type, row, meta) {
-                    var combo = '';
-                    $.each(row.value_lists, function (k,v) {
-                        combo += v.option +' : '+v.values+ '<br>';
-                    })
-                    return combo;
+                    return '<div class="form-group m-form__group"> \n' +
+                        '<input type="text" class="form-control"  name="Products['+row.id+'][price_sale]" value="'+row.price_sale+'"/>\n' +
+                        '</div>';
                 }
             },
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
-                    return row.branches;
+                    var tmp = '';
+                    $.each(row.product_option_prices, function(k,v){
+                        var info = '';
+                        $.each(v.product_option_value_lists,function (kk, vv) {
+                            info += vv.option.name+' : '+ vv.option_value.name+', ';
+                        })
+                        tmp += '<div class="form-group m-form__group row"> \n' +
+                            '<span class="col-xl-12"> '+info+'</span>\n' +
+                            '</div>';
+                    }) ;
+                    return tmp;
                 }
             },
             {
                 targets: 5,
                 render: function (data, type, row, meta) {
-                    return row.stock > 0 ? 'In Stock' : 'Out Of Stock';
-                }
-            },
-            {
-                targets: 6,
-                render: function (data, type, row, meta) {
-                    return row.stock;
-                }
-            },
-            {
-                targets: 7,
-                render: function (data, type, row, meta) {
-                    return '<div class="m-form__group form-group mt-2">\n' +
-                        '<div class="m-radio-inline">\n' +
-                        '<label class="m-radio">\n' +
-                        '<input type="radio" name="ProductOptionStocks['+row.id+'][tipe]" value="penambahan" class="mutasi" data-row="'+row.id+'"> Penambahan\n' +
-                        '<span></span>\n' +
-                        '</label>\n' +
-                        '<label class="m-radio">\n' +
-                        '<input type="radio" name="ProductOptionStocks['+row.id+'][tipe]" value="pengurangan" class="mutasi" data-row="'+row.id+'"> Pengurangan\n' +
-                        '<span></span>\n' +
-                        '</label>\n' +
-                        '</div>\n' +
-                        '</div>\n' +
-                        '<div class="m-form__group form-group row row-val-'+row.id+'" style="display:none;">\n' +
-                        '<div class="col-xl-4"><input type="number" class="form-control" name="ProductOptionStocks['+row.id+'][stock]" placeholder="Stock"/></div>\n' +
-                        '<div class="col-xl-8"><input type="text" class="form-control"  name="ProductOptionStocks['+row.id+'][description]" placeholder="Deskripsi"/></div>\n' +
+                    var tmp = '';
+                    $.each(row.product_option_prices, function(k,v){
+                        var info = '';
+                        $.each(v.product_option_value_lists,function (kk, vv) {
+                            info += vv.option.name+' : '+ vv.option_value.name+', ';
+                        })
+
+                        tmp += '<div class="form-group m-form__group row"> \n' +
+                        '<label class="col-xl-5 col-form-label"> SKU ID '+v.sku+' : </label>\n' +
+                        '<div class="col-xl-4"><input type="text" class="form-control"  name="Products['+row.id+'][ProductOptionPrices]['+v.id+'][price]" value="'+v.price+'"/></div>\n' +
                         '</div>';
+                    }) ;
+                    return tmp;
                 }
             },
-            {
-                targets: 8,
-                render: function (data, type, row, meta) {
-                    return row.stock;
-                }
-            },
-            {
-                targets: 9,
-                render: function (data, type, row, meta) {
-                    return '<button type="button" class="m-btn btn btn-primary"><i class="la la-refresh"></i></button>';
-                }
-            }
         ],
     });
-
-    $("#table-stocks").on('change', 'input.mutasi',function(){
-        $('.row-val-'+$(this).data('row')).show()
-    })
-
-
     // Handle form submission event
     $('#frm-example').on('submit', function(e){
         // Prevent actual form submission
@@ -360,17 +248,16 @@ $this->Html->script([
 
         var formEl = $("#frm-example");
 
-        $('input[type="hidden"]', formEl).remove();
+        // $('input[type="hidden"]', formEl).remove();
 
         var ajaxRequest = new ajaxValidation(formEl);
         ajaxRequest.setblockUI('.m-portlet__body');
         var datax = table.$('input,select,textarea');
-        ajaxRequest.post("<?= $this->Url->build(['action' => 'validates']); ?>", datax, function(data, saved) {
+        ajaxRequest.post("<?= $this->Url->build(['action' => 'validate']); ?>", datax, function(data, saved) {
             if (data.success) {
-                location.href = '';
+                // location.href = '';
             }
         });
-
     });
 
     $('#export_print').on('click', function(e) {
