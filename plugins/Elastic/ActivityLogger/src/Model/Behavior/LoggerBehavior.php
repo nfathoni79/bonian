@@ -102,6 +102,18 @@ class LoggerBehavior extends Behavior
         $log->data = $this->getDirtyData($entity);
         $log->message = $this->buildMessage($log, $entity, $this->getConfig('issuer'));
 
+
+        $newData = [];
+        $out = [];
+        foreach($entity->getOriginalValues() as $key => $val) {
+            if (in_array($key, $entity->getDirty())) {
+                $out[$key] = $val;
+            }
+        }
+        $newData['before'] = $out;
+        $newData['after'] = $log->data;
+        $log->data = $newData;
+
         $logs = $this->duplicateLogByScope($this->getConfig('scope'), $log, $entity);
 
         $this->saveLogs($logs);
@@ -444,6 +456,8 @@ class LoggerBehavior extends Behavior
             if (empty($scopeId)) {
                 continue;
             }
+            //debug($entity->getDirty());
+            //debug($entity->getOriginalValues());exit;
             $new = $this->getLogTable()->newEntity($log->toArray() + [
                     'scope_model' => $scopeModel,
                     'scope_id' => $scopeId,
