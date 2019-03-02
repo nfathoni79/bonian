@@ -257,10 +257,10 @@ $this->Html->script([
         },
         columns: [
             {data: 'id'},
-            {data: 'skuid'},
-            {data: 'product'},
+            {data: 'ProductOptionPrices.sku'},
+            {data: 'Products.name'},
             {data: 'skuname'},
-            {data: 'warehouse'},
+            {data: 'branch_id'},
             {data: 'inventory'},
             {data: 'stock'},
             {data: 'order'},
@@ -286,6 +286,7 @@ $this->Html->script([
             },
             {
                 targets: 3,
+                orderable: false,
                 render: function (data, type, row, meta) {
                     var combo = '';
                     $.each(row.value_lists, function (k,v) {
@@ -302,6 +303,7 @@ $this->Html->script([
             },
             {
                 targets: 5,
+                orderable: false,
                 render: function (data, type, row, meta) {
                     return row.stock > 0 ? 'In Stock' : 'Out Of Stock';
                 }
@@ -314,6 +316,7 @@ $this->Html->script([
             },
             {
                 targets: 7,
+                orderable: false,
                 render: function (data, type, row, meta) {
                     return '<div class="m-form__group form-group mt-2">\n' +
                         '<div class="m-radio-inline">\n' +
@@ -341,6 +344,7 @@ $this->Html->script([
             },
             {
                 targets: 9,
+                orderable: false,
                 render: function (data, type, row, meta) {
                     return '<button type="button" class="m-btn btn btn-primary"><i class="la la-refresh"></i></button>';
                 }
@@ -365,7 +369,7 @@ $this->Html->script([
         var ajaxRequest = new ajaxValidation(formEl);
         ajaxRequest.setblockUI('.m-portlet__body');
         var datax = table.$('input,select,textarea');
-        ajaxRequest.post("<?= $this->Url->build(['action' => 'validates']); ?>", datax, function(data, saved) {
+        ajaxRequest.post("<?= $this->Url->build(['action' => 'validate']); ?>", datax, function(data, saved) {
             if (data.success) {
                 location.href = '';
             }

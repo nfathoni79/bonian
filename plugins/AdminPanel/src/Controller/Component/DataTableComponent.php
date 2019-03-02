@@ -21,6 +21,7 @@ class DataTableComponent extends Component
     protected $_table = null;
     protected $_columns = [];
     protected $_alias = null;
+    protected $_data = [];
 
     public function initialize(array $config)
     {
@@ -108,6 +109,7 @@ class DataTableComponent extends Component
 
     protected function setParams()
     {
+
         $request = $this->getController()->request;
         $limit = $request->getData('length');
         $start = $request->getData('start');
@@ -119,11 +121,13 @@ class DataTableComponent extends Component
                 if (array_key_exists('column', $val) && array_key_exists('dir', $val)) {
                     if (array_key_exists($val['column'], $columns)) {
                         if (array_key_exists('data', $columns[$val['column']])) {
-                            array_push($sorting, [$columns[$val['column']]['data'] => $val['dir']]);
+                            $cols = array_values($this->_table->aliasField($columns[$val['column']]['data']));
+                            array_push($sorting, [$cols[0] => $val['dir']]);
                         }
                     }
                 }
             }
+            //debug($sorting);exit;
             foreach($sorting as $sort) {
                 $this->_table->order($sort);
             }
@@ -166,6 +170,23 @@ class DataTableComponent extends Component
         return $this;
     }
 
+    public function getData()
+    {
+        return $this->_data;
+    }
+
+    public function setData($data)
+    {
+        $this->setParams();
+        return $this->_data = $data;
+    }
+
+    public function setSorting()
+    {
+        $this->setParams();
+        return $this;
+    }
+
     /**
      * @return \Cake\Http\Response
      */
@@ -173,9 +194,11 @@ class DataTableComponent extends Component
     {
         $this->renderSelect();
         $total = $this->_table->count();
-        $this->setParams();
+        if (empty($this->_data)) {
+            $this->setParams();
+        }
         $data = [];
-        $data['data'] = $this->_table;
+        $data['data'] = !empty($this->_data) ? $this->_data : $this->_table;
         $data['iTotalRecords'] = $total;
         $data['iTotalDisplayRecords'] = $total;
         $data['sEcho'] = 0;

@@ -7,6 +7,12 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\I18n\FrozenTime;
 
+/**
+ * Class AppController
+ * @package AdminPanel\Controller
+ * @property \AdminPanel\Controller\Component\DataTableComponent $DataTable
+ */
+
 class AppController extends BaseController
 {
     public function initialize()

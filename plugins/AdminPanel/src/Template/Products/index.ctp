@@ -5,6 +5,12 @@
  * nevix
  */
 ?>
+<!-- <div class="m-list-pics m-list-pics--sm m--padding-left-20" style="width:110px;">
+    <a href="#"><img src="/zolaku/images/50x50/fb0182b9a6eb45a5a10a8eb5e64b359e.jpg" title=""></a>
+    <a href="#"><img src="/zolaku/images/50x50/fb0182b9a6eb45a5a10a8eb5e64b359e.jpg" title=""></a>
+    <a href="#"><img src="/zolaku/images/50x50/fb0182b9a6eb45a5a10a8eb5e64b359e.jpg" title=""></a>
+
+</div> -->
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
     <div class="m-subheader ">
         <div class="d-flex align-items-center">

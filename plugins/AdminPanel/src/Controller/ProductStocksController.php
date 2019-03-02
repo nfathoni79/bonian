@@ -83,14 +83,46 @@ class ProductStocksController  extends AppController
 
 //        $this->ProductStockMutations->saving('1','1', '1','Test mutation'); //mutation amount
 
-        if ($this->request->is('ajax')) {
+        if ($this->DataTable->isAjax()) {
+            $datatable = $this->DataTable->adapter('AdminPanel.ProductOptionStocks')
+                ->contain(['Products','ProductOptionPrices'])
+                ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+                    return $exp->like('ProductOptionPrices.sku', '%' . $search . '%');
+                });
+
+
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->toArray();
+            foreach($result as $k => $vals){
+                $priceId = $vals['product_option_price_id'];
+                $result[$k]['branches'] = $this->Branches->getNameById($vals['branch_id']);
+                $result[$k]['value_lists'] = $this->ProductOptionValueLists->find()
+                    ->where(['ProductOptionValueLists.product_option_price_id' => $priceId])
+                    ->all()
+                    ->toArray();
+                foreach($result[$k]['value_lists'] as $x => $val){
+                    $result[$k]['value_lists'][$x]['option'] = $this->Options->getNameById($val['option_id']);
+                    $result[$k]['value_lists'][$x]['values'] = $this->OptionValues->getNameById($val['option_value_id']);
+                }
+            }
+
+            //set again datatable
+            $datatable->setData($result);
+
+
+            return $datatable->response();
+        }
+
+        /*if ($this->request->is('ajax')) {
             $this->viewBuilder()->setLayout('ajax');
 
             $pagination = $this->request->getData('pagination');
             $sort = $this->request->getData('sort');
             $query = $this->request->getData('query');
 
-            /** custom default query : select, where, contain, etc. **/
+            //** custom default query : select, where, contain, etc.
             $data = $this->ProductOptionStocks->find('all')
                 ->select();
             $data->contain(['Products','ProductOptionPrices']);
@@ -99,10 +131,10 @@ class ProductStocksController  extends AppController
                 if (isset($query['generalSearch'])) {
                     $search = $query['generalSearch'];
                     unset($query['generalSearch']);
-                    /**
-                    custom field for general search
-                    ex : 'Users.email LIKE' => '%' . $search .'%'
-                     **/
+
+                    //custom field for general search
+                    //ex : 'Users.email LIKE' => '%' . $search .'%'
+
                     $data->where(['ProductOptionPrices.sku LIKE' => '%' . $search .'%']);
                 }
                 $data->where($query);
@@ -143,7 +175,7 @@ class ProductStocksController  extends AppController
 
             return $this->response->withType('application/json')
                 ->withStringBody(json_encode($result));
-        }
+        }*/
     }
 
     public function import(){
