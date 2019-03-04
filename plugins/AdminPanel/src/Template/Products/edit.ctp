@@ -626,7 +626,7 @@ echo $this->Html->script([
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Brand'); ?>*</label>
                                 <div class="col-xl-7">
-                                    <?php echo $this->Form->control('brand_id', ['label' => false, 'class' => $default_class, 'style' => 'width: 100% !important;']);?>
+                                    <?php echo $this->Form->control('brand_id', ['label' => false, 'options' => $brands, 'class' => $default_class, 'style' => 'width: 100% !important;']);?>
                                 </div>
                                 <div class="col-xl-1">
                                     <a href="#" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-brand"  data-toggle="modal" data-target="#modal-brand""><i class="la la-plus"></i></a>

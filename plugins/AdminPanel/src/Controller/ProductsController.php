@@ -373,8 +373,6 @@ class ProductsController extends AppController
 
                     $this->Products->patchEntity($productEntity, $getData, ['validate' => false]);
 
-                    
-
                     if ($this->Products->save($productEntity)) {
 
                         //processing save ProductMetaTags
@@ -1044,10 +1042,43 @@ class ProductsController extends AppController
             })->toArray();
         //debug($parent_categories->toArray());
 
+        /**
+         * @var \AdminPanel\Model\Entity\ProductToCategory[] $productToCategories
+         */
+        $productToCategories = $this->Products->ProductToCategories->find()
+            ->select(['product_category_id'])
+            ->where([
+                'product_id' => $product->get('id')
+            ])
+            ->toArray();
+
+        $product_categories = [];
+        foreach($productToCategories as $val) {
+            array_push($product_categories, $val->get('product_category_id'));
+        }
+
+        $brands = $this->Products->Brands->find('list')
+            ->where([
+                'product_category_id IN' => $product_categories
+            ])
+            ->toArray();
+        
+
         $product_tags = $this->Tags->find('list')->toArray();
         $product_warranties = $this->ProductWarranties->find('list')->toArray();
 
-        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags','product_warranties'));
+        $this->set(compact(
+            'product',
+            'productStockStatuses',
+            'productWeightClasses',
+            'productStatuses',
+            'courriers',
+            'options',
+            'parent_categories',
+            'product_tags',
+            'product_warranties',
+            'brands'
+        ));
     }
 
     /**
