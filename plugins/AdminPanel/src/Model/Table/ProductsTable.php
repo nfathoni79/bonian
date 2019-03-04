@@ -24,6 +24,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable|\Cake\ORM\Association\HasMany $ProductToCategories
  * @property \AdminPanel\Model\Table\ProductToCourriersTable|\Cake\ORM\Association\HasMany $ProductToCourriers
  * @property \AdminPanel\Model\Table\ProductTagsTable|\Cake\ORM\Association\HasMany $ProductTags
+ * @property \AdminPanel\Model\Table\BrandsTable|\Cake\ORM\Association\BelongsTo Brands
  *
  * @method \AdminPanel\Model\Entity\Product get($primaryKey, $options = [])
  * @method \AdminPanel\Model\Entity\Product newEntity($data = null, array $options = [])
@@ -67,6 +68,10 @@ class ProductsTable extends Table
             'foreignKey' => 'product_status_id',
             'joinType' => 'INNER',
             'className' => 'AdminPanel.ProductStatuses'
+        ]);
+        $this->belongsTo('Brands', [
+            'foreignKey' => 'brand_id',
+            'className' => 'AdminPanel.Brands'
         ]);
         $this->hasMany('OrderProducts', [
             'foreignKey' => 'product_id',
