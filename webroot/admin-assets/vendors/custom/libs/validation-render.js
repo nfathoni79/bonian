@@ -128,8 +128,21 @@ ajaxValidation.prototype.ObjectLength = function( object ) {
 ajaxValidation.prototype.post = function(url, input, callback) {
     var that = this;
     if (typeof input === 'object') {
+
         var p = input.serializeArray();
         p.push({name: "_csrfToken", value: $("input[name=_csrfToken]").val()});
+        var f = new FormData();
+
+        $.each(that.form.find('input[type="file"]'), function(i, tag) {
+            $.each($(tag)[0].files, function(i, file) {
+                f.append(tag.name, file);
+            });
+        });
+
+        $.each(p, function(i, val) {
+            f.append(val.name, val.value);
+        });
+
         mApp.block(that.blockUIelement,{
             overlayColor:"#000000",
             type:"loader",
@@ -140,7 +153,9 @@ ajaxValidation.prototype.post = function(url, input, callback) {
         $.ajax({
             type: "POST",
             url: url,
-            data: p,
+            data: f,
+            processData: false,
+            contentType: false,
             //dataType: "json",
             success: function(data) {
                 //var obj = jQuery.parseJSON(data); if the dataType is not specified as json uncomment this
