@@ -198,7 +198,7 @@ $this->Html->script([
                     var text = JSON.parse(row.data);
                     var message = '';
                     $.each(text.before, function(k,v){
-                        message += 'Kolom "'+k+'" : '+v;
+                        message += 'Kolom "'+k+'" : '+v' ;
                     })
                     return message;
                 }

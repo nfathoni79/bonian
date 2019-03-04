@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Harga') ?>
+                                <?= __('Daftar Harga Varian') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Daftar Harga') ?>
+                            <?= __('Daftar Harga Varian') ?>
                         </h3>
                     </div>
                 </div>
@@ -118,10 +118,12 @@
                         <tr class="text-center">
                             <th>#</th>
                             <th>Produk</th>
+                            <th>SKU</th>
                             <th>SKU Produk</th>
-                            <th>Harga</th>
                             <th>Varian</th>
-                            <th>Harga Tambahan</th>
+                            <th>Manajemen Harga</th>
+                            <th>id</th>
+                            <th>price</th>
                         </tr>
                         </thead>
                     </table>
@@ -169,55 +171,98 @@ $this->Html->script([
                 _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
             },
         },
+        drawCallback: function(settings) {
+            var api = this.api();
+            var rows = api.rows({page: 'current'}).nodes();
+            var last = null;
+            api.column(2, {page: 'current'}).data().each(function(group, i) {
+                if (last !== group) {
+                    $(rows).eq(i).before(
+                        '<tr class="group"><td colspan="10">' + group + ' - ' +api.column(1, {page: 'current'}).data()[i]+'</td></tr>',
+                        '<tr role="row" class="even"><td><label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand"><input type="checkbox" name="Products['+api.column(6, {page: 'current'}).data()[i]+'][id]" value="'+api.column(6, {page: 'current'}).data()[i]+'" class="m-checkable" id="parent-'+api.column(6, {page: 'current'}).data()[i]+'"><span></span></label></td><td>'+api.column(2, {page: 'current'}).data()[i]+'</td><td><div class="form-group m-form__group row"><span class="col-xl-12"> '+api.column(1, {page: 'current'}).data()[i]+' </span></div></td><td><div class="form-group m-form__group row"><label class="col-xl-5 col-form-label"> SKU ID '+api.column(2, {page: 'current'}).data()[i]+' : </label><div class="col-xl-4"><input type="text" class="form-control numberinput"  name="Products['+api.column(6, {page: 'current'}).data()[i]+'][price_sale]" value="'+(new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(api.column(7, {page: 'current'}).data()[i])+'"/></div></div></td></tr>',
+                    );
+                    last = group;
+                }
+            });
+        },
+        initComplete: function(settings, json) {
+            $('input.numberinput').keyup(function(event) {
+
+                // skip for arrow keys
+                if(event.which >= 37 && event.which <= 40) return;
+
+                // format number
+                $(this).val(function(index, value) {
+                    return value
+                        .replace(/\D/g, "")
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                });
+            });
+
+            $('input.child').on('change',function(){
+                $( "#parent-"+$(this).data('parent')).prop('checked', true);
+            })
+
+        },
         columns: [
             {data: 'id'},
-            {data: 'produk'},
+            {data: 'product.name'},
+            {data: 'product.sku'},
             {data: 'sku'},
-            {data: 'harga'},
-            {data: 'varian'},
-            {data: 'hargatambahan'},
+            {data: 'sku'},
+            {data: 'sku'},
+            {data: 'product_id'},
+            {data: 'product.price_sale'},
         ],
         columnDefs: [
+            {
+                // hide columns by index number
+                targets: [1,2,6,7],
+                visible: false,
+            },
+
             {
                 orderable: false,
                 targets: 0,
                 render: function (data, type, row, meta) {
-                    return '<input type="checkbox" name="Products['+row.id+'][id]" value="'+row.id+'">';
+                    return '<label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand">\n' +
+                        '<input type="checkbox" name="Products['+row.product.id+'][ProductOptionPrices]['+row.id+'][id]" value="'+row.id+'" class="m-checkable child" data-parent="'+row.product.id+'">\n' +
+                        '<span></span>\n' +
+                        '</label>';
                 }
             },
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return row.name;
+                    return row.product.name;
                 }
             },
             {
                 targets: 2,
                 render: function (data, type, row, meta) {
-                    return row.sku;
+                    return row.product.sku;
                 }
             },
             {
                 targets: 3,
                 render: function (data, type, row, meta) {
-                    return '<div class="form-group m-form__group"> \n' +
-                        '<input type="text" class="form-control"  name="Products['+row.id+'][price_sale]" value="'+row.price_sale+'"/>\n' +
-                        '</div>';
+                    return row.sku;
                 }
             },
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
                     var tmp = '';
-                    $.each(row.product_option_prices, function(k,v){
+                    // $.each(row.product_option_prices, function(k,v){
                         var info = '';
-                        $.each(v.product_option_value_lists,function (kk, vv) {
+                        $.each(row.product_option_value_lists,function (kk, vv) {
                             info += vv.option.name+' : '+ vv.option_value.name+', ';
                         })
                         tmp += '<div class="form-group m-form__group row"> \n' +
                             '<span class="col-xl-12"> '+info+'</span>\n' +
                             '</div>';
-                    }) ;
+                    // }) ;
                     return tmp;
                 }
             },
@@ -225,22 +270,22 @@ $this->Html->script([
                 targets: 5,
                 render: function (data, type, row, meta) {
                     var tmp = '';
-                    $.each(row.product_option_prices, function(k,v){
-                        var info = '';
-                        $.each(v.product_option_value_lists,function (kk, vv) {
-                            info += vv.option.name+' : '+ vv.option_value.name+', ';
-                        })
+                    var info = '';
+                    $.each(row.product_option_value_lists,function (kk, vv) {
+                        info += vv.option.name+' : '+ vv.option_value.name+', ';
+                    })
 
-                        tmp += '<div class="form-group m-form__group row"> \n' +
-                        '<label class="col-xl-5 col-form-label"> SKU ID '+v.sku+' : </label>\n' +
-                        '<div class="col-xl-4"><input type="text" class="form-control"  name="Products['+row.id+'][ProductOptionPrices]['+v.id+'][price]" value="'+v.price+'"/></div>\n' +
+                    tmp += '<div class="form-group m-form__group row"> \n' +
+                        '<label class="col-xl-5 col-form-label"> SKU ID '+row.sku+' : </label>\n' +
+                        '<div class="col-xl-4"><input type="text" class="form-control numberinput"  name="Products['+row.product.id+'][ProductOptionPrices]['+row.id+'][price]" value="'+(new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(row.price)+'"/></div>\n' +
                         '</div>';
-                    }) ;
                     return tmp;
                 }
             },
         ],
     });
+
+
     // Handle form submission event
     $('#frm-example').on('submit', function(e){
         // Prevent actual form submission
@@ -252,13 +297,15 @@ $this->Html->script([
 
         var ajaxRequest = new ajaxValidation(formEl);
         ajaxRequest.setblockUI('.m-portlet__body');
-        var datax = table.$('input,select,textarea');
+        var datax = formEl.find('input.numberinput, input.m-checkable');
+        // var datax = table.$('input,select,textarea');
         ajaxRequest.post("<?= $this->Url->build(['action' => 'validate']); ?>", datax, function(data, saved) {
             if (data.success) {
                 // location.href = '';
             }
         });
     });
+
 
     $('#export_print').on('click', function(e) {
         e.preventDefault();

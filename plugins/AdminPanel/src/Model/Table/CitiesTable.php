@@ -46,7 +46,7 @@ class CitiesTable extends Table
             'scope' => [
                 'Cities'
             ],
-            'issuer' => \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(Configure::read('User.id'))
+            'issuer' => \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
         ]);
         //sample activity logs
 

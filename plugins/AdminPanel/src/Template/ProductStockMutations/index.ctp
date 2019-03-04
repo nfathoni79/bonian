@@ -126,7 +126,6 @@
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="table-productStockMutations">
                         <thead>
                         <tr>
-                            <th>#</th>
                             <th>Tanggal</th>
                             <th>Nama Produk</th>
                             <th>SKU</th>
@@ -188,7 +187,7 @@ $this->Html->script([
 
         processing: true,
         serverSide: true,
-        order: [[1, 'desc']],
+        order: [[0, 'desc']],
         ajax: {
             url: "<?= $this->Url->build(); ?>",
             type: 'POST',
@@ -200,7 +199,6 @@ $this->Html->script([
             },
         },
         columns: [
-            {data: 'id'},
             {data: 'created'},
             {data: 'Products.name'},
             {data: 'ProductOptionStocks.ProductOptionPrices.sku'},
@@ -215,39 +213,30 @@ $this->Html->script([
         columnDefs: [
             {
                 targets: 0,
-                width: '30px',
-                className: 'dt-right',
-                orderable: false,
-                render: function (data, type, row, meta) {
-                    return row.id;
-                }
-            },
-            {
-                targets: 1,
                 render: function (data, type, row, meta) {
                     return row.created;
                 }
             },
             {
-                targets: 2,
+                targets: 1,
                 render: function (data, type, row, meta) {
                     return row.product.name;
                 }
             },
             {
-                targets: 3,
+                targets: 2,
                 render: function (data, type, row, meta) {
                     return row.product_option_stock.product_option_price.sku;
                 }
             },
             {
-                targets: 4,
+                targets: 3,
                 render: function (data, type, row, meta) {
                     return row.branch.name;
                 }
             },
             {
-                targets: 5,
+                targets: 4,
                 render: function (data, type, row, meta) {
                     var optlist = '';
                     $.each(row.product_option_stock.product_option_price.product_option_value_lists, function(k,v){
@@ -257,25 +246,25 @@ $this->Html->script([
                 }
             },
             {
-                targets: 6,
+                targets: 5,
                 render: function (data, type, row, meta) {
                     return row.product_stock_mutation_type.name;
                 }
             },
             {
-                targets: 7,
+                targets: 6,
                 render: function (data, type, row, meta) {
                     return row.description;
                 }
             },
             {
-                targets: 8,
+                targets: 7,
                 render: function (data, type, row, meta) {
                     return row.amount;
                 }
             },
             {
-                targets: 9,
+                targets: 8,
                 render: function (data, type, row, meta) {
                     return row.balance;
                 }

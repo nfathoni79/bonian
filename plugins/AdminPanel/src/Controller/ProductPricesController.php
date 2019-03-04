@@ -33,12 +33,14 @@ class ProductPricesController extends AppController
         $optionPrice = new Validator();
         foreach($products as $k => $vals){
             if(!empty($vals['id'])) {
-                $productsValue
-                    ->decimal('price_sale')
-                    ->notBlank('price_sale', 'tidak boleh kosong');
-                $optionPrice->decimal('price')
-                    ->notBlank('price', 'tidak boleh kosong');
-
+                $products[$k]['price_sale'] = preg_replace('/[,.]/', '', $vals['price_sale']);
+                foreach($vals['ProductOptionPrices'] as $x => $val){
+                    if(!empty($val['id'])){
+                        $products[$k]['ProductOptionPrices'][$x]['price'] =  preg_replace('/[,.]/', '', $val['price']);
+                    }else{
+                        unset($products[$k]['ProductOptionPrices'][$x]);
+                    }
+                }
             } else {
                 unset($products[$k]);
             }
@@ -51,7 +53,6 @@ class ProductPricesController extends AppController
         $allData['Products'] = $products;
         $error = $validator->errors($allData);
         if (empty($error)) {
-
             foreach($products as $vals){
                 $id = $vals['id'];
                 $product = $this->Products->get($id);
@@ -69,7 +70,6 @@ class ProductPricesController extends AppController
                     }
                 }
             }
-
             $this->Flash->success(__('The product price has been update.'));
 
 
@@ -89,62 +89,33 @@ class ProductPricesController extends AppController
     public function index()
     {
 
-        if ($this->request->is('ajax')) {
-            $this->viewBuilder()->setLayout('ajax');
-
-            $pagination = $this->request->getData('pagination');
-            $sort = $this->request->getData('sort');
-            $query = $this->request->getData('query');
-
-            /** custom default query : select, where, contain, etc. **/
-            $data = $this->Products->find('all')
-                ->select();
-            $data->contain([
-                'ProductOptionPrices',
-                'ProductOptionPrices' => [
+        if ($this->DataTable->isAjax()) {
+            $datatable = $this->DataTable->adapter('AdminPanel.ProductOptionPrices')
+                ->contain([
+                    'Products',
                     'ProductOptionValueLists' => [
                         'Options',
                         'OptionValues',
                     ]
-                ]
-            ]);
-            $data->where(['Products.name !=' => '']);
-            if ($query && is_array($query)) {
-                if (isset($query['generalSearch'])) {
-                    $search = $query['generalSearch'];
-                    unset($query['generalSearch']);
-                    /**
-                    custom field for general search
-                    ex : 'Users.email LIKE' => '%' . $search .'%'
-                     **/
-                    $data->where(['ProductOptionPrices.sku LIKE' => '%' . $search .'%']);
-                }
-                $data->where($query);
-            }
+                ])
+                ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+                    $orConditions = $exp->or_([
+                        'Products.name LIKE' => '%' . $search .'%',
+                        'Products.sku LIKE' => '%' . $search .'%',
+                        'ProductOptionPrices.sku LIKE' => $search .'%',
+                    ]);
+                    return $exp
+                        ->add($orConditions);
+                });
 
-            if (isset($sort['field']) && isset($sort['sort'])) {
-                $data->order([$sort['field'] => $sort['sort']]);
-            }
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->toArray();
 
-            if (isset($pagination['perpage']) && is_numeric($pagination['perpage'])) {
-                $data->limit($pagination['perpage']);
-            }
-            if (isset($pagination['page']) && is_numeric($pagination['page'])) {
-                $data->page($pagination['page']);
-            }
-            $total = $data->count();
-
-            $result = [];
-            $result['data'] = $data->toArray();
-            $result['meta'] = array_merge((array) $pagination, (array) $sort);
-            $result['meta']['total'] = $total;
-//            debug($data);
-//            exit;
-
-
-            return $this->response->withType('application/json')
-                ->withStringBody(json_encode($result));
-
+            //set again datatable
+            $datatable->setData($result);
+            return $datatable->response();
         }
     }
 }
