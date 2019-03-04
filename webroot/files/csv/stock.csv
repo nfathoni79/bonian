@@ -1,2 +1,3 @@
-0001120001061234,jakarta,penambahan,5,Deskripsi isi
-0001120001061235,bandung,pengurangan,2,Deskripsi Isi
+KODE SKU SUB,Cabang,Jenis Mutasi,Jumlah,Deskripsi Mutasi
+1120001061234,jakarta,penambahan,5,Deskripsi isi
+1120001061235,bandung,pengurangan,2,Deskripsi Isi

@@ -382,8 +382,13 @@ class AttributesController extends AppController
             $data = $this->request->getData('files');
             $file = $data['tmp_name'];
             $handle = fopen($file, "r");
+            $count = 0;
             while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
 
+                $count++;
+                if ($count == 1) {
+                    continue;
+                }
                 $findMainCategory = $this->ProductCategories->find()
                     ->where(['ProductCategories.name' => $row[2]])
                     ->first();

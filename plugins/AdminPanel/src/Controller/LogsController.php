@@ -25,6 +25,7 @@ class LogsController  extends AppController
                 ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
                     $orConditions = $exp->or_([
                         'Users.first_name LIKE' => '%' . $search .'%',
+                        'ActivityLogs.message LIKE' => '%' . $search .'%',
                         'ActivityLogs.created_at LIKE' => '%' . $search .'%',
                         'ActivityLogs.action LIKE' => '%' . $search .'%',
                     ]);

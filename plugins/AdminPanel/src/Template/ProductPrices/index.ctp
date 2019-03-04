@@ -120,7 +120,7 @@
                             <th>Produk</th>
                             <th>SKU</th>
                             <th>SKU Produk</th>
-                            <th>Varian</th>
+                            <th>Produk / Varian</th>
                             <th>Manajemen Harga</th>
                             <th>id</th>
                             <th>price</th>
@@ -301,7 +301,7 @@ $this->Html->script([
         // var datax = table.$('input,select,textarea');
         ajaxRequest.post("<?= $this->Url->build(['action' => 'validate']); ?>", datax, function(data, saved) {
             if (data.success) {
-                // location.href = '';
+                location.href = '';
             }
         });
     });

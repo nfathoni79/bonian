@@ -118,8 +118,8 @@
                             <tr>
                                 <th>Tanggal</th>
                                 <th>User</th>
-                                <th>Model</th>
                                 <th>Aksi</th>
+                                <th>Message</th>
                                 <th>Sebelum</th>
                                 <th>Sesudah</th>
                             </tr>
@@ -174,7 +174,6 @@ $this->Html->script([
         columns: [
             {data: 'created_at'},
             {data: 'issuer_id'},
-            {data: 'object_model'},
             {data: 'action'},
             {data: 'data'},
             {data: 'data'},
@@ -193,12 +192,18 @@ $this->Html->script([
                 }
             },
             {
+                targets: 3,
+                render: function (data, type, row, meta) {
+                    return row.message;
+                }
+            },
+            {
                 targets: 4,
                 render: function (data, type, row, meta) {
                     var text = JSON.parse(row.data);
                     var message = '';
                     $.each(text.before, function(k,v){
-                        message += 'Kolom "'+k+'" : '+v' ;
+                        message += 'Kolom "'+k+'" : '+v+', ' ;
                     })
                     return message;
                 }
@@ -209,7 +214,7 @@ $this->Html->script([
                     var text = JSON.parse(row.data);
                     var message = '';
                     $.each(text.after, function(k,v){
-                        message += 'Kolom "'+k+'" : '+v;
+                        message += 'Kolom "'+k+'" : '+v+', ' ;
                     })
                     return message;
                 }

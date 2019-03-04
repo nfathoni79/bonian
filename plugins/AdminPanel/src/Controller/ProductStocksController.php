@@ -185,8 +185,12 @@ class ProductStocksController  extends AppController
             $data = $this->request->getData('files');
             $file = $data['tmp_name'];
             $handle = fopen($file, "r");
+            $count = 0;
             while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
-
+                $count++;
+                if ($count == 1) {
+                    continue;
+                }
                 $findSKU = $this->ProductOptionPrices->find()
                     ->where(['ProductOptionPrices.sku LIKE ' => $row[0].'%'])
                     ->first();
