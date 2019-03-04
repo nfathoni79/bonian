@@ -171,6 +171,11 @@ class AttributesController extends AppController
                             'name' => $attribute['name'],
                             'parent_id' => null
                         ]);
+
+                        $this->Attributes->setLogMessageBuilder(function () use($attributeEntity){
+                            return 'Manajemen Atribut - Penambahan atribut : '.$attributeEntity->get('name');
+                        });
+
                         if ($this->Attributes->save($attributeEntity)) {
                             foreach($attribute['value'] as $child) {
                                 $attributeChildEntity = $this->Attributes->newEntity([
@@ -178,6 +183,9 @@ class AttributesController extends AppController
                                     'name' => $child,
                                     'parent_id' => $attributeEntity->get('id')
                                 ]);
+                                $this->Attributes->setLogMessageBuilder(function () use($attributeChildEntity){
+                                    return 'Manajemen Atribut - Penambahan atribut : '.$attributeChildEntity->get('name');
+                                });
                                 $this->Attributes->save($attributeChildEntity);
                             }
 
@@ -260,6 +268,10 @@ class AttributesController extends AppController
                     'product_category_id' => $product_category_id,
                     'name' => $this->request->getData('name'),
                 ]);
+
+                $this->Attributes->setLogMessageBuilder(function () use($attribute){
+                    return 'Manajemen Atribut - Perubahan atribut : '.$attribute->get('name');
+                });
 
                 if ($this->Attributes->save($attribute)) {
 
@@ -362,6 +374,9 @@ class AttributesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $attribute = $this->Attributes->get($id);
         try {
+            $this->Attributes->setLogMessageBuilder(function () use($attribute){
+                return 'Manajemen Atribut - Penghapusan data atribut : '.$attribute->get('name');
+            });
             if ($this->Attributes->delete($attribute)) {
                 $this->Flash->success(__('The attribute has been deleted.'));
             } else {
@@ -411,6 +426,9 @@ class AttributesController extends AppController
                                 $newEntities->set('parent_id', null);
                                 $newEntities->set('product_category_id', $findMainCategory->get('id'));
                                 $newEntities->set('name', trim($parents));
+                                $this->Attributes->setLogMessageBuilder(function () use($newEntities){
+                                    return 'Manajemen Atribut - Import data atribut : '.$newEntities->get('name');
+                                });
                                 $this->Attributes->save($newEntities);
                                 $id = $newEntities->get('id');
                             }
