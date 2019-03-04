@@ -253,6 +253,13 @@
                     ],
                 ]
             ],
+            [
+                'name' => 'Log Aktifitas',
+                'url' => ['controller' => 'Logs', 'action' => 'index'],
+                'icon' => 'm-menu__link-icon flaticon-apps',
+                'children' => [
+                ]
+            ],
         ];
 
         echo $this->SideMenu->create('main')
