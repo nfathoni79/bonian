@@ -63,3 +63,9 @@ div[class^="col-"] {
 .image-radio-checked .checked-icon {
     display: block !important;
 }
+
+input.disabled {
+    border-color: #f4f5f8 !important;
+    color: #6f727d;
+    background-color: #f4f5f8 !important;
+}

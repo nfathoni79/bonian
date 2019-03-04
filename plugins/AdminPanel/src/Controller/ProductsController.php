@@ -4,6 +4,7 @@ namespace AdminPanel\Controller;
 use AdminPanel\Controller\AppController;
 use AdminPanel\Model\Entity\Product;
 use Cake\Validation\Validator;
+use Cake\Utility\Hash;
 
 /**
  * Products Controller
@@ -1062,10 +1063,45 @@ class ProductsController extends AppController
                 'product_category_id IN' => $product_categories
             ])
             ->toArray();
-        
+
+        $get_product_tag_selected = $this->Products->ProductTags->find()
+            ->select()
+            ->where([
+                'product_id' => $product->get('id')
+            ])
+            ->toArray();
+
+        $product_tag_selected  = Hash::extract($get_product_tag_selected, '{n}.tag_id');
+
+        $list_attributes = $this->Attributes->find('threaded')
+            ->where(['Attributes.product_category_id IN ' => $product_categories])
+            ->toArray();
+
+        $get_product_attribute_checked =$this->Products->ProductAttributes->find()
+            ->where([
+                'product_id' => $product->get('id')
+            ])
+            ->toArray();
+        $product_attribute_checked  = Hash::extract($get_product_attribute_checked, '{n}.attribute_id');
 
         $product_tags = $this->Tags->find('list')->toArray();
         $product_warranties = $this->ProductWarranties->find('list')->toArray();
+
+        $get_product_option_prices = $this->Products->ProductOptionPrices->find()
+            ->where([
+                'product_id' => $product->get('id')
+            ])
+            ->contain([
+                'ProductOptionStocks',
+                'ProductOptionValueLists'
+            ])
+            ->orderAsc('idx')
+            ->toArray();
+
+        $list_options = Hash::extract($get_product_option_prices, '0.product_option_value_lists.{n}.option_id');
+
+        //debug($get_product_option_prices);exit;
+
 
         $this->set(compact(
             'product',
@@ -1077,7 +1113,10 @@ class ProductsController extends AppController
             'parent_categories',
             'product_tags',
             'product_warranties',
-            'brands'
+            'brands',
+            'product_tag_selected',
+            'list_attributes',
+            'product_attribute_checked'
         ));
     }
 

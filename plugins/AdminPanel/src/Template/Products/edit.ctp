@@ -10,12 +10,14 @@
 <?php
     //echo $this->Html->script('/admin-assets/demo/default/custom/crud/wizard/wizard');
 echo $this->Html->script([
-'/admin-assets/vendors/custom/slugify/speakingurl.min',
-'/admin-assets/vendors/custom/slugify/slugify.min',
-'/admin-assets/vendors/custom/libs/validation-render',
+    '/admin-assets/app/js/lodash.min',
+    '/admin-assets/vendors/custom/slugify/speakingurl.min',
+    '/admin-assets/vendors/custom/slugify/slugify.min',
+    '/admin-assets/vendors/custom/libs/validation-render',
 ]);
 ?>
 <script>
+    Dropzone.autoDiscover = false;
     $(document).ready(function() {
         $('.summernote').summernote({
             height: 150
@@ -28,6 +30,7 @@ echo $this->Html->script([
         var url_category = '<?= $this->Url->build(['action' => 'getCategory']); ?>';
         var url_attribute = '<?= $this->Url->build(['action' => 'getAttributeAndBrand']); ?>';
         var product;
+        var sku_variant = {};
 
 
         var ajaxRequest = new ajaxValidation(formEl);
@@ -120,24 +123,46 @@ echo $this->Html->script([
             });
         });
 
-        $('input.numberinput').keyup(function(event) {
+        function replace_number_format(index, value) {
+            return value
+                .replace(/\D/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+        }
 
+        function onkeyup(event) {
             // skip for arrow keys
             if(event.which >= 37 && event.which <= 40) return;
 
             // format number
-            $(this).val(function(index, value) {
-                return value
-                    .replace(/\D/g, "")
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    ;
-            });
+            $(this).val(replace_number_format);
+        }
+
+        $('input.numberinput').keyup(onkeyup);
+        $('input.numberinput').each(function(){
+            $(this).val(replace_number_format);
         });
 
         function reindexProduct(formEl) {
             formEl.find('.product-variant-item').each(function(index) {
                 $(this).attr('data-index', ++index);
             });
+        }
+
+        function dropZoneRemoveFile(file) {
+
+            for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= $this->Url->build(['action' => 'add']); ?>',
+                    data: {action: "removeImage", image_id: $(thumbnailElement).attr('data-image-id'), _csrfToken : $('input[name=_csrfToken]').val()},
+                    success: function (data) {
+                        $(thumbnailElement).parents('.dz-preview').remove();
+                    }
+                });
+            }
+
+
         }
 
         /*var optbranchs = getList();
@@ -151,6 +176,7 @@ echo $this->Html->script([
             optbranchs = await getList();
             optvalues = await getOptionValue();
             var i = 1;
+
             $('.add-attribute').on('click',function(){
 
                 var radioValue = $("input[name='ShippingOption[]']:checked").val();
@@ -171,7 +197,7 @@ echo $this->Html->script([
                     formTemplate += '<div class="form-group m-form__group row">\n' +
                         '<label class="col-xl-4 col-form-label">'+text+'  *</label>\n' +
                         '<div class="col-xl-6">\n' +
-                        '<select name="ProductOptionValueLists['+i+']['+values+']" class="form-control select2 m-input select-'+text.toLowerCase()+'" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
+                        '<select name="ProductOptionValueLists['+i+']['+values+']" class="form-control select2 m-input sku-prefix select-'+text.toLowerCase()+'" id="ProductOptionValues'+i+''+text+'">'+opt+'</select>\n' +
                         '</div>\n' +
                         '<div class="col-xl-2">\n' +
                         '<a href="#" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-variant" style="width:40px; height: 40px;"  data-toggle="modal" data-target="#modal-attribute" data-variant="'+text.toLowerCase()+'"><i class="la la-plus"></i></a>\n' +
@@ -190,6 +216,14 @@ echo $this->Html->script([
                     '<div class="row">\n' +
                     '<div class="col-xl-4">'+formTemplate+'</div>\n' +
                     '<div class="col-xl-4"> \n' +
+                    '<div class="form-group m-form__group row">\n' +
+                    '<label class="col-xl-4 col-form-label">Expired</label>\n' +
+                    '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][expired]" class="form-control m-input datepicker" placeholder="Expired"></div> \n' +
+                    '</div>  \n' +
+                    '<div class="form-group m-form__group row">\n' +
+                    '<label class="col-xl-4 col-form-label">SKU *</label>\n' +
+                    '<div class="col-xl-6"><input type="text" name="ProductOptionPrices['+i+'][sku]" class="form-control m-input sku-number" placeholder="Sku" readonly="readonly"></div> \n' +
+                    '</div>  \n' +
                     '<div class="form-group m-form__group row">\n' +
                     '<label class="col-xl-4 col-form-label">Harga Tambahan  *</label>\n' +
                     '<div class="col-xl-4"><input type="number" name="ProductOptionPrices['+i+'][price]" class="form-control m-input" placeholder="Harga"></div> \n' +
@@ -241,6 +275,39 @@ echo $this->Html->script([
                 if(formTemplate != ''){
                     var appendTemplate = $('.form-dynamic').append(template);
                     //after append reindex product variant options
+
+                    appendTemplate.find('.sku-prefix').each(function(index) {
+                        $(this).change(function(){
+                            var parentIndex = $(this).parents('.product-variant-item').attr('data-index');
+                            _.set(sku_variant, `${parentIndex}.${index}`, $(this).val());
+                            $(this)
+                                .parents('.product-variant-item')
+                                .find('.sku-number')
+                                .val($("#sku").val() + Number(_.get(sku_variant, `${parentIndex}`).join('')).toString(16).toUpperCase());
+                        });
+                    });
+
+                    var arrows;
+                    if (mUtil.isRTL()) {
+                        arrows = {
+                            leftArrow: '<i class="la la-angle-right"></i>',
+                            rightArrow: '<i class="la la-angle-left"></i>'
+                        }
+                    } else {
+                        arrows = {
+                            leftArrow: '<i class="la la-angle-left"></i>',
+                            rightArrow: '<i class="la la-angle-right"></i>'
+                        }
+                    }
+                    $('.datepicker').datepicker({
+                        startDate: '-0d',
+                        rtl: mUtil.isRTL(),
+                        todayHighlight: true,
+                        orientation: "bottom left",
+                        format: 'yyyy-mm-dd',
+                        autoclose: true,
+                        templates: arrows
+                    });
 
                     reindexProduct(formEl);
 
@@ -328,10 +395,15 @@ echo $this->Html->script([
                         },
                         success: function(file, response) {
                             //console.log(file, response)
+                            for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                                $(thumbnailElement).attr('data-image-id', response.data.image_id)
+                                    .attr('data-image-name', response.data.name);
+                            }
                         },
                         maxfilesexceeded: function(file) {
                             this.removeFile(file);
                         },
+                        removedfile: dropZoneRemoveFile,
                         sending: function(file, xhr, formData) {
                             formData.append('_csrfToken', $('input[name=_csrfToken]').val());
                             formData.append('product_id', $('input[name=id]').val());
@@ -356,13 +428,13 @@ echo $this->Html->script([
 
 
 
-        var frm = $('#form-attribute');
-        frm.submit(function (e) {
+        var frmAttr = $('#form-attribute');
+        frmAttr.submit(function (e) {
             e.preventDefault();
             $.ajax({
-                type: frm.attr('method'),
-                url: frm.attr('action'),
-                data: frm.serialize(),
+                type: frmAttr.attr('method'),
+                url: frmAttr.attr('action'),
+                data: frmAttr.serialize(),
                 success: function (data) {
                     if(data.is_error){
                         return false;
@@ -383,13 +455,13 @@ echo $this->Html->script([
             });
         });
 
-        var frm = $('#form-brand');
-        frm.submit(function (e) {
+        var frmBrand = $('#form-brand');
+        frmBrand.submit(function (e) {
             e.preventDefault();
             $.ajax({
-                type: frm.attr('method'),
-                url: frm.attr('action'),
-                data: frm.serialize(),
+                type: frmBrand.attr('method'),
+                url: frmBrand.attr('action'),
+                data: frmBrand.serialize(),
                 success: function (data) {
                     if(data.is_error){
                         return false;
@@ -450,6 +522,9 @@ echo $this->Html->script([
         });
 
         $('#price-sale').trigger('change');
+
+
+
     })
 </script>
 <script>
@@ -609,6 +684,32 @@ echo $this->Html->script([
                     <div class="m-form__seperator m-form__seperator--dashed"></div>
                     <div class="row mt-3">
                         <div class="col-xl-12 dynamic-form-attribute">
+                            <?php /* $list_attributes */ ?>
+                            <?php
+                            /**
+                             * @var \AdminPanel\Model\Entity\Attribute[] $list_attributes
+                             */
+                            foreach($list_attributes as $key => $val) : ?>
+                            <div class="form-group m-form__group row">
+                                <label class="col-xl-2 col-form-label"><?= h($val->get('name')); ?></label>
+                                <div class="col-xl-10 m-form__group-sub">
+                                    <div class="m-checkbox-inline">
+                                    <?php foreach($val->get('children') as $child) : ?>
+                                        <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                            <?php echo $this->Form->checkbox("ProductToAttributes[$key][]", [
+                                                'value' => $child->get('id'),
+                                                'hiddenField' => false,
+                                                'checked' => in_array($child->get('id'), $product_attribute_checked)
+                                            ]); ?>
+                                            <?= h($child->get('name')) ; ?>
+                                            <span></span>
+                                        </label>
+                                    <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+
 
                         </div>
                     </div>
@@ -625,11 +726,8 @@ echo $this->Html->script([
                         <div class="col-xl-4">
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Brand'); ?>*</label>
-                                <div class="col-xl-7">
-                                    <?php echo $this->Form->control('brand_id', ['label' => false, 'options' => $brands, 'class' => $default_class, 'style' => 'width: 100% !important;']);?>
-                                </div>
-                                <div class="col-xl-1">
-                                    <a href="#" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-brand"  data-toggle="modal" data-target="#modal-brand""><i class="la la-plus"></i></a>
+                                <div class="col-xl-8">
+                                    <?php echo $this->Form->control('brand_id', ['label' => false, 'class' => $default_class, 'disabled' => true]);?>
                                 </div>
                             </div>
 
@@ -642,13 +740,20 @@ echo $this->Html->script([
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Sku'); ?>*</label>
                                 <div class="col-xl-8">
-                                    <?php echo $this->Form->control('sku',['label' => false,'class' => $default_class]);?>
+                                    <?php echo $this->Form->control('sku',['label' => false,'class' => $default_class . ' disabled', 'readonly' => true]);?>
                                 </div>
                             </div>
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Status Stok'); ?></label>
                                 <div class="col-xl-8">
                                     <?php echo $this->Form->control('product_stock_status_id', ['options' => $productStockStatuses,'label' => false, 'class' => $default_class . ' select-picker']);?>
+                                </div>
+                            </div>
+
+                            <div class="form-group m-form__group row">
+                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Barcode'); ?></label>
+                                <div class="col-xl-8">
+                                    <?php echo $this->Form->control('barcode', ['type' => 'text','div' => false, 'label' => false,'class' => $default_class. ' numberinput']);?>
                                 </div>
                             </div>
 
@@ -682,8 +787,15 @@ echo $this->Html->script([
 
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?>*</label>
-                                <div class="col-xl-3">
+                                <div class="col-xl-6">
                                     <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class . ' numberinput']);?>
+                                </div>
+                            </div>
+
+                            <div class="form-group m-form__group row">
+                                <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Kode Supplier'); ?></label>
+                                <div class="col-xl-6">
+                                    <?php echo $this->Form->control('supplier_code', ['type' => 'text','div' => false, 'label' => false,'class' => $default_class. ' numberinput']);?>
                                 </div>
                             </div>
                         </div>
@@ -691,7 +803,7 @@ echo $this->Html->script([
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Produk Tagging'); ?></label>
                                 <div class="col-xl-9">
-                                    <?php echo $this->Form->control('ProductTags', ['options' => $product_tags, 'label' => false, 'class' => $default_class . ' m-select2', 'id' => 'product-tagging', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
+                                    <?php echo $this->Form->select('ProductTags', $product_tags, ['multiple' => true, 'value' => $product_tag_selected, 'class' => $default_class . ' m-select2', 'id' => 'product-tagging', 'style' => 'width: 100% !important;']); //['options' => $product_tags, 'default' => $product_tag_selected, 'label' => false, 'class' => $default_class . ' m-select2', 'id' => 'product-tagging', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
                                 </div>
                             </div>
 
@@ -716,6 +828,8 @@ echo $this->Html->script([
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
 
                     <div class="row mt-5">
@@ -795,6 +909,7 @@ echo $this->Html->script([
                     <div class="row mt-3">
                         <div class="col-xl-12">
                             <div class="m-accordion m-accordion--bordered form-dynamic" id="m_accordion_2" role="tablist">
+                                <?php echo $this->element('Products/partials/variant'); ?>
                             </div>
                         </div>
                     </div>

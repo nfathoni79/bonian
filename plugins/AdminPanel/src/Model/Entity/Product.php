@@ -13,6 +13,8 @@ use Cake\ORM\Entity;
  * @property string|null $model
  * @property string|null $code
  * @property string|null $sku
+ * @property string|null $barcode
+ * @property string|null $supplier_code
  * @property int $qty
  * @property int|null $product_stock_status_id
  * @property int $shipping
@@ -64,6 +66,8 @@ class Product extends Entity
         'model' => true,
         'code' => true,
         'sku' => true,
+        'barcode' => true,
+        'supplier_code' => true,
         'qty' => true,
         'product_stock_status_id' => true,
         'shipping' => true,
