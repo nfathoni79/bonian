@@ -1093,14 +1093,37 @@ class ProductsController extends AppController
             ])
             ->contain([
                 'ProductOptionStocks',
-                'ProductOptionValueLists'
+                'ProductOptionValueLists' => [
+                    'Options'
+                ]
             ])
             ->orderAsc('idx')
             ->toArray();
 
         $list_options = Hash::extract($get_product_option_prices, '0.product_option_value_lists.{n}.option_id');
 
-        //debug($get_product_option_prices);exit;
+
+        /**
+         * @var \AdminPanel\Model\Entity\OptionValue[] $get_option_lists
+         */
+        $get_option_lists = $this->OptionValues->find()
+            ->where([
+                'option_id IN' => $list_options
+            ])
+            ->toArray();
+        $select_options = [];
+        foreach($get_option_lists as $val) {
+            if (!isset($select_options[$val->get('option_id')])) {
+                $select_options[$val->get('option_id')] = [];
+            }
+            $select_options[$val->get('option_id')][$val->get('id')] = $val->get('name');
+        }
+
+        $branches = $this->Branches->find('list')->toArray();
+
+        //debug($select_options);
+        //debug($get_product_option_prices);
+        //exit;
 
 
         $this->set(compact(
@@ -1116,7 +1139,11 @@ class ProductsController extends AppController
             'brands',
             'product_tag_selected',
             'list_attributes',
-            'product_attribute_checked'
+            'product_attribute_checked',
+            'get_product_option_prices',
+            'list_options',
+            'select_options',
+            'branches'
         ));
     }
 

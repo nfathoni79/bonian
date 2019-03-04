@@ -175,7 +175,7 @@ echo $this->Html->script([
         async function initial() {
             optbranchs = await getList();
             optvalues = await getOptionValue();
-            var i = 1;
+            var i = <?= count($get_product_option_prices) + 1; ?>;
 
             $('.add-attribute').on('click',function(){
 
@@ -238,7 +238,7 @@ echo $this->Html->script([
                     '<label class="col-xl-4 col-form-label">Dimensi  *</label>\n' +
                     '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
                     '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
-                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][height]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
                     '</div>  \n' +
                     '<div class="m-form__group form-group row">\n' +
                     '<label class="col-xl-4 col-form-label">Stock Cabang  *</label>\n' +
@@ -893,7 +893,7 @@ echo $this->Html->script([
                                     <div class="m-checkbox-inline">
                                         <?php foreach($options as $k => $vals):?>
                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                            <input type="checkbox" name="options[]"  value="<?php echo $k;?>" class="option" data-text="<?php echo $vals;?>"> <?php echo $vals;?>
+                                            <input type="checkbox" name="options[]"  value="<?php echo $k;?>" <?php echo array_search($k, $list_options) >= 0 ? 'checked="checked"' : '' ?> class="option" data-text="<?php echo $vals;?>"> <?php echo $vals;?>
                                             <span></span>
                                         </label>
                                         <?php endforeach;?>
@@ -909,7 +909,11 @@ echo $this->Html->script([
                     <div class="row mt-3">
                         <div class="col-xl-12">
                             <div class="m-accordion m-accordion--bordered form-dynamic" id="m_accordion_2" role="tablist">
-                                <?php echo $this->element('Products/partials/variant'); ?>
+                                <?php echo $this->element('Products/partials/variant', [
+                                        'data' => $get_product_option_prices,
+                                        'dropdown' => $select_options,
+                                        'branches' => $branches
+                                ]); ?>
                             </div>
                         </div>
                     </div>

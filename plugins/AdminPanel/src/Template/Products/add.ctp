@@ -368,7 +368,7 @@
                     '<label class="col-xl-4 col-form-label">Dimensi  *</label>\n' +
                     '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][length]" class="form-control m-input" placeholder="Panjang"></div>\n' +
                     '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][width]"  class="form-control m-input" placeholder="Lebar"></div>\n' +
-                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][heigth]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
+                    '<div class="col-xl-2"><input type="number" name="ProductOptionStocks['+i+'][height]" class="form-control m-input" placeholder="Tinggi"></div>\n' +
                     '</div>  \n' +
                     '<div class="m-form__group form-group row">\n' +
                     '<label class="col-xl-4 col-form-label">Stock Cabang  *</label>\n' +
