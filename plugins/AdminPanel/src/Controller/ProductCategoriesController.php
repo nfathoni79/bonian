@@ -135,8 +135,13 @@ class ProductCategoriesController extends AppController
             $data = $this->request->getData('files');
             $file = $data['tmp_name'];
             $handle = fopen($file, "r");
+            $count = 0;
             while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
 //                0 main, 1 submain, 2 subsubmain, 3 desctioption
+                $count++;
+                if ($count == 1) {
+                    continue;
+                }
                 for($i=0;$i<=3;$i++){
                     switch ($i) {
                         case 0:

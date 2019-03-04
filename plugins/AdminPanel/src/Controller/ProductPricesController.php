@@ -8,6 +8,7 @@ use Cake\Validation\Validator;
  * ProductPricesMutations Controller
  * @property \AdminPanel\Model\Table\ProductsTable $Products
  * @property \AdminPanel\Model\Table\ProductOptionPricesTable $ProductOptionPrices
+ * @property \AdminPanel\Model\Table\ActivityLogsTable $ActivityLogs
  *
  */
 class ProductPricesController extends AppController
@@ -18,6 +19,7 @@ class ProductPricesController extends AppController
         parent::initialize();
         $this->loadModel('AdminPanel.Products');
         $this->loadModel('AdminPanel.ProductOptionPrices');
+        $this->loadModel('AdminPanel.ActivityLogs');
     }
 
 
@@ -60,12 +62,18 @@ class ProductPricesController extends AppController
                     'price_sale' => $vals['price_sale']
                 ] , ['validate' => false]);
 
+                $this->Products->setLogMessageBuilder(function () use($product){
+                    return 'Manajemen Harga - Perubahan Pada Main SKU : '.$product->get('sku');
+                });
                 if($this->Products->save($product)){
                     foreach($vals['ProductOptionPrices'] as $k => $val){
                         $productOptionPrices = $this->ProductOptionPrices->get($k);
                         $productOptionPrices = $this->ProductOptionPrices->patchEntity($productOptionPrices, [
                             'price' => $val['price']
                         ] , ['validate' => false]);
+                        $this->ProductOptionPrices->setLogMessageBuilder(function () use($productOptionPrices){
+                            return 'Manajemen Harga - Perubahan Pada SKU : '.$productOptionPrices->get('sku');
+                        });
                         $this->ProductOptionPrices->save($productOptionPrices);
                     }
                 }

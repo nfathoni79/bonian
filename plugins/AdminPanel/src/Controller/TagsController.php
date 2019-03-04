@@ -165,7 +165,13 @@ class TagsController extends AppController
             $data = $this->request->data['files'];
             $file = $data['tmp_name'];
             $handle = fopen($file, "r");
+            $count = 0;
             while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+
+                $count++;
+                if ($count == 1) {
+                    continue;
+                }
                 $Tags = $this->Tags->find()
                     ->where(['Tags.name' => $row[0]])
                     ->first();
@@ -176,7 +182,6 @@ class TagsController extends AppController
                     $this->Tags->save($newEntity);
                 }
             }
-
         }
             $this->Flash->success(__('Success import file'));
             $this->redirect(['action' => 'index']);
