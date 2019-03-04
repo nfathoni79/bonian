@@ -373,7 +373,7 @@ class ProductsController extends AppController
 
                     $this->Products->patchEntity($productEntity, $getData, ['validate' => false]);
 
-                    //debug($productEntity);
+                    
 
                     if ($this->Products->save($productEntity)) {
 

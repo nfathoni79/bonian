@@ -20,6 +20,8 @@ use Cake\ORM\Entity;
  * @property float $price_sale
  * @property float|null $weight
  * @property int|null $product_weight_class_id
+ * @property int|null $product_warranty_id
+ * @property int|null $brand_id
  * @property int $product_status_id
  * @property string|null $highlight
  * @property string|null $condition
@@ -69,6 +71,8 @@ class Product extends Entity
         'price_sale' => true,
         'weight' => true,
         'product_weight_class_id' => true,
+        'product_warranty_id' => true,
+        'brand_id' => true,
         'product_status_id' => true,
         'highlight' => true,
         'condition' => true,
