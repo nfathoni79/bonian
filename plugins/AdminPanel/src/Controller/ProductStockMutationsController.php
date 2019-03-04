@@ -19,85 +19,45 @@ class ProductStockMutationsController extends AppController
      */
     public function index()
     {
-        
-        if ($this->request->is('ajax')) {
-            $this->viewBuilder()->setLayout('ajax');
 
-            $pagination = $this->request->getData('pagination');
-            $sort = $this->request->getData('sort');
-            $query = $this->request->getData('query');
-
-            /** custom default query : select, where, contain, etc. **/
-            $data = $this->ProductStockMutations->find('all')
-                ->select([
-//                    'id' => 'Products.id',
-//                    'created' => 'Products.created',
-//                    'name' => 'Products.name',
-                ]);
-            $data->contain([
-                'Products',
-                'Branches',
-                'ProductOptionStocks' => [
-                    'ProductOptionPrices' => [
-                        'ProductOptionValueLists' => [
-//                            'fields' => [
-//                                'ProductOptionValueLists.product_option_price_id',
-//                                'option_name' => 'Options.name',
-//                                'option_value_name' => 'OptionValues.name'
-//                            ],
-                            'Options',
-                            'OptionValues',
+        if ($this->DataTable->isAjax()) {
+            $datatable = $this->DataTable->adapter('AdminPanel.ProductStockMutations')
+                ->contain([
+                    'Products',
+                    'Branches',
+                    'ProductOptionStocks' => [
+                        'ProductOptionPrices' => [
+                            'ProductOptionValueLists' => [
+                                'Options',
+                                'OptionValues',
+                            ]
                         ]
-                    ]
-                ],
-                'ProductStockMutationTypes' => [
-//                    'fields' => [
-//                        'tipe' => 'ProductStockMutationTypes.name'
-//                    ]
-                ]
-            ])->order(['Products.created' => 'DESC'])
-            ;
+                    ],
+                    'ProductStockMutationTypes'
+                ])
+                ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+                    $orConditions = $exp->or_([
+                        'Products.name LIKE' => '%' . $search .'%',
+                        'Branches.name LIKE' => '%' . $search .'%',
+                        'ProductStockMutationTypes.name LIKE' => '%' . $search .'%',
+                    ]);
+                    return $exp
+                        ->add($orConditions);
+                });
 
-            if ($query && is_array($query)) {
-                if (isset($query['generalSearch'])) {
-                    $search = $query['generalSearch'];
-                    unset($query['generalSearch']);
-                    /**
-                        custom field for general search
-                        ex : 'Users.email LIKE' => '%' . $search .'%'
-                    **/
-                    $data->where(['ProductStockMutations.name LIKE' => '%' . $search .'%']);
-                }
-                $data->where($query);
-            }
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->toArray();
 
-            if (isset($sort['field']) && isset($sort['sort'])) {
-                $data->order([$sort['field'] => $sort['sort']]);
-            }
-
-            if (isset($pagination['perpage']) && is_numeric($pagination['perpage'])) {
-                $data->limit($pagination['perpage']);
-            }
-            if (isset($pagination['page']) && is_numeric($pagination['page'])) {
-                $data->page($pagination['page']);
-            }
-
-            $total = $data->count();
-
-            $result = [];
-            $result['data'] = $data->toArray();
-
-
-            $result['meta'] = array_merge((array) $pagination, (array) $sort);
-            $result['meta']['total'] = $total;
-
-
-            return $this->response->withType('application/json')
-            ->withStringBody(json_encode($result));
+            //set again datatable
+            $datatable->setData($result);
+            return $datatable->response();
         }
 
 
-        $this->set(compact('productStockMutations'));
+
+//        $this->set(compact('productStockMutations'));
     }
 
 }

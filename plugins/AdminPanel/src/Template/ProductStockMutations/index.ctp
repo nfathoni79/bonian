@@ -139,7 +139,6 @@
                         </tr>
                         </thead>
                     </table>
-
                 </div>
 
             </div>
@@ -177,146 +176,138 @@ $this->Html->script([
 <?php $this->append('script'); ?>
 <script>
 
-    function delete_data(id) {
-        $.post( "<?= $this->Url->build(['action' => 'delete']); ?>/" + id, { _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>' } )
-            .done(function( data ) {
-                location.href = '<?= $this->Url->build();?>';
-            });
-    }
+    var datatable = $('#table-productStockMutations').DataTable({
 
-    function view_data(id) {
-        $('#modalView').modal('show');
-        $('.titleModal').html('Provinces View');
-        $('.contentModal').load( "<?= $this->Url->build(['action' => 'view']); ?>/" + id);
-    }
+        buttons: [
+            'print',
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5',
+        ],
 
-    var DatatableRemoteAjaxDemo = function() {
-        var demo = function() {
-            var datatable = $('#table-productStockMutations').DataTable({
-
-                buttons: [
-                    'print',
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5',
-                ],
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: "<?= $this->Url->build(); ?>",
-                    type: 'POST',
-                    data: {
-                        pagination: {
-                            perpage: 50,
-                        },
-                        _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
-                    },
+        processing: true,
+        serverSide: true,
+        order: [[1, 'desc']],
+        ajax: {
+            url: "<?= $this->Url->build(); ?>",
+            type: 'POST',
+            data: {
+                pagination: {
+                    perpage: 50,
                 },
-                columnDefs: [
-                    {
-                        targets: 0,
-                        render: function (data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart + 1;
-                        }
-                    },
-                    {
-                        targets: 1,
-                        render: function (data, type, row, meta) {
-                            return  row.created;
-                        }
-                    },
-                    {
-                        targets: 2,
-                        render: function (data, type, row, meta) {
-                            return row.product.name;
-                        }
-                    },
-                    {
-                        targets: 3,
-                        render: function (data, type, row, meta) {
-                            return row.product_option_stock.product_option_price.sku;
-                        }
-                    },
-                    {
-                        targets: 4,
-                        render: function (data, type, row, meta) {
-                            return row.branch.name;
-                        }
-                    },
-                    {
-                        targets: 5,
-                        render: function (data, type, row, meta) {
-                            var optlist = '';
-                            $.each(row.product_option_stock.product_option_price.product_option_value_lists, function(k,v){
-                                optlist += v.option.name + ' : '+v.option_value.name +'<br>';
-                            })
-                            return optlist;
-                        }
-                    },
-                    {
-                        targets: 6,
-                        render: function (data, type, row, meta) {
-                            return row.product_stock_mutation_type.name;
-                        }
-                    },
-                    {
-                        targets: 7,
-                        render: function (data, type, row, meta) {
-                            return row.description;
-                        }
-                    },
-                    {
-                        targets: 8,
-                        render: function (data, type, row, meta) {
-                            return row.amount;
-                        }
-                    },
-                    {
-                        targets: 9,
-                        render: function (data, type, row, meta) {
-                            return row.balance;
-                        }
-                    },
-                ]
-
-            });
-            // var query = datatable.getDataSourceQuery();
-
-            $('#export_print').on('click', function(e) {
-                e.preventDefault();
-                datatable.button(0).trigger();
-            });
-
-            $('#export_copy').on('click', function(e) {
-                e.preventDefault();
-                datatable.button(1).trigger();
-            });
-
-            $('#export_excel').on('click', function(e) {
-                e.preventDefault();
-                datatable.button(2).trigger();
-            });
-
-            $('#export_csv').on('click', function(e) {
-                e.preventDefault();
-                datatable.button(3).trigger();
-            });
-
-            $('#export_pdf').on('click', function(e) {
-                e.preventDefault();
-                datatable.button(4).trigger();
-            });
-        };
-        return {
-            init: function() {
-                demo();
+                _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
             },
-        };
-    }();
+        },
+        columns: [
+            {data: 'id'},
+            {data: 'created'},
+            {data: 'Products.name'},
+            {data: 'ProductOptionStocks.ProductOptionPrices.sku'},
+            {data: 'Branches.name'},
+            {data: 'ProductOptionStocks.ProductOptionPrices.id'},
+            {data: 'ProductStockMutationTypes.name'},
+            {data: 'ProductStockMutations.description'},
+            {data: 'ProductStockMutations.amount'},
+            {data: 'ProductStockMutations.balance'},
+        ],
+        //
+        columnDefs: [
+            {
+                targets: 0,
+                width: '30px',
+                className: 'dt-right',
+                orderable: false,
+                render: function (data, type, row, meta) {
+                    return row.id;
+                }
+            },
+            {
+                targets: 1,
+                render: function (data, type, row, meta) {
+                    return row.created;
+                }
+            },
+            {
+                targets: 2,
+                render: function (data, type, row, meta) {
+                    return row.product.name;
+                }
+            },
+            {
+                targets: 3,
+                render: function (data, type, row, meta) {
+                    return row.product_option_stock.product_option_price.sku;
+                }
+            },
+            {
+                targets: 4,
+                render: function (data, type, row, meta) {
+                    return row.branch.name;
+                }
+            },
+            {
+                targets: 5,
+                render: function (data, type, row, meta) {
+                    var optlist = '';
+                    $.each(row.product_option_stock.product_option_price.product_option_value_lists, function(k,v){
+                        optlist += v.option.name + ' : '+v.option_value.name +'<br>';
+                    })
+                    return optlist;
+                }
+            },
+            {
+                targets: 6,
+                render: function (data, type, row, meta) {
+                    return row.product_stock_mutation_type.name;
+                }
+            },
+            {
+                targets: 7,
+                render: function (data, type, row, meta) {
+                    return row.description;
+                }
+            },
+            {
+                targets: 8,
+                render: function (data, type, row, meta) {
+                    return row.amount;
+                }
+            },
+            {
+                targets: 9,
+                render: function (data, type, row, meta) {
+                    return row.balance;
+                }
+            },
+        ]
 
-    jQuery(document).ready(function() {
-        DatatableRemoteAjaxDemo.init();
+    });
+
+
+    $('#export_print').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(0).trigger();
+    });
+
+    $('#export_copy').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(1).trigger();
+    });
+
+    $('#export_excel').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(2).trigger();
+    });
+
+    $('#export_csv').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(3).trigger();
+    });
+
+    $('#export_pdf').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(4).trigger();
     });
 </script>
 <?php $this->end(); ?>

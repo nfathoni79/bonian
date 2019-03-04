@@ -147,7 +147,6 @@
                         </thead>
                     </table>
                     <button class="btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info mt-5">Simpan</button></p>
-                    <div id="example-console-form"></div>
                     </form>
                 </div>
 
@@ -245,6 +244,7 @@ $this->Html->script([
         ],
         processing: true,
         serverSide: true,
+        order: [[1, 'desc']],
         ajax: {
             url: "<?= $this->Url->build(); ?>",
             type: 'POST',
@@ -268,8 +268,14 @@ $this->Html->script([
         columnDefs: [
             {
                 targets: 0,
+                width: '30px',
+                className: 'dt-right',
+                orderable: false,
                 render: function (data, type, row, meta) {
-                    return '<input type="checkbox" name="ProductOptionStocks['+row.id+'][id]" value="'+row.id+'">';
+                    return '<label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand">\n' +
+                        '<input type="checkbox" name="ProductOptionStocks['+row.id+'][id]" value="'+row.id+'" class="m-checkable">\n' +
+                        '<span></span>\n' +
+                        '</label>';
                 }
             },
             {
