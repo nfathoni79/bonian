@@ -153,6 +153,45 @@
     </div>
 </div>
 
+<!--begin::Modal-->
+<div class="modal fade" id="m_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Import Stock Mutation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <?= $this->Form->create('ProductPrices',['action' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file', 'id' => 'import']); ?>
+
+                <div class="form-group m-form__group row">
+                    <label class="col-form-label col-lg-4">Cari FIle</label>
+                    <div class="col-lg-8">
+                        <?php
+                             echo $this->Form->control('files',['class' => 'form-control', 'type' => 'file','div' => false, 'label' => false,]);
+                        ?>
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <label class="col-form-label col-lg-4">Schedule</label>
+                    <div class="col-lg-8">
+                        <?php
+                             echo $this->Form->control('schedule',['div' => false, 'label' => false, 'class' => 'form-control', 'id' => 'm_datepicker_1', 'readonly' => 'readonly', 'placeholder' => 'Select date']);
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <?= $this->Form->submit(__('Import'),['class' => 'btn btn-brand']) ?>
+            </div>
+            <?= $this->Form->end(); ?>
+        </div>
+    </div>
+</div>
+
 <?php
 $this->Html->css([
 '/admin-assets/vendors/custom/datatables/datatables.bundle.css'
@@ -165,6 +204,27 @@ $this->Html->script([
 <?php $this->append('script'); ?>
 <script>
 
+    var arrows;
+    if (mUtil.isRTL()) {
+        arrows = {
+            leftArrow: '<i class="la la-angle-right"></i>',
+            rightArrow: '<i class="la la-angle-left"></i>'
+        }
+    } else {
+        arrows = {
+            leftArrow: '<i class="la la-angle-left"></i>',
+            rightArrow: '<i class="la la-angle-right"></i>'
+        }
+    }
+    $('#m_datepicker_1').datepicker({
+        startDate: '-0d',
+        rtl: mUtil.isRTL(),
+        todayHighlight: true,
+        orientation: "bottom left",
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        templates: arrows
+    });
     // begin first table
     var table = $('#table-prices').DataTable({
         responsive: true,
@@ -196,7 +256,7 @@ $this->Html->script([
                 if (last !== group) {
                     $(rows).eq(i).before(
                         '<tr class="group"><td colspan="10">' + group + ' - ' +api.column(1, {page: 'current'}).data()[i]+'</td></tr>',
-                        '<tr role="row" class="even"><td><label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand"><input type="checkbox" name="Products['+api.column(6, {page: 'current'}).data()[i]+'][id]" value="'+api.column(6, {page: 'current'}).data()[i]+'" class="m-checkable" id="parent-'+api.column(6, {page: 'current'}).data()[i]+'"><span></span></label></td><td>'+api.column(2, {page: 'current'}).data()[i]+'</td><td><div class="form-group m-form__group row"><span class="col-xl-12"> '+api.column(1, {page: 'current'}).data()[i]+' </span></div></td><td><div class="form-group m-form__group row"><label class="col-xl-5 col-form-label"> SKU ID '+api.column(2, {page: 'current'}).data()[i]+' : </label><div class="col-xl-4"><input type="text" class="form-control numberinput"  name="Products['+api.column(6, {page: 'current'}).data()[i]+'][price_sale]" value="'+(new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(api.column(7, {page: 'current'}).data()[i])+'"/></div></div></td></tr>',
+                        '<tr role="row" class="even"><td><label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand"><input type="checkbox" name="Products['+api.column(6, {page: 'current'}).data()[i]+'][id]" value="'+api.column(6, {page: 'current'}).data()[i]+'" class="m-checkable" id="parent-'+api.column(6, {page: 'current'}).data()[i]+'"><span></span></label></td><td>'+api.column(2, {page: 'current'}).data()[i]+'</td><td><div class="form-group m-form__group row"><span class="col-xl-12"> '+api.column(1, {page: 'current'}).data()[i]+' </span></div></td><td><div class="form-group m-form__group row"><label class="col-xl-6 col-form-label"> SKU ID '+api.column(2, {page: 'current'}).data()[i]+' : </label><div class="col-xl-6"><input type="text" class="form-control numberinput"  name="Products['+api.column(6, {page: 'current'}).data()[i]+'][price_sale]" value="'+(new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(api.column(7, {page: 'current'}).data()[i])+'"/></div></div></td></tr>',
                     );
                     last = group;
                 }
@@ -293,8 +353,8 @@ $this->Html->script([
                     })
 
                     tmp += '<div class="form-group m-form__group row"> \n' +
-                        '<label class="col-xl-5 col-form-label"> SKU ID '+row.sku+' : </label>\n' +
-                        '<div class="col-xl-4"><input type="text" class="form-control numberinput"  name="Products['+row.product.id+'][ProductOptionPrices]['+row.id+'][price]" value="'+(new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(row.price)+'"/></div>\n' +
+                        '<label class="col-xl-6 col-form-label"> SKU ID '+row.sku+' : </label>\n' +
+                        '<div class="col-xl-6"><input type="text" class="form-control numberinput"  name="Products['+row.product.id+'][ProductOptionPrices]['+row.id+'][price]" value="'+(new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(row.price)+'"/></div>\n' +
                         '</div>';
                     return tmp;
                 }
@@ -323,6 +383,20 @@ $this->Html->script([
         });
     });
 
+    $('#import').on('submit',function(e){
+        e.preventDefault();
+
+        var formEl1 = $("#import");
+        var ajaxRequest = new ajaxValidation(formEl1);
+        ajaxRequest.setblockUI('.modal-body');
+        var datax = formEl1.find(':input');
+        ajaxRequest.post("<?= $this->Url->build(['action' => 'validateUpload']); ?>", datax, function(data, saved) {
+            if (data.success) {
+                // location.href = '';
+            }
+        });
+
+    })
 
     $('#export_print').on('click', function(e) {
         e.preventDefault();

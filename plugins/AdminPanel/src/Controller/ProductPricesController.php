@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductsTable $Products
  * @property \AdminPanel\Model\Table\ProductOptionPricesTable $ProductOptionPrices
  * @property \AdminPanel\Model\Table\ActivityLogsTable $ActivityLogs
+ * @property \AdminPanel\Model\Table\PriceSettingsTable $PriceSettings
+ * @property \AdminPanel\Model\Table\PriceSettingDetailsTable $PriceSettingDetails
  *
  */
 class ProductPricesController extends AppController
@@ -20,9 +22,144 @@ class ProductPricesController extends AppController
         $this->loadModel('AdminPanel.Products');
         $this->loadModel('AdminPanel.ProductOptionPrices');
         $this->loadModel('AdminPanel.ActivityLogs');
+        $this->loadModel('AdminPanel.PriceSettings');
+        $this->loadModel('AdminPanel.PriceSettingDetails');
     }
 
+    public function validateUpload(){
+        $this->disableAutoRender();
 
+        $response = [];
+        $validator = new Validator();
+        $validator
+            ->notBlank('schedule', 'tidak boleh kosong');
+        $validator
+//            ->notBlank('files', 'tidak boleh kosong')
+            ->add('files', [
+                'validExtension' => [
+                    'rule' => ['extension',['csv']], // default  ['gif', 'jpeg', 'png', 'jpg']
+                    'message' => __('These files extension are allowed: .csv')
+                ]
+            ]);
+
+        $allData = $this->request->getData();
+        $error = $validator->errors($allData);
+        if (empty($error)) {
+            try {
+                $this->PriceSettings->getConnection()->begin();
+                $entity = $this->PriceSettings->newEntity([
+                    'user_id' => $this->Auth->user('id'),
+                    'schedule' => $this->request->getData('schedule'),
+                    'status' => 0,
+                ]);
+                if ($this->PriceSettings->save($entity)) {
+                    $this->PriceSettings->getConnection()->commit();
+                    $idPriceSetting = $entity->get('id');
+                    $data = $this->request->getData('files');
+                    $file = $data['tmp_name'];
+                    $handle = fopen($file, "r");
+                    $count = 0;
+                    while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+
+                        /* SKIP ROW 0*/
+                        $count++;
+                        if ($count == 1) {
+                            continue;
+                        }
+
+                        /*0 : SKU , 1 : Type (Main/Varian), 2 : Price*/
+                        switch (strtolower($row[1])) {
+                            case 'main':
+                                $findProduct = $this->Products->find()
+                                    ->where(['Products.sku' => $row[0]])
+                                    ->first();
+                                if($findProduct){
+                                    $id = $findProduct->get('id');
+                                    $product = $this->Products->get($id, [
+                                        'contain' => []
+                                    ]);
+                                    $newEntities = $this->Products->patchEntity($product,
+                                        [
+                                            'id' => $id,
+                                            'price_sale' => $row[2],
+                                        ]
+                                    );
+                                    if($this->Products->save($newEntities)){
+
+                                        $entityDetails = $this->PriceSettingDetails->newEntity([
+                                            'price_setting_id' => $idPriceSetting,
+                                            'sku' => $row[0],
+                                            'product_id' => $id,
+                                            'type' => 'Main',
+                                            'price' => $row[2],
+                                            'status' => 1,
+                                        ]);
+                                        $this->PriceSettingDetails->getConnection()->begin();
+                                        if($this->PriceSettingDetails->save($entityDetails)){
+                                            $this->PriceSettingDetails->getConnection()->commit();
+                                        }else{
+                                            $this->PriceSettings->getConnection()->rollback();
+                                            $this->PriceSettingDetails->getConnection()->rollback();
+                                        }
+
+                                    }
+                                }else{
+                                    $this->PriceSettings->getConnection()->rollback();
+                                }
+                            break;
+                            case 'varian':
+                                $findProductOptionPrice = $this->ProductOptionPrices->find()
+                                    ->where(['ProductOptionPrices.sku' => $row[0]])
+                                    ->first();
+                                if($findProductOptionPrice){
+                                    $id = $findProductOptionPrice->get('id');
+                                    $productOptionPrice = $this->ProductOptionPrices->get($id, [
+                                        'contain' => []
+                                    ]);
+                                    $newEntities = $this->ProductOptionPrices->patchEntity($productOptionPrice,
+                                        [
+                                            'id' => $id,
+                                            'price' => $row[2],
+                                        ]
+                                    );
+                                    if($this->ProductOptionPrices->save($newEntities)){
+                                        $entityDetails = $this->PriceSettingDetails->newEntity([
+                                            'price_setting_id' => $idPriceSetting,
+                                            'sku' => $row[0],
+                                            'product_option_price_id' => $id,
+                                            'type' => 'Variant',
+                                            'price' => $row[2],
+                                            'status' => 1,
+                                        ]);
+                                        $this->PriceSettingDetails->getConnection()->begin();
+                                        if($this->PriceSettingDetails->save($entityDetails)){
+                                            $this->PriceSettingDetails->getConnection()->commit();
+                                        }else{
+                                            $this->PriceSettings->getConnection()->rollback();
+                                            $this->PriceSettingDetails->getConnection()->rollback();
+                                        }
+                                    }
+                                }else{
+                                    $this->PriceSettings->getConnection()->rollback();
+                                }
+                            break;
+                        }
+
+
+                    }
+
+                }
+
+            } catch(\Cake\ORM\Exception\PersistenceFailedException $e) {
+                $this->PriceSettings->getConnection()->rollback();
+            }
+
+
+        }
+        $response['error'] = $error;
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($response));
+    }
 
     public function validate(){
 
@@ -45,6 +182,20 @@ class ProductPricesController extends AppController
                 }
             } else {
                 unset($products[$k]);
+            }
+        }
+        foreach($products as $k => $vals){
+            if(!empty($vals['id'])) {
+                $productsValue
+                    ->notBlank('price_sale', 'tidak boleh kosong')
+                    ->decimal('price_sale');
+                foreach($vals['ProductOptionPrices'] as $x => $val){
+                    if(!empty($val['id'])){
+                        $optionPrice
+                            ->notBlank('price', 'tidak boleh kosong')
+                            ->decimal('price');
+                    }
+                }
             }
         }
 
