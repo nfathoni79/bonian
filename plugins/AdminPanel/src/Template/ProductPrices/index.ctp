@@ -32,7 +32,7 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                        <a href="<?= $this->Url->build('action' => 'index'); ?>" class="m-nav__link">
+                        <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
                                 <?= __('Daftar Harga Varian') ?>
                             </span>
