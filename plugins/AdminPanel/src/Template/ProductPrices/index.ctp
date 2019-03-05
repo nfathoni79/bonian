@@ -71,6 +71,14 @@
                                 </span>
                             </a>
                         </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="<?= $this->Url->build(['action' => 'schedule']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                                <span>
+                                    <i class="la la-calendar"></i>
+                                    <span><?= __('Schedule Perubahan Harga') ?></span>
+                                </span>
+                            </a>
+                        </li>
                         <li class="m-portlet__nav-item"></li>
                         <li class="m-portlet__nav-item m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover" aria-expanded="true">
                             <a href="#" class="m-portlet__nav-link m-dropdown__toggle dropdown-toggle btn btn--sm m-btn--pill btn-secondary m-btn m-btn--label-brand">
@@ -392,7 +400,7 @@ $this->Html->script([
         var datax = formEl1.find(':input');
         ajaxRequest.post("<?= $this->Url->build(['action' => 'validateUpload']); ?>", datax, function(data, saved) {
             if (data.success) {
-                // location.href = '';
+                location.href = '';
             }
         });
 

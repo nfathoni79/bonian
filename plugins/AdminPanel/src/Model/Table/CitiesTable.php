@@ -42,12 +42,12 @@ class CitiesTable extends Table
         $this->setPrimaryKey('id');
 
         //sample activity logs
-        $this->addBehavior('Elastic/ActivityLogger.Logger', [
-            'scope' => [
-                'Cities'
-            ],
-            'issuer' => \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
-        ]);
+//        $this->addBehavior('Elastic/ActivityLogger.Logger', [
+//            'scope' => [
+//                'Cities'
+//            ],
+//            'issuer' => \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
+//        ]);
         //sample activity logs
 
 
