@@ -201,7 +201,6 @@ echo $this->Html->script([
                 '<a href="javascript:void(0);" style="width:40px; height: 40px;" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-cabang" data-item="'+item+'" data-row="'+y+'"><i class="la la-minus"></i></a>\n' +
                 '</div> \n' +
                 '<div>';
-
             $('.multi-cabang-'+item).append(rowcabang);
         }
 
@@ -658,11 +657,10 @@ echo $this->Html->script([
             }
         });
 
-        var y = 1;
+        var count_cabang_y = 1;
         $('.add-cabang').on('click',function() {
             var item = $(this).data('item');
-
-            rowCabangTemplate(y, item);
+            rowCabangTemplate(count_cabang_y, item);
 
             $('.remove-cabang').off('click').on('click',function() {
                 var items = $(this).data('item');
@@ -670,7 +668,7 @@ echo $this->Html->script([
                 $('div').remove('.cabang-'+items+'-'+row);
             });
             $('.select2').select2();
-            y++;
+            count_cabang_y++;
         });
 
         $('.remove-row').on('click', function() {
