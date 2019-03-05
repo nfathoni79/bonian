@@ -52,7 +52,10 @@ class AppController extends BaseController
 
         FrozenTime::setJsonEncodeFormat($timeJsonFormat);
         FrozenTime::setToStringFormat($timeJsonFormat);
-        Configure::write('User', $this->Auth->user());
+        if ($this->Auth->user()) {
+            Configure::write('User', $this->Auth->user());
+        }
+
 	}
 
 

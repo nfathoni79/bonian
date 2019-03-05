@@ -44,12 +44,15 @@ class AttributesTable extends Table
 
         $this->addBehavior('Tree');
 
-//        $this->addBehavior('Elastic/ActivityLogger.Logger', [
-//            'scope' => [
-//                'Attributes'
-//            ],
-//            'issuer' => \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
-//        ]);
+        $this->addBehavior('Elastic/ActivityLogger.Logger', [
+            'scope' => [
+                'Attributes'
+            ],
+            'issuer' => \Cake\Core\Configure::read('User') ?
+                \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
+                : null
+        ]);
+
         $this->belongsTo('ParentAttributes', [
             'className' => 'AdminPanel.Attributes',
             'foreignKey' => 'parent_id'
