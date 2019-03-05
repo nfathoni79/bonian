@@ -42,7 +42,7 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                        <a href="<?= $this->Url->build(['action' => 'schedule']); ?>" class="m-nav__link">
+                        <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
                                 <?= __('Daftar Schedule Perubahan Harga') ?>
                             </span>
@@ -52,7 +52,7 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
+                        <a href="<?= $this->Url->build('action' => 'preview'); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
                                 <?= __('Pratinjau Data Perubahan') ?>
                             </span>
@@ -121,7 +121,7 @@ $this->Html->script([
         processing: true,
         serverSide: true,
         ajax: {
-            url: "<?= $this->Url->build(); ?>",
+            url: "<?= $this->Url->build(['action' => 'preview']); ?>",
             type: 'POST',
             data: {
                 pagination: {
