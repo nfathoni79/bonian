@@ -197,7 +197,7 @@
                     source: {
                         read: {
                             method: 'POST',
-                            url: '<?= $this->Url->build(); ?>',
+                            url: '<?= $this->Url->build(['action' => 'index']); ?>',
                             cache: false,
                             params: {
                                 _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
@@ -250,7 +250,7 @@
                         field: 'ProductCategories.name',
                         title: 'Kategori',
                         template: function(row) {
-                            return row.product_category.name;
+                            return row.product_category ? row.product_category.name : 'Unknown';
                         }
                     },
 
