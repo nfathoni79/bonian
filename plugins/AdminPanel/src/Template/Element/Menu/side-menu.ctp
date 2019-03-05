@@ -102,12 +102,12 @@
                         'children' => []
                     ],
                     [
-                        'name' => 'Manajemen Stok',
+                        'name' => 'Manajemen Stock',
                         'url' => '#',
                         'icon' => 'm-menu__link-bullet',
                         'children' => [
                             [
-                                'name' => 'Stok',
+                                'name' => 'Stock',
                                 'url' => ['controller' => 'ProductStocks', 'action' => 'index'],
                                 'icon' => 'm-menu__link-bullet',
                                 'children' => []
