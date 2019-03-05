@@ -137,7 +137,7 @@
                 <?= $this->Flash->render() ?>
 
                 <div class="m_datatable" >
-                    <?= $this->Form->create(null,['action' => 'validate','class' => 'm-form m-form--fit m-form--label-align-right','id' => 'frm-example']); ?>
+                    <?= $this->Form->create(null,['url' => 'validate','class' => 'm-form m-form--fit m-form--label-align-right','id' => 'frm-example']); ?>
                     <table class="table table-striped table-bordered table-hover table-checkable" id="table-prices">
                         <thead>
                         <tr class="text-center">
