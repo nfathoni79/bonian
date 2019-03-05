@@ -166,7 +166,7 @@
                 ]
             ],
             [
-                'name' => 'Pembelian',
+                'name' => 'Penjualan',
                     'url' => '#',
                     'icon' => 'm-menu__link-icon flaticon-box',
                     'children' => [

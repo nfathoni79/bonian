@@ -911,7 +911,7 @@ echo $this->Html->script([
                                     <div class="m-checkbox-inline">
                                         <?php foreach($courriers as $k => $vals):?>
                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                            <input type="checkbox" name="ProductToCourriers[]" value="<?php echo $k;?>"> <?php echo $vals;?>
+                                            <input type="checkbox" name="ProductToCourriers[]" value="<?php echo $k;?>" <?= in_array($k, $product_to_courriers) ? 'checked="checked"' : '';?> > <?php echo $vals;?>
                                             <span></span>
                                         </label>
                                         <?php endforeach;?>
@@ -1002,7 +1002,7 @@ echo $this->Html->script([
                                     <div class="m-checkbox-inline">
                                         <?php foreach($options as $k => $vals):?>
                                         <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
-                                            <input type="checkbox" name="options[]"  value="<?php echo $k;?>" <?php echo array_search($k, $list_options) >= 0 ? 'checked="checked"' : '' ?> class="option" data-text="<?php echo $vals;?>"> <?php echo $vals;?>
+                                            <input type="checkbox" name="options[]"  value="<?php echo $k;?>" <?php echo count($list_options) > 0 ? 'disabled="disabled"' : ''; ?> <?php echo in_array($k, $list_options) ? 'checked="checked"' : '' ?> class="option" data-text="<?php echo $vals;?>"> <?php echo $vals;?>
                                             <span></span>
                                         </label>
                                         <?php endforeach;?>

@@ -468,9 +468,10 @@ class ProductsController extends AppController
 
                                 foreach($getProductAttributes as $val) {
                                     if (in_array($val->get('attribute_id'), $attribute_requests)) {
-                                        $key = array_search($val->get('attribute_id'), $attribute);
-                                        if ($key >= 0) {
-                                            unset($attribute[$key]);
+                                        foreach($attribute as $a => $v) {
+                                            if ($val->get('attribute_id') == $v) {
+                                                unset($attribute[$a]);
+                                            }
                                         }
                                     } else {
                                         $this->Products->ProductAttributes->delete($val);
@@ -1020,7 +1021,9 @@ class ProductsController extends AppController
     public function edit($id = null)
     {
         $product = $this->Products->get($id, [
-            'contain' => []
+            'contain' => [
+                'ProductToCourriers'
+            ]
         ]);
 
         if ($this->request->is('ajax')) {
@@ -1151,7 +1154,78 @@ class ProductsController extends AppController
                 }
                 $this->Products->patchEntity($product, $getData, ['validate' => false]);
                 if ($this->Products->save($product)) {
+                    //print_r($this->request->getData());
+                    //save product to attribute
+                    if ($attributes = $this->request->getData('ProductToAttributes')) {
 
+                        //exists product attribute
+                        /**
+                         * @var \AdminPanel\Model\Entity\ProductAttribute[] $getProductAttributes
+                         */
+                        $getProductAttributes = $this->Products->ProductAttributes->find()
+                            ->where([
+                                'product_id' => $product->get('id')
+                            ]);
+
+
+
+                        //loop attribute request data
+                        $attribute_requests = [];
+                        foreach($attributes as $key => $attribute) {
+                            foreach($attribute as $attribute_id) {
+                                array_push($attribute_requests, $attribute_id);
+                            }
+                        }
+
+
+                        foreach($attributes as $key => $attribute) {
+
+                            foreach($getProductAttributes as $val) {
+                                if (in_array($val->get('attribute_id'), $attribute_requests)) {
+                                    foreach($attribute as $a => $v) {
+                                        if ($val->get('attribute_id') == $v) {
+                                            unset($attribute[$a]);
+                                        }
+                                    }
+                                } else {
+                                    $this->Products->ProductAttributes->delete($val);
+                                }
+                            }
+
+
+                            foreach($attribute as $attribute_id) {
+                                $parent = $this->Attributes->find('path', ['for' => $attribute_id])->first();
+
+                                $productAttributeEntity = $this->Products->ProductAttributes->newEntity([
+                                    'product_id' => $product->get('id'),
+                                    'attribute_name_id' => $parent->get('id')
+                                ]);
+
+                                $this
+                                    ->Products
+                                    ->ProductAttributes
+                                    ->patchEntity($productAttributeEntity, ['attribute_id' => $attribute_id], ['validate' => false]);
+
+                                $this
+                                    ->Products
+                                    ->ProductAttributes
+                                    ->save($productAttributeEntity);
+
+
+                            }
+                        }
+                    } else {
+                        /**
+                         * @var \AdminPanel\Model\Entity\ProductAttribute[] $getProductAttributes
+                         */
+                        $getProductAttributes = $this->Products->ProductAttributes->find()
+                            ->where([
+                                'product_id' => $product->get('id')
+                            ]);
+                        foreach($getProductAttributes as $val) {
+                            $this->Products->ProductAttributes->delete($val);
+                        }
+                    }
                 }
             }
 
@@ -1245,11 +1319,16 @@ class ProductsController extends AppController
         /**
          * @var \AdminPanel\Model\Entity\OptionValue[] $get_option_lists
          */
-        $get_option_lists = $this->OptionValues->find()
-            ->where([
-                'option_id IN' => $list_options
-            ])
-            ->toArray();
+        $get_option_lists = [];
+        if (count($list_options) > 0) {
+            $get_option_lists = $this->OptionValues->find()
+                ->where([
+                    'option_id IN' =>  $list_options
+                ])
+                ->toArray();
+        }
+
+
         $select_options = [];
         foreach($get_option_lists as $val) {
             if (!isset($select_options[$val->get('option_id')])) {
@@ -1283,9 +1362,10 @@ class ProductsController extends AppController
             ])
             ->first();
 
+        $product_to_courriers  = Hash::extract($product['product_to_courriers'], '{n}.id');
 
 
-        //debug($select_options);
+            //debug($list_options);
         //debug($get_product_option_prices);
         //exit;
 
@@ -1309,7 +1389,8 @@ class ProductsController extends AppController
             'select_options',
             'branches',
             'product_images',
-            'meta_tags'
+            'meta_tags',
+            'product_to_courriers'
         ));
     }
 
