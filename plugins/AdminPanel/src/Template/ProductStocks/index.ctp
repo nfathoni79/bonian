@@ -246,7 +246,7 @@ $this->Html->script([
         serverSide: true,
         order: [[1, 'desc']],
         ajax: {
-            url: "<?= $this->Url->build(); ?>",
+            url: "<?= $this->Url->build(['action' => 'index']); ?>",
             type: 'POST',
             data: {
                 pagination: {
