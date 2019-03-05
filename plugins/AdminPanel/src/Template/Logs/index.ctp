@@ -32,7 +32,7 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
+                        <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
                                 <?= __('Daftar Aktifitas') ?>
                             </span>
@@ -162,7 +162,7 @@ $this->Html->script([
         serverSide: true,
         order: [[0, 'desc']],
         ajax: {
-            url: "<?= $this->Url->build(); ?>",
+            url: "<?= $this->Url->build(['action' => 'index']); ?>",
             type: 'POST',
             data: {
                 pagination: {

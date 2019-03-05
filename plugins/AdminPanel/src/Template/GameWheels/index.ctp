@@ -32,7 +32,7 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
+                        <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
                                 <?= __('Wheel Of Fortune') ?>
                             </span>
@@ -126,7 +126,7 @@
                     source: {
                         read: {
                             method: 'POST',
-                            url: '<?= $this->Url->build(); ?>',
+                            url: '<?= $this->Url->build(['action' => 'index']); ?>',
                             cache: false,
                             params: {
                                 _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'

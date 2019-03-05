@@ -172,7 +172,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <?= $this->Form->create('ProductPrices',['action' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file', 'id' => 'import']); ?>
+                <?= $this->Form->create('ProductPrices',['url' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file', 'id' => 'import']); ?>
 
                 <div class="form-group m-form__group row">
                     <label class="col-form-label col-lg-4">Cari FIle</label>

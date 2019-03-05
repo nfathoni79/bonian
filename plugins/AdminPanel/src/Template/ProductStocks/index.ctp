@@ -185,7 +185,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <?= $this->Form->create('ProductStocks',['action' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file']); ?>
+                <?= $this->Form->create('ProductStocks',['url' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file']); ?>
 
                 <div class="form-group m-form__group">
                     <label>Cari FIle</label>
