@@ -1154,7 +1154,7 @@ class ProductsController extends AppController
                 }
                 $this->Products->patchEntity($product, $getData, ['validate' => false]);
                 if ($this->Products->save($product)) {
-                    //print_r($this->request->getData());
+
                     //save product to attribute
                     if ($attributes = $this->request->getData('ProductToAttributes')) {
 
@@ -1226,6 +1226,39 @@ class ProductsController extends AppController
                             $this->Products->ProductAttributes->delete($val);
                         }
                     }
+
+                    //save product to couriers
+                    if ($couriers = $this->request->getData('ProductToCourriers')) {
+                        /**
+                         * @var \AdminPanel\Model\Entity\ProductToCourrier[] $getCourriers
+                         */
+                        $getCourriers = $this->Products->ProductToCourriers->find()
+                            ->where([
+                                'product_id' => $product->get('id')
+                            ]);
+
+                        //remove exists if not in request
+                        foreach($getCourriers as $courier) {
+                            if (!in_array($courier->get('courrier_id'), $couriers)) {
+                                $this->Products->ProductToCourriers->delete($courier);
+                            } else {
+                                $key = array_search($courier->get('courrier_id'), $couriers);
+                                if ($key >= 0) {
+                                    unset($couriers[$key]);
+                                }
+                            }
+                        }
+
+                        //insert new request
+                        foreach($couriers as $val) {
+                            $courierEntity = $this->Products->ProductToCourriers->newEntity(['product_id' => $product->get('id')]);
+                            $this->Products->ProductToCourriers->patchEntity($courierEntity, ['courrier_id' => $val]);
+                            $this->Products->ProductToCourriers->save($courierEntity);
+                        }
+                    }
+
+
+
                 }
             }
 
@@ -1362,12 +1395,14 @@ class ProductsController extends AppController
             ])
             ->first();
 
-        $product_to_courriers  = Hash::extract($product['product_to_courriers'], '{n}.id');
+        $product_to_courriers  = Hash::extract($product['product_to_courriers'], '{n}.courrier_id');
+
 
 
             //debug($list_options);
         //debug($get_product_option_prices);
         //exit;
+        
 
 
         $this->set(compact(

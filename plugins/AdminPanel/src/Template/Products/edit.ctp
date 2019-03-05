@@ -531,6 +531,32 @@ echo $this->Html->script([
             }
         });
 
+        $("#brand-id").change(function(){
+            var brand_id = $(this).val();
+            $.ajax({
+                url: "<?= $this->Url->build(['action' => 'add']); ?>",
+                cache: false,
+                method: 'POST',
+                data: {action: "getSku", brand_id: brand_id, product_id: "<?= $product->get('id'); ?>", _csrfToken: $('input[name=_csrfToken]').val()},
+                success: function (response) {
+                    if (typeof response.data != "undefined") {
+                        let sku = $("#sku");
+                        sku.val(response.data);
+                        sku.trigger('change');
+                    }
+                }
+            });
+        });
+
+        $("#sku").on('change', function(){
+            var sku_number = $(this).val();
+            for(var index in sku_variant) {
+                $(`[data-index=${index}]`)
+                    .find('.sku-number')
+                    .val(sku_number + Number(sku_variant[index].join('')).toString(16).toUpperCase());
+            }
+        })
+
         $('#price-sale').trigger('change');
         //default for edit
         $('.select2.select-attribute').select2();
@@ -825,7 +851,7 @@ echo $this->Html->script([
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Brand'); ?>*</label>
                                 <div class="col-xl-8">
-                                    <?php echo $this->Form->control('brand_id', ['label' => false, 'class' => $default_class, 'disabled' => true]);?>
+                                    <?php echo $this->Form->control('brand_id', ['label' => false, 'empty' => 'Pilih Brand', 'class' => $default_class, 'disabled' => !empty($product->get('brand_id'))]);?>
                                 </div>
                             </div>
 
