@@ -39,12 +39,15 @@ class ProductOptionPricesTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-//        $this->addBehavior('Elastic/ActivityLogger.Logger', [
-//            'scope' => [
-//                'ProductOptionPrices'
-//            ],
-//            'issuer' => \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
-//        ]);
+
+        $this->addBehavior('Elastic/ActivityLogger.Logger', [
+            'scope' => [
+                'ProductOptionPrices'
+            ],
+            'issuer' => \Cake\Core\Configure::read('User') ?
+                \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
+                : null
+        ]);
 
 
         $this->belongsTo('Products', [

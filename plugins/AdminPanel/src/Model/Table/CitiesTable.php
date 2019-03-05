@@ -41,14 +41,14 @@ class CitiesTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        //sample activity logs
-//        $this->addBehavior('Elastic/ActivityLogger.Logger', [
-//            'scope' => [
-//                'Cities'
-//            ],
-//            'issuer' => \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
-//        ]);
-        //sample activity logs
+        $this->addBehavior('Elastic/ActivityLogger.Logger', [
+            'scope' => [
+                'Cities'
+            ],
+            'issuer' => \Cake\Core\Configure::read('User') ?
+                \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
+                : null
+        ]);
 
 
         $this->belongsTo('Provinces', [

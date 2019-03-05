@@ -56,12 +56,15 @@ class ProductsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-//        $this->addBehavior('Elastic/ActivityLogger.Logger', [
-//            'scope' => [
-//                'Products'
-//            ],
-//            'issuer' => \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
-//        ]);
+
+        $this->addBehavior('Elastic/ActivityLogger.Logger', [
+            'scope' => [
+                'Products'
+            ],
+            'issuer' => \Cake\Core\Configure::read('User') ?
+                \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
+                : null
+        ]);
 
         $this->belongsTo('ProductStockStatuses', [
             'foreignKey' => 'product_stock_status_id',
