@@ -1324,6 +1324,174 @@ class ProductsController extends AppController
                         }
                     }
 
+                    if ($option_prices = $this->request->getData('ProductOptionPrices')) {
+                        $idx = 1;
+
+
+                        foreach($option_prices as $key => $price) {
+
+                            $price['idx'] = $idx;
+                            $getOptionPrice = $this
+                                ->Products
+                                ->ProductOptionPrices
+                                ->find()
+                                ->where([
+                                    'product_id' => $product->get('id'),
+                                    'idx' => $idx
+                                ])
+                                ->first();
+
+                            $OptionPriceEntity = !empty($getOptionPrice) ? $getOptionPrice : $this
+                                ->Products
+                                ->ProductOptionPrices
+                                ->newEntity(['product_id' => $product->get('id')]);
+
+                            $this
+                                ->Products
+                                ->ProductOptionPrices
+                                ->patchEntity($OptionPriceEntity, $price);
+
+                            $saveOptionPrice = $this
+                                ->Products
+                                ->ProductOptionPrices
+                                ->save($OptionPriceEntity);
+
+                            if (!$saveOptionPrice) {
+                                $response['error']['ProductOptionPrices'][$key] = $OptionPriceEntity->getErrors();
+                                //debug($response);exit;
+                                //debug($option_prices);exit;
+                                //debug($OptionPriceEntity->getErrors());
+                                //exit;
+                            }
+
+                            $idx++;
+                        }
+
+                        /**
+                         * @var \AdminPanel\Model\Entity\ProductOptionPrice[] $getOptionPriceEntity
+                         */
+                        $getOptionPriceEntity = $this
+                            ->Products
+                            ->ProductOptionPrices
+                            ->find()
+                            ->where([
+                                'product_id' => $product->get('id'),
+                            ]);
+
+                        /**
+                         * @var \AdminPanel\Model\Entity\ProductOptionPrice[] $OptionPriceEntity
+                         */
+                        $OptionPriceEntity = [];
+                        foreach($getOptionPriceEntity as $val) {
+                            $OptionPriceEntity[$val->get('idx')] = $val;
+                        }
+                        unset($getOptionPriceEntity);
+
+
+
+
+                        if ($option_value_lists = $this->request->getData('ProductOptionValueLists')) {
+                            $idx = count($OptionPriceEntity); //1;
+                            //debug($option_value_lists);exit;
+                            foreach($option_value_lists as $k => $lists) {
+
+                                foreach($lists as $option_id => $option_value_id) {
+                                    if (!isset($OptionPriceEntity[$idx])) continue;
+
+                                    $getValueList = $this
+                                        ->ProductOptionValueLists
+                                        ->find()
+                                        ->where([
+                                            'product_option_price_id' => $OptionPriceEntity[$idx]->get('id'),
+                                            'option_id' => $option_id
+                                        ])
+                                        ->first();
+
+
+                                    $OptionValueListEntity = !empty($getValueList) ? $getValueList : $this
+                                        ->ProductOptionValueLists
+                                        ->newEntity([
+                                            'product_option_price_id' => $OptionPriceEntity[$idx]->get('id'),
+                                            'option_id' => $option_id
+                                        ]);
+
+                                    $this
+                                        ->ProductOptionValueLists
+                                        ->patchEntity($OptionValueListEntity, ['option_value_id' => $option_value_id]);
+
+                                    $this
+                                        ->ProductOptionValueLists
+                                        ->save($OptionValueListEntity);
+
+
+                                }
+                                $idx++;
+                            }
+                        }
+
+                        if ($option_stocks = $this->request->getData('ProductOptionStocks')) {
+                            $idx = 1;
+                            foreach($option_stocks as $key => $stock) {
+
+                                if (isset($stock['branches'])) {
+                                    foreach($stock['branches'] as $branch) {
+                                        if (!isset($OptionPriceEntity[$idx])) continue;
+
+                                        $getOptionStock = $this
+                                            ->Products
+                                            ->ProductOptionStocks
+                                            ->find();
+
+                                        if (isset($branch['id'])) {
+                                            $getOptionStock
+                                                ->where([
+                                                    'id' => $branch['id']
+                                                ]);
+                                        } else {
+                                            $stock['branch_id'] = $branch['branch_id'];
+                                            $stock['stock'] = $branch['stock'];
+                                            $getOptionStock
+                                                ->where([
+                                                    'product_id' => $product->get('id'),
+                                                    'product_option_price_id' => $OptionPriceEntity[$idx]->get('id'),
+                                                    'branch_id' => $stock['branch_id']
+                                                ]);
+                                        }
+
+
+
+
+                                        $getOptionStock = $getOptionStock->first();
+
+
+                                        $OptionStockEntity = !empty($getOptionStock) ? $getOptionStock : $this
+                                            ->Products
+                                            ->ProductOptionStocks
+                                            ->newEntity([
+                                                'product_id' => $product->get('id'),
+                                                'product_option_price_id' => $OptionPriceEntity[$idx]->get('id')
+                                            ]);
+
+                                        //debug($OptionStockEntity);
+
+
+                                        $this
+                                            ->Products
+                                            ->ProductOptionStocks
+                                            ->patchEntity($OptionStockEntity, $stock, ['validate' => false]);
+
+
+                                        $this
+                                            ->Products
+                                            ->ProductOptionStocks
+                                            ->save($OptionStockEntity);
+                                    }
+                                }
+                                $idx++;
+                            }
+                        }
+                    }
+
                     $this->Flash->success(__('The product has been saved.'));
 
                 }

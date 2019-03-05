@@ -176,6 +176,8 @@ echo $this->Html->script([
             });
         }
 
+
+
         
 
         /*var optbranchs = getList();
@@ -185,6 +187,25 @@ echo $this->Html->script([
 
         var optbranchs, optvalues; //initial on first
         var dropzones = [];
+
+        function rowCabangTemplate(y, item) {
+            var rowcabang = '<div class="m-form__group form-group row cabang-'+item+'-'+y+'">\n' +
+                '<label class="col-xl-4 col-form-label"></label>\n' +
+                '<div class="col-xl-3">\n' +
+                '<select name="ProductOptionStocks['+item+'][branches]['+y+'][branch_id]" class="form-control select2  m-input " >'+optbranchs+'</select>\t\n' +
+                '</div> \n' +
+                '<div class="col-xl-3">\n' +
+                '<input type="number" name="ProductOptionStocks['+item+'][branches]['+y+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
+                '</div>\n' +
+                '<div class="col-xl-1">\n' +
+                '<a href="javascript:void(0);" style="width:40px; height: 40px;" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-cabang" data-item="'+item+'" data-row="'+y+'"><i class="la la-minus"></i></a>\n' +
+                '</div> \n' +
+                '<div>';
+
+            $('.multi-cabang-'+item).append(rowcabang);
+        }
+
+
         async function initial() {
             optbranchs = await getList();
             optvalues = await getOptionValue();
@@ -357,20 +378,7 @@ echo $this->Html->script([
                     var y = 1;
                     $('.add-cabang').off('click').on('click',function() {
                         var item = $(this).data('item');
-                        var rowcabang = '<div class="m-form__group form-group row cabang-'+item+'-'+y+'">\n' +
-                            '<label class="col-xl-4 col-form-label"></label>\n' +
-                            '<div class="col-xl-3">\n' +
-                            '<select name="ProductOptionStocks['+item+'][branches]['+y+'][branch_id]" class="form-control select2  m-input " >'+optbranchs+'</select>\t\n' +
-                            '</div> \n' +
-                            '<div class="col-xl-3">\n' +
-                            '<input type="number" name="ProductOptionStocks['+item+'][branches]['+y+'][stock]"  class="form-control m-input" placeholder="Stok">\n' +
-                            '</div>\n' +
-                            '<div class="col-xl-1">\n' +
-                            '<a href="javascript:void(0);" style="width:40px; height: 40px;" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-cabang" data-item="'+item+'" data-row="'+y+'"><i class="la la-minus"></i></a>\n' +
-                            '</div> \n' +
-                            '<div>';
-
-                        $('.multi-cabang-'+item).append(rowcabang);
+                        rowCabangTemplate(y, item);
 
                         $('.remove-cabang').off('click').on('click',function() {
                             var items = $(this).data('item');
@@ -419,7 +427,7 @@ echo $this->Html->script([
                         removedfile: dropZoneRemoveFile,
                         sending: function(file, xhr, formData) {
                             formData.append('_csrfToken', $('input[name=_csrfToken]').val());
-                            formData.append('product_id', $('input[name=id]').val());
+                            formData.append('product_id', '<?= $product->get('id'); ?>');
                             formData.append('idx', $(file.previewElement).parents('.product-variant-item').attr('data-index'));
 
                         }
@@ -648,6 +656,21 @@ echo $this->Html->script([
                 formData.append('idx', '0');
 
             }
+        });
+
+        var y = 1;
+        $('.add-cabang').on('click',function() {
+            var item = $(this).data('item');
+
+            rowCabangTemplate(y, item);
+
+            $('.remove-cabang').off('click').on('click',function() {
+                var items = $(this).data('item');
+                var row = $(this).data('row');
+                $('div').remove('.cabang-'+items+'-'+row);
+            });
+            $('.select2').select2();
+            y++;
         });
 
 

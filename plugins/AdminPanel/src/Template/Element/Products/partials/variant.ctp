@@ -105,6 +105,7 @@
                     </div>
                     <?php endif; ?>
                     <?php endforeach; ?>
+                    <div class="multi-cabang-<?= $key; ?>"></div>
                 </div>
                 <div class="col-xl-4">
                     <div class="form-group m-form__group row">
