@@ -1155,6 +1155,73 @@ class ProductsController extends AppController
                 $this->Products->patchEntity($product, $getData, ['validate' => false]);
                 if ($this->Products->save($product)) {
 
+
+                    //processing save ProductMetaTags
+                    $getMetaTag = $this->Products->ProductMetaTags->find()
+                        ->where([
+                            'product_id' => $product->get('id')
+                        ])
+                        ->first();
+
+                    $metaTagEntity = !empty($getMetaTag) ?
+                        $getMetaTag :
+                        $this
+                            ->Products
+                            ->ProductMetaTags
+                            ->newEntity(['product_id' => $product->get('id')]);
+
+                    $this
+                        ->Products
+                        ->ProductMetaTags
+                        ->patchEntity($metaTagEntity, $this->request->getData('ProductMetaTags'));
+
+                    $this
+                        ->Products
+                        ->ProductMetaTags
+                        ->save($metaTagEntity);
+
+                    //product tags
+                    if ($product_tags = $this->request->getData('ProductTags')) {
+                        /**
+                         * @var \AdminPanel\Model\Entity\ProductTag[] $getProductTag
+                         */
+                        $getProductTag = $this->Products->ProductTags->find()
+                            ->where([
+                                'product_id' => $product->get('id')
+                            ]);
+
+                        //remove exists if not in request
+                        foreach($getProductTag as $tags) {
+                            if (!in_array($tags->get('tag_id'), $product_tags)) {
+                                $this->Products->ProductTags->delete($tags);
+                            } else {
+                                $key = array_search($tags->get('tag_id'), $product_tags);
+                                if ($key >= 0) {
+                                    unset($product_tags[$key]);
+                                }
+                            }
+                        }
+                        foreach($product_tags as $tag_id) {
+                            $productTagEntity = $this->Products->ProductTags->newEntity(['product_id' => $product->get('id')]);
+                            if (!is_numeric($tag_id)) {
+                                //save new data to tags and product_tags
+                                $tagEntity = $this->Tags->newEntity(['name' => $tag_id]);
+                                if ($this->Tags->save($tagEntity)) {
+                                    $tag_id = $tagEntity->get('id');
+                                } else {
+                                    $tag_id = null;
+                                }
+
+                            }
+                            if ($tag_id) {
+                                $this->Products->ProductTags->patchEntity($productTagEntity, ['tag_id' => $tag_id]);
+                                $this->Products->ProductTags->save($productTagEntity);
+                            }
+
+
+                        }
+                    }
+
                     //save product to attribute
                     if ($attributes = $this->request->getData('ProductToAttributes')) {
 
@@ -1257,7 +1324,7 @@ class ProductsController extends AppController
                         }
                     }
 
-
+                    $this->Flash->success(__('The product has been saved.'));
 
                 }
             }
@@ -1402,7 +1469,7 @@ class ProductsController extends AppController
             //debug($list_options);
         //debug($get_product_option_prices);
         //exit;
-        
+
 
 
         $this->set(compact(

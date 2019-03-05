@@ -55,7 +55,10 @@ echo $this->Html->script([
         formEl.submit(function(e) {
             e.preventDefault();
             ajaxRequest.post(formEl.attr('action'), formEl.find(':input'), function(data, saved) {
-                console.log(data, saved);
+                if (data.success) {
+                    console.log(data, saved);
+                    location.href = '<?= $this->Url->build(['action' => 'index']); ?>';
+                }
             });
         });
 
