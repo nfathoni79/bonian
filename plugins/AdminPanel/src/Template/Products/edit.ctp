@@ -673,6 +673,36 @@ echo $this->Html->script([
             y++;
         });
 
+        $('.remove-row').on('click', function() {
+            var id_price = $(this).attr('data-option-price');
+            if(id_price) {
+                console.log(id_price);
+                var item = $(this).data('item');
+                $('div').remove('.item-'+item);
+                var total = $('.m-accordion__item').length;
+                if (total == 0) {
+                    $("input[name='ShippingOption[]']").attr('disabled', false);
+                    $("input[name='options[]']").attr('disabled', false);
+                }
+
+                reindexProduct(formEl);
+                //remove dropzone index
+                for(var z in dropzones) {
+                    if (dropzones[z].index == item) {
+                        dropzones.splice(z, 1);
+                    }
+                }
+                console.log(dropzones);
+
+                var elementDeletePrice = $('<input/>');
+                elementDeletePrice.attr('name', 'OptionPriceToDelete[]')
+                    .attr('value', id_price)
+                    .attr('type', 'hidden');
+                formEl.append(elementDeletePrice);
+
+            }
+        });
+
 
 
     })
@@ -772,7 +802,7 @@ echo $this->Html->script([
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <div class="form-group m-form__group row">
-                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                <?php /*<div class="col-lg-4 col-md-9 col-sm-12">
                                     <?= $this->Form->select('parent', $parent_categories, ['id' => 'level1', 'class' => 'form-control product-category', 'size' => 7, 'multiple' => 1]); ?>
                                 </div>
 
@@ -782,7 +812,13 @@ echo $this->Html->script([
 
                                 <div class="col-lg-4 col-md-9 col-sm-12">
                                     <?= $this->Form->select('product_category_id', [], ['id' => 'level3', 'class' => 'form-control product-category', 'size' => 7, 'multiple' => 1]); ?>
-                                </div>
+                                </div>*/ ?>
+                                <?php foreach($product_category_path as $key => $path) : ?>
+                                    <span class="m-badge m-badge--metal m-badge--wide"><?= $path->get('name'); ?></span>
+                                    <?php if ($key + 1 < count($product_category_path)) : ?>
+                                        <span style="padding-left: 5px; padding-right: 5px;"> > </span>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
@@ -975,6 +1011,12 @@ echo $this->Html->script([
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Garansi'); ?></label>
                                 <div class="col-xl-9">
                                     <?php echo $this->Form->control('product_warranty_id', ['options' => $product_warranties, 'label' => false, 'class' => $default_class . ' select-picker']);?>
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row">
+                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Produk status'); ?></label>
+                                <div class="col-xl-8">
+                                    <?php echo $this->Form->control('product_status_id', ['options' => $productStatuses,'label' => false, 'class' => $default_class . ' select-picker']);?>
                                 </div>
                             </div>
                         </div>

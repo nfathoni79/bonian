@@ -1,7 +1,7 @@
 <?php foreach($data as $key => $val) : ++$key; ?>
 <div class="m-accordion__item product-variant-item item-<?= $key; ?>">
     <div class="m-accordion__item-head" role="tab" id="m_accordion_2_item_<?= $key; ?>_head" data-toggle="collapse" href="#m_accordion_2_item_<?= $key; ?>_body" aria-expanded="    false">
-        <span class="m-accordion__item-title">Varian Produk <a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item=<?= $key; ?>>  <i class="la la-trash"></i></a> </span>
+        <span class="m-accordion__item-title">Varian Produk <a href="javascript:void(0);" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row" data-item="<?= $key; ?>" data-option-price="<?= $val->get('id'); ?>" >  <i class="la la-trash"></i></a> </span>
         <span class="m-accordion__item-mode"></span>
     </div>
     <div class="m-accordion__item-body collapse show" id="m_accordion_2_item_<?= $key; ?>_body" class=" " role="tabpanel" aria-labelledby="m_accordion_2_item_<?= $key; ?>_head" data-parent="#m_accordion_2">

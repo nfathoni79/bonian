@@ -1022,7 +1022,8 @@ class ProductsController extends AppController
     {
         $product = $this->Products->get($id, [
             'contain' => [
-                'ProductToCourriers'
+                'ProductToCourriers',
+                'ProductStatuses'
             ]
         ]);
 
@@ -1492,6 +1493,33 @@ class ProductsController extends AppController
                         }
                     }
 
+                    if ($option_price_delete = $this->request->getData('OptionPriceToDelete')) {
+                        foreach($option_price_delete as $product_option_price_id) {
+                            //TODO using soft delete later
+                            //find entity
+                            $getProductOptionPrices = $this->Products->ProductOptionPrices->find()
+                                ->where([
+                                    'ProductOptionPrices.id' => $product_option_price_id
+                                ])
+                                ->first();
+                            if ($getProductOptionPrices) {
+                                $idx = $getProductOptionPrices->get('idx');
+                                if($this->Products->ProductOptionPrices->delete($getProductOptionPrices)) {
+                                    //delete image too
+                                    $getProductImages = $this->Products->ProductImages->find()
+                                        ->where([
+                                            'product_id' => $product->get('id'),
+                                            'idx' => $idx
+                                        ])
+                                        ->first();
+                                    if ($getProductImages) {
+                                        $this->Products->ProductImages->delete($getProductImages);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     $this->Flash->success(__('The product has been saved.'));
 
                 }
@@ -1538,6 +1566,11 @@ class ProductsController extends AppController
         foreach($productToCategories as $val) {
             array_push($product_categories, $val->get('product_category_id'));
         }
+
+        $product_category_path = $this->ProductCategories->find('path', ['for' => $product_categories[0]])
+            ->select('name')
+            ->toArray();
+
 
         $brands = $this->Products->Brands->find('list')
             ->where([
@@ -1660,7 +1693,8 @@ class ProductsController extends AppController
             'branches',
             'product_images',
             'meta_tags',
-            'product_to_courriers'
+            'product_to_courriers',
+            'product_category_path'
         ));
     }
 
