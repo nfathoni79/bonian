@@ -20,7 +20,7 @@
                                         'label' => false,
                                         'value' => $variant->get('option_value_id'),
                                         'disabled' => true,
-                                        'class' => 'form-control select2 m-input sku-prefix select-' . strtolower($variant['option']->get('name')),
+                                        'class' => 'form-control select2 select-attribute m-input sku-prefix select-' . strtolower($variant['option']->get('name')),
                                         'id' => 'ProductOptionValues' . $key . $variant['option']->get('name')
                                     ]); ?>
                         </div>
@@ -35,13 +35,14 @@
                     <div class="form-group m-form__group row">
                         <label class="col-xl-4 col-form-label">Expired</label>
                         <div class="col-xl-4">
-                            <input type="text" name="ProductOptionPrices[<?= $key; ?>][expired]" class="form-control m-input datepicker" value="<?= h($val->get('expired')->format('Y-m-d')); ?>" placeholder="Expired">
+                            <input type="text" name="ProductOptionPrices[<?= $key; ?>][expired]" class="form-control m-input datepicker" value="<?= h($val->get('expired') ? $val->get('expired')->format('Y-m-d') : ''); ?>" placeholder="Expired">
                         </div>
                     </div>
                     <div class="form-group m-form__group row">
                         <label class="col-xl-4 col-form-label">SKU *</label>
                         <div class="col-xl-5">
                             <input type="text" name="ProductOptionPrices[<?= $key; ?>][sku]" class="form-control m-input sku-number disabled" placeholder="Sku" value="<?= h($val->get('sku')); ?>" readonly="readonly">
+                            <input type="hidden" name="ProductOptionPrices[<?= $key; ?>][id]" value="<?= $val->get('id'); ?>">
                         </div>
                     </div>
                     <div class="form-group m-form__group row">
@@ -84,8 +85,12 @@
                                         'label' => false,
                                         'value' => $stock->get('branch_id'),
                                         'disabled' => true,
-                                        'class' => 'form-control select2 m-input',
+                                        'class' => 'form-control select2 select-attribute m-input',
                                     ]); ?>
+                            <?= $this
+                                ->Form
+                                ->hidden('ProductOptionStocks.' . $key . '.branches.' . $k . '.id', ['value' => $stock->get('id')]);
+                            ?>
                         </div>
                         <div class="col-xl-3">
                             <input type="number" disabled value="<?= $stock['stock']; ?>" name="ProductOptionStocks[<?= $key; ?>][branches][0][stock]" class="form-control m-input" placeholder="Stok">
@@ -109,6 +114,7 @@
                                     <h3 class="m-dropzone__msg-title">Drop files disini atau click untuk upload.</h3>
                                     <span class="m-dropzone__msg-desc">Upload sampai 10 file</span>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -117,4 +123,74 @@
         </div>
     </div>
 </div>
+<?php $this->append('script'); ?>
+<script>
+    $(document).ready(function() {
+        new Dropzone("#m-dropzone<?= $key; ?>", {
+            url: "<?= $this->Url->build(['action' => 'upload']); ?>",
+            maxFiles: 10,
+            maxFilesize: 10, // MB
+            addRemoveLinks: true,
+            acceptedFiles: "image/*",
+            paramName: "name",
+            //autoProcessQueue: false,
+            //autoQueue: false,
+            init: function () {
+                var thisDropzone = this;
+
+                <?php if (array_key_exists($key, $product_images)) : ?>
+                <?php foreach($product_images[$key] as $k => $image) : ?>
+                <?php
+                $image_preview = [
+                    'name' => $image->get('name'),
+                    'size' => $image->get('size'),
+                    'type' => $image->get('type'),
+                    'image_id' => $image->get('id')
+                ];
+                ?>
+                var previewImage = <?= json_encode($image_preview); ?>;
+                thisDropzone.emit("addedfile", previewImage);
+                thisDropzone.emit("success", previewImage, {data: previewImage});
+                thisDropzone.emit("thumbnail", previewImage, "<?= $this->Url->build('/images/126x126/' . $image->get('name')); ?>")
+
+                $(thisDropzone.previewsContainer).find('.dz-preview').addClass('dz-processing')
+                    .addClass('dz-complete');
+                <?php endforeach; ?>
+                <?php endif; ?>
+
+            },
+            thumbnail: function (file, dataUrl) {
+                if (file.previewElement) {
+                    //$(file.previewElement.querySelectorAll('div.dz-progress')).hide()
+                    file.previewElement.classList.remove("dz-file-preview");
+                    for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                        thumbnailElement.alt = file.name;
+                        thumbnailElement.src = dataUrl;
+                    }
+
+                    return setTimeout((() => file.previewElement.classList.add("dz-image-preview")), 1);
+                }
+
+            },
+            success: function (file, response) {
+                //console.log(file, response)
+                for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                    $(thumbnailElement).attr('data-image-id', response.data.image_id)
+                        .attr('data-image-name', response.data.name);
+                }
+            },
+            maxfilesexceeded: function (file) {
+                this.removeFile(file);
+            },
+            removedfile: dropZoneRemoveFile,
+            sending: function (file, xhr, formData) {
+                formData.append('_csrfToken', $('input[name=_csrfToken]').val());
+                formData.append('product_id', '<?= $product->get('id'); ?>');
+                formData.append('idx', '<?= $key; ?>');
+
+            }
+        });
+    });
+</script>
+<?php $this->end(); ?>
 <?php endforeach; ?>

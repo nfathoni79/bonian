@@ -18,6 +18,23 @@ echo $this->Html->script([
 ?>
 <script>
     Dropzone.autoDiscover = false;
+
+    function dropZoneRemoveFile(file) {
+        if(confirm('Apakah anda yakin ingin menghapus gambar ini?')) {
+            for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= $this->Url->build(['action' => 'add']); ?>',
+                    data: {action: "removeImage", image_id: $(thumbnailElement).attr('data-image-id'), _csrfToken : $('input[name=_csrfToken]').val()},
+                    success: function (data) {
+                        $(thumbnailElement).parents('.dz-preview').remove();
+                    }
+                });
+            }
+        }
+
+    }
+
     $(document).ready(function() {
         $('.summernote').summernote({
             height: 150
@@ -26,7 +43,7 @@ echo $this->Html->script([
 
         var formEl = $("#m_form");
 
-        var url = '<?= $this->Url->build(['action' => 'validationWizard']); ?>';
+
         var url_category = '<?= $this->Url->build(['action' => 'getCategory']); ?>';
         var url_attribute = '<?= $this->Url->build(['action' => 'getAttributeAndBrand']); ?>';
         var product;
@@ -35,6 +52,13 @@ echo $this->Html->script([
 
         var ajaxRequest = new ajaxValidation(formEl);
         ajaxRequest.setblockUI('#m_wizard');
+        formEl.submit(function(e) {
+            e.preventDefault();
+            ajaxRequest.post(formEl.attr('action'), formEl.find(':input'), function(data, saved) {
+                console.log(data, saved);
+            });
+        });
+
 
 
 
@@ -522,6 +546,94 @@ echo $this->Html->script([
         });
 
         $('#price-sale').trigger('change');
+        //default for edit
+        $('.select2.select-attribute').select2();
+        var arrows;
+        if (mUtil.isRTL()) {
+            arrows = {
+                leftArrow: '<i class="la la-angle-right"></i>',
+                rightArrow: '<i class="la la-angle-left"></i>'
+            }
+        } else {
+            arrows = {
+                leftArrow: '<i class="la la-angle-left"></i>',
+                rightArrow: '<i class="la la-angle-right"></i>'
+            }
+        }
+        $('.datepicker').datepicker({
+            startDate: '-0d',
+            rtl: mUtil.isRTL(),
+            todayHighlight: true,
+            orientation: "bottom left",
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            templates: arrows
+        });
+
+        new Dropzone("#m-dropzone-parent", {
+            url: "<?= $this->Url->build(['action' => 'upload']); ?>",
+            maxFiles: 10,
+            maxFilesize: 10, // MB
+            addRemoveLinks: true,
+            acceptedFiles: "image/*",
+            paramName: "name",
+            //autoProcessQueue: false,
+            //autoQueue: false,
+            init: function () {
+                var thisDropzone = this;
+
+                <?php if (array_key_exists(0, $product_images)) : ?>
+                <?php foreach($product_images[0] as $k => $image) : ?>
+                <?php
+                $image_preview = [
+                    'name' => $image->get('name'),
+                    'size' => $image->get('size'),
+                    'type' => $image->get('type'),
+                    'image_id' => $image->get('id')
+                ];
+                ?>
+                var previewImage = <?= json_encode($image_preview); ?>;
+                thisDropzone.emit("addedfile", previewImage);
+                thisDropzone.emit("success", previewImage, {data: previewImage});
+                thisDropzone.emit("thumbnail", previewImage, "<?= $this->Url->build('/images/126x126/' . $image->get('name')); ?>")
+
+                $(thisDropzone.previewsContainer).find('.dz-preview').addClass('dz-processing')
+                    .addClass('dz-complete');
+                <?php endforeach; ?>
+                <?php endif; ?>
+
+            },
+            thumbnail: function (file, dataUrl) {
+                if (file.previewElement) {
+                    //$(file.previewElement.querySelectorAll('div.dz-progress')).hide()
+                    file.previewElement.classList.remove("dz-file-preview");
+                    for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                        thumbnailElement.alt = file.name;
+                        thumbnailElement.src = dataUrl;
+                    }
+
+                    return setTimeout((() => file.previewElement.classList.add("dz-image-preview")), 1);
+                }
+
+            },
+            success: function (file, response) {
+                //console.log(file, response)
+                for (let thumbnailElement of file.previewElement.querySelectorAll("[data-dz-thumbnail]")) {
+                    $(thumbnailElement).attr('data-image-id', response.data.image_id)
+                        .attr('data-image-name', response.data.name);
+                }
+            },
+            maxfilesexceeded: function (file) {
+                this.removeFile(file);
+            },
+            removedfile: dropZoneRemoveFile,
+            sending: function (file, xhr, formData) {
+                formData.append('_csrfToken', $('input[name=_csrfToken]').val());
+                formData.append('product_id', '<?= $product->get('id'); ?>');
+                formData.append('idx', '0');
+
+            }
+        });
 
 
 
@@ -655,7 +767,7 @@ echo $this->Html->script([
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel', 'Kata Kunci'); ?>*</label>
                                 <div class="col-xl-9">
-                                    <?php echo $this->Form->control('ProductMetaTags.keyword',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 1]);?>
+                                    <?php echo $this->Form->control('ProductMetaTags.keyword',['type' => 'textarea','value' => $meta_tags ? $meta_tags->get('keyword') : null, 'label' => false,'class' => $default_class, 'rows' => 1]);?>
                                     <span class="m-form__help">Penggunaan Kata kunci SEO wajib menggunakan "koma" contoh : kamera, kamera handphone, dll</span>
                                 </div>
                             </div>
@@ -670,7 +782,7 @@ echo $this->Html->script([
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Deskripsi SEO'); ?></label>
                                 <div class="col-xl-9">
-                                    <?php echo $this->Form->control('ProductMetaTags.description',['type' => 'textarea','label' => false,'class' => $default_class, 'rows' => 1]);?>
+                                    <?php echo $this->Form->control('ProductMetaTags.description',['type' => 'textarea', 'value' => $meta_tags ? $meta_tags->get('description') : null, 'label' => false,'class' => $default_class, 'rows' => 1]);?>
                                 </div>
                             </div>
                         </div>
@@ -753,7 +865,7 @@ echo $this->Html->script([
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Barcode'); ?></label>
                                 <div class="col-xl-8">
-                                    <?php echo $this->Form->control('barcode', ['type' => 'text','div' => false, 'label' => false,'class' => $default_class. ' numberinput']);?>
+                                    <?php echo $this->Form->control('barcode', ['type' => 'text','div' => false, 'label' => false,'class' => $default_class]);?>
                                 </div>
                             </div>
 
@@ -788,14 +900,14 @@ echo $this->Html->script([
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?>*</label>
                                 <div class="col-xl-6">
-                                    <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class . ' numberinput']);?>
+                                    <?php echo $this->Form->control('point',['type' => 'text', 'div' => false, 'label' => false,'class' => $default_class . ' numberinput']);?>
                                 </div>
                             </div>
 
                             <div class="form-group m-form__group row">
                                 <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Kode Supplier'); ?></label>
                                 <div class="col-xl-6">
-                                    <?php echo $this->Form->control('supplier_code', ['type' => 'text','div' => false, 'label' => false,'class' => $default_class. ' numberinput']);?>
+                                    <?php echo $this->Form->control('supplier_code', ['type' => 'text','div' => false, 'label' => false,'class' => $default_class]);?>
                                 </div>
                             </div>
                         </div>
@@ -839,22 +951,33 @@ echo $this->Html->script([
                     </div>
                     <div class="m-form__seperator m-form__seperator--dashed"></div>
                     <div class="row mt-3">
-                        <div class="col-xl-4">
+                        <div class="col-xl-6">
                             <div class="form-group m-form__group">
                                 <label class="col-form-label"><?= __d('AdminPanel',  'Highlight Produk'); ?></label>
                                 <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1, 'placeholder' => 'Highlight Produk']);?>
                             </div>
                         </div>
-                        <div class="col-xl-4">
-                            <div class="form-group m-form__group">
-                                <label class="col-form-label"><?= __d('AdminPanel',  'Kondisi Produk'); ?></label>
-                                <?php echo $this->Form->control('condition',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1]);?>
-                            </div>
-                        </div>
-                        <div class="col-xl-4">
+
+                        <div class="col-xl-6">
                             <div class="form-group m-form__group">
                                 <label class="col-form-label"><?= __d('AdminPanel',  'Profil Produk'); ?></label>
                                 <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1]);?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-xl-12">
+                            <h6><?= __d('AdminPanel',  'Gambar Produk'); ?></h6>
+                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+                            <div class="form-group m-form__group">
+                                <div class="form-group m-form__group">
+                                    <div class="m-dropzone dropzone m-dropzone--primary" action="#" id="m-dropzone-parent" style="min-height:190px !important;">
+                                        <div class="m-dropzone__msg dz-message needsclick">
+                                            <h3 class="m-dropzone__msg-title">Drop files disini atau click untuk upload.</h3>
+                                            <span class="m-dropzone__msg-desc">Upload sampai 10 file</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -912,7 +1035,9 @@ echo $this->Html->script([
                                 <?php echo $this->element('Products/partials/variant', [
                                         'data' => $get_product_option_prices,
                                         'dropdown' => $select_options,
-                                        'branches' => $branches
+                                        'branches' => $branches,
+                                        'product_images' => $product_images,
+                                        'product' => $product
                                 ]); ?>
                             </div>
                         </div>

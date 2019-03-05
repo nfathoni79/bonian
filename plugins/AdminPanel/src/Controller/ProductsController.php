@@ -1022,7 +1022,146 @@ class ProductsController extends AppController
         $product = $this->Products->get($id, [
             'contain' => []
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
+
+        if ($this->request->is('ajax')) {
+            $response = [];
+            $validator = new Validator();
+
+            $validator
+                ->requirePresence('name')
+                ->notBlank('name', 'tidak boleh kosong');
+
+            //$validator
+            //    ->requirePresence('title')
+            //    ->notBlank('title', 'tidak boleh kosong');
+
+            $validator
+                ->requirePresence('slug')
+                ->notBlank('slug', 'tidak boleh kosong');
+
+            $validator
+                //->requirePresence('brand_id')
+                ->notBlank('brand_id', 'tidak boleh kosong');
+
+            //$validator
+            //    ->requirePresence('condition')
+            //    ->notBlank('condition', 'tidak boleh kosong');
+
+            $meta = new Validator();
+            $meta
+                ->requirePresence('keyword')
+                ->notBlank('keyword', 'tidak boleh kosong');
+
+            $validator->addNested('ProductMetaTags', $meta);
+
+            $validator
+                ->requirePresence('model')
+                ->notBlank('model', 'tidak boleh kosong');
+
+            $validator
+                ->requirePresence('sku')
+                ->notBlank('sku', 'tidak boleh kosong')
+                ->add('sku', 'unique', [
+                    'rule' => function($value) {
+                        return $this->Products->find()
+                                ->select(['sku'])
+                                ->where(['sku' => $value])
+                                ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
+                                    return $exp->notEq('id', $this->request->getData('id'));
+                                })
+                                ->count() == 0;
+                    },
+                    'message' => 'sku sudah terdaftar'
+                ]);
+
+            //$validator
+            //    ->requirePresence('code')
+            //    ->notBlank('code', 'tidak boleh kosong');
+
+            $validator
+                ->requirePresence('price')
+                ->notBlank('price', 'tidak boleh kosong');
+
+            $validator
+                ->requirePresence('point')
+                ->notBlank('point', 'tidak boleh kosong');
+
+            $validator
+                ->requirePresence('price_sale')
+                ->notBlank('price_sale', 'tidak boleh kosong');
+
+            $validator
+                ->requirePresence('ProductToCourriers')
+                ->hasAtLeast('ProductToCourriers', 2, __d('AdminPanel', __d('AdminPanel','pilihan minimal 2 kurir')));
+
+            $productOption = new Validator();
+
+            /*$productOption
+                ->notBlank('warna', 'tidak boleh kosong');
+
+            $productOption
+                ->notBlank('ukuran', 'tidak boleh kosong');*/
+
+            //dynamic validation from table options
+            $getOption = $this->Options->find('list');
+            foreach($getOption as $option_id => $option_name) {
+                $productOption
+                    ->notBlank($option_id, 'tidak boleh kosong');
+            }
+
+            $validator->addNestedMany('ProductOptionValueLists', $productOption);
+
+            $productPrice = new Validator();
+            $productPrice
+                ->requirePresence('price')
+                ->numeric('price', 'tidak boleh kosong');
+
+            $productPrice
+                ->requirePresence('sku')
+                ->notBlank('sku', 'tidak boleh kosong');
+
+            $validator->addNestedMany('ProductOptionPrices', $productPrice);
+
+
+            $productSize = new Validator();
+            $productSize
+                ->notBlank('weight');
+
+
+            //added nested validation on branches -> 0 -> branch_id
+            $branches = new Validator();
+            $branches
+                //->requirePresence('branch_id')
+                ->notBlank('branch_id');
+            $branches
+                //->requirePresence('stock')
+                ->notBlank('stock');
+
+            $productSize->addNestedMany('branches', $branches);
+
+            $validator->addNestedMany('ProductOptionStocks', $productSize);
+
+            $error = $validator->errors($this->request->getData());
+
+            if (empty($error)) {
+                $getData = $this->request->getData();
+
+                foreach(['price', 'price_sale', 'point'] as $val) {
+                    $getData[$val] = preg_replace('/[,.]/', '', $getData[$val]);
+                }
+                $this->Products->patchEntity($product, $getData, ['validate' => false]);
+                if ($this->Products->save($product)) {
+
+                }
+            }
+
+
+
+            $response['error'] = !isset($response['error']) ? $validator->errors($this->request->getData()) : $response['error'];
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($response));
+
+        } else if ($this->request->is(['patch', 'post', 'put'])) {
             $product = $this->Products->patchEntity($product, $this->request->getData());
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
@@ -1121,6 +1260,31 @@ class ProductsController extends AppController
 
         $branches = $this->Branches->find('list')->toArray();
 
+        /**
+         * @var \AdminPanel\Model\Entity\ProductImage[] $get_product_images
+         */
+        $get_product_images = $this->Products->ProductImages->find()
+            ->where([
+                'product_id' => $product->get('id')
+            ])
+            ->toArray();
+
+        $product_images = [];
+        foreach($get_product_images as $key => $val) {
+            if (!array_key_exists($val->get('idx'), $product_images)) {
+                $product_images[$val->get('idx')] = [];
+            }
+            $product_images[$val->get('idx')][] = $val;
+        }
+
+        $meta_tags = $this->Products->ProductMetaTags->find()
+            ->where([
+                'product_id' => $product->get('id')
+            ])
+            ->first();
+
+
+
         //debug($select_options);
         //debug($get_product_option_prices);
         //exit;
@@ -1143,7 +1307,9 @@ class ProductsController extends AppController
             'get_product_option_prices',
             'list_options',
             'select_options',
-            'branches'
+            'branches',
+            'product_images',
+            'meta_tags'
         ));
     }
 
