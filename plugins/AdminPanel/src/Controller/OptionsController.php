@@ -103,6 +103,9 @@ class OptionsController extends AppController
             $option = $this->Options->patchEntity($option, $this->request->getData());
             $option->set('option_type_id', 1);
             $option->set('sort_order', 0);
+            $this->Options->setLogMessageBuilder(function () use($option){
+                return 'Manajemen Varian - penambahan option : '.$option->get('name');
+            });
             if ($this->Options->save($option)) {
                 $this->Flash->success(__('The option has been saved.'));
 
@@ -127,6 +130,9 @@ class OptionsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $option = $this->Options->patchEntity($option, $this->request->getData());
+            $this->Options->setLogMessageBuilder(function () use($option){
+                return 'Manajemen Varian - perubahan option : '.$option->get('name');
+            });
             if ($this->Options->save($option)) {
                 $this->Flash->success(__('The option has been saved.'));
 
@@ -149,6 +155,9 @@ class OptionsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $option = $this->Options->get($id);
         try {
+            $this->Options->setLogMessageBuilder(function () use($option){
+                return 'Manajemen Varian - penghapusan option : '.$option->get('name');
+            });
             if ($this->Options->delete($option)) {
                 $this->Flash->success(__('The option has been deleted.'));
             } else {

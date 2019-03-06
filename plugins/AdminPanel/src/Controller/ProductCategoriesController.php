@@ -112,6 +112,9 @@ class ProductCategoriesController extends AppController
             //debug($this->request->getData());
             //exit;
             $productCategory = $this->ProductCategories->patchEntity($productCategory, $this->request->getData());
+            $this->ProductCategories->setLogMessageBuilder(function () use($productCategory){
+                return 'Manajemen Kategori - penambahan : '.$productCategory->get('name');
+            });
             if ($this->ProductCategories->save($productCategory)) {
                 $this->Flash->success(__('The product category has been saved.'));
 
@@ -155,6 +158,9 @@ class ProductCategoriesController extends AppController
                                 $newEntity->set('name', $row[$i]);
                                 $newEntity->set('slug', strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $row[$i]))));
                                 $newEntity->set('description', '-');
+                                $this->ProductCategories->setLogMessageBuilder(function () use($newEntity){
+                                    return 'Manajemen Kategori - penambahan import  : '.$newEntity->get('name');
+                                });
                                 $this->ProductCategories->save($newEntity);
                             }
                         break;
@@ -169,6 +175,9 @@ class ProductCategoriesController extends AppController
                                 $newEntity->set('name', $row[$i]);
                                 $newEntity->set('slug', strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $row[$i]))));
                                 $newEntity->set('description', '-');
+                                $this->ProductCategories->setLogMessageBuilder(function () use($newEntity){
+                                    return 'Manajemen Kategori - penambahan import  : '.$newEntity->get('name');
+                                });
                                 $this->ProductCategories->save($newEntity);
                             }
                         break;
@@ -183,6 +192,9 @@ class ProductCategoriesController extends AppController
                                 $newEntity->set('name', $row[$i]);
                                 $newEntity->set('slug', strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $row[$i]))));
                                 $newEntity->set('description', '-');
+                                $this->ProductCategories->setLogMessageBuilder(function () use($newEntity){
+                                    return 'Manajemen Kategori - penambahan import  : '.$newEntity->get('name');
+                                });
                                 $this->ProductCategories->save($newEntity);
                             }
                         break;
@@ -209,6 +221,9 @@ class ProductCategoriesController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $productCategory = $this->ProductCategories->patchEntity($productCategory, $this->request->getData());
+            $this->ProductCategories->setLogMessageBuilder(function () use($productCategory){
+                return 'Manajemen Kategori - perubahan : '.$productCategory->get('name');
+            });
             if ($this->ProductCategories->save($productCategory)) {
                 $this->Flash->success(__('The product category has been saved.'));
 
@@ -237,6 +252,9 @@ class ProductCategoriesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $productCategory = $this->ProductCategories->get($id);
         try {
+            $this->ProductCategories->setLogMessageBuilder(function () use($productCategory){
+                return 'Manajemen Kategori - penghapusan : '.$productCategory->get('name');
+            });
             if ($this->ProductCategories->delete($productCategory)) {
                 $this->Flash->success(__('The product category has been deleted.'));
             } else {

@@ -139,6 +139,9 @@ class BrandsController extends AppController
                                 'name' => $child,
                                 'parent_id' => null
                             ]);
+                            $this->Brands->setLogMessageBuilder(function () use($brandChildEntity){
+                                return 'Manajemen Brand - penambahan : '.$brandChildEntity->get('name');
+                            });
                             $this->Brands->save($brandChildEntity);
                         }
                     }
@@ -185,6 +188,10 @@ class BrandsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $brand = $this->Brands->patchEntity($brand, $this->request->getData());
+
+            $this->Brands->setLogMessageBuilder(function () use($brand){
+                return 'Manajemen Brand - perubahan : '.$brand->get('name');
+            });
             if ($this->Brands->save($brand)) {
                 $this->Flash->success(__('The brand has been saved.'));
 
@@ -214,6 +221,9 @@ class BrandsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $brand = $this->Brands->get($id);
         try {
+            $this->Brands->setLogMessageBuilder(function () use($brand){
+                return 'Manajemen Brand - penghapusan : '.$brand->get('name');
+            });
             if ($this->Brands->delete($brand)) {
                 $this->Flash->success(__('The brand has been deleted.'));
             } else {
@@ -252,6 +262,9 @@ class BrandsController extends AppController
                             $newEntity->set('parent_id', null);
                             $newEntity->set('product_category_id', $findMainCategory->get('id'));
                             $newEntity->set('name', trim($val));
+                            $this->Brands->setLogMessageBuilder(function () use($newEntity){
+                                return 'Manajemen Brand - penambahan import : '.$newEntity->get('name');
+                            });
                             $this->Brands->save($newEntity);
                         }
                     }
