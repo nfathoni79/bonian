@@ -291,7 +291,15 @@ echo $this->Html->script([
                 //isNew.replaceWith('<option selected value="' + isNew.val() + '">' + isNew.val() + '</option>');
                 console.log('New tag: ', isNew.val());
             }
-        });
+        }).on(
+            'select2:close',
+            function () {
+                var select2SearchField = $(this).parent().find('.select2-search__field'),
+                    setfocus = setTimeout(function() {
+                        select2SearchField.focus();
+                    }, 100);
+            }
+        )
     }
 
     createAttributeValues($('#tags-0'));
