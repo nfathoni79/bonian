@@ -189,7 +189,7 @@ echo $this->Html->script([
         var dropzones = [];
 
         function rowCabangTemplate(y, item) {
-            var rowcabang = '<div class="m-form__group form-group row cabang-'+item+'-'+y+'">\n' +
+            var rowcabang = '<div class="m-form__group form-group row cabang cabang-'+item+'-'+y+'">\n' +
                 '<label class="col-xl-4 col-form-label"></label>\n' +
                 '<div class="col-xl-3">\n' +
                 '<select name="ProductOptionStocks['+item+'][branches]['+y+'][branch_id]" class="form-control select2  m-input " >'+optbranchs+'</select>\t\n' +
@@ -660,6 +660,7 @@ echo $this->Html->script([
         var count_cabang_y = 1;
         $('.add-cabang').on('click',function() {
             var item = $(this).data('item');
+            count_cabang_y = $(this).parents('.m-accordion__item-body').find('.cabang').length + 1;
             rowCabangTemplate(count_cabang_y, item);
 
             $('.remove-cabang').off('click').on('click',function() {

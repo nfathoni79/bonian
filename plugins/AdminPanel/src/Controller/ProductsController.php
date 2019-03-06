@@ -637,7 +637,7 @@ class ProductsController extends AppController
                                 foreach($option_stocks as $key => $stock) {
 
                                     if (isset($stock['branches'])) {
-                                        foreach($stock['branches'] as $branch) {
+                                        foreach($stock['branches'] as $i => $branch) {
                                             if (!isset($OptionPriceEntity[$idx])) continue;
                                             $stock['branch_id'] = $branch['branch_id'];
                                             $stock['stock'] = $branch['stock'];
@@ -666,13 +666,17 @@ class ProductsController extends AppController
                                             $this
                                                 ->Products
                                                 ->ProductOptionStocks
-                                                ->patchEntity($OptionStockEntity, $stock, ['validate' => false]);
+                                                ->patchEntity($OptionStockEntity, $stock, ['validate' => true]);
 
 
-                                            $this
+                                            $saveStock = $this
                                                 ->Products
                                                 ->ProductOptionStocks
                                                 ->save($OptionStockEntity);
+                                            
+                                            if (!$saveStock) {
+                                                $response['error']['ProductOptionStocks'][$key]['branches'][$i] = $OptionStockEntity->getErrors();
+                                            }
                                         }
                                     }
                                     $idx++;
@@ -1435,7 +1439,7 @@ class ProductsController extends AppController
                             foreach($option_stocks as $key => $stock) {
 
                                 if (isset($stock['branches'])) {
-                                    foreach($stock['branches'] as $branch) {
+                                    foreach($stock['branches'] as $i => $branch) {
                                         if (!isset($OptionPriceEntity[$idx])) continue;
 
                                         $getOptionStock = $this
@@ -1448,21 +1452,25 @@ class ProductsController extends AppController
                                                 ->where([
                                                     'id' => $branch['id']
                                                 ]);
+                                            $getOptionStock = $getOptionStock->first();
                                         } else {
                                             $stock['branch_id'] = $branch['branch_id'];
                                             $stock['stock'] = $branch['stock'];
-                                            $getOptionStock
+                                            /*$getOptionStock
                                                 ->where([
                                                     'product_id' => $product->get('id'),
                                                     'product_option_price_id' => $OptionPriceEntity[$idx]->get('id'),
                                                     'branch_id' => $stock['branch_id']
                                                 ]);
+                                            $getOptionStock = $getOptionStock->first();
+                                            */
+                                            $getOptionStock = null;
                                         }
 
 
 
 
-                                        $getOptionStock = $getOptionStock->first();
+
 
 
                                         $OptionStockEntity = !empty($getOptionStock) ? $getOptionStock : $this
@@ -1479,13 +1487,17 @@ class ProductsController extends AppController
                                         $this
                                             ->Products
                                             ->ProductOptionStocks
-                                            ->patchEntity($OptionStockEntity, $stock, ['validate' => false]);
+                                            ->patchEntity($OptionStockEntity, $stock, ['validate' => true]);
 
 
-                                        $this
+                                        $saveStock = $this
                                             ->Products
                                             ->ProductOptionStocks
                                             ->save($OptionStockEntity);
+
+                                        if (!$saveStock) {
+                                            $response['error']['ProductOptionStocks'][$key]['branches'][$i] = $OptionStockEntity->getErrors();
+                                        }
                                     }
                                 }
                                 $idx++;

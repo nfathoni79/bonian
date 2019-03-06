@@ -74,7 +74,7 @@
                     <?php if ($k == 1) : ?>
                     <div class="multi-cabang-<?= $key; ?>">
                     <?php endif; ?>
-                    <div class="m-form__group form-group row">
+                    <div class="m-form__group form-group row cabang">
                         <label class="col-xl-4 col-form-label"><?php if ($k == 0) : ?>Stock Cabang *<?php endif; ?></label>
                         <div class="col-xl-3">
                             <?= $this

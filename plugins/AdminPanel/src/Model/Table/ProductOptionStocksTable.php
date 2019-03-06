@@ -106,6 +106,8 @@ class ProductOptionStocksTable extends Table
         $rules->add($rules->existsIn(['product_option_price_id'], 'ProductOptionPrices'));
         $rules->add($rules->existsIn(['branch_id'], 'Branches'));
 
+        $rules->add($rules->isUnique(['branch_id', 'product_option_price_id'], 'cabang sudah terdaftar.'));
+
         return $rules;
     }
 
