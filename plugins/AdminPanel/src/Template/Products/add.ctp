@@ -143,6 +143,9 @@
         function renderImagePreview(element) {
             var imageRow = [];
             $('[data-dz-thumbnail]').each(function(i) {
+                if ($(this).parents('.dz-preview').hasClass('dz-error')) {
+                    return;
+                }
                 var image_id = $(this).attr('data-image-id');
                 var image_name = $(this).attr('data-image-name');
                 imageRow.push(`<div class="col-md-1 nopad text-center">
