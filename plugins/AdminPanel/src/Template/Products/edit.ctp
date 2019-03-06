@@ -536,10 +536,18 @@ echo $this->Html->script([
         }).on("change", function(e) {
             var isNew = $(this).find('[data-select2-tag="true"]');
             if(isNew.length && $.inArray(isNew.val(), $(this).val()) !== -1){
-                //isNew.replaceWith('<option selected value="' + isNew.val() + '">' + isNew.val() + '</option>');
+                isNew.replaceWith('<option selected value="' + isNew.val() + '">' + isNew.val() + '</option>');
                 console.log('New tag: ', isNew.val());
             }
-        });
+        }).on(
+            'select2:close',
+            function () {
+                var select2SearchField = $(this).parent().find('.select2-search__field'),
+                    setfocus = setTimeout(function() {
+                        select2SearchField.focus();
+                    }, 100);
+            }
+        );
 
         $("#brand-id").change(function(){
             var brand_id = $(this).val();

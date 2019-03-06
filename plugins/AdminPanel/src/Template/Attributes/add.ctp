@@ -229,7 +229,7 @@ echo $this->Html->script([
         var select = $clone.find('#tags-' + count);
 
         select.val('');
-        
+
         createAttributeValues(select);
         removeRow($clone.find('.remove-row'));
 
@@ -303,7 +303,7 @@ echo $this->Html->script([
                         select2SearchField.focus();
                     }, 100);
             }
-        )
+        );
     }
 
     createAttributeValues($('#tags-0'));
