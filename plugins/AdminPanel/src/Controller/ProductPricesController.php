@@ -311,6 +311,7 @@ class ProductPricesController extends AppController
                 unset($products[$k]);
             }
         }
+        $nasted = false;
         foreach($products as $k => $vals){
             if(!empty($vals['id'])) {
                 $productsValue
@@ -321,12 +322,16 @@ class ProductPricesController extends AppController
                         $optionPrice
                             ->notBlank('price', 'tidak boleh kosong')
                             ->decimal('price');
+                        $nasted = true;
                     }
                 }
             }
         }
 
-        $productsValue->addNestedMany('ProductOptionPrices', $optionPrice);
+        if($nasted){
+            $productsValue->addNestedMany('ProductOptionPrices', $optionPrice);
+        }
+
         $validator->addNestedMany('Products', $productsValue);
 
         $allData = $this->request->getData();
@@ -344,15 +349,17 @@ class ProductPricesController extends AppController
                     return 'Manajemen Harga - Perubahan Pada Main SKU : '.$product->get('sku');
                 });
                 if($this->Products->save($product)){
-                    foreach($vals['ProductOptionPrices'] as $k => $val){
-                        $productOptionPrices = $this->ProductOptionPrices->get($k);
-                        $productOptionPrices = $this->ProductOptionPrices->patchEntity($productOptionPrices, [
-                            'price' => $val['price']
-                        ] , ['validate' => false]);
-                        $this->ProductOptionPrices->setLogMessageBuilder(function () use($productOptionPrices){
-                            return 'Manajemen Harga - Perubahan Pada SKU : '.$productOptionPrices->get('sku');
-                        });
-                        $this->ProductOptionPrices->save($productOptionPrices);
+                    if(is_array($vals['ProductOptionPrices'])){
+                        foreach($vals['ProductOptionPrices'] as $k => $val){
+                            $productOptionPrices = $this->ProductOptionPrices->get($k);
+                            $productOptionPrices = $this->ProductOptionPrices->patchEntity($productOptionPrices, [
+                                'price' => $val['price']
+                            ] , ['validate' => false]);
+                            $this->ProductOptionPrices->setLogMessageBuilder(function () use($productOptionPrices){
+                                return 'Manajemen Harga - Perubahan Pada SKU : '.$productOptionPrices->get('sku');
+                            });
+                            $this->ProductOptionPrices->save($productOptionPrices);
+                        }
                     }
                 }
             }
