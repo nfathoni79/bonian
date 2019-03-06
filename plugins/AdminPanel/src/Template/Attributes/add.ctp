@@ -226,7 +226,11 @@ echo $this->Html->script([
             this.name = this.name.replace(/\[\d+\]/, '[' + count + ']');
         });
 
-        createAttributeValues($clone.find('#tags-' + count));
+        var select = $clone.find('#tags-' + count);
+
+        select.val('');
+        
+        createAttributeValues(select);
         removeRow($clone.find('.remove-row'));
 
         $clone.find('label').each(function() {
