@@ -93,7 +93,7 @@
                             ?>
                         </div>
                         <div class="col-xl-3">
-                            <input type="number" disabled value="<?= $stock['stock']; ?>" name="ProductOptionStocks[<?= $key; ?>][branches][0][stock]" class="form-control m-input" placeholder="Stok">
+                            <input type="number" disabled value="<?= $stock['stock']; ?>" name="ProductOptionStocks[<?= $key; ?>][branches][<?= $k; ?>][stock]" class="form-control m-input" placeholder="Stok">
                         </div>
                         <div class="col-xl-1">
                             <?php if ($k == 0) : ?>
