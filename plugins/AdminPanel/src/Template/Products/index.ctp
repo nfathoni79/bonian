@@ -232,13 +232,13 @@ echo $this->Html->script([
                         }
                     },
 
-                    {
+                    /*{
                         field: 'Products.qty',
                         title: 'Qty',
                         template: function(row) {
                             return row.qty;
                         }
-                    },
+                    },*/
 
                     {
                         field: 'ProductStockStatuses.name',
@@ -277,6 +277,14 @@ echo $this->Html->script([
                         title: 'View',
                         template: function(row) {
                             return row.view;
+                        }
+                    },
+
+                    {
+                        field: 'Products.created',
+                        title: 'Creation',
+                        template: function(row) {
+                            return row.created;
                         }
                     },
 

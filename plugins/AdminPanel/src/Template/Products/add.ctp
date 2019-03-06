@@ -89,6 +89,8 @@
             mUtil.scrollTop();
         });
 
+        
+
 
         //== Change event
         wizard.on('change', function(wizard) {
@@ -994,6 +996,13 @@
                                                 </div>
                                             </div>
 
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Barcode'); ?></label>
+                                                <div class="col-xl-8">
+                                                    <?php echo $this->Form->control('barcode', ['type' => 'text','div' => false, 'label' => false,'class' => $default_class]);?>
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <div class="col-xl-4">
                                             <div class="form-group m-form__group row">
@@ -1024,8 +1033,15 @@
 
                                             <div class="form-group m-form__group row">
                                                 <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Reward Point'); ?>*</label>
-                                                <div class="col-xl-3">
-                                                    <?php echo $this->Form->control('point',['div' => false, 'label' => false,'class' => $default_class . ' numberinput']);?>
+                                                <div class="col-xl-6">
+                                                    <?php echo $this->Form->control('point',['type' => 'text', 'div' => false, 'label' => false,'class' => $default_class . ' numberinput']);?>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-4 col-form-label"><?= __d('AdminPanel',  'Kode Supplier'); ?></label>
+                                                <div class="col-xl-6">
+                                                    <?php echo $this->Form->control('supplier_code', ['type' => 'text','div' => false, 'label' => false,'class' => $default_class]);?>
                                                 </div>
                                             </div>
                                         </div>
@@ -1061,14 +1077,25 @@
                                     </div>
 
                                     <div class="row mt-5">
-                                        <div class="col-xl-6">
+                                        <div class="col-xl-12">
                                             <h6><?= __d('AdminPanel',  'Deskripsi Produk'); ?></h6>
                                             <div class="m-form__seperator m-form__seperator--dashed"></div>
+                                        </div>
+                                        <div class="col-xl-6">
                                             <div class="form-group m-form__group">
+                                                <label class="col-form-label"><?= __d('AdminPanel',  'Highlight Produk'); ?></label>
                                                 <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1, 'placeholder' => 'Highlight Produk']);?>
                                             </div>
                                         </div>
                                         <div class="col-xl-6">
+                                            <div class="form-group m-form__group">
+                                                <label class="col-form-label"><?= __d('AdminPanel',  'Profil Produk'); ?></label>
+                                                <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1]);?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-xl-12">
                                             <h6><?= __d('AdminPanel',  'Gambar Produk'); ?></h6>
                                             <div class="m-form__seperator m-form__seperator--dashed"></div>
                                             <div class="form-group m-form__group">

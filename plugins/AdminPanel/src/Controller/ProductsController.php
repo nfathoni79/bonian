@@ -367,7 +367,7 @@ class ProductsController extends AppController
 
                     $getData = $this->request->getData();
 
-                    foreach(['price', 'price_sale'] as $val) {
+                    foreach(['price', 'price_sale', 'point'] as $val) {
                         $getData[$val] = preg_replace('/[,.]/', '', $getData[$val]);
                     }
 
@@ -673,7 +673,7 @@ class ProductsController extends AppController
                                                 ->Products
                                                 ->ProductOptionStocks
                                                 ->save($OptionStockEntity);
-                                            
+
                                             if (!$saveStock) {
                                                 $response['error']['ProductOptionStocks'][$key]['branches'][$i] = $OptionStockEntity->getErrors();
                                             }
