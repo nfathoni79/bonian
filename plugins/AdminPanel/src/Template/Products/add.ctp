@@ -60,6 +60,13 @@
                 current[len] = elem_id[0];
             }
 
+            if(wizard.getStep() === 2) {
+                let pointInput = $("#point").val();
+                if (!confirm(`setting point untuk produk ini adalah ${pointInput} apakah ingin melanjutkan?`)) {
+                    return;
+                }
+            }
+
             var self = this;
 
             ajaxRequest.post(url + '/' + wizard.getStep(), current, function(data, saved) {
