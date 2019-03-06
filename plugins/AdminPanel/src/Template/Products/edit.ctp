@@ -1020,8 +1020,26 @@ echo $this->Html->script([
                             </div>
                         </div>
 
-
                     </div>
+
+
+                    <div class="row mt-5">
+                        <div class="col-sm-12">
+                            <h6><?= __d('AdminPanel',  'Embed Video'); ?></h6>
+                        </div>
+                    </div>
+                    <div class="m-form__seperator m-form__seperator--dashed"></div>
+                    <div class="row mt-3">
+                        <div class="col-xl-12">
+                            <div class="form-group m-form__group row">
+                                <div class="col-xl-12">
+                                    <?php echo $this->Form->control('video_url', ['type' => 'text', 'div' => false, 'label' => false,'class' => $default_class]);?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
 
                     <div class="row mt-5">
                         <div class="col-sm-12">

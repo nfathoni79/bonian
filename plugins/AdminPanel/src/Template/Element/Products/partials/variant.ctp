@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     <?php foreach($val['product_option_stocks'] as $k => $stock) : ?>
-                    <?php if ($k == 1) : ?>
+                    <?php if ($k == 1) : $multi_cabang = true; ?>
                     <div class="multi-cabang-<?= $key; ?>">
                     <?php endif; ?>
                     <div class="m-form__group form-group row cabang">
@@ -101,10 +101,10 @@
                             <?php endif; ?>
                         </div>
                     </div>
-                    <?php if ($k == 1) : ?>
+                    <?php endforeach; ?>
+                    <?php if (isset($multi_cabang)) : ?>
                     </div>
                     <?php endif; ?>
-                    <?php endforeach; ?>
                     <?php if (count($val['product_option_stocks']) == 1) : ?>
                         <div class="multi-cabang-<?= $key; ?>"></div>
                     <?php endif; ?>

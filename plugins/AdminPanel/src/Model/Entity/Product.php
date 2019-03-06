@@ -30,6 +30,7 @@ use Cake\ORM\Entity;
  * @property string|null $profile
  * @property int $view
  * @property int $point
+ * @property string|null $video_url
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
@@ -83,6 +84,7 @@ class Product extends Entity
         'profile' => true,
         'view' => true,
         'point' => true,
+        'video_url' => true,
         'created' => true,
         'modified' => true,
         'product_stock_status' => true,
