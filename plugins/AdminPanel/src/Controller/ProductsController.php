@@ -797,6 +797,24 @@ class ProductsController extends AppController
         $mime = mime_content_type($file['tmp_name']);
 
         if (in_array($mime, $this->allowedFileType)) {
+
+            $size = getimagesize($file['tmp_name']);
+
+            $width = $size[0];
+            $height = $size[1];
+
+            $min_image_size = [
+                'width' => 500,
+                'height' => 500
+            ];
+
+            if ($width < $min_image_size['width'] && $height < $min_image_size['height']) {
+                $out['error'] = __d('AdminPanel', sprintf('minimal width %s dan height %s', $min_image_size['width'], $min_image_size['height']));
+                $Response = $Response->withStatus('401');
+                return $Response
+                    ->withStringBody(json_encode($out));
+            }
+
             $entity = $this->ProductImageSizes->ProductImages->newEntity();
 
             $this->ProductImageSizes->ProductImages->patchEntity($entity, $this->request->getData());

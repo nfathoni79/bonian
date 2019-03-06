@@ -69,3 +69,7 @@ input.disabled {
     color: #6f727d;
     background-color: #f4f5f8 !important;
 }
+
+.dropzone .dz-error {
+    border: 1px red dashed;
+}
