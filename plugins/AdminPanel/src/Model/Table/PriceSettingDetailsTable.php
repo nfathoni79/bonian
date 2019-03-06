@@ -39,6 +39,14 @@ class PriceSettingDetailsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Elastic/ActivityLogger.Logger', [
+            'scope' => [
+                'PriceSettingDetails'
+            ],
+            'issuer' => \Cake\Core\Configure::read('User') ?
+                \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
+                : null
+        ]);
         $this->belongsTo('PriceSettings', [
             'foreignKey' => 'price_setting_id',
             'joinType' => 'INNER',

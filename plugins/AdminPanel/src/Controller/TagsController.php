@@ -101,6 +101,9 @@ class TagsController extends AppController
         $tag = $this->Tags->newEntity();
         if ($this->request->is('post')) {
             $tag = $this->Tags->patchEntity($tag, $this->request->getData());
+            $this->Tags->setLogMessageBuilder(function () use($tag){
+                return 'Manajemen Penandaan - penambahan : '.$tag->get('name');
+            });
             if ($this->Tags->save($tag)) {
                 $this->Flash->success(__('The tag has been saved.'));
 
@@ -125,6 +128,9 @@ class TagsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tag = $this->Tags->patchEntity($tag, $this->request->getData());
+            $this->Tags->setLogMessageBuilder(function () use($tag){
+                return 'Manajemen Penandaan - perubahan : '.$tag->get('name');
+            });
             if ($this->Tags->save($tag)) {
                 $this->Flash->success(__('The tag has been saved.'));
 
@@ -147,6 +153,9 @@ class TagsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $tag = $this->Tags->get($id);
         try {
+            $this->Tags->setLogMessageBuilder(function () use($tag){
+                return 'Manajemen Penandaan - penghapusan : '.$tag->get('name');
+            });
             if ($this->Tags->delete($tag)) {
                 $this->Flash->success(__('The tag has been deleted.'));
             } else {
@@ -179,6 +188,9 @@ class TagsController extends AppController
                     $newEntity = $this->Tags->newEntity();
                     $newEntity = $this->Tags->patchEntity($newEntity, $this->request->getData());
                     $newEntity->set('name', $row[0]);
+                    $this->Tags->setLogMessageBuilder(function () use($newEntity){
+                        return 'Manajemen Penandaan - penambahan import : '.$newEntity->get('name');
+                    });
                     $this->Tags->save($newEntity);
                 }
             }

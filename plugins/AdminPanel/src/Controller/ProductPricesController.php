@@ -27,7 +27,6 @@ class ProductPricesController extends AppController
     }
 
     public function preview($id = null){
-
         if ($this->DataTable->isAjax()) {
 
             $datatable = $this->DataTable->adapter('AdminPanel.PriceSettingDetails')
@@ -38,6 +37,7 @@ class ProductPricesController extends AppController
                         'Products'
                     ],
                 ])
+                ->where(['PriceSettingDetails.price_setting_id' => $id])
                 ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
                     $orConditions = $exp->or_([
                         'Products.name LIKE' => '%' . $search .'%',
@@ -97,6 +97,9 @@ class ProductPricesController extends AppController
 //            $priceSetting = $this->PriceSettingDetails->patchEntity($priceSetting, [
 //                'status' => '2'
 //            ]);
+            $this->PriceSettingDetails->setLogMessageBuilder(function () use($priceSetting){
+                return 'Manajemen Harga - Schedule perubahan, pembatalan dari daftar list SKU : '.$priceSetting->get('sku');
+            });
             $priceSetting->set('status', 2);
             if ($this->PriceSettingDetails->save($priceSetting)) {
                 $this->Flash->success(__('The price setting details has been saved.'));
@@ -119,6 +122,9 @@ class ProductPricesController extends AppController
             $priceSetting = $this->PriceSettings->patchEntity($priceSetting, [
                 'status' => '2'
             ]);
+            $this->PriceSettings->setLogMessageBuilder(function () use($priceSetting){
+                return 'Manajemen Harga - Pembatalan schedule perubahan : '.$priceSetting->get('schedule');
+            });
             if ($this->PriceSettings->save($priceSetting)) {
 
                 $query = $this->PriceSettingDetails->query();
@@ -170,6 +176,9 @@ class ProductPricesController extends AppController
 
                 $this->PriceSettings->getConnection()->begin();
 
+                $this->PriceSettings->setLogMessageBuilder(function () use($entity){
+                    return 'Manajemen Harga - Upload schedule perubahan harga : '.$entity->get('schedule');
+                });
                 if ($this->PriceSettings->save($entity)) {
                     $idPriceSetting = $entity->get('id');
                     $data = $this->request->getData('files');
@@ -204,6 +213,9 @@ class ProductPricesController extends AppController
                                         'price' => $row[2],
                                         'status' => 0,
                                     ]);
+                                    $this->PriceSettingDetails->setLogMessageBuilder(function () use($entityDetails){
+                                        return 'Manajemen Harga - Upload schedule perubahan harga SKU : '.$entityDetails->get('sku');
+                                    });
                                     if($this->PriceSettingDetails->save($entityDetails)){
 
                                     }else{
@@ -234,6 +246,9 @@ class ProductPricesController extends AppController
                                         'status' => 0,
                                     ]);
 
+                                    $this->PriceSettingDetails->setLogMessageBuilder(function () use($entityDetails){
+                                        return 'Manajemen Harga - Upload schedule perubahan harga SKU : '.$entityDetails->get('sku');
+                                    });
                                     if($this->PriceSettingDetails->save($entityDetails)){
 
                                     }else{

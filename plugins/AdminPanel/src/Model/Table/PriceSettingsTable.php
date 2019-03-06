@@ -42,6 +42,14 @@ class PriceSettingsTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->addBehavior('Elastic/ActivityLogger.Logger', [
+            'scope' => [
+                'PriceSettings'
+            ],
+            'issuer' => \Cake\Core\Configure::read('User') ?
+                \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
+                : null
+        ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',

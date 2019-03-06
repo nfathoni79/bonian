@@ -37,6 +37,15 @@ class OptionsTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Elastic/ActivityLogger.Logger', [
+            'scope' => [
+                'Options'
+            ],
+            'issuer' => \Cake\Core\Configure::read('User') ?
+                \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
+                : null
+        ]);
+
         $this->hasMany('OptionValues', [
             'foreignKey' => 'option_id',
             'className' => 'AdminPanel.OptionValues'

@@ -44,6 +44,16 @@ class BrandsTable extends Table
 
         $this->addBehavior('Tree');
 
+        $this->addBehavior('Elastic/ActivityLogger.Logger', [
+            'scope' => [
+                'Brands'
+            ],
+            'issuer' => \Cake\Core\Configure::read('User') ?
+                \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
+                : null
+        ]);
+
+
         $this->belongsTo('ProductCategories', [
             'foreignKey' => 'product_category_id',
             'className' => 'AdminPanel.ProductCategories'
