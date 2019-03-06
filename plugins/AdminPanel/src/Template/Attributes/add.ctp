@@ -288,7 +288,7 @@ echo $this->Html->script([
         }).on("change", function(e) {
             var isNew = $(this).find('[data-select2-tag="true"]');
             if(isNew.length && $.inArray(isNew.val(), $(this).val()) !== -1){
-                //isNew.replaceWith('<option selected value="' + isNew.val() + '">' + isNew.val() + '</option>');
+                isNew.replaceWith('<option selected value="' + isNew.val() + '">' + isNew.val() + '</option>');
                 console.log('New tag: ', isNew.val());
             }
         }).on(
