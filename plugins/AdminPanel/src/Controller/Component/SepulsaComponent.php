@@ -172,7 +172,7 @@ class SepulsaComponent extends Component
      */
     public function getMobileTransaction($transaction_id)
     {
-        $this->_response = $this->makeRequest()->get("transaction/mobile/{transaction_id}.json")->getBody();
+        $this->_response = $this->makeRequest()->get("transaction/mobile/{$transaction_id}.json")->getBody();
         return $this->_getResponse();
     }
 }
