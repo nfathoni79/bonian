@@ -94,7 +94,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-products"></div>
+                <div class="m_datatable" id="table-productss"></div>
 
             </div>
         </div>
@@ -143,7 +143,7 @@ echo $this->Html->script([
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-products').mDatatable({
+            var datatable = $('#table-productss').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -190,7 +190,7 @@ echo $this->Html->script([
                     {
                         field: 'id',
                         title: '#',
-                        sortable: true,
+                        sortable: false,
                         width: 40,
                         selector: false,
                         textAlign: 'center',
@@ -201,6 +201,7 @@ echo $this->Html->script([
                     {
                         field: '#',
                         title: 'Image',
+                        sortable: false,
                         template: function(row) {
                             // return row.name;
                             var primary_image = '<img src="<?= $this->Url->build('/admin-assets/app/media/img/products/no-image.png');?>" style="width: 50px;" />';

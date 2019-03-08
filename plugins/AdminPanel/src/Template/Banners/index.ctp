@@ -144,11 +144,7 @@ $this->Html->script([
             },
         },
         headerCallback: function(thead, data, start, end, display) {
-            thead.getElementsByTagName('th')[0].innerHTML = `
-                    <label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand">
-                        <input type="checkbox" value="" class="m-group-checkable">
-                        <span></span>
-                    </label>`;
+            thead.getElementsByTagName('th')[0].innerHTML = '<label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand"><input type="checkbox" value="" class="m-group-checkable"><span></span></label>';
         },
         columns: [
             {data: 'id'},
