@@ -32,6 +32,7 @@ class ProductDealDetail extends Entity
         'product_id' => true,
         'price_sale' => true,
         'created' => true,
+        'start_stock' => true,
         'product_deal' => true,
         'product' => true
     ];

@@ -153,17 +153,24 @@ class ProductDealsController extends AppController
                     $productDealId = $productDeal->get('id');
                     foreach($this->request->getData('ProductDealDetails') as $vals){
 
+                        $query = $this->ProductOptionStocks->find();
+                        $sisa = $query
+                            ->select(['sum' => $query->func()->sum('ProductOptionStocks.stock')])
+                            ->where(['ProductOptionStocks.product_id' => $vals['produk_id']])->toArray();
+
                         if(!empty(@$vals['idx'])){
                             $productDealDetails = $this->ProductDealDetails->get($vals['idx']);
                             $productDealDetails = $this->ProductDealDetails->patchEntity($productDealDetails, [
                                 'product_deal_id' => $productDealId,
                                 'product_id' => $vals['produk_id'],
+                                'start_stock' => $sisa[0]['sum'],
                                 'price_sale' => $vals['price_sale']
                             ] , ['validate' => false]);
                         }else{
                             $productDealDetails = $this->ProductDealDetails->newEntity([
                                 'product_deal_id' => $productDealId,
                                 'product_id' => $vals['produk_id'],
+                                'start_stock' => $sisa[0]['sum'],
                                 'price_sale' => $vals['price_sale']
                             ] , ['validate' => false]);
                         }
