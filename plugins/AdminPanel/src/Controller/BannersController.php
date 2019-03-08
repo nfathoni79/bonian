@@ -92,22 +92,6 @@ class BannersController extends AppController
         }
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Banner id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $this->viewBuilder()->setLayout('ajax');
-        $banner = $this->Banners->get($id, [
-            'contain' => ['ProductCategories']
-        ]);
-
-        $this->set('banner', $banner);
-    }
 
     /**
      * Add method
@@ -136,34 +120,6 @@ class BannersController extends AppController
     }
 
 
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Banner id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $banner = $this->Banners->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            if(!empty($this->request->getData('product_category_id'))){
-                $this->request->data['position'] = 'Product List By Category';
-            }
-            $banner = $this->Banners->patchEntity($banner, $this->request->getData());
-            if ($this->Banners->save($banner)) {
-                $this->Flash->success(__('The banner has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The banner could not be saved. Please, try again.'));
-        }
-        $productCategories = $this->Banners->ProductCategories->find('list', ['limit' => 200]);
-        $this->set(compact('banner', 'productCategories'));
-    }
 
     /**
      * Delete method
