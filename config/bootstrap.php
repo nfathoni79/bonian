@@ -198,6 +198,14 @@ Type::build('datetime')
 Type::build('timestamp')
     ->useImmutable();
 
+Log::setConfig('sepulsa', [
+    'className' => 'File',
+    'path' => LOGS,
+    'levels' => [],
+    'scopes' => ['sepulsa'],
+    'file' => 'sepulsa.log',
+]);
+
 /*
  * Custom Inflector rules, can be set to correctly pluralize or singularize
  * table, model, controller names or whatever other string is passed to the
