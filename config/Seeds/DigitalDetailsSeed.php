@@ -22,6 +22,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '1',
                 'digital_id' => '1',
+                'code' => '14',
                 'name' => 'Axis Rp 5.000',
                 'denom' => '5000',
                 'operator' => 'Axis',
@@ -31,6 +32,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '2',
                 'digital_id' => '1',
+                'code' => '55',
                 'name' => 'Axis Rp 10.000',
                 'denom' => '10000',
                 'operator' => 'Axis',
@@ -40,6 +42,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '3',
                 'digital_id' => '1',
+                'code' => '223',
                 'name' => 'Axis Rp 15.000',
                 'denom' => '15000',
                 'operator' => 'Axis',
@@ -49,6 +52,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '4',
                 'digital_id' => '1',
+                'code' => '91',
                 'name' => 'Axiata Axis Rp 25.000',
                 'denom' => '25000',
                 'operator' => 'Axis',
@@ -58,6 +62,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '5',
                 'digital_id' => '1',
+                'code' => '202',
                 'name' => 'Axis Rp 30.000',
                 'denom' => '30000',
                 'operator' => 'Axis',
@@ -67,6 +72,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '6',
                 'digital_id' => '1',
+                'code' => '92',
                 'name' => 'Axiata Axis Rp 50.000',
                 'denom' => '50000',
                 'operator' => 'Axis',
@@ -76,6 +82,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '7',
                 'digital_id' => '1',
+                'code' => '94',
                 'name' => 'Axiata Axis Rp 100.000',
                 'denom' => '100000',
                 'operator' => 'Axis',
@@ -85,6 +92,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '8',
                 'digital_id' => '1',
+                'code' => '99',
                 'name' => 'Axiata Axis Rp 200.000',
                 'denom' => '200000',
                 'operator' => 'Axis',
@@ -94,6 +102,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '9',
                 'digital_id' => '1',
+                'code' => '15',
                 'name' => 'Indosat Rp 5.000',
                 'denom' => '5000',
                 'operator' => 'Indosat',
@@ -103,6 +112,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '10',
                 'digital_id' => '1',
+                'code' => '60',
                 'name' => 'Indosat Rp 10.000',
                 'denom' => '10000',
                 'operator' => 'Indosat',
@@ -112,6 +122,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '11',
                 'digital_id' => '1',
+                'code' => '734',
                 'name' => 'Indosat Ooredoo Rp 20,000',
                 'denom' => '20000',
                 'operator' => 'Indosat',
@@ -121,6 +132,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '12',
                 'digital_id' => '1',
+                'code' => '24',
                 'name' => 'Indosat Rp 25.000',
                 'denom' => '25000',
                 'operator' => 'Indosat',
@@ -130,6 +142,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '13',
                 'digital_id' => '1',
+                'code' => '735',
                 'name' => 'Indosat Ooredoo Rp 30,000',
                 'denom' => '30000',
                 'operator' => 'Indosat',
@@ -139,6 +152,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '14',
                 'digital_id' => '1',
+                'code' => '5',
                 'name' => 'Indosat Rp 50.000',
                 'denom' => '50000',
                 'operator' => 'Indosat',
@@ -148,6 +162,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '15',
                 'digital_id' => '1',
+                'code' => '6',
                 'name' => 'Indosat Rp 100.000',
                 'denom' => '100000',
                 'operator' => 'Indosat',
@@ -157,6 +172,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '16',
                 'digital_id' => '1',
+                'code' => '62',
                 'name' => 'Indosat Rp 150.000',
                 'denom' => '150000',
                 'operator' => 'Indosat',
@@ -166,6 +182,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '17',
                 'digital_id' => '1',
+                'code' => '81',
                 'name' => 'Indosat Rp 200.000',
                 'denom' => '200000',
                 'operator' => 'Indosat',
@@ -175,6 +192,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '18',
                 'digital_id' => '1',
+                'code' => '82',
                 'name' => 'Indosat Rp 250.000',
                 'denom' => '250000',
                 'operator' => 'Indosat',
@@ -184,6 +202,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '19',
                 'digital_id' => '1',
+                'code' => '83',
                 'name' => 'Indosat Rp 500.000',
                 'denom' => '500000',
                 'operator' => 'Indosat',
@@ -193,6 +212,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '20',
                 'digital_id' => '1',
+                'code' => '84',
                 'name' => 'Indosat Rp 1.000.000',
                 'denom' => '1000000',
                 'operator' => 'Indosat',
@@ -202,6 +222,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '21',
                 'digital_id' => '1',
+                'code' => '16',
                 'name' => 'Smartfren Rp 5.000',
                 'denom' => '5000',
                 'operator' => 'Smartfren',
@@ -211,6 +232,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '22',
                 'digital_id' => '1',
+                'code' => '59',
                 'name' => 'Smartfren Rp 10.000',
                 'denom' => '10000',
                 'operator' => 'Smartfren',
@@ -220,6 +242,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '23',
                 'digital_id' => '1',
+                'code' => '71',
                 'name' => 'Smartfren Rp 20.000',
                 'denom' => '20000',
                 'operator' => 'Smartfren',
@@ -229,6 +252,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '24',
                 'digital_id' => '1',
+                'code' => '25',
                 'name' => 'Smartfren Rp 25.000',
                 'denom' => '25000',
                 'operator' => 'Smartfren',
@@ -238,6 +262,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '25',
                 'digital_id' => '1',
+                'code' => '7',
                 'name' => 'Smartfren Rp 50.000',
                 'denom' => '50000',
                 'operator' => 'Smartfren',
@@ -247,6 +272,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '26',
                 'digital_id' => '1',
+                'code' => '144',
                 'name' => 'Smartfren Rp 60,000',
                 'denom' => '60000',
                 'operator' => 'Smartfren',
@@ -256,6 +282,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '27',
                 'digital_id' => '1',
+                'code' => '8',
                 'name' => 'Smartfren Rp 100.000',
                 'denom' => '100000',
                 'operator' => 'Smartfren',
@@ -265,6 +292,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '28',
                 'digital_id' => '1',
+                'code' => '72',
                 'name' => 'Smartfren Rp 150.000',
                 'denom' => '150000',
                 'operator' => 'Smartfren',
@@ -274,6 +302,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '29',
                 'digital_id' => '1',
+                'code' => '73',
                 'name' => 'Smartfren Rp 200.000',
                 'denom' => '200000',
                 'operator' => 'Smartfren',
@@ -283,6 +312,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '30',
                 'digital_id' => '1',
+                'code' => '75',
                 'name' => 'Smartfren Rp 250.000',
                 'denom' => '250000',
                 'operator' => 'Smartfren',
@@ -292,6 +322,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '31',
                 'digital_id' => '1',
+                'code' => '143',
                 'name' => 'Smartfren Rp 300.000',
                 'denom' => '300000',
                 'operator' => 'Smartfren',
@@ -301,6 +332,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '32',
                 'digital_id' => '1',
+                'code' => '74',
                 'name' => 'Smartfren Rp 500.000',
                 'denom' => '500000',
                 'operator' => 'Smartfren',
@@ -310,6 +342,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '33',
                 'digital_id' => '1',
+                'code' => '80',
                 'name' => 'Smartfren Rp 1.000.000',
                 'denom' => '1000000',
                 'operator' => 'Smartfren',
@@ -319,6 +352,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '34',
                 'digital_id' => '1',
+                'code' => '17',
                 'name' => 'Telkomsel Rp 5.000',
                 'denom' => '5000',
                 'operator' => 'Telkomsel',
@@ -328,6 +362,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '35',
                 'digital_id' => '1',
+                'code' => '56',
                 'name' => 'Telkomsel Rp 10.000',
                 'denom' => '10000',
                 'operator' => 'Telkomsel',
@@ -337,6 +372,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '36',
                 'digital_id' => '1',
+                'code' => '108',
                 'name' => 'Telkomsel Rp 20,000',
                 'denom' => '20000',
                 'operator' => 'Telkomsel',
@@ -346,6 +382,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '37',
                 'digital_id' => '1',
+                'code' => '26',
                 'name' => 'Pulsa Telkomsel Rp25.000',
                 'denom' => '25000',
                 'operator' => 'Telkomsel',
@@ -355,6 +392,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '38',
                 'digital_id' => '1',
+                'code' => '295',
                 'name' => 'Pulsa Telkomsel Rp 40.000',
                 'denom' => '40000',
                 'operator' => 'Telkomsel',
@@ -364,6 +402,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '39',
                 'digital_id' => '1',
+                'code' => '9',
                 'name' => 'Pulsa Telkomsel Rp50.000',
                 'denom' => '50000',
                 'operator' => 'Telkomsel',
@@ -373,6 +412,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '40',
                 'digital_id' => '1',
+                'code' => '10',
                 'name' => 'Pulsa Telkomsel Rp100.000',
                 'denom' => '100000',
                 'operator' => 'Telkomsel',
@@ -382,6 +422,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '41',
                 'digital_id' => '1',
+                'code' => '103',
                 'name' => 'Pulsa Telkomsel Rp150.000',
                 'denom' => '150000',
                 'operator' => 'Telkomsel',
@@ -391,6 +432,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '42',
                 'digital_id' => '1',
+                'code' => '104',
                 'name' => 'Pulsa Telkomsel Rp200.000',
                 'denom' => '200000',
                 'operator' => 'Telkomsel',
@@ -400,6 +442,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '43',
                 'digital_id' => '1',
+                'code' => '105',
                 'name' => 'Pulsa Telkomsel Rp300.000',
                 'denom' => '300000',
                 'operator' => 'Telkomsel',
@@ -409,6 +452,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '44',
                 'digital_id' => '1',
+                'code' => '106',
                 'name' => 'Pulsa Telkomsel Rp500.000',
                 'denom' => '500000',
                 'operator' => 'Telkomsel',
@@ -418,6 +462,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '45',
                 'digital_id' => '1',
+                'code' => '107',
                 'name' => 'Pulsa Telkomsel Rp1000.000',
                 'denom' => '1000000',
                 'operator' => 'Telkomsel',
@@ -427,6 +472,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '46',
                 'digital_id' => '1',
+                'code' => '607',
                 'name' => 'Tri Rp 1.000',
                 'denom' => '1000',
                 'operator' => 'Tri',
@@ -436,6 +482,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '47',
                 'digital_id' => '1',
+                'code' => '608',
                 'name' => 'Tri Rp 2.000',
                 'denom' => '2000',
                 'operator' => 'Tri',
@@ -445,6 +492,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '48',
                 'digital_id' => '1',
+                'code' => '13',
                 'name' => 'Tri Rp 5.000',
                 'denom' => '5000',
                 'operator' => 'Tri',
@@ -454,6 +502,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '49',
                 'digital_id' => '1',
+                'code' => '195',
                 'name' => 'Tri Rp 8.000',
                 'denom' => '8000',
                 'operator' => 'Tri',
@@ -463,6 +512,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '50',
                 'digital_id' => '1',
+                'code' => '57',
                 'name' => 'Tri Rp 10.000',
                 'denom' => '10000',
                 'operator' => 'Tri',
@@ -472,6 +522,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '51',
                 'digital_id' => '1',
+                'code' => '118',
                 'name' => 'Tri Rp 15.000',
                 'denom' => '15000',
                 'operator' => 'Tri',
@@ -481,6 +532,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '52',
                 'digital_id' => '1',
+                'code' => '109',
                 'name' => 'Tri Rp 20.000',
                 'denom' => '20000',
                 'operator' => 'Tri',
@@ -490,6 +542,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '53',
                 'digital_id' => '1',
+                'code' => '122',
                 'name' => 'Tri Rp 25.000',
                 'denom' => '25000',
                 'operator' => 'Tri',
@@ -499,6 +552,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '54',
                 'digital_id' => '1',
+                'code' => '22',
                 'name' => 'Tri Rp 30.000',
                 'denom' => '30000',
                 'operator' => 'Tri',
@@ -508,6 +562,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '55',
                 'digital_id' => '1',
+                'code' => '1',
                 'name' => 'Tri Rp 50.000',
                 'denom' => '50000',
                 'operator' => 'Tri',
@@ -517,6 +572,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '56',
                 'digital_id' => '1',
+                'code' => '2',
                 'name' => 'Tri Rp 100.000',
                 'denom' => '100000',
                 'operator' => 'Tri',
@@ -526,6 +582,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '57',
                 'digital_id' => '1',
+                'code' => '85',
                 'name' => 'Tri Rp 150.000',
                 'denom' => '150000',
                 'operator' => 'Tri',
@@ -535,6 +592,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '58',
                 'digital_id' => '1',
+                'code' => '634',
                 'name' => 'Tri Rp 200.000',
                 'denom' => '200000',
                 'operator' => 'Tri',
@@ -544,6 +602,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '59',
                 'digital_id' => '1',
+                'code' => '86',
                 'name' => 'Tri Rp 300.000',
                 'denom' => '300000',
                 'operator' => 'Tri',
@@ -553,6 +612,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '60',
                 'digital_id' => '1',
+                'code' => '87',
                 'name' => 'Tri Rp 500.000',
                 'denom' => '500000',
                 'operator' => 'Tri',
@@ -562,6 +622,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '61',
                 'digital_id' => '1',
+                'code' => '18',
                 'name' => 'XL Rp 5.000',
                 'denom' => '5000',
                 'operator' => 'XL',
@@ -571,6 +632,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '62',
                 'digital_id' => '1',
+                'code' => '58',
                 'name' => 'XL Rp 10.000',
                 'denom' => '10000',
                 'operator' => 'XL',
@@ -580,6 +642,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '63',
                 'digital_id' => '1',
+                'code' => '801',
                 'name' => 'Axiata XL Rp 15.000',
                 'denom' => '15000',
                 'operator' => 'XL',
@@ -589,6 +652,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '64',
                 'digital_id' => '1',
+                'code' => '89',
                 'name' => 'Axiata XL Rp 25.000',
                 'denom' => '25000',
                 'operator' => 'XL',
@@ -598,6 +662,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '65',
                 'digital_id' => '1',
+                'code' => '201',
                 'name' => 'XL Rp 30.000',
                 'denom' => '30000',
                 'operator' => 'XL',
@@ -607,6 +672,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '66',
                 'digital_id' => '1',
+                'code' => '90',
                 'name' => 'Axiata XL Rp 50.000',
                 'denom' => '50000',
                 'operator' => 'XL',
@@ -616,6 +682,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '67',
                 'digital_id' => '1',
+                'code' => '88',
                 'name' => 'Axiata XL Rp 100.000',
                 'denom' => '100000',
                 'operator' => 'XL',
@@ -625,6 +692,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '68',
                 'digital_id' => '1',
+                'code' => '621',
                 'name' => 'Axiata XL Rp 150.000',
                 'denom' => '150000',
                 'operator' => 'XL',
@@ -634,6 +702,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '69',
                 'digital_id' => '1',
+                'code' => '95',
                 'name' => 'Axiata XL Rp 200.000',
                 'denom' => '200000',
                 'operator' => 'XL',
@@ -643,6 +712,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '70',
                 'digital_id' => '1',
+                'code' => '96',
                 'name' => 'Axiata XL Rp 300.000',
                 'denom' => '300000',
                 'operator' => 'XL',
@@ -652,6 +722,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '71',
                 'digital_id' => '1',
+                'code' => '97',
                 'name' => 'Axiata XL Rp 500.000',
                 'denom' => '500000',
                 'operator' => 'XL',
@@ -661,6 +732,7 @@ class DigitalDetailsSeed extends AbstractSeed
             [
                 'id' => '72',
                 'digital_id' => '1',
+                'code' => '98',
                 'name' => 'Axiata XL Rp 1.000.000',
                 'denom' => '1000000',
                 'operator' => 'XL',

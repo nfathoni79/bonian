@@ -231,7 +231,6 @@
                             return row.description;
                         }
                     },
-                    /**
                     {
                         field: 'ProductCategories.path',
                         title: 'Foto',
@@ -243,7 +242,6 @@
                             }
                         }
                     },
-                     **/
                     /** Action button **/
                     {
                         field: "Actions",

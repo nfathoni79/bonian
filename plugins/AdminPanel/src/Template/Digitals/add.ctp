@@ -1,29 +1,15 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface $productCategory
+ * @var \Cake\Datasource\EntityInterface $page
  */
 ?>
-<?php $this->append('script'); ?>
-<?php
-echo $this->Html->script([
-    '/admin-assets/vendors/custom/slugify/speakingurl.min',
-    '/admin-assets/vendors/custom/slugify/slugify.min',
-    '/admin-assets/vendors/custom/libs/validation-render',
-]);
-?>
-<script>
-    $(document).ready(function() {
-        $('#slug').slugify('#title'); // Type as you slug
-    })
-</script>
-<?php $this->end(); ?>
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Kategori Produk') ?>
+                    <?= __('Produk Digital') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -37,7 +23,7 @@ echo $this->Html->script([
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Kategori Produk') ?>
+                                <?= __('Produk Digital') ?>
                             </span>
                         </a>
                     </li>
@@ -45,23 +31,12 @@ echo $this->Html->script([
                         -
                     </li>
                     <li class="m-nav__item">
-                        <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
+                        <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Kategori Produk') ?>
+                                <?= __('Tambah Produk Pulsa') ?>
                             </span>
                         </a>
                     </li>
-                    <li class="m-nav__separator">
-                        -
-                    </li>
-                    <li class="m-nav__item">
-                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
-                            <span class="m-nav__link-text">
-                                <?= __('Tambah Kategori') ?>
-                            </span>
-                        </a>
-                    </li>
-
                 </ul>
             </div>
         </div>
@@ -72,7 +47,7 @@ echo $this->Html->script([
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Tambah Kategori') ?>
+                            <?= __('Tambah Produk Pulsa') ?>
                         </h3>
                     </div>
                 </div>
@@ -82,18 +57,30 @@ echo $this->Html->script([
             </div>
 
 
-            <?= $this->Form->create($productCategory,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file']); ?>
-            <div class="m-portlet__body">
-
-            <?php
+            <?= $this->Form->create($digitalDetail,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.form_mini']); ?>
+            <div class="m-portlet__body col-lg-8 ">
+                <?php
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
-                echo $this->Form->control('parent_id', ['options' => $parentProductCategories, 'empty' => true, 'class' => $default_class, 'escape' => false]);
-                echo $this->Form->control('name',['class' => $default_class, 'id' => 'title']);
-                echo $this->Form->control('slug',['class' => $default_class, 'id' => 'slug']);
-                echo $this->Form->control('description',['class' => $default_class]);
-                echo $this->Form->control('path',['class' => $default_class, 'type' => 'file']);
-            ?>
+                echo $this->Form->control('code',['class' => $default_class, 'label' => 'Kode Produk']);
+                echo $this->Form->control('name',['class' => $default_class, 'required' => false, 'label' => 'Nama Produk'],['fieldset' => false]);
+                echo $this->Form->control('denom',['type' => 'text','class' => $default_class. ' numberinput', 'required' => false, 'label' => 'Denom', 'escape' => false],['fieldset' => false]);
+                echo $this->Form->control('operator',[
+                    'class' => $default_class,
+                    'required' => false,
+                    'options' => [
+                        'Axis' => 'Axis',
+                        'Indosat'=> 'Indosat',
+                        'Smartfren'=> 'Smartfren',
+                        'Telkomsel'=> 'Telkomsel',
+                        'Tri'=> 'Tri',
+                        'XL'=> 'XL'
+                    ],
+                    'empty' => 'Pilih Operator',
+                ]);
+                echo $this->Form->control('price',['type' => 'text','class' => $default_class. ' numberinput', 'required' => false, 'label' => 'Price', 'escape' => false],['fieldset' => false]);
+                echo $this->Form->control('status',['class' => $default_class, 'required' => false, 'label' => 'Status', 'options' => ['0' => 'Close', '1' => 'Open']]);
+                ?>
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">
                 <div class="m-form__actions m-form__actions">
@@ -109,18 +96,21 @@ echo $this->Html->script([
         </div>
     </div>
 </div>
-<?php
-$this->Html->script([
-'/admin-assets/app/js/jquery.slug'
-], ['block' => true]);
-?>
-<?php $this->append('script'); ?>
 <script>
     $('select').selectpicker();
+    $(document).ready(function(){
+        $('input.numberinput').keyup(function(event) {
 
-    $("#name").slug({
-        slug:'permalink', // class of input / span that contains the generated slug
-        hide: false        // hide the text input, true by default
-    });
+            // skip for arrow keys
+            if(event.which >= 37 && event.which <= 40) return;
+
+            // format number
+            $(this).val(function(index, value) {
+                return value
+                    .replace(/\D/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ;
+            });
+        });
+    })
 </script>
-<?php $this->end(); ?>

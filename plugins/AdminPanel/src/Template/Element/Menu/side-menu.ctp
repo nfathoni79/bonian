@@ -166,24 +166,37 @@
                 ]
             ],
             [
+                'name' => 'Produk Digital',
+                'url' => '#',
+                'icon' => 'm-menu__link-icon flaticon-box',
+                'children' => [
+                    [
+                        'name' => 'Daftar Produk',
+                        'url' => ['controller' => 'Digitals', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                ]
+            ],
+            [
                 'name' => 'Penjualan',
-                    'url' => '#',
-                    'icon' => 'm-menu__link-icon flaticon-box',
-                    'children' => [
-                        [
-                            'name' => 'Daftar Pembelian',
-                            'url' => ['controller' => 'Products', 'action' => 'index'],
-                            'icon' => 'm-menu__link-bullet',
-                            'children' => []
-                        ],
-                        [
-                            'name' => 'Export Data Pembelian',
-                            'url' => ['controller' => 'Products', 'action' => 'prices'],
-                            'icon' => 'm-menu__link-bullet',
-                            'children' => []
-                        ],
-                    ]
-                ],
+                'url' => '#',
+                'icon' => 'm-menu__link-icon flaticon-box',
+                'children' => [
+                    [
+                        'name' => 'Daftar Pembelian',
+                        'url' => ['controller' => 'Products', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Export Data Pembelian',
+                        'url' => ['controller' => 'Products', 'action' => 'prices'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                ]
+            ],
             [
                 'name' => 'Promosi Penjualan',
                 'url' => '#',

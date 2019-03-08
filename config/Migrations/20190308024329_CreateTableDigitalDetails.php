@@ -18,6 +18,10 @@ class CreateTableDigitalDetails extends AbstractMigration
             'limit' => 11,
             'null' => false
         ]);
+        $table->addColumn('code', 'string', [
+            'limit' => 15,
+            'null' => false
+        ]);
         $table->addColumn('name', 'string', [
             'limit' => 50,
             'null' => false
