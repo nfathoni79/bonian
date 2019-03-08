@@ -1574,7 +1574,9 @@ class ProductsController extends AppController
         $productWeightClasses = $this->Products->ProductWeightClasses->find('list', ['limit' => 200]);
         $productStatuses = $this->Products->ProductStatuses->find('list', ['limit' => 200]);
         $courriers = $this->Courriers->find('list')->toArray();
-        $options = $this->Options->find('list')->toArray();
+        $options = $this->Options->find('list')
+            ->orderAsc('id')
+            ->toArray();
 
         $parent_categories = $this->ProductCategories->find('list')
             ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
@@ -1638,6 +1640,7 @@ class ProductsController extends AppController
             ->contain([
                 'ProductOptionStocks',
                 'ProductOptionValueLists' => [
+                    'sort' => ['Options.id' => 'ASC'],
                     'Options'
                 ]
             ])
