@@ -102,7 +102,7 @@
                         </div>
                     </div>
                     <?php endforeach; ?>
-                    <?php if (isset($multi_cabang)) : ?>
+                    <?php if (isset($multi_cabang)) : unset($multi_cabang); ?>
                     </div>
                     <?php endif; ?>
                     <?php if (count($val['product_option_stocks']) == 1) : ?>
