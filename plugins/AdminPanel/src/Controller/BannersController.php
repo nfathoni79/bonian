@@ -49,6 +49,7 @@ class BannersController extends AppController
                 $id = $vals['id'];
                 $details = $this->Banners->get($id);
                 $details->set('status', $vals['status']);
+                $details->set('url', $vals['url']);
                 $this->Banners->save($details);
             }
             $this->Flash->success(__('The banners has been saved.'));
