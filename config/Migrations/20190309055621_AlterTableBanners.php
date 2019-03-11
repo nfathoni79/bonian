@@ -16,7 +16,7 @@ class AlterTableBanners extends AbstractMigration
         $table->addColumn('url', 'string', [
             'null' => true,
             'limit' => 255,
-            'after' => 'position'
+            //'after' => 'position'
         ]);
         $table->update();
     }
