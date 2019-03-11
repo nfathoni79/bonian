@@ -8,6 +8,7 @@
 /webroot/files/ProductImages/name/*
 /webroot/images/*
 /webroot/files/ProductCategories/*
+/webroot/files/Banners/*
 
 # OS generated files #
 ######################
