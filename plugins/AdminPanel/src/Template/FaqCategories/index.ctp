@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $pages
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $faqCategories
  * nevix
  */
 ?>
@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Halaman') ?>
+                    <?= __('Faq Categories') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Halaman') ?>
+                                <?= __('Faq Categories') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Halaman') ?>
+                                <?= __('List Faq Categories') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Daftar Halaman') ?>
+                            <?= __('List Faq Categories') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('Halaman Baru') ?></span>
+                                    <span><?= __('New Faq Category') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -75,7 +75,7 @@
                             <div class="form-group m-form__group row align-items-center">
                                 <div class="col-md-8">
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Cari..." id="generalSearch">
+                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="la la-search"></i>
@@ -88,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-pages"></div>
+                <div class="m_datatable" id="table-faqCategories"></div>
 
             </div>
         </div>
@@ -132,7 +132,7 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-pages').mDatatable({
+            var datatable = $('#table-faqCategories').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -188,46 +188,10 @@
                         }
                     },
                     {
-                        field: 'Pages.title',
-                        title: 'Judul',
+                        field: 'FaqCategories.name',
+                        title: 'Name',
                         template: function(row) {
-                            return row.title;
-                        }
-                    },
-
-                     {
-                        field: 'Pages.slug',
-                        title: 'Slug URL',
-                        template: function(row) {
-                            return row.title;
-                        }
-                    },
-
-                     {
-                        field: 'Pages.Kategori',
-                        title: 'Kategori',
-                        template: function(row) {
-                            return row.title;
-                        }
-                    },
-
-                    {
-                        field: 'Pages.enable',
-                        title: 'Tampilkan',
-                        template: function(row) {
-                            var status = {
-                                0: {'title': 'Off', 'class': 'm-badge--danger'},
-                                1: {'title': 'On', 'class': ' m-badge--success'},
-                            };
-                            return '<span class="m-badge ' + status[row.enable].class + ' m-badge--wide">' + status[row.enable].title + '</span>';
-                        }
-                    },
-
-                    {
-                        field: 'Pages.created',
-                        title: 'Konten',
-                        template: function(row) {
-                            return row.created;
+                            return row.name;
                         }
                     },
 
@@ -235,11 +199,11 @@
                     {
                         field: "Actions",
                         width: 110,
-                        title: "Aksi",
+                        title: "Actions",
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {
-                            return '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
+                            return '<a href="javascript:view_data('+row.id+');" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="VIew"><i class="la la-eye"></i></a><a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
                         }
                     }
                 ]

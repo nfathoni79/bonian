@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $pages
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $faqs
  * nevix
  */
 ?>
@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Halaman') ?>
+                    <?= __('Faqs') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Halaman') ?>
+                                <?= __('Faqs') ?>
                             </span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Halaman') ?>
+                                <?= __('Daftar Faqs') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Daftar Halaman') ?>
+                            <?= __('Daftar Faqs') ?>
                         </h3>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('Halaman Baru') ?></span>
+                                    <span><?= __('Tambah Faq') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -75,7 +75,7 @@
                             <div class="form-group m-form__group row align-items-center">
                                 <div class="col-md-8">
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Cari..." id="generalSearch">
+                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="la la-search"></i>
@@ -88,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-pages"></div>
+                <div class="m_datatable" id="table-faqs"></div>
 
             </div>
         </div>
@@ -132,7 +132,7 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-pages').mDatatable({
+            var datatable = $('#table-faqs').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -188,48 +188,33 @@
                         }
                     },
                     {
-                        field: 'Pages.title',
-                        title: 'Judul',
-                        template: function(row) {
-                            return row.title;
-                        }
-                    },
-
-                     {
-                        field: 'Pages.slug',
-                        title: 'Slug URL',
-                        template: function(row) {
-                            return row.title;
-                        }
-                    },
-
-                     {
-                        field: 'Pages.Kategori',
+                        field: 'FaqCategories.name',
                         title: 'Kategori',
                         template: function(row) {
-                            return row.title;
+                            return row.faq_category.name;
                         }
                     },
 
                     {
-                        field: 'Pages.enable',
-                        title: 'Tampilkan',
+                        field: 'Faqs.judul',
+                        title: 'Judul',
+                        template: function(row) {
+                            return row.judul;
+                        }
+                    },
+
+                    {
+                        field: 'Faqs.status',
+                        title: 'Status',
                         template: function(row) {
                             var status = {
                                 0: {'title': 'Off', 'class': 'm-badge--danger'},
                                 1: {'title': 'On', 'class': ' m-badge--success'},
                             };
-                            return '<span class="m-badge ' + status[row.enable].class + ' m-badge--wide">' + status[row.enable].title + '</span>';
+                            return '<span class="m-badge ' + status[row.status].class + ' m-badge--wide">' + status[row.status].title + '</span>';
                         }
                     },
 
-                    {
-                        field: 'Pages.created',
-                        title: 'Konten',
-                        template: function(row) {
-                            return row.created;
-                        }
-                    },
 
                     /** Action button **/
                     {

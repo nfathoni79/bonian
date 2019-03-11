@@ -279,6 +279,25 @@
                 'children' => [
                 ]
             ],
+            [
+                'name' => 'FAQ',
+                'url' => '#',
+                'icon' => 'm-menu__link-icon flaticon-apps',
+                'children' => [
+                    [
+                        'name' => 'Faq Kategori',
+                        'url' => ['controller' => 'FaqCategories', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Daftar FAQ',
+                        'url' => ['controller' => 'Faqs', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                ]
+            ],
         ];
 
         echo $this->SideMenu->create('main')

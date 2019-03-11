@@ -68,26 +68,34 @@
             </div>
 
 
-            <?= $this->Form->create($page,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form']); ?>
-            <div class="m-portlet__body col-lg-8 ">
+            <?= $this->Form->create($page,['class' => 'm-login__form m-form']); ?>
             <?php
                 echo $this->Flash->render();
-                $default_class = 'form-control form-control-danger m-input m-input--air';
-                echo $this->Form->control('title',['class' => $default_class, 'label' => 'Judul']);
-                echo $this->Form->control('slug',['class' => $default_class, 'required' => false, 'label' => 'Slug URL'],['fieldset' => false]);
-                echo $this->Form->input('kategori', array('label'=>'Kategori', 'class' => 'form-control form-control-danger m-input', 'type'=>'select', 'options'=>['Satu', 'Dua']));
-                echo $this->Form->control('content',['class' => $default_class . ' froala-editor', 'required' => false, 'label' => 'Konten']);
-                ?>
-
-                <div class="input text form-group m-form__group row">
-                    <label class="col-form-label col-lg-3"></label>
+            $default_class = 'form-control form-control-danger m-input m-input--air';
+            ?>
+            <div class="m-portlet__body">
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-2 col-form-label">Judul:</label>
+                    <div class="col-lg-6">
+                        <?php  echo $this->Form->control('title',['label' => false, 'div' => false, 'class' => $default_class]);?>
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-2 col-form-label">Slug URL:</label>
+                    <div class="col-lg-6">
+                        <?php  echo $this->Form->control('slug',['label' => false, 'div' => false, 'class' => $default_class]);?>
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-2 col-form-label">Konten:</label>
                     <div class="col-lg-9">
-                        <div class="m-checkbox-list">
-                            <label class="m-checkbox">
-                                <?php echo $this->Form->checkbox('enable', ['div' => false, 'label' => false, 'hiddenField' => true, 'required' => false]); ?>  Tampilkan
-                                <span></span>
-                            </label>
-                        </div>
+                        <?php  echo $this->Form->control('content',['label' => false, 'div' => false, 'class' => $default_class. ' froala-editor']);?>
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-2 col-form-label">Konten:</label>
+                    <div class="col-lg-1">
+                        <?php echo $this->Form->control('enable',['label' => false, 'div' => false, 'class' => $default_class, 'options' => [0 => 'Off', 1 => 'On']]);?>
                     </div>
                 </div>
             </div>
