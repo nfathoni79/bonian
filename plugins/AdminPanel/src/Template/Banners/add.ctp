@@ -97,6 +97,14 @@
                         </div>
                     </div>
                     <div class="form-group m-form__group row">
+                        <label class="col-lg-2 col-form-label">Url Action </label>
+                        <div class="col-lg-4">
+                            <?php
+                                echo $this->Form->control('url', ['label' => false, 'div' => false,'empty' => true, 'required' => false, 'class' => $default_class]);
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-group m-form__group row">
                         <label class="col-lg-2 col-form-label">Gambar Banner </label>
                         <div class="col-lg-4">
                             <?php

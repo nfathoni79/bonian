@@ -164,11 +164,7 @@ $this->Html->script([
             })
         },
         headerCallback: function(thead, data, start, end, display) {
-            thead.getElementsByTagName('th')[0].innerHTML = `
-                    <label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand">
-                        <input type="checkbox" value="" class="m-group-checkable">
-                        <span></span>
-                    </label>`;
+            thead.getElementsByTagName('th')[0].innerHTML = '<label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand"><input type="checkbox" value="" class="m-group-checkable"><span></span></label>';
         },
         columns: [
             {data: 'id'},
@@ -193,12 +189,13 @@ $this->Html->script([
             },
             {
                 targets: 1,
+                width: "20%",
                 render: function (data, type, row, meta) {
                     return '<div class="form-group m-form__group row"><div class="col-xl-12"><input type="text" class="form-control fname"  name="DigitalDetails['+row.id+'][name]" value="'+row.name+'"/></div></div>';
                 }
             },
             {
-                targets: 2,
+                targets: 2, 
                 render: function (data, type, row, meta) {
                     return '<div class="form-group m-form__group row"><div class="col-xl-12"><input type="text" class="form-control"  name="DigitalDetails['+row.id+'][code]" value="'+row.code+'"/></div></div>';
                 }
@@ -211,6 +208,7 @@ $this->Html->script([
             },
             {
                 targets: 4,
+                width: "20%",
                 render: function (data, type, row, meta) {
 
                     var selection = {

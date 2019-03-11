@@ -32,6 +32,7 @@ class Banner extends Entity
         'product_category_id' => true,
         'name' => true,
         'position' => true,
+        'url' => true,
         'dir' => true,
         'size' => true,
         'type' => true,

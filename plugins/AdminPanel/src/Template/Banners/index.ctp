@@ -79,6 +79,7 @@
                             <th>Gambar</th>
                             <th>Kategori</th>
                             <th>Posisi</th>
+                            <th>Url</th>
                             <th>Tipe</th>
                             <th>Status</th>
                             <th>Aksi</th>
@@ -144,17 +145,14 @@ $this->Html->script([
             },
         },
         headerCallback: function(thead, data, start, end, display) {
-            thead.getElementsByTagName('th')[0].innerHTML = `
-                    <label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand">
-                        <input type="checkbox" value="" class="m-group-checkable">
-                        <span></span>
-                    </label>`;
+            thead.getElementsByTagName('th')[0].innerHTML = '<label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand"><input type="checkbox" value="" class="m-group-checkable"><span></span></label>';
         },
         columns: [
             {data: 'id'},
             {data: 'name'},
             {data: 'product_category_id'},
             {data: 'position'},
+            {data: 'url'},
             {data: 'type'},
             {data: 'status'},
             {data: 'id'},
@@ -188,7 +186,18 @@ $this->Html->script([
                 }
             },
             {
-                targets: 5,
+                targets: 4,
+                render: function (data, type, row, meta) {
+                    if(row.url == 'null'){
+                        return '-';
+                    }else{
+
+                        return '<div class="form-group m-form__group row"><div class="col-xl-12"><input type="text" class="form-control fname"  name="Banners['+row.id+'][url]" value="'+row.url+'"/></div></div>';
+                    }
+                }
+            },
+            {
+                targets: 6,
                 render: function (data, type, row, meta) {
                     var status = {
                         '0': 'OFF',
@@ -207,7 +216,7 @@ $this->Html->script([
                 }
             },
             {
-                targets: 6,
+                targets: 7,
                 render: function (data, type, row, meta) {
                     return '<a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="btn btn-danger btn-sm" title="Delete"><i class="la la-trash"></i> Hapus</a>';
                 }
