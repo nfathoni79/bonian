@@ -80,7 +80,7 @@ class PriceSettingsTable extends Table
 //            ->allowEmptyFile('filename', false);
 
         $validator
-            ->date('schedule')
+            ->dateTime('schedule')
             ->requirePresence('schedule', 'create')
             ->allowEmptyDate('schedule', false);
 

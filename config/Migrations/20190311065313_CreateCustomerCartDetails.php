@@ -57,7 +57,7 @@ class CreateCustomerCartDetails extends AbstractMigration
         $table->addColumn('status', 'integer', [
             'null' => false,
             'limit' => 1,
-            'comment' => '1 : available, 2 : expired, 3 : outoff stock'
+            'comment' => '1 : available, 2 : expired, 3 : outoff stock, 4: deleted'
         ]);
         $table->addColumn('created', 'datetime', [
             'null' => false,

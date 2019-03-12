@@ -144,6 +144,8 @@
                             <th>#</th>
                             <th>Produk</th>
                             <th>SKU</th>
+                            <th>Barcode</th>
+                            <th>Supplier</th>
                             <th>SKU Produk</th>
                             <th>Produk / Varian</th>
                             <th>Manajemen Harga</th>
@@ -186,7 +188,7 @@
                     <label class="col-form-label col-lg-4">Schedule</label>
                     <div class="col-lg-8">
                         <?php
-                             echo $this->Form->control('schedule',['div' => false, 'label' => false, 'class' => 'form-control', 'id' => 'm_datepicker_1', 'readonly' => 'readonly', 'placeholder' => 'Select date']);
+                             echo $this->Form->control('schedule',['div' => false, 'label' => false, 'class' => 'form-control', 'id' => 'm_datetimepicker_start', 'readonly' => 'readonly', 'placeholder' => 'Select date']);
                         ?>
                     </div>
                 </div>
@@ -212,26 +214,12 @@ $this->Html->script([
 <?php $this->append('script'); ?>
 <script>
 
-    var arrows;
-    if (mUtil.isRTL()) {
-        arrows = {
-            leftArrow: '<i class="la la-angle-right"></i>',
-            rightArrow: '<i class="la la-angle-left"></i>'
-        }
-    } else {
-        arrows = {
-            leftArrow: '<i class="la la-angle-left"></i>',
-            rightArrow: '<i class="la la-angle-right"></i>'
-        }
-    }
-    $('#m_datepicker_1').datepicker({
+    $('#m_datetimepicker_start').datetimepicker({
         startDate: '-0d',
-        rtl: mUtil.isRTL(),
         todayHighlight: true,
-        orientation: "bottom left",
-        format: 'yyyy-mm-dd',
         autoclose: true,
-        templates: arrows
+        pickerPosition: 'bottom-left',
+        format: 'yyyy-mm-dd hh:ii',
     });
     // begin first table
     var table = $('#table-prices').DataTable({
@@ -264,7 +252,7 @@ $this->Html->script([
                 if (last !== group) {
                     $(rows).eq(i).before(
                         '<tr class="group"><td colspan="10">' + group + ' - ' +api.column(1, {page: 'current'}).data()[i]+'</td></tr>',
-                        '<tr role="row" class="even"><td><label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand"><input type="checkbox" name="Products['+api.column(6, {page: 'current'}).data()[i]+'][id]" value="'+api.column(6, {page: 'current'}).data()[i]+'" class="m-checkable" id="parent-'+api.column(6, {page: 'current'}).data()[i]+'"><span></span></label></td><td>'+api.column(2, {page: 'current'}).data()[i]+'</td><td><div class="form-group m-form__group row"><span class="col-xl-12"> '+api.column(1, {page: 'current'}).data()[i]+' </span></div></td><td><div class="form-group m-form__group row"><label class="col-xl-6 col-form-label"> SKU ID '+api.column(2, {page: 'current'}).data()[i]+' : </label><div class="col-xl-6"><input type="text" class="form-control numberinput"  name="Products['+api.column(6, {page: 'current'}).data()[i]+'][price_sale]" value="'+(new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(api.column(7, {page: 'current'}).data()[i])+'"/></div></div></td></tr>',
+                        '<tr role="row" class="even"><td><label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand"><input type="checkbox" name="Products['+api.column(8, {page: 'current'}).data()[i]+'][id]" value="'+api.column(8, {page: 'current'}).data()[i]+'" class="m-checkable" id="parent-'+api.column(8, {page: 'current'}).data()[i]+'"><span></span></label></td><td>'+api.column(3, {page: 'current'}).data()[i]+'</td><td>'+api.column(4, {page: 'current'}).data()[i]+'</td><td>'+api.column(2, {page: 'current'}).data()[i]+'</td><td><div class="form-group m-form__group row"><span class="col-xl-12"> '+api.column(1, {page: 'current'}).data()[i]+' </span></div></td><td><div class="form-group m-form__group row"><label class="col-xl-6 col-form-label"> SKU ID '+api.column(2, {page: 'current'}).data()[i]+' : </label><div class="col-xl-6"><input type="text" class="form-control numberinput"  name="Products['+api.column(8, {page: 'current'}).data()[i]+'][price_sale]" value="'+(new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(api.column(9, {page: 'current'}).data()[i])+'"/></div></div></td></tr>',
                     );
                     last = group;
                 }
@@ -294,6 +282,8 @@ $this->Html->script([
             {data: 'id'},
             {data: 'product.name'},
             {data: 'product.sku'},
+            {data: 'product.barcode'},
+            {data: 'product.supplier_code'},
             {data: 'sku'},
             {data: 'sku'},
             {data: 'sku'},
@@ -303,7 +293,7 @@ $this->Html->script([
         columnDefs: [
             {
                 // hide columns by index number
-                targets: [1,2,6,7],
+                targets: [1,2,8,9],
                 visible: false,
             },
 
@@ -330,13 +320,13 @@ $this->Html->script([
                 }
             },
             {
-                targets: 3,
+                targets: 5,
                 render: function (data, type, row, meta) {
                     return row.sku;
                 }
             },
             {
-                targets: 4,
+                targets: 6,
                 render: function (data, type, row, meta) {
                     var tmp = '';
                     // $.each(row.product_option_prices, function(k,v){
@@ -352,7 +342,7 @@ $this->Html->script([
                 }
             },
             {
-                targets: 5,
+                targets: 7,
                 render: function (data, type, row, meta) {
                     var tmp = '';
                     var info = '';

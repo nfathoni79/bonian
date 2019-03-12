@@ -88,6 +88,8 @@
                             <th>#</th>
                             <th>Tanggal</th>
                             <th>SKU</th>
+                            <th>Barcode</th>
+                            <th>Supplier Code</th>
                             <th>Nama Produk</th>
                             <th>Type</th>
                             <th>Harga</th>
@@ -134,6 +136,8 @@ $this->Html->script([
             {data: 'id'},
             {data: 'price_setting.schedule'},
             {data: 'sku'},
+            {data: 'product.barcode'},
+            {data: 'product.supplier_code'},
             {data: 'product.name'},
             {data: 'product.product_option_price'},
             {data: 'price'},
@@ -150,23 +154,35 @@ $this->Html->script([
             {
                 targets: 3,
                 render: function (data, type, row, meta) {
-                    return row.product ? row.product.name : row.product_option_price.product.name;
+                    return row.barcode ? row.barcode : '-';
                 }
             },
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
-                    return row.product ? '<b>Main Produk</b>' : 'Varian Produk';
+                    return row.supplier_code ? row.supplier_code : '-';
                 }
             },
             {
                 targets: 5,
                 render: function (data, type, row, meta) {
-                    return (new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(row.price);
+                    return row.product ? row.product.name : row.product_option_price.product.name;
                 }
             },
             {
                 targets: 6,
+                render: function (data, type, row, meta) {
+                    return row.product ? '<b>Main Produk</b>' : 'Varian Produk';
+                }
+            },
+            {
+                targets: 7,
+                render: function (data, type, row, meta) {
+                    return (new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(row.price);
+                }
+            },
+            {
+                targets: 8,
                 render: function (data, type, row, meta) {
                     var status = {
                         0: {'title': 'Pending', 'class': 'm-badge--brand'},
@@ -177,7 +193,7 @@ $this->Html->script([
                 }
             },
             {
-                targets: 7,
+                targets: 9,
                 render: function (data, type, row, meta) {
                     var btnTmp = '';
                     if(row.status == '0'){

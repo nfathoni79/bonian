@@ -52,7 +52,7 @@ class PriceUpdateScheduleTaskCommand extends Command
 
         $check = $this->PriceSettings->find()
             ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
-                return $exp->gte('schedule', (new \DateTime())->format('Y-m-d'));
+                return $exp->gte('schedule', (new \DateTime())->format('Y-m-d H:i:s'));
             })
             ->where([
                 'status' => 0

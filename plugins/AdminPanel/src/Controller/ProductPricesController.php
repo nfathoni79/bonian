@@ -173,7 +173,6 @@ class ProductPricesController extends AppController
                     'status' => 0,
                 ]);
 
-
                 $this->PriceSettings->getConnection()->begin();
 
                 $this->PriceSettings->setLogMessageBuilder(function () use($entity){
@@ -195,7 +194,6 @@ class ProductPricesController extends AppController
                         if ($count == 1) {
                             continue;
                         }
-
                         /*0 : SKU , 1 : Type (Main/Varian), 2 : Price*/
                         switch (strtolower($row[1])) {
                             case 'main':
@@ -395,6 +393,8 @@ class ProductPricesController extends AppController
                     $orConditions = $exp->or_([
                         'Products.name LIKE' => '%' . $search .'%',
                         'Products.sku LIKE' => '%' . $search .'%',
+                        'Products.barcode LIKE' => '%' . $search .'%',
+                        'Products.supplier_code LIKE' => '%' . $search .'%',
                         'ProductOptionPrices.sku LIKE' => $search .'%',
                     ]);
                     return $exp
