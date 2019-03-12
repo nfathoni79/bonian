@@ -65,6 +65,30 @@ class CreateTransactions extends AbstractMigration
             'null' => true
         ]);
 
+        $table->addColumn('va_number', 'string', [
+            'default' => null,
+            'limit' => 25,
+            'null' => true
+        ]);
+
+        $table->addColumn('masked_card', 'string', [
+            'default' => null,
+            'limit' => 25,
+            'null' => true
+        ]);
+
+        $table->addColumn('card_type', 'string', [
+            'default' => null,
+            'limit' => 15,
+            'null' => true
+        ]);
+
+        $table->addColumn('approval_code', 'string', [
+            'default' => null,
+            'limit' => 20,
+            'null' => true
+        ]);
+
         $table->addColumn('created', 'datetime', [
             'default' => null
         ]);
