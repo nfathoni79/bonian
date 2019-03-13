@@ -188,7 +188,7 @@ $this->Html->script([
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return row.user.first_name;
+                    return row.user ? row.user.first_name : 'System auto update';
                 }
             },
             {
