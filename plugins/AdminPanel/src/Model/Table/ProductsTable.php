@@ -83,6 +83,10 @@ class ProductsTable extends Table
             'foreignKey' => 'brand_id',
             'className' => 'AdminPanel.Brands'
         ]);
+        $this->belongsTo('ProductWarranties', [
+            'foreignKey' => 'product_warranty_id',
+            'className' => 'AdminPanel.ProductWarranties'
+        ]);
         $this->hasMany('OrderProducts', [
             'foreignKey' => 'product_id',
             'className' => 'AdminPanel.OrderProducts'

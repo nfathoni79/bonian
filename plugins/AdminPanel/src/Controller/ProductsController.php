@@ -72,6 +72,7 @@ class ProductsController extends AppController
             $data = $this->Products->find('all')
                 ->select();
             $data->contain(['ProductStockStatuses', 'ProductWeightClasses', 'ProductStatuses', 'ProductImages']);
+            $data->where(['Products.sku != ' => 'NULL']);
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
@@ -922,6 +923,95 @@ class ProductsController extends AppController
             ->withStringBody(json_encode($respon));
     }
 
+    public function preview($id, $type = null){
+        $this->viewBuilder()->setLayout('AdminPanel.blank');
+
+        $product = $this->Products->find()
+            ->contain([
+                'ProductToCategories' => [
+                    'ProductCategories'
+                ],
+                'ProductMetaTags',
+                'Brands',
+                'ProductTags' => [
+                    'Tags'
+                ],
+                'ProductToCourriers' => [
+                    'Courriers'
+                ],
+                'ProductWarranties',
+                'ProductStockStatuses',
+                'ProductStatuses',
+                'ProductImages',
+                'ProductAttributes' => [
+                    'Attributes'
+                ],
+                'ProductOptionPrices' => [
+                    'ProductOptionValueLists' => [
+                        'Options',
+                        'OptionValues',
+                    ],
+                    'ProductOptionStocks' => [
+                        'Branches'
+                    ]
+
+                ],
+            ])
+            ->where(['Products.id' => $id])
+            ->map(function (\AdminPanel\Model\Entity\Product $row){
+                $row->keyword = @$row->product_meta_tags[0]->keyword;
+                $row->description = @$row->product_meta_tags[0]->description;
+                $row->category = $row->product_to_categories[0]->product_category->name;
+                $row->brand = $row->brand->name;
+                $tags = [];
+                foreach($row->product_tags as $k => $vals){
+                    $tags[$k] = $vals->tag->name;
+                }
+                $row->tags = $tags;
+                $couriers = [];
+                foreach($row->product_to_courriers as $k => $vals){
+                    $couriers[$k] = $vals->courrier->name;
+                }
+                $row->couriers = $couriers;
+                $row->warranty = $row->product_warranty->name;
+                $row->stock_status = $row->product_stock_status->name;
+                $row->status = $row->product_status->name;
+                $main = [];
+                foreach($row->product_images as $k => $vals){
+                    $main[$vals['idx']][] =  $vals['name'];
+                }
+                $row->main_image = $main[0];
+                foreach($row->product_option_prices as  $k=> $vals){
+                    $row->product_option_prices[$k]->image = $main[$vals['idx']];
+                }
+                $listAttribute = [];
+                foreach($row->product_attributes as $k => $vals){
+                    $listAttribute[$this->Attributes->getName($vals['attribute_name_id'])][] = $vals['attribute']['name'];
+                }
+                $row->attributes = $listAttribute;
+
+
+                unset($row->product_attributes);
+                unset($row->product_images);
+                unset($row->product_status);
+                unset($row->product_stock_status);
+                unset($row->product_warranty);
+                unset($row->product_to_courriers);
+                unset($row->product_tags);
+                unset($row->product_meta_tags);
+                unset($row->product_to_categories);
+                return $row;
+            })
+            ->first()
+            ->toArray();
+        $this->set(compact('product'));
+
+        if($type == 1){
+            $this->render('preview');
+        }else{
+            $this->render('preview_bottom');
+        }
+    }
     /**
      * Add method
      *
@@ -968,6 +1058,7 @@ class ProductsController extends AppController
         }
 
 
+        $lastId = $this->Products->find()->select('id')->last();
 
         $productStockStatuses = $this->Products->ProductStockStatuses->find('list', ['limit' => 200]);
         $productWeightClasses = $this->Products->ProductWeightClasses->find('list', ['limit' => 200]);
@@ -984,7 +1075,7 @@ class ProductsController extends AppController
         $product_tags = $this->Tags->find('list')->toArray();
         $product_warranties = $this->ProductWarranties->find('list')->toArray();
 
-        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags','product_warranties'));
+        $this->set(compact('product', 'productStockStatuses', 'productWeightClasses', 'productStatuses','courriers','options', 'parent_categories', 'product_tags','product_warranties','lastId'));
     }
 
 

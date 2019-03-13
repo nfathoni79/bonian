@@ -106,4 +106,12 @@ class AttributesTable extends Table
 
         return $rules;
     }
+
+
+    public function getName($id = null){
+        $find = $this->find()
+            ->where(['Attributes.id' => $id])
+            ->first();
+        return $find['name'];
+    }
 }

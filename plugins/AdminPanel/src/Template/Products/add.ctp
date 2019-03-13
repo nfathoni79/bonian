@@ -30,6 +30,9 @@
         var url = '<?= $this->Url->build(['action' => 'validationWizard']); ?>';
         var url_category = '<?= $this->Url->build(['action' => 'getCategory']); ?>';
         var url_attribute = '<?= $this->Url->build(['action' => 'getAttributeAndBrand']); ?>';
+        var preview_url = '<?= $this->Url->build(['action' => 'preview',($lastId->id +1),1]); ?>';
+        var preview_url_bottom = '<?= $this->Url->build(['action' => 'preview',($lastId->id +1),2]); ?>';
+
         var product;
         var sku_variant = {};
 
@@ -105,7 +108,9 @@
             if (wizard.isLastStep()) {
                 nextAction.hide();
                 renderImagePreview('#image-preview-wizard');
-                renderInputPreview('#input-preview-wizard');
+                // renderInputPreview('#input-preview-wizard');
+                $( "#preview-wizard-before-save" ).load( preview_url );
+                $( "#preview-wizard-inside" ).load( preview_url_bottom );
             } else {
                 nextAction.show();
             }
@@ -1206,6 +1211,10 @@
                                 <!--begin: Form Wizard Step 3-->
                                 <div class="m-wizard__form-step" id="m_wizard_form_step_3">
                                     <div class="row">
+                                        <div class="col-lg-12" id="preview-wizard-before-save">
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-lg-12" id="input-preview-wizard">
 
                                             <div class="form-group m-form__group">
@@ -1214,6 +1223,15 @@
 
                                                 </div>
                                             </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12" id="preview-wizard-inside">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12" id="input-preview-wizard">
                                             <div class="form-group m-form__group">
                                                 <label for="exampleInputEmail1">Status</label>
                                                 <?php echo $this->Form->control('product_status_id', ['label' => false, 'class' => $default_class . ' select-picker col-md-2']);?>
