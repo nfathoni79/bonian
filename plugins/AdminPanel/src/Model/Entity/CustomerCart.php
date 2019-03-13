@@ -1,20 +1,21 @@
 <?php
-namespace AdminPanel\Model\Entity;
+namespace ADminPanel\Model\Entity;
 
 use Cake\ORM\Entity;
 
 /**
- * CustomerBalance Entity
+ * CustomerCart Entity
  *
  * @property int $id
- * @property int|null $customer_id
- * @property float $balance
- * @property float $point
+ * @property int $customer_id
+ * @property int $status
+ * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
- * @property \AdminPanel\Model\Entity\Customer $customer
+ * @property \ADminPanel\Model\Entity\Customer $customer
+ * @property \ADminPanel\Model\Entity\CustomerCartDetail[] $customer_cart_details
  */
-class CustomerBalance extends Entity
+class CustomerCart extends Entity
 {
 
     /**
@@ -28,10 +29,10 @@ class CustomerBalance extends Entity
      */
     protected $_accessible = [
         'customer_id' => true,
-        'balance' => true,
-        'point' => true,
+        'status' => true,
+        'created' => true,
         'modified' => true,
-        'modified_point' => true,
-        'customer' => true
+        'customer' => true,
+        'customer_cart_details' => true
     ];
 }

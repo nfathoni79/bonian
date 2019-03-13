@@ -123,7 +123,7 @@ class CustomerMutationPointsTable extends Table
                 if($this->save($data)){
                     $customerBalances->query()
                         ->update()
-                        ->set(['point' => $balance])
+                        ->set(['point' => $balance, 'modified_point' => date('Y-m-d H:i:s')])
                         ->where(['id' => $getSaldo->get('id')])
                         ->execute();
                     return true;
