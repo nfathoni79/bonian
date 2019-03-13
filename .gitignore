@@ -10,6 +10,8 @@
 /webroot/files/ProductCategories/*
 /webroot/files/Banners/*
 /webroot/uploads/*
+/webroot/files/Customers/avatar/*
+/webroot/files/ProductCategories/path/*
 
 # OS generated files #
 ######################
