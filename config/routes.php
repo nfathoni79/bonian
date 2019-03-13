@@ -44,7 +44,9 @@ use Cake\Routing\Route\DashedRoute;
  *
  */
 Router::defaultRouteClass(DashedRoute::class);
-
+//Router::scope('/images', function (RouteBuilder $routes) {
+//    $routes->connect('/avatar', ['controller' => 'Images', 'action' => 'avatar']);
+//});
 Router::scope('/', function (RouteBuilder $routes) {
     // Register scoped middleware for in scopes.
     $routes->registerMiddleware('csrf', new CsrfProtectionMiddleware([
@@ -69,11 +71,13 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
-    $routes->connect('/images/:dimension/:filename',
-        ['controller' => 'Images', 'action' => 'index'],
-        ['dimension' => '\d+x\d+', 'pass' => ['dimension', 'filename', '_ext']]
-    )->setExtensions(['jpg', 'png']);
-
+    Router::scope('/images', function (RouteBuilder $routes) {
+        $routes->connect('/:dimension/:filename',
+            ['controller' => 'Images', 'action' => 'index'],
+            ['dimension' => '\d+x\d+', 'pass' => ['dimension', 'filename', '_ext']]
+        )->setExtensions(['jpg', 'png']);
+        $routes->connect('/avatar', ['controller' => 'Images', 'action' => 'avatar']);
+    });
     /**
      * Connect catchall routes for all controllers.
      *

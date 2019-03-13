@@ -4,6 +4,7 @@ namespace AdminPanel\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Utility\Text;
 use Cake\Validation\Validator;
 
 /**
@@ -54,6 +55,43 @@ class CustomersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'avatar' => [
+                // Ensure the default filesystem writer writes using
+                // our S3 adapter
+//                'filesystem' => [
+//                    'adapter' => $adapter,
+//                ],
+                'nameCallback' => function ($tableObj, $entity, $data, $field, $settings) {
+                    $ext = substr(strrchr($data['name'], '.'), 1);
+                    return str_replace('-', '', Text::uuid()) . '.' . 'jpg'; //strtolower($ext);
+                },
+                // This can also be in a class that implements
+                // the TransformerInterface or any callable type.
+                'transformer' => function (\Cake\Datasource\RepositoryInterface $table, \Cake\Datasource\EntityInterface $entity, $data, $field, $settings) {
+                    // get the extension from the file
+                    // there could be better ways to do this, and it will fail
+                    // if the file has no extension
+                    $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
+                    // Store the thumbnail in a temporary file
+                    $tmp = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
+                    // Use the Imagine library to DO THE THING
+                    $size = new \Imagine\Image\Box(40, 40);
+                    $mode = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
+                    $imagine = new \Imagine\Gd\Imagine();
+                    // Save that modified file to our temp file
+                    $imagine->open($data['tmp_name'])
+                        ->thumbnail($size, $mode)
+                        ->save($tmp);
+                    // Now return the original *and* the thumbnail
+                    return [
+                        $data['tmp_name'] => $data['name'],
+                        $tmp => 'thumbnail-' . $data['name'],
+                    ];
+                },
+            ],
+        ]);
 //
 //        $this->belongsTo('RefferalCustomers', [
 //            'foreignKey' => 'refferal_customer_id',

@@ -2,20 +2,31 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Log\Log;
+use Cake\Event\Event;
+use Cake\Event\EventManager;
+use Cake\Validation\Validator;
 
 /**
  * Images Controller
  *
  *
  * @property \AdminPanel\Model\Table\ProductImageSizesTable $ProductImageSizes
+ * @property \AdminPanel\Model\Table\CustomersTable $Customers
  */
 class ImagesController extends AppController
 {
+//    public function beforeFilter(Event $event) {
+//        if (in_array($this->request->action, ['avatar'])) {
+//            $this->getEventManager()->off($this->Csrf);
+//        }
+//    }
 
     public function initialize()
     {
         parent::initialize();
         $this->loadModel('AdminPanel.ProductImageSizes');
+        $this->loadModel('AdminPanel.Customers');
     }
 
     /**
@@ -55,6 +66,42 @@ class ImagesController extends AppController
 
             }
         }
+    }
+
+
+    public function avatar(){
+        $this->disableAutoRender();
+
+        $this->request->allowMethod('post');
+        $validator = new Validator();
+        $validator
+            ->requirePresence('avatar')
+            ->add('avatar', [
+                'validExtension' => [
+                    'rule' => ['extension',['jpg','png','image/jpeg']], // default  ['gif', 'jpeg', 'png', 'jpg']
+                    'message' => __('These files extension are allowed: .jpg, .png')
+                ]
+            ]);
+        $validator
+            ->requirePresence('customer_id')
+            ->notBlank('customer_id');
+
+        $errors = $validator->errors($this->request->getData());
+        if (empty($errors)) {
+            $entity = $this->Customers->get($this->request->getData('customer_id'));
+            $entity->set('avatar',$this->request->getData('avatar'));
+            if($this->Customers->save($entity)){
+                $response = ['is_success' => true];
+            }else{
+                $response = ['is_success' => false];
+            }
+        }else{
+
+            $response = ['is_success' => false];
+        }
+        echo json_encode($response);
+        exit;
+
     }
 
 }
