@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class AlterTableCustomers1 extends AbstractMigration
+class AlterTableCustomers2 extends AbstractMigration
 {
     /**
      * Change Method.
@@ -13,6 +13,13 @@ class AlterTableCustomers1 extends AbstractMigration
     public function change()
     {
         $table = $this->table('customers');
+
+        $table->addColumn('gender', 'string', [
+            'default' => null,
+            'null' => true,
+            'limit' => 1,
+            'after' => 'dob',
+        ]);
         $table->update();
     }
 }
