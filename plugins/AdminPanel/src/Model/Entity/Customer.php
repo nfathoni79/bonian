@@ -71,6 +71,7 @@ class Customer extends Entity
         'customer_status' => true,
         'chat_details' => true,
         'gender' => true,
+        'avatar' => true,
         'customer_addreses' => true,
         'customer_balances' => true,
         'customer_buy_group_details' => true,
