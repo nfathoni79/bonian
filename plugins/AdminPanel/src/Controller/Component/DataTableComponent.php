@@ -47,6 +47,21 @@ class DataTableComponent extends Component
         return $this;
     }
 
+    public function adapterThread($model)
+    {
+        if ($model instanceof \Cake\ORM\Query) {
+            $this->_table = $model;
+        } else if ($model instanceof \Cake\ORM\Table) {
+            $this->_table = $model->find('threaded');
+        } else {
+            $table = TableRegistry::get($model);
+            $this->_alias = $table->getAlias();
+            $this->_table = $table->find('threaded');
+        }
+
+        return $this;
+    }
+
     public function changeColumn($field, $column)
     {
         foreach($this->_columns as $key => $val) {

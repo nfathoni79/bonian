@@ -16,6 +16,7 @@ class CustomersController extends AppController
     {
         parent::initialize();
         $this->loadModel('AdminPanel.Customers');
+        $this->loadModel('AdminPanel.Generations');
         $this->loadModel('AdminPanel.CustomerMutationPoints');
         $this->loadModel('AdminPanel.CustomerMutationPointTypes');
         $this->loadModel('AdminPanel.CustomerMutationAmounts');
@@ -282,4 +283,35 @@ class CustomersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
+    public function network(){
+
+        if ($this->DataTable->isAjax()) {
+
+            $datatable = $this->DataTable->adapterThread('AdminPanel.Generations')
+                ->contain([
+                    'Customers',
+                    'Refferals'
+                ])
+//                ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+//                    $orConditions = $exp->or_([
+//                        'username LIKE' => '%' . $search .'%',
+//                    ]);
+//                    return $exp
+//                        ->add($orConditions);
+//                })
+            ;
+
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->toArray();
+
+            //set again datatable
+            $datatable->setData($result);
+            return $datatable->response();
+        }
+    }
+
 }
