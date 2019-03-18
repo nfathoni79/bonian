@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int|null $customer_id
  * @property int|null $voucher_id
+ * @property int|null $status
  * @property \Cake\I18n\FrozenTime $created
  *
  * @property \AdminPanel\Model\Entity\Customer $customer
@@ -29,6 +30,7 @@ class CustomerVoucher extends Entity
     protected $_accessible = [
         'customer_id' => true,
         'voucher_id' => true,
+        'status' => true,
         'created' => true,
         'customer' => true,
         'voucher' => true
