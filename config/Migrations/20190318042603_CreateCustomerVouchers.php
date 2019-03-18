@@ -26,6 +26,13 @@ class CreateCustomerVouchers extends AbstractMigration
             'default' => null
         ]);
 
+        $table->addColumn('status', 'integer', [
+            'null' => true,
+            'limit' => 1,
+            'default' => 1,
+            'comment' => '1 pending, 2 used'
+        ]);
+
         $table->addColumn('created', 'datetime', [
             'default' => null
         ]);
