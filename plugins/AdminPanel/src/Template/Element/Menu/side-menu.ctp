@@ -221,8 +221,14 @@
                         'children' => []
                     ],
                     [
-                        'name' => 'Voucher',
+                        'name' => 'Voucher',s
                         'url' => ['controller' => 'Vouchers', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Coupon',
+                        'url' => ['controller' => 'ProductCoupons', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
