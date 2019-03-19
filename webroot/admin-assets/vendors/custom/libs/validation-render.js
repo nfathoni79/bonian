@@ -241,6 +241,8 @@ ajaxValidation.prototype.appendTextInput = function (el, message) {
         el.parents('.input-group').after(out);
     } else if (el.attr('type') === 'checkbox') {
         el.parents('.m-checkbox-inline').after(out);
+    } else if (el.attr('type') === 'radio') {
+        el.parents('.m-radio-list-inline').after(out);
     } else {
 
         if (el.hasClass('select2-hidden-accessible')) {

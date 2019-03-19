@@ -306,6 +306,10 @@ class ProductsController extends AppController
                     ->notBlank('price_sale', 'tidak boleh kosong');
 
                 $validator
+                    ->requirePresence('type')
+                    ->notBlank('type', 'tidak boleh kosong');
+
+                $validator
                     ->requirePresence('ProductToCourriers')
                     ->hasAtLeast('ProductToCourriers', 2, __d('AdminPanel', __d('AdminPanel','pilihan minimal 2 kurir')));
 
@@ -1206,6 +1210,10 @@ class ProductsController extends AppController
             $validator
                 ->requirePresence('price_sale')
                 ->notBlank('price_sale', 'tidak boleh kosong');
+
+            $validator
+                ->requirePresence('type')
+                ->notBlank('type', 'tidak boleh kosong');
 
             $validator
                 ->requirePresence('ProductToCourriers')

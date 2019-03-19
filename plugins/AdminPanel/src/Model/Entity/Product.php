@@ -87,6 +87,7 @@ class Product extends Entity
         'view' => true,
         'point' => true,
         'rating' => true,
+        'type' => true,
         'rating_count' => true,
         'video_url' => true,
         'created' => true,

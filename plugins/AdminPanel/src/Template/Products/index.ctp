@@ -243,16 +243,20 @@ echo $this->Html->script([
 
                     {
                         field: 'ProductStockStatuses.name',
-                        title: 'Product Stock Status',
+                        title: 'Stock Status',
                         template: function(row) {
-                            return row.product_stock_status.name;
+                            var status = {
+                                1: {'class': 'm-badge--success'},
+                                2: {'class': ' m-badge--danger'},
+                            };
+                            return '<span class="m-badge ' + status[row.product_stock_status_id].class + ' m-badge--wide">' + row.product_stock_status.name + '</span>'; 
                         }
                     },
 
 
                     {
                         field: 'Products.price',
-                        title: 'Price',
+                        title: 'Harga Reguler',
                         template: function(row) {
                             return parseInt(row.price).format(0, 3, '.', ',');
                         }
@@ -260,16 +264,21 @@ echo $this->Html->script([
 
                     {
                         field: 'Products.price_sale',
-                        title: 'Price Sale',
+                        title: 'Harga Jual',
                         template: function(row) {
                             return parseInt(row.price_sale).format(0, 3, '.', ',');
                         }
                     },
                     {
                         field: 'ProductStatuses.name',
-                        title: 'Product Status',
+                        title: 'Publish Status',
                         template: function(row) {
-                            return row.product_status.name;
+
+                            var status = {
+                                1: {'class': 'm-badge--success'},
+                                2: {'class': ' m-badge--danger'},
+                            };
+                            return '<span class="m-badge ' + status[row.product_status_id].class + ' m-badge--wide">' + row.product_status.name + '</span>';
                         }
                     },
 

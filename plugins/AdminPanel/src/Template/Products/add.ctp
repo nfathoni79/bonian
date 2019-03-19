@@ -1096,6 +1096,23 @@
                                                     <?php echo $this->Form->control('product_warranty_id', ['options' => $product_warranties, 'label' => false, 'class' => $default_class . ' select-picker']);?>
                                                 </div>
                                             </div>
+
+                                            <div class="form-group m-form__group row">
+                                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Jenis Barang'); ?>*</label>
+                                                <div class="col-xl-9 m-form__group-sub">
+                                                    <div class="m-radio-list-inline mt-2">
+                                                        <label class="m-radio">
+                                                            <input type="radio" name="type" value="consignment"> Consignment
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="m-radio">
+                                                            <input type="radio" name="type" name="retail"> Retail
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
 

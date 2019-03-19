@@ -1021,6 +1021,20 @@ echo $this->Html->script([
                                 </div>
                             </div>
                             <div class="form-group m-form__group row">
+                                <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Jenis Barang'); ?>*</label>
+                                <div class="col-xl-9 m-form__group-sub">
+                                    <div class="m-radio-list-inline mt-2">
+                                        <?php $typeList = ['consignment', 'retail']?>
+                                        <?php foreach($typeList as $k => $vals):?>
+                                        <label class="m-radio">
+                                            <input type="checkbox" name="type" value="<?php echo $vals;?>" <?= ($vals == $product['type']) ? 'checked="checked"' : '';?> > <?php echo ucfirst($vals);?>
+                                            <span></span>
+                                        </label>
+                                        <?php endforeach;?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row">
                                 <label class="col-xl-3 col-form-label"><?= __d('AdminPanel',  'Produk status'); ?></label>
                                 <div class="col-xl-8">
                                     <?php echo $this->Form->control('product_status_id', ['options' => $productStatuses,'label' => false, 'class' => $default_class . ' select-picker']);?>
