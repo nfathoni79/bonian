@@ -7,11 +7,17 @@ use AdminPanel\Plugin;
 /**
  * Dashboard Controller
  *
- * @property
+ * @property \AdminPanel\Model\Table\CustomersTable $Customers
  * @method \AdminPanel\Model\Entity\Dashboard[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class DashboardController extends AppController
 {
+
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('AdminPanel.Customers');
+    }
 
     /**
      * Index method
@@ -20,9 +26,37 @@ class DashboardController extends AppController
      */
     public function index()
     {
-        $dashboard = null;
+        //$dashboard = null;
 
-        $this->set(compact('dashboard'));
+        $month = date('Y-m');
+        $nextMonth = date('Y-m', strtotime('+3 months', strtotime($month)));
+        $lastMonth = date('Y-m', strtotime('-2 months', strtotime($month)));
+
+//        $customer_android = array();
+//        $customer_website = array();
+//        $jsonMonth = array();
+
+
+        $result = [];
+        $i = 1;
+        while (strtotime($lastMonth) <= strtotime($nextMonth)) {
+            $timestamp = strtotime($lastMonth);
+            $jsonMonth = date('Y-m', $timestamp);
+            $customer_android = $this->Customers->find()
+                ->where(['Customers.platforrm' => 'Android', 'MONTH(Customers.created)' => date('m', strtotime($lastMonth))])
+                ->count();
+            $customer_website = $this->Customers->find()
+                ->where(['Customers.platforrm' => 'Web', 'MONTH(Customers.created)' => date('m', strtotime($lastMonth))])
+                ->count();
+            $lastMonth = date ("Y-m", strtotime("+1 months", strtotime($lastMonth)));
+
+            $result[$i]['y']= $jsonMonth;
+            $result[$i]['a']= $customer_android;
+            $result[$i]['b']= $customer_website;
+            $i++;
+        }
+
+        $this->set(compact('result'));
     }
 
     /**
