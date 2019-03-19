@@ -1,22 +1,16 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $products
+ * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $productCoupons
  * nevix
  */
 ?>
-<!-- <div class="m-list-pics m-list-pics--sm m--padding-left-20" style="width:110px;">
-    <a href="#"><img src="/zolaku/images/50x50/fb0182b9a6eb45a5a10a8eb5e64b359e.jpg" title=""></a>
-    <a href="#"><img src="/zolaku/images/50x50/fb0182b9a6eb45a5a10a8eb5e64b359e.jpg" title=""></a>
-    <a href="#"><img src="/zolaku/images/50x50/fb0182b9a6eb45a5a10a8eb5e64b359e.jpg" title=""></a>
-
-</div> -->
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Products') ?>
+                    <?= __('Promosi Penjualan') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -30,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Products') ?>
+                                <?= __('Promosi Penjualan') ?>
                             </span>
                         </a>
                     </li>
@@ -40,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('List Products') ?>
+                                <?= __('Daftar Coupons') ?>
                             </span>
                         </a>
                     </li>
@@ -55,19 +49,14 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('List Products') ?>
+                            <?= __('Daftar Coupons') ?>
                         </h3>
                     </div>
                 </div>
                 <div class="m-portlet__head-tools">
                     <ul class="m-portlet__nav">
                         <li class="m-portlet__nav-item">
-                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
-                                <span>
-                                    <i class="la la-plus"></i>
-                                    <span><?= __('New Product') ?></span>
-                                </span>
-                            </a>
+                            <a href="#" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air"  data-toggle="modal" data-target="#modalView"><span><i class="la la-plus"></i><span><?= __('Tambah Coupon') ?></span></span></a>
                         </li>
                     </ul>
                 </div>
@@ -94,7 +83,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-productss"></div>
+                <div class="m_datatable" id="table-productCoupons"></div>
 
             </div>
         </div>
@@ -105,17 +94,57 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><span class="titleModal"></span></h5>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Coupon</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body contentModal">
+            <div class="modal-body">
+                <?= $this->Form->create('ProductCoupon',['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form', 'id' => 'form-coupon']); ?>
 
+                <?php
+                   echo $this->Form->control('product_id',['type' => 'hidden','div' => false, 'label' => false, 'class' => 'form-control']);
+                ?>
+                <div class="form-group m-form__group row">
+                    <label class="col-form-label col-lg-4">Nama Produk</label>
+                    <div class="col-lg-8">
+                        <div class="m-typeahead">
+                            <?php
+                             echo $this->Form->control('name',['type' => 'text', 'div' => false, 'label' => false, 'class' => 'form-control form-control-danger m-input m-input--air k_typeahead', 'dir' => 'ltr',   'placeholder' => 'Pencarian Produk']);
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <label class="col-form-label col-lg-4">Jumlah Potongan</label>
+                    <div class="col-lg-6">
+                        <?php
+                             echo $this->Form->control('price',['type' => 'number','div' => false, 'label' => false, 'class' => 'form-control' ]);
+                        ?>
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <label class="col-form-label col-lg-4">Tanggal Kadaluarsa</label>
+                    <div class="col-lg-6">
+                        <?php
+                             echo $this->Form->control('expired',['div' => false, 'label' => false, 'class' => 'form-control', 'id' => 'm_datepicker', 'readonly' => 'readonly', 'placeholder' => 'Select date']);
+                        ?>
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <label class="col-form-label col-lg-4">Status</label>
+                    <div class="col-lg-2">
+                        <?php
+                             echo $this->Form->control('status',['type' => 'select','div' => false, 'label' => false, 'class' => 'form-control', 'options' => ['1' => 'On', '2' => 'Off']]);
+                        ?>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <?= $this->Form->submit(__('Tambahkan'),['class' => 'btn btn-brand']) ?>
             </div>
+            <?= $this->Form->end(); ?>
         </div>
     </div>
 </div>
@@ -123,10 +152,77 @@
 <?php $this->append('script'); ?>
 <?php
 echo $this->Html->script([
-            '/admin-assets/app/js/lib-tools.js',
-    ]);
+'/admin-assets/vendors/custom/libs/validation-render',
+'/admin-assets/app/js/lib-tools.js',
+]);
 ?>
 <script>
+
+    var formEl = $("#form-coupon");
+    var url = '<?= $this->Url->build(['action' => 'validateAjax']); ?>';
+    var ajaxRequest = new ajaxValidation(formEl);
+    ajaxRequest.setblockUI('.modal-body');
+
+
+    $("#form-coupon").submit(function(e) {
+        ajaxRequest.post(url, formEl.find(':input'), function(data,saved) {
+            if (data.success) {
+                location.reload();
+            }
+        });
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
+
+    $('#m_datepicker').datepicker({
+        startDate: '-0d',
+        todayHighlight: true,
+        autoclose: true,
+        pickerPosition: 'bottom-left',
+        format: 'yyyy-mm-dd',
+    });
+
+
+    function init(rows) {
+        rows = rows || '';
+        var productLists = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            //prefetch: '<?= $this->Url->build(['action' => 'productExist']); ?>'
+            remote: {
+                wildcard: '%QUERY',
+                url: '<?= $this->Url->build(['action' => 'productExist']); ?>',
+                prepare: function(query, setting) {
+                    // setting.url += '?search=' + encodeURI(query) + '&exl=' + PopulateProductLists();
+                    setting.url += '?search=' + encodeURI(query) ;
+                    return setting;
+                }
+            }
+        });
+        //productLists.clearPrefetchCache();
+        productLists.initialize();
+
+        $('.k_typeahead').typeahead(null, {
+            display: 'name',
+            source: productLists.ttAdapter(),
+            templates: {
+                empty: [
+                    '<div class="empty-message" style="padding: 10px 15px; text-align: center;">',
+                    'Produk tidak ditemukan dalam daftar produk',
+                    '</div>'
+                ].join('\n'),
+                suggestion: Handlebars.compile('<div><strong>{{name}}</strong> (SKU:{{sku}})</div>')
+            },
+        });
+
+        $('.k_typeahead').on('typeahead:select', function(evt, item) {
+            $("#product-id").val(item.id)
+            console.log(item);
+        })
+    }
+    init();
+
+
+
 
     function delete_data(id) {
         $.post( "<?= $this->Url->build(['action' => 'delete']); ?>/" + id, { _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>' } )
@@ -135,15 +231,9 @@ echo $this->Html->script([
             });
     }
 
-    function view_data(id) {
-        $('#modalView').modal('show');
-        $('.titleModal').html('Provinces View');
-        $('.contentModal').load( "<?= $this->Url->build(['action' => 'view']); ?>/" + id);
-    }
-
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-productss').mDatatable({
+            var datatable = $('#table-productCoupons').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
@@ -190,7 +280,7 @@ echo $this->Html->script([
                     {
                         field: 'id',
                         title: '#',
-                        sortable: false,
+                        sortable: true,
                         width: 40,
                         selector: false,
                         textAlign: 'center',
@@ -199,100 +289,44 @@ echo $this->Html->script([
                         }
                     },
                     {
-                        field: '#',
-                        title: 'Image',
-                        sortable: false,
-                        template: function(row) {
-                            // return row.name;
-                            var primary_image = '<img src="<?= $this->Url->build('/admin-assets/app/media/img/products/no-image.png');?>" style="width: 50px;" />';
-                            if (typeof row.product_images != 'undefined' && row.product_images.length > 0) {
-                                primary_image = row.product_images[0].name;
-                                for(var i in row.product_images) {
-                                    if (row.product_images[i].primary === 1) {
-                                        primary_image = row.product_images[i].name;
-                                    }
-                                }
-                                primary_image = '<img src="<?= $this->Url->build('/images/50x50/');?>' + primary_image + '" style="width: 50px;" />';
-                            }
-                            return primary_image;
-                        }
-                    },
-                    {
                         field: 'Products.name',
-                        title: 'Name',
+                        title: 'Nama Produk',
                         template: function(row) {
-                            return row.name;
+                            return row.product.name;
                         }
                     },
 
                     {
-                        field: 'Products.sku',
-                        title: 'SKU',
-                        template: function(row) {
-                            return row.sku;
-                        }
-                    },
-
-                    /*{
-                        field: 'Products.qty',
-                        title: 'Qty',
-                        template: function(row) {
-                            return row.qty;
-                        }
-                    },*/
-
-                    {
-                        field: 'ProductStockStatuses.name',
-                        title: 'Stock Status',
-                        template: function(row) {
-                            var status = {
-                                1: {'class': 'm-badge--success'},
-                                2: {'class': ' m-badge--danger'},
-                            };
-                            return '<span class="m-badge ' + status[row.product_stock_status_id].class + ' m-badge--wide">' + row.product_stock_status.name + '</span>';
-                        }
-                    },
-
-
-                    {
-                        field: 'Products.price',
-                        title: 'Harga Reguler',
+                        field: 'ProductCoupons.price',
+                        title: 'Jumlah Potongan',
                         template: function(row) {
                             return parseInt(row.price).format(0, 3, '.', ',');
                         }
                     },
 
                     {
-                        field: 'Products.price_sale',
-                        title: 'Harga Jual',
+                        field: 'ProductCoupons.expired',
+                        title: 'Kadaluarsa',
                         template: function(row) {
-                            return parseInt(row.price_sale).format(0, 3, '.', ',');
+                            return row.expired;
                         }
                     },
-                    {
-                        field: 'ProductStatuses.name',
-                        title: 'Publish Status',
-                        template: function(row) {
 
+                    {
+                        field: 'ProductCoupons.status',
+                        title: 'Status',
+                        template: function(row) {
                             var status = {
-                                1: {'class': 'm-badge--success'},
-                                2: {'class': ' m-badge--danger'},
+                                1: {'title': 'ON','class': 'm-badge--success'},
+                                2: {'title': 'OFF','class': ' m-badge--danger'},
                             };
-                            return '<span class="m-badge ' + status[row.product_status_id].class + ' m-badge--wide">' + row.product_status.name + '</span>';
+                            return '<span class="m-badge ' + status[row.status].class + ' m-badge--wide">' + status[row.status].title + '</span>';
                         }
                     },
 
                     {
-                        field: 'Products.view',
-                        title: 'View',
-                        template: function(row) {
-                            return row.view;
-                        }
-                    },
-
-                    {
-                        field: 'Products.created',
-                        title: 'Creation',
+                        field: 'ProductCoupons.created',
+                        title: 'Tanggal',
                         template: function(row) {
                             return row.created;
                         }
@@ -302,11 +336,11 @@ echo $this->Html->script([
                     {
                         field: "Actions",
                         width: 110,
-                        title: "Actions",
+                        title: "Aksi",
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {
-                            return '<a href="javascript:view_data('+row.id+');" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="VIew"><i class="la la-eye"></i></a><a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
+                            return '<a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
                         }
                     }
                 ]
@@ -324,6 +358,19 @@ echo $this->Html->script([
     jQuery(document).ready(function() {
         DatatableRemoteAjaxDemo.init();
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 <?php $this->end(); ?>
 
