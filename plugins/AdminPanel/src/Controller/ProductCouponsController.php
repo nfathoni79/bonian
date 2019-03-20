@@ -160,7 +160,7 @@ class ProductCouponsController extends AppController
                 if (is_numeric($product_id)) {
                     $exclude_product_id[] = $product_id;
                 }
-            } 
+            }
 
             $options = $this->Products->find('all')
                 ->select(['id','sku','name'])
