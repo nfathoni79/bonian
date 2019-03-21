@@ -221,7 +221,7 @@
                         'children' => []
                     ],
                     [
-                        'name' => 'Voucher',s
+                        'name' => 'Voucher',
                         'url' => ['controller' => 'Vouchers', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
