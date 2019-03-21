@@ -77,6 +77,7 @@ Router::scope('/', function (RouteBuilder $routes) {
             ['dimension' => '\d+x\d+', 'pass' => ['dimension', 'filename', '_ext']]
         )->setExtensions(['jpg', 'png']);
         $routes->connect('/avatar', ['controller' => 'Images', 'action' => 'avatar']);
+        $routes->connect('/ratings', ['controller' => 'Images', 'action' => 'ratings']);
     });
     /**
      * Connect catchall routes for all controllers.

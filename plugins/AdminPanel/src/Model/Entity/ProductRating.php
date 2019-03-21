@@ -7,12 +7,14 @@ use Cake\ORM\Entity;
  * ProductRating Entity
  *
  * @property int $id
+ * @property int|null $order_detail_product_id
  * @property int|null $product_id
  * @property int|null $customer_id
  * @property int|null $rating
  * @property string|null $comment
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
+ * @property int|null $status
  *
  * @property \AdminPanel\Model\Entity\Product $product
  * @property \AdminPanel\Model\Entity\Customer $customer
@@ -30,12 +32,14 @@ class ProductRating extends Entity
      * @var array
      */
     protected $_accessible = [
+        'order_detail_product_id' => true,
         'product_id' => true,
         'customer_id' => true,
         'rating' => true,
         'comment' => true,
         'created' => true,
         'modified' => true,
+        'status' => true,
         'product' => true,
         'customer' => true
     ];

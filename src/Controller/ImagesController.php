@@ -13,6 +13,7 @@ use Cake\Validation\Validator;
  *
  * @property \AdminPanel\Model\Table\ProductImageSizesTable $ProductImageSizes
  * @property \AdminPanel\Model\Table\CustomersTable $Customers
+ * @property \AdminPanel\Model\Table\ProductRatingImagesTable $ProductRatingImages
  */
 class ImagesController extends AppController
 {
@@ -27,6 +28,7 @@ class ImagesController extends AppController
         parent::initialize();
         $this->loadModel('AdminPanel.ProductImageSizes');
         $this->loadModel('AdminPanel.Customers');
+        $this->loadModel('AdminPanel.ProductRatingImages');
     }
 
     /**
@@ -97,6 +99,54 @@ class ImagesController extends AppController
             }
         }else{
 
+            $response = ['is_success' => false];
+        }
+        echo json_encode($response);
+        exit;
+
+    }
+
+    public function ratings(){
+        $this->disableAutoRender();
+
+        $this->request->allowMethod('post');
+        $validator = new Validator();
+        $validator
+            ->requirePresence('name')
+            ->add('name', [
+                'validExtension' => [
+                    'rule' => ['extension',['jpg','png','image/jpeg']], // default  ['gif', 'jpeg', 'png', 'jpg']
+                    'message' => __('These files extension are allowed: .jpg, .png')
+                ]
+            ]);
+        $validator
+            ->requirePresence('product_rating_id')
+            ->notBlank('product_rating_id');
+
+        $errors = $validator->errors($this->request->getData());
+        if (empty($errors)) {
+
+            $success = true;
+            foreach($this->request->getData('name') as $vals){
+                $entity = $this->ProductRatingImages->newEntity();
+                $this->ProductRatingImages->patchEntity($entity, $this->request->getData(), [
+                    'fields' => [
+                        'product_rating_id'
+                    ]
+                ]);
+                $entity->set('name', $vals);
+                if($this->ProductRatingImages->save($entity)){
+
+                }else{
+                   $success = false;
+                }
+            }
+            if($success){
+                $response = ['is_success' => true];
+            }else{
+                $response = ['is_success' => false];
+            }
+        }else{
             $response = ['is_success' => false];
         }
         echo json_encode($response);

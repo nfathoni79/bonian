@@ -9,8 +9,10 @@ use Cake\Validation\Validator;
 /**
  * ProductRatings Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $OrderDetailProducts
  * @property \AdminPanel\Model\Table\ProductsTable|\Cake\ORM\Association\BelongsTo $Products
  * @property \AdminPanel\Model\Table\CustomersTable|\Cake\ORM\Association\BelongsTo $Customers
+ * @property |\Cake\ORM\Association\HasMany $ProductRatingImages
  *
  * @method \AdminPanel\Model\Entity\ProductRating get($primaryKey, $options = [])
  * @method \AdminPanel\Model\Entity\ProductRating newEntity($data = null, array $options = [])
@@ -42,6 +44,10 @@ class ProductRatingsTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->belongsTo('OrderDetailProducts', [
+            'foreignKey' => 'order_detail_product_id',
+            'className' => 'AdminPanel.OrderDetailProducts'
+        ]);
         $this->belongsTo('Products', [
             'foreignKey' => 'product_id',
             'className' => 'AdminPanel.Products'
@@ -49,6 +55,10 @@ class ProductRatingsTable extends Table
         $this->belongsTo('Customers', [
             'foreignKey' => 'customer_id',
             'className' => 'AdminPanel.Customers'
+        ]);
+        $this->hasMany('ProductRatingImages', [
+            'foreignKey' => 'product_rating_id',
+            'className' => 'AdminPanel.ProductRatingImages'
         ]);
     }
 
@@ -72,6 +82,10 @@ class ProductRatingsTable extends Table
             ->scalar('comment')
             ->allowEmptyString('comment');
 
+        $validator
+            ->integer('status')
+            ->allowEmptyString('status');
+
         return $validator;
     }
 
@@ -84,6 +98,7 @@ class ProductRatingsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
+        $rules->add($rules->existsIn(['order_detail_product_id'], 'OrderDetailProducts'));
         $rules->add($rules->existsIn(['product_id'], 'Products'));
         $rules->add($rules->existsIn(['customer_id'], 'Customers'));
 
