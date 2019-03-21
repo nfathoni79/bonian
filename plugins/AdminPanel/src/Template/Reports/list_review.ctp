@@ -131,6 +131,7 @@
                             <th>Rating</th>
                             <th>Comment</th>
                             <th>Tanggal Review</th>
+                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                         </thead>
@@ -205,6 +206,7 @@ $this->Html->script([
             {data: 'rating'},
             {data: 'comment'},
             {data: 'created'},
+            {data: 'status'},
             {data: 'id'},
         ],
         //
@@ -223,6 +225,7 @@ $this->Html->script([
             },
             {
                 targets: 2,
+                orderable: false,
                 render: function (data, type, row, meta) {
                     return '<span class="stars" data-rating="'+row.rating+'" data-num-stars="5" ></span>';
                 }
@@ -241,6 +244,16 @@ $this->Html->script([
             },
             {
                 targets: 5,
+                render: function (data, type, row, meta) {
+                    var status = {
+                        0: {'title': 'Belum ada penilaian','classes': 'm-badge--danger'},
+                        1: {'title': 'Sudah diberikan penulaian','classes': ' m-badge--success'},
+                    };
+                    return '<span class="m-badge ' + status[row.status].classes + ' m-badge--wide">' + status[row.status].title + '</span>';
+                }
+            },
+            {
+                targets: 6,
                 render: function (data, type, row, meta) {
                     return '<a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete reviews #'+row.id+'\');" class="m-btn btn btn-danger btn-sm" title="Delete"><i class="la la-trash-o"></i> Hapus dari daftar reviews</a>';
                 }

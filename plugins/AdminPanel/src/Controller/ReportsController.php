@@ -41,6 +41,8 @@ class ReportsController extends AppController
                 ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
                     $orConditions = $exp->or_([
                         'Products.name LIKE' => '%' . $search .'%',
+                        'Products.modified LIKE' => '%' . $search .'%',
+                        'Products.rating_count LIKE' => '%' . $search .'%',
                     ]);
                     return $exp
                         ->add($orConditions);
@@ -76,7 +78,9 @@ class ReportsController extends AppController
                 ])
                 ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
                     $orConditions = $exp->or_([
-                        'Products.name LIKE' => '%' . $search .'%',
+                        'Customers.first_name LIKE' => '%' . $search .'%',
+                        'Customers.last_name LIKE' => '%' . $search .'%',
+                        'ProductRatings.comment LIKE' => '%' . $search .'%',
                     ]);
                     return $exp
                         ->add($orConditions);
@@ -110,6 +114,7 @@ class ReportsController extends AppController
             $this->Flash->error(__('The product review  could not be deleted. Please, try again.'));
         }
 
+        return $this->redirect(['action' => 'review']);
     }
 
 }

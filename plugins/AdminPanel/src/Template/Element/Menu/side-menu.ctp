@@ -288,7 +288,7 @@
                         'url' => ['controller' => 'Reports', 'action' => 'review'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
-                    ], 
+                    ],
                 ]
             ],
             [

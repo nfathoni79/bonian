@@ -189,6 +189,7 @@ $this->Html->script([
             {data: 'rating_count'},
             {data: 'count_review'},
             {data: 'modified'},
+            {data: 'id'},
             // {data: 'comment'},
             // {data: 'created'},
         ],
@@ -208,6 +209,7 @@ $this->Html->script([
             },
             {
                 targets: 2,
+                orderable: false,
                 render: function (data, type, row, meta) {
                     return '<span class="stars" data-rating="'+row.rating_count+'" data-num-stars="5" ></span>';
                 }
