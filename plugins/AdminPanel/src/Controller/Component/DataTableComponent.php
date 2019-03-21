@@ -114,6 +114,14 @@ class DataTableComponent extends Component
         return $this;
     }
 
+    public function map(callable $func)
+    {
+        if (is_callable($func)) {
+            $this->_table->map($func);
+        }
+        return $this;
+    }
+
     /**
      * @return bool
      */

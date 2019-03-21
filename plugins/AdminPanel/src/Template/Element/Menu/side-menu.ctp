@@ -279,6 +279,19 @@
                 ]
             ],
             [
+                'name' => 'Reports',
+                'url' => '#',
+                'icon' => 'm-menu__link-icon flaticon-settings',
+                'children' => [
+                    [
+                        'name' => 'Product Review Report',
+                        'url' => ['controller' => 'Reports', 'action' => 'review'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ], 
+                ]
+            ],
+            [
                 'name' => 'Log Aktifitas',
                 'url' => ['controller' => 'Logs', 'action' => 'index'],
                 'icon' => 'm-menu__link-icon flaticon-apps',

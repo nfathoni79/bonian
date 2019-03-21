@@ -95,6 +95,10 @@ class ProductsTable extends Table
             'foreignKey' => 'product_id',
             'className' => 'AdminPanel.ProductAttributes'
         ]);
+        $this->hasMany('ProductRatings', [
+            'foreignKey' => 'product_id',
+            'className' => 'AdminPanel.ProductRatings'
+        ]);
         $this->hasMany('ProductDeals', [
             'foreignKey' => 'product_id',
             'className' => 'AdminPanel.ProductDeals'
