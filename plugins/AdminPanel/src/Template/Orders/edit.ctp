@@ -206,6 +206,32 @@
                                 <div><?= $this->Number->format($val->shipping_cost); ?></div>
                             </div>
                         </div>
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-6">
+                                <label>Awb:</label>
+                                <?= $this->Form->input('origin.' . $val['branch_id'] . '.awb', [
+                                    'value' => $val['awb'],
+                                    'div' => false,
+                                    'label' => false,
+                                    'class' => 'form-control m-input col-lg-4',
+                                    'placeholder' => 'Input no. awb disini'
+                                ]); ?>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <label style="display: block;">Order Status:</label>
+                                <?= $this->Form->select('origin.' . $val['branch_id'] . '.order_status_id',
+                                    $order_detail_statuses,
+                                    [
+                                        'value' => $val['order_status_id'],
+                                        'div' => false,
+                                        'label' => false,
+                                        'class' => 'form-control m-input col-lg-4',
+                                        'style' => 'display: block;'
+                                    ]); ?>
+                            </div>
+
+                        </div>
                     </div>
                     <?php /*
                     <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
@@ -225,7 +251,7 @@
 
                 <!--end::Form-->
 
-                <div class="table-responsive">
+                <div class="table-responsive" >
                     <table class="table">
                         <thead>
                         <tr>
@@ -234,7 +260,7 @@
                             <th>SKU</th>
                             <th>QTY</th>
                             <th>PRICE</th>
-                            <th>AMOUNT</th>
+                            <th style="text-align: right;">AMOUNT</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -259,12 +285,20 @@
                             <td><?= $product['product_option_price']['sku']; ?></td>
                             <td><?= $product['qty']; ?></td>
                             <td><?= $this->Number->format($product['price']); ?></td>
-                            <td class="m--font-danger right-align"><?= $this->Number->format($product['total']); ?></td>
+                            <td class="m--font-danger" style="text-align: right;"><?= $this->Number->format($product['total']); ?></td>
                         </tr>
                         <?php $subtotal += $product['total']; endforeach; ?>
                         <tr>
                             <th colspan="5" style="text-align: right;">Subtotal</th>
-                            <th class="right-align"><?= $this->Number->format($subtotal); ?></th>
+                            <th style="text-align: right;"><?= $this->Number->format($subtotal); ?></th>
+                        </tr>
+                        <tr>
+                            <th colspan="5" style="text-align: right;">Shipping</th>
+                            <th style="text-align: right;"><?= $this->Number->format($val->shipping_cost); ?></th>
+                        </tr>
+                        <tr>
+                            <th colspan="5" style="text-align: right;">Total</th>
+                            <th style="text-align: right;"><?= $this->Number->format($subtotal + $val->shipping_cost); ?></th>
                         </tr>
                         </tbody>
                     </table>

@@ -180,6 +180,9 @@ class OrdersController extends AppController
                 ]
             ]
         ]);
+
+
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $order = $this->Orders->patchEntity($order, $this->request->getData());
             if ($this->Orders->save($order)) {
@@ -189,8 +192,12 @@ class OrdersController extends AppController
             }
             $this->Flash->error(__('The order could not be saved. Please, try again.'));
         }
+
+
+        $order_detail_statuses = $this->Orders->OrderDetails->OrderStatuses->find('list');
+
         //debug($order);exit;
-        $this->set(compact('order'));
+        $this->set(compact('order', 'order_detail_statuses'));
     }
 
     /**
