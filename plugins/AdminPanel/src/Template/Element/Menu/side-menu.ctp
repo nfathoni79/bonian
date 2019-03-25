@@ -185,7 +185,7 @@
                 'children' => [
                     [
                         'name' => 'Daftar Pembelian',
-                        'url' => ['controller' => 'Products', 'action' => 'index'],
+                        'url' => ['controller' => 'Orders', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
