@@ -233,10 +233,20 @@ echo $this->Html->script([
                             let status = {
                                 1: {'class': 'm-badge--default', 'name': 'Pending'},
                                 2: {'class': ' m-badge--success', 'name': 'Success'},
+                                3: {'class': ' m-badge--danger', 'name': 'Failed'},
                             };
                             return '<span class="m-badge ' + status[row.payment_status].class + ' m-badge--wide">'
                             + status[row.payment_status].name
                             + '</span>';
+                        }
+                    },
+
+                    {
+                        field: '',
+                        sortable: false,
+                        title: 'Payment Method',
+                        template: function(row) {
+                            return row.transactions.length > 0 ? row.transactions[row.transactions.length - 1].payment_type : '-';
                         }
                     },
 

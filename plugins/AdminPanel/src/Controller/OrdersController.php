@@ -31,7 +31,8 @@ class OrdersController extends AppController
             $data = $this->Orders->find('all')
                 ->select()
                 ->contain([
-                   'Customers'
+                   'Customers',
+                    'Transactions'
                 ]);
 
             if ($query && is_array($query)) {
@@ -55,7 +56,7 @@ class OrdersController extends AppController
                 $data->where($query);
             }
 
-            if (isset($sort['field']) && isset($sort['sort'])) {
+            if (isset($sort['field']) && !empty($sort['field']) && isset($sort['sort'])) {
                 $data->order([$sort['field'] => $sort['sort']]);
             }
 
@@ -153,7 +154,31 @@ class OrdersController extends AppController
     public function edit($id = null)
     {
         $order = $this->Orders->get($id, [
-            'contain' => []
+            'contain' => [
+                'Provinces',
+                'Cities',
+                'Subdistricts',
+                'Customers',
+                'Transactions',
+                'OrderDetails' => [
+                    'Branches',
+                    'OrderStatuses',
+                    'Provinces',
+                    'Cities',
+                    'Subdistricts',
+                    'OrderDetailProducts' => [
+                        'Products' => [
+                            'ProductImages'
+                        ],
+                        'ProductOptionPrices' => [
+                            'ProductOptionValueLists' => [
+                                'Options',
+                                'OptionValues'
+                            ],
+                        ],
+                    ]
+                ]
+            ]
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $order = $this->Orders->patchEntity($order, $this->request->getData());
@@ -164,6 +189,7 @@ class OrdersController extends AppController
             }
             $this->Flash->error(__('The order could not be saved. Please, try again.'));
         }
+        //debug($order);exit;
         $this->set(compact('order'));
     }
 
