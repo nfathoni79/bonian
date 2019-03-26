@@ -53,7 +53,7 @@
         </div>
     </div>
     <div class="m-content">
-
+        <?php  echo $this->Flash->render(); ?>
         <div class="m-portlet">
             <div class="m-portlet__head">
                 <div class="m-portlet__head-caption">
@@ -492,7 +492,7 @@
 
             <div class="m-portlet__body">
                 <!--begin::Form-->
-                <form class="m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed">
+                    <?= $this->Form->create($order,['class' => 'm-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed']); ?>
                     <div class="m-portlet__body">
                         <div class="form-group m-form__group row">
                             <div class="col-lg-6">
@@ -531,7 +531,7 @@
                                     'value' => $val['awb'],
                                     'div' => false,
                                     'label' => false,
-                                    'class' => 'form-control m-input col-lg-4',
+                                    'class' => 'form-control m-input col-lg-4 form-event-changed',
                                     'placeholder' => 'Input no. awb disini'
                                 ]); ?>
                             </div>
@@ -544,28 +544,26 @@
                                         'value' => $val['order_status_id'],
                                         'div' => false,
                                         'label' => false,
-                                        'class' => 'form-control m-input col-lg-4',
+                                        'class' => 'form-control m-input col-lg-4 form-event-changed',
                                         'style' => 'display: block;'
                                     ]); ?>
                             </div>
 
                         </div>
                     </div>
-                    <?php /*
-                    <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
+
+                    <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit form-action" style="display: none;">
                         <div class="m-form__actions m-form__actions--solid">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <button type="reset" class="btn btn-primary">Save</button>
-                                    <button type="reset" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" class="btn btn-secondary button-reset">Cancel</button>
                                 </div>
-                                <div class="col-lg-6 m--align-right">
-                                    <button type="reset" class="btn btn-danger">Delete</button>
-                                </div>
+
                             </div>
                         </div>
-                    </div> */ ?>
-                </form>
+                    </div>
+                <?= $this->Form->end(); ?>
 
                 <!--end::Form-->
 
@@ -631,6 +629,14 @@
     </div>
 </div>
 <script>
-    $('select').selectpicker();
+    $(document).ready(function(){
+        $('select').selectpicker();
+        $('.form-event-changed').on('change', function(){
+            $(this).parents('form').find('.form-action').show();
+        });
+        $('.button-reset').click(function() {
+           $(this).parents('.form-action').hide();
+        });
+    });
 </script>
 

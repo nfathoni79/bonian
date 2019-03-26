@@ -185,13 +185,27 @@ class OrdersController extends AppController
 
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $order = $this->Orders->patchEntity($order, $this->request->getData());
-            if ($this->Orders->save($order)) {
-                $this->Flash->success(__('The order has been saved.'));
+            //$order = $this->Orders->patchEntity($order, $this->request->getData());
+            //if ($this->Orders->save($order)) {
+            //    $this->Flash->success(__('The order has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+            //    return $this->redirect(['action' => 'index']);
+            //}
+
+            foreach($order->order_details as $detail) {
+                foreach($this->request->getData('origin') as $origin => $shipping) {
+                    if ($detail->get('branch_id') == $origin) {
+                        $detail = $this->Orders->OrderDetails->patchEntity($detail, $shipping);
+                        if ($this->Orders->OrderDetails->save($detail)) {
+                            $this->Flash->success(__('The order has been saved.'));
+                        } else {
+                            $this->Flash->error(__('The order could not be saved. Please, try again.'));
+                        }
+                        break;
+                    }
+                }
             }
-            $this->Flash->error(__('The order could not be saved. Please, try again.'));
+
         }
 
 
