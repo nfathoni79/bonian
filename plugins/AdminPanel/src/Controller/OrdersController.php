@@ -131,6 +131,8 @@ class OrdersController extends AppController
      */
     public function add()
     {
+        return $this->redirect(['action' => 'index']);
+        /*
         $order = $this->Orders->newEntity();
         if ($this->request->is('post')) {
             $order = $this->Orders->patchEntity($order, $this->request->getData());
@@ -142,6 +144,7 @@ class OrdersController extends AppController
             $this->Flash->error(__('The order could not be saved. Please, try again.'));
         }
         $this->set(compact('order'));
+        */
     }
 
     /**

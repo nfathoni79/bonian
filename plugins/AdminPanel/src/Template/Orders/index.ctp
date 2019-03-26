@@ -54,16 +54,7 @@
                     </div>
                 </div>
                 <div class="m-portlet__head-tools">
-                    <ul class="m-portlet__nav">
-                        <li class="m-portlet__nav-item">
-                            <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
-                                <span>
-                                    <i class="la la-plus"></i>
-                                    <span><?= __('New Order') ?></span>
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
+
                 </div>
             </div>
 
