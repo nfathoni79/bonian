@@ -160,6 +160,7 @@ class OrdersController extends AppController
                 'Subdistricts',
                 'Customers',
                 'Transactions',
+                'Vouchers',
                 'OrderDetails' => [
                     'Branches',
                     'OrderStatuses',

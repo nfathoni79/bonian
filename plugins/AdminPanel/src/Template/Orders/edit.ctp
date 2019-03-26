@@ -126,7 +126,7 @@
                                     Payment Method
                                 </span>
                                 <h3 class="m-widget14__title">
-                                    <?= $order->has('transactions') ? $order->transactions[count($order->transactions)-1]->payment_type : '-'; ?>
+                                    <?= $order->has('transactions') && count($order->transactions) > 0 ? $order->transactions[count($order->transactions)-1]->payment_type : '-'; ?>
                                 </h3>
                             </div>
                         </div>
@@ -139,18 +139,336 @@
                         <!--begin:: Widgets/Profit Share-->
                         <div class="m-widget14">
                             <div class="m-widget14__header">
-                                <h3 class="m-widget14__title">
-                                    Masked Card
-                                </h3>
                                 <span class="m-widget14__desc">
-                                    4111 **** **** 1212
+                                    Amount
                                 </span>
+                                <h3 class="m-widget14__title">
+                                    <?= $this->Number->format($order->total); ?>
+                                </h3>
                             </div>
                         </div>
 
                         <!--end:: Widgets/Profit Share-->
                     </div>
 
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="m-portlet m-portlet--mobile">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text">
+                                    <?= __('Order Detail') ?>
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+
+                        </div>
+                    </div>
+
+                    <div class="m-portlet__body">
+                        <div class="m-widget16">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="m-widget16__head">
+                                        <div class="m-widget16__item">
+															<span class="m-widget16__sceduled">
+																Type
+															</span>
+                                            <span class="m-widget16__amount m--align-right">
+																Value
+															</span>
+                                        </div>
+                                    </div>
+                                    <div class="m-widget16__body">
+                                        <!--begin::widget item-->
+                                        <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Gross Total
+                                                </span>
+                                            <span class="m-widget16__price m--align-right">
+                                                <?php $gross_total = $order->get('gross_total'); ?>
+                                                    <?= $this->Number->format($gross_total); ?>
+                                                </span>
+                                        </div>
+                                        <!--end::widget item-->
+
+                                        <?php if ($order->use_point > 0) : ?>
+                                            <!--begin::widget item-->
+                                            <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Using Point
+                                                </span>
+                                                <span class="m-widget16__price m--align-right">
+                                                    <?php
+                                                    $use_point = $order->get('use_point');
+                                                    $gross_total -= $use_point;
+                                                    ?>
+                                                    -<?= $this->Number->format($use_point); ?>
+                                                </span>
+                                            </div>
+                                            <!--end::widget item-->
+                                        <?php endif; ?>
+
+                                        <?php if ($order->has('voucher_id')) : ?>
+                                            <!--begin::widget item-->
+                                            <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Voucher Amount
+                                                </span>
+                                                <span class="m-widget16__price m--align-right">
+                                                    <?php
+                                                    $voucher_value = $order->voucher->get('value');
+                                                    $discount = 0;
+                                                    switch($order->voucher->get('type')) {
+                                                        case '1':
+                                                            $discount = ($voucher_value / 100 * $gross_total);
+                                                            break;
+                                                        case '2':
+                                                            $discount = $voucher_value;
+                                                            break;
+                                                    }
+                                                    $gross_total -= $discount;
+                                                    ?>
+                                                    -<?= $this->Number->format($discount); ?>
+                                                </span>
+                                            </div>
+                                            <!--end::widget item-->
+                                        <!--begin::widget item-->
+                                        <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Code Voucher
+                                                </span>
+                                            <span class="m-widget16__price m--align-right">
+                                                    <?= $order->voucher->get('code_voucher'); ?>
+                                                </span>
+                                        </div>
+                                        <!--end::widget item-->
+                                        <?php endif; ?>
+                                        <!--begin::widget item-->
+                                        <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Net Total
+                                                </span>
+                                            <span class="m-widget16__price m--align-right">
+                                                <?= $this->Number->format($gross_total); ?>
+                                                </span>
+                                        </div>
+                                        <!--end::widget item-->
+
+
+                                    </div>
+                                </div>
+                                <div class="col-md-1">&nbsp;</div>
+                                <div class="col-md-5">
+                                    <?php if ($order->has('transactions') && count($order->transactions) > 0) : ?>
+                                    <div class="m-widget16__head">
+                                        <div class="m-widget16__item">
+															<span class="m-widget16__sceduled">
+																Type
+															</span>
+                                            <span class="m-widget16__amount m--align-right">
+																Value
+															</span>
+                                        </div>
+                                    </div>
+                                    <div class="m-widget16__body">
+
+                                            <?php $transaction = $order->transactions[count($order->transactions) - 1]; ?>
+                                            <!--begin::widget item-->
+                                            <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Transaction Time
+                                                </span>
+                                                <span class="m-widget16__price m--align-right">
+                                                    <?= $transaction->get('transaction_time'); ?>
+                                                </span>
+                                            </div>
+                                            <!--end::widget item-->
+
+                                            <!--begin::widget item-->
+                                            <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Transaction Status
+                                                </span>
+                                                <span class="m-widget16__price m--align-right">
+                                                    <?= $transaction->get('transaction_status'); ?>
+                                                </span>
+                                            </div>
+                                            <!--end::widget item-->
+
+                                            <!--begin::widget item-->
+                                            <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Fraud Status
+                                                </span>
+                                                <span class="m-widget16__price m--align-right">
+                                                    <?= $transaction->get('fraud_status'); ?>
+                                                </span>
+                                            </div>
+                                            <!--end::widget item-->
+
+                                            <?php if ($bank = $transaction->get('bank')) : ?>
+                                                <!--begin::widget item-->
+                                                <div class="m-widget16__item">
+                                                        <span class="m-widget16__date">
+                                                            Bank
+                                                        </span>
+                                                    <span class="m-widget16__price m--align-right">
+                                                            <?= $bank; ?>
+                                                        </span>
+                                                </div>
+                                                <!--end::widget item-->
+                                            <?php endif; ?>
+
+                                            <?php if ($va_number = $transaction->get('va_number')) : ?>
+                                                <!--begin::widget item-->
+                                                <div class="m-widget16__item">
+                                                            <span class="m-widget16__date">
+                                                                VA Number
+                                                            </span>
+                                                    <span class="m-widget16__price m--align-right">
+                                                                <?= $va_number; ?>
+                                                            </span>
+                                                </div>
+                                                <!--end::widget item-->
+                                            <?php endif; ?>
+
+                                            <?php if ($masked_card = $transaction->get('masked_card')) : ?>
+                                            <?php
+                                                if (preg_match('/^(\d+)-(\d+)/i', $masked_card, $matched)) {
+                                                    $masked_card = substr($matched[1], 0, 4) . ' ' .
+                                                        substr($matched[1], 4, 6) .
+                                                        '** **** ' .
+                                                        $matched[2];
+                                                }
+                                            ?>
+                                            <!--begin::widget item-->
+                                            <div class="m-widget16__item">
+                                                    <span class="m-widget16__date">
+                                                        Masked Card
+                                                    </span>
+                                                <span class="m-widget16__price m--align-right">
+                                                        <?= $masked_card; ?>
+                                                    </span>
+                                            </div>
+                                            <!--end::widget item-->
+                                            <?php endif; ?>
+
+
+                                    </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="m-portlet m-portlet--mobile">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text">
+                                    <?= __('Customer Detail') ?>
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="m-portlet__body">
+                        <div class="m-widget16">
+                            <div class="m-widget16__head">
+                                <div class="m-widget16__item">
+															<span class="m-widget16__sceduled">
+																Type
+															</span>
+                                    <span class="m-widget16__amount m--align-right">
+																Value
+															</span>
+                                </div>
+                            </div>
+                            <div class="m-widget16__body">
+                                <!--begin::widget item-->
+                                <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Full Name
+                                                </span>
+                                    <span class="m-widget16__price m--align-right">
+                                                    <?= $order->customer->get('first_name'); ?>
+                                                    <?= $order->customer->get('last_name'); ?>
+                                                </span>
+                                </div>
+                                <!--end::widget item-->
+
+                                <!--begin::widget item-->
+                                <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Email
+                                                </span>
+                                    <span class="m-widget16__price m--align-right">
+                                                    <?= $order->customer->get('email'); ?>
+                                                </span>
+                                </div>
+                                <!--end::widget item-->
+
+                                <!--begin::widget item-->
+                                <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Destination Province
+                                                </span>
+                                    <span class="m-widget16__price m--align-right">
+                                                    <?= $order->province->get('name'); ?>
+                                                </span>
+                                </div>
+                                <!--end::widget item-->
+
+                                <!--begin::widget item-->
+                                <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Destination City
+                                                </span>
+                                    <span class="m-widget16__price m--align-right">
+                                                    <?= $order->city->get('name'); ?>
+                                                </span>
+                                </div>
+                                <!--end::widget item-->
+
+                                <!--begin::widget item-->
+                                <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Destination Subdistrict
+                                                </span>
+                                    <span class="m-widget16__price m--align-right">
+                                                    <?= $order->subdistrict->get('name'); ?>
+                                                </span>
+                                </div>
+                                <!--end::widget item-->
+
+                                <!--begin::widget item-->
+                                <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Destination Address
+                                                </span>
+                                    <span class="m-widget16__price m--align-right">
+                                                    <?= $order->get('address'); ?>
+                                                </span>
+                                </div>
+                                <!--end::widget item-->
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
