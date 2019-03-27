@@ -227,7 +227,7 @@ class ReportsController extends AppController
             ])
             ->bind(':start', $datestart, 'date')
             ->bind(':end',   $dateend, 'date')
-            ->where(['CustomerCartDetails.status !=' => 1]);
+            ->where(['CustomerCartDetails.status NOT IN ' => [1,4]]);
 
         $res = $Query->select(['total' => $Query->func()->sum('total')])->first();
 
