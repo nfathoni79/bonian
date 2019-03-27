@@ -301,6 +301,12 @@
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
+                    [
+                        'name' => 'Top Purchased Product',
+                        'url' => ['controller' => 'TopPurchaseProduct', 'prefix' => 'report'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
                 ]
             ],
             [
