@@ -204,6 +204,16 @@ class DataTableComponent extends Component
         return $this->_data = $data;
     }
 
+    public function getRequestColumn($number, callable $func = null)
+    {
+        if (is_callable($func)) {
+            $r = $this->getController()->request->getData('columns.' . $number);
+            call_user_func($func, $r, $this->_table);
+        }
+
+        return $this;
+    }
+
     public function setSorting()
     {
         $this->setParams();

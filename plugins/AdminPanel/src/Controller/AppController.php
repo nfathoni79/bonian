@@ -6,6 +6,7 @@ use App\Controller\AppController as BaseController;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\I18n\FrozenTime;
+use Cake\Routing\Router;
 
 /**
  * Class AppController
@@ -61,6 +62,14 @@ class AppController extends BaseController
 
 	public function beforeFilter(Event $event)
     {
+        /* enable prefix routing */
+        Router::addUrlFilter(function ($params, $request) {
+            if (!isset($params['prefix'])) {
+                $params['prefix'] = false;
+            }
+            return $params;
+        });
+
         return parent::beforeFilter($event);
     }
 

@@ -289,6 +289,12 @@
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
+                    [
+                        'name' => 'Product Low Stocks',
+                        'url' => ['controller' => 'Stocks', 'prefix' => 'report'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
                 ]
             ],
             [
