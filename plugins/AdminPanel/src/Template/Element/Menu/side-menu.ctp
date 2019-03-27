@@ -295,6 +295,12 @@
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
+                    [
+                        'name' => 'Abandoned Cart Report',
+                        'url' => ['controller' => 'Reports', 'action' => 'abandoned'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
                 ]
             ],
             [
