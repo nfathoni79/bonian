@@ -51,8 +51,8 @@ class StocksController extends AppController
                     }
                 })
                 ->getRequestColumn(6, function($request, \Cake\ORM\Query $table) {
-                    if (!empty($request['search']['value'])) {
-                        $qty = $request['search']['value'];
+                    if (!empty($request['search']['value']) || $request['search']['value'] != '') {
+                        $qty = (int) $request['search']['value'];
                     } else {
                         $qty = 10; //default low stock
                     }
