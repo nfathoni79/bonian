@@ -90,6 +90,54 @@ class DataTableComponent extends Component
         return $this;
     }
 
+    public function innerJoinWith($assoc, callable $builder = null)
+    {
+        $this->_table->innerJoinWith($assoc, $builder);
+        return $this;
+    }
+
+    public function leftJoin($table, $conditions = [], $types = [])
+    {
+        $this->_table->leftJoin($table, $conditions, $types);
+        return $this;
+    }
+
+    public function leftJoinWith($assoc, callable $builder = null)
+    {
+        $this->_table->leftJoinWith($assoc, $builder);
+        return $this;
+    }
+
+    public function group($fields, $overwrite = false)
+    {
+        $this->_table->group($fields, $overwrite);
+        return $this;
+    }
+
+    public function enableAutoFields($bool)
+    {
+        $this->_table->enableAutoFields($bool);
+        return $this;
+    }
+
+    public function limit($num)
+    {
+        $this->_table->limit($num);
+        return $this;
+    }
+
+    public function having($conditions = null, $types = [], $overwrite = false)
+    {
+        $this->_table->having($conditions, $types, $overwrite);
+        return $this;
+    }
+
+    public function order($fields, $overwrite = false)
+    {
+        $this->_table->order($fields, $overwrite);
+        return $this;
+    }
+
     /**
      * @return \Cake\ORM\Query
      */
