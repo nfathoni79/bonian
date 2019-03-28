@@ -304,7 +304,7 @@ echo $this->Html->script([
         serverSide: true,
         order: [[0, 'desc']],
         ajax: {
-            url: "<?= $this->Url->build(['action' => 'abandoned']); ?>",
+            url: "<?= $this->Url->build(null, ['escape' => false]); ?>",
             type: 'POST',
             data: {
                 pagination: {

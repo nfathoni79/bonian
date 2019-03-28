@@ -139,7 +139,6 @@ class ReportsController extends AppController
             $dateend = date("Y-m-d");
             $datestart = date("Y-m-d",strtotime(date("Y-m-d", strtotime($dateend)) . " -2 week"));
         }
-
         if ($this->DataTable->isAjax()) {
             $datatable = $this->DataTable->adapter('AdminPanel.CustomerCartDetails')
                 ->contain([
@@ -167,7 +166,7 @@ class ReportsController extends AppController
                 ->setSorting()
                 ->getTable()
                 ->where(function ($exp) use($datestart,$dateend) {
-                    return $exp->between('CustomerCartDetails.created', $datestart, $dateend);
+                    return $exp->between('CustomerCartDetails.created', $datestart , $dateend );
                 })
                 ->group('product_id')
                 ->map(function (\AdminPanel\Model\Entity\CustomerCartDetail $row) use($datestart, $dateend){
