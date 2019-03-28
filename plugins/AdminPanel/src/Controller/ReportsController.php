@@ -300,4 +300,55 @@ class ReportsController extends AppController
         }
         return $dates;
     }
+
+    public function bestView(){
+
+        if ($this->DataTable->isAjax()) {
+
+            $query = $this->Products->find();
+            $query = $query->select(['total' => $query->func()->sum('Products.view')])->first();
+            $totalView = $query->total;
+
+
+            $datatable = $this->DataTable->adapter('AdminPanel.Products')
+                ->contain([
+                ])
+                ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+                    $orConditions = $exp->or_([
+                        'Products.name LIKE' => '%' . $search .'%',
+                        'Products.sku LIKE' => '%' . $search .'%',
+                        'Products.model LIKE' => '%' . $search .'%',
+                        'Products.view LIKE' => '%' . $search .'%',
+                    ]);
+                    return $exp
+                        ->add($orConditions);
+                })
+                ->where(['Products.view > ' => 0 ])
+                ->order(['Products.view' => 'DESC']) ;
+
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->map(function (\AdminPanel\Model\Entity\Product $row) use($totalView){
+                    $row->percent = Number::toPercentage(( $row-> view / $totalView)* 100);
+                    return $row;
+                })
+                ->toArray();
+            //set again datatable
+            $datatable->setData($result);
+            return $datatable->response();
+        }
+
+
+        $products = $this->Products->find()
+            ->select(['name','view'])
+            ->where(['Products.view > ' => 0 ])
+            ->order(['Products.view' => 'DESC'])
+            ->limit(10)
+            ->all()->toArray();
+        $this->set(compact('products'));
+
+
+    }
+
 }

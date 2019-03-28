@@ -307,6 +307,12 @@
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
+                    [
+                        'name' => 'Best View Product Report',
+                        'url' => ['controller' => 'Reports', 'action' => 'bestView'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
                 ]
             ],
             [
