@@ -60,6 +60,40 @@ $this->Html->script(array(
             toolbarButtons: ['fullscreen', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|',
                 'paragraphFormat', 'paragraphStyle', 'align', 'formatOL', 'formatUL', 'indent', 'outdent',
                 '|', 'insertImage', 'insertLink', 'insertTable', 'clearFormatting', 'fontAwesome', 'html']
-        });
+        }).on('froalaEditor.image.uploaded', function (e, editor, response) {
+			// Image was uploaded to the server.
+			// Parse response to get image url. 
+			//console.log(e);
+			var o = JSON.parse(response); 
+
+			return $(location).attr('hostname')+'/'+o.link;			
+			
+			//console.log('Image was uploaded to the server')
+
+		})
+		.on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+			// Image was inserted in the editor.
+			
+			for(var image of $img) {
+				var src = $(image).attr('src');
+				$(image).attr('src', location.origin + src);
+			}
+
+			//console.log(e)
+			//console.log(editor)
+			//console.log($img)
+			//console.log('Image was inserted in the editor')
+
+		})
+		.on('froalaEditor.image.replaced', function (e, editor, $img, response) {
+			// Image was replaced in the editor.
+
+			for(var image of $img) {
+				var src = $(image).attr('src');
+				$(image).attr('src', location.origin + src);
+			} 
+
+			//console.log('Image was replaced in the editor')
+		});
     });
 </script>
