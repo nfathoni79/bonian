@@ -131,6 +131,26 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-12">
+                <div class="m-portlet m-portlet--mobile">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text">
+                                    <?= __('Top Purchased Products By Period') ?>
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+
+                        </div>
+                    </div>
+
+                    <div class="m-portlet__body">
+                        <div id="m_amcharts_15" style="height: 500px;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
@@ -275,6 +295,44 @@ $this->Html->script([
                 "enabled": true
             }
         });
+
+
+
+        var chart = AmCharts.makeChart( "m_amcharts_15", {
+            "type": "serial",
+            "theme": "light",
+            "dataProvider": <?= json_encode($by_periods); ?>,
+            "valueAxes": [ {
+                "gridColor": "#FFFFFF",
+                "gridAlpha": 0.2,
+                "dashLength": 0
+            } ],
+            "gridAboveGraphs": true,
+            "startDuration": 1,
+            "graphs": [ {
+                "balloonText": "[[category]]: <b>[[value]]</b>",
+                "fillAlphas": 0.8,
+                "lineAlpha": 0.2,
+                "type": "column",
+                "valueField": "value"
+            } ],
+            "chartCursor": {
+                "categoryBalloonEnabled": false,
+                "cursorAlpha": 0,
+                "zoomable": false
+            },
+            "categoryField": "name",
+            "categoryAxis": {
+                "gridPosition": "start",
+                "gridAlpha": 0,
+                "tickPosition": "start",
+                "tickLength": 20
+            },
+            "export": {
+                "enabled": true
+            }
+
+        } );
 
 
 

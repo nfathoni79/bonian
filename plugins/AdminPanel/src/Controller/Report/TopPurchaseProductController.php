@@ -2,6 +2,7 @@
 namespace AdminPanel\Controller\Report;
 
 use AdminPanel\Controller\AppController;
+use Cake\I18n\Time;
 
 /**
  * Reports Controller
@@ -25,10 +26,17 @@ class TopPurchaseProductController  extends AppController
         $start = $this->request->getQuery('start');
         $end = $this->request->getQuery('end');
 
+        if (empty($start) || empty ($end)) {
+            $start = (Time::now())->addDays(-14)->format('Y-m-d');
+            $end = (Time::now())->format('Y-m-d');
+        }
+
         $by_categories = $this->byCategory($start, $end);
         $by_brands = $this->byBrand($start, $end);
+        $by_periods = $this->byPeriod($start, $end);
 
-        $this->set(compact('by_categories', 'by_brands'));
+
+        $this->set(compact('by_categories', 'by_brands', 'by_periods'));
     }
 
     protected function byCategory($start = null, $end = null)
@@ -151,6 +159,91 @@ class TopPurchaseProductController  extends AppController
     protected function byPeriod($start = null, $end = null)
     {
 
+        //get date diff
+        $type = null;
+        if ($this->validDate($start) && $this->validDate($end)) {
+            $time = Time::parse($start);
+            $diff_days = $time->diffInDays(Time::parse($end));
+            $diff_months = $time->diffInMonths(Time::parse($end));
+            $diff_years = $time->diffInYears(Time::parse($end));
+
+            if ($diff_days && $diff_months && $diff_years) {
+                $type = 'year';
+            } else if ($diff_days && $diff_months) {
+                $type = 'month';
+            } else {
+                $type = 'day';
+            }
+
+        }
+
+
+        $datatable = $this->OrderDetailProducts->find();
+        $datatable->select([
+            'value' => $datatable->func()->count('OrderDetailProducts.product_id'),
+            'year' => $datatable->func()->year([
+                'Orders.created' => 'identifier'
+            ]),
+            'month' => $datatable->func()->month([
+                'Orders.created' => 'identifier'
+            ]),
+            'day' => $datatable->func()->day([
+                'Orders.created' => 'identifier'
+            ])
+        ])
+        ->leftJoinWith('OrderDetails')
+        ->leftJoinWith('OrderDetails.Orders')
+            ->where([
+                'Orders.payment_status' => 2,
+                //'OrderDetails.order_status_id IN' => [2, 3, 4]
+            ]);
+
+        if ($this->validDate($start) && $this->validDate($end)) {
+            $datatable->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
+                return $exp->gte('Orders.created', $start . ' 00:00:00')
+                    ->lte('Orders.created', $end . ' 23:59:59');
+            });
+        }
+
+        switch ($type) {
+            case 'year':
+                $datatable->group(['year']);
+                break;
+            case 'month':
+                $datatable->group(['month', 'year']);
+                break;
+            case 'day':
+                $datatable->group(['day', 'month', 'year']);
+                break;
+        }
+
+
+        $datatable = $datatable
+            ->order([
+                'Orders.created' => 'ASC'
+            ])
+            ->limit(10)
+            ->map(function(\AdminPanel\Model\Entity\OrderDetailProduct $row) use($type) {
+                switch ($type) {
+                    case 'year':
+                        $row->name = $row->year;
+                        break;
+                    case 'month':
+                        $row->name = date('M', strtotime($row->year . '-' . $row->month . '-' . $row->day));
+                        break;
+                    case 'day':
+                        $row->name = $row->day;
+                        break;
+                }
+
+                unset($row->year);
+                unset($row->month);
+                unset($row->day);
+                return $row;
+            })
+            ->toArray();
+
+        return $datatable;
     }
 
 
