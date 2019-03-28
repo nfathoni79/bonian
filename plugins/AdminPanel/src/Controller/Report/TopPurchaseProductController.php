@@ -36,7 +36,7 @@ class TopPurchaseProductController  extends AppController
         $by_periods = $this->byPeriod($start, $end);
 
 
-        $this->set(compact('by_categories', 'by_brands', 'by_periods'));
+        $this->set(compact('by_categories', 'by_brands', 'by_periods', 'start', 'end'));
     }
 
     protected function byCategory($start = null, $end = null)
@@ -219,7 +219,7 @@ class TopPurchaseProductController  extends AppController
                     ->limit(31);
                 break;
         }
-        
+
         $datatable
             ->order([
                 'Orders.created' => 'ASC'
@@ -233,7 +233,7 @@ class TopPurchaseProductController  extends AppController
                         $row->name = $row->year;
                         break;
                     case 'month':
-                        $row->name = date('M', strtotime($row->year . '-' . $row->month . '-' . $row->day));
+                        $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day));
                         break;
                     case 'day':
                         $row->name = $row->day;
