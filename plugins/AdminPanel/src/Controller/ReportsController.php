@@ -6,6 +6,7 @@ use Cake\Database\Expression\IdentifierExpression;
 use Cake\Database\Expression\QueryExpression;
 use Cake\I18n\Number;
 use DateTime;
+use Cake\I18n\Time;
 
 /**
  * Reports Controller
@@ -14,6 +15,8 @@ use DateTime;
  * @property \AdminPanel\Model\Table\CustomerCartsTable $CustomerCarts
  * @property \AdminPanel\Model\Table\CustomerCartDetailsTable $CustomerCartDetails
  * @property \AdminPanel\Model\Table\OrdersTable $Orders
+ * @property \AdminPanel\Model\Table\CustomerMutationPointsTable $CustomerMutationPoints
+ * @property \AdminPanel\Model\Table\CustomerMutationPointTypesTable $CustomerMutationPointTypes
  *
  * @method \AdminPanel\Model\Entity\Report[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -28,6 +31,8 @@ class ReportsController extends AppController
         $this->loadModel('AdminPanel.CustomerCarts');
         $this->loadModel('AdminPanel.CustomerCartDetails');
         $this->loadModel('AdminPanel.Orders');
+        $this->loadModel('AdminPanel.CustomerMutationPoints');
+        $this->loadModel('AdminPanel.CustomerMutationPointTypes');
     }
 
     /**
@@ -348,6 +353,117 @@ class ReportsController extends AppController
         $this->set(compact('products'));
 
 
+    }
+
+
+    public function couponAndPoint(){
+
+        $datestart = $this->request->getQuery('start');
+        $dateend = $this->request->getQuery('end');
+
+        if (empty($datestart) || empty ($dateend)) {
+            $dateend = date("Y-m-d");
+            $datestart = date("Y-m-d",strtotime(date("Y-m-d", strtotime($dateend)) . " -2 week"));
+        }
+
+        $by_periods = $this->byPeriod($datestart, $dateend);
+        $this->set(compact('by_periods'));
+    }
+
+    protected function validDate($date)
+    {
+        $month = 0;
+        $day = 0;
+        $year = 0;
+
+        if (preg_match('/(\d{4})-(\d{2})-(\d{2})/', $date, $matched)) {
+            $year = $matched[1];
+            $month = $matched[2];
+            $day = $matched[3];
+        }
+
+        return checkdate ($month, $day, $year);
+    }
+
+    protected function byPeriod($start = null, $end = null)
+    {
+
+        //get date diff
+        $type = null;
+        if ($this->validDate($start) && $this->validDate($end)) {
+            $time = Time::parse($start);
+            $diff_days = $time->diffInDays(Time::parse($end));
+            $diff_months = $time->diffInMonths(Time::parse($end));
+            $diff_years = $time->diffInYears(Time::parse($end));
+
+            if ($diff_days && $diff_months && $diff_years) {
+                $type = 'year';
+            } else if ($diff_days && $diff_months) {
+                $type = 'month';
+            } else {
+                $type = 'day';
+            }
+
+        }
+
+        $datatable = $this->CustomerMutationPoints->find();
+        $datatable->select([
+            'plus' => $datatable->func()->sum("IF(CustomerMutationPoints.amount > 0, CustomerMutationPoints.amount, 0)"),
+            'minus' => $datatable->func()->sum("ABS(IF(CustomerMutationPoints.amount < 0, CustomerMutationPoints.amount, 0))"),
+            'year' => $datatable->func()->year([
+                'CustomerMutationPoints.created' => 'identifier'
+            ]),
+            'month' => $datatable->func()->month([
+                'CustomerMutationPoints.created' => 'identifier'
+            ]),
+            'day' => $datatable->func()->day([
+                'CustomerMutationPoints.created' => 'identifier'
+            ])
+        ]);
+
+        if ($this->validDate($start) && $this->validDate($end)) {
+            $datatable->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
+                return $exp->gte('CustomerMutationPoints.created', $start . ' 00:00:00')
+                    ->lte('CustomerMutationPoints.created', $end . ' 23:59:59');
+            });
+        }
+
+        switch ($type) {
+            case 'year':
+                $datatable->group(['year']);
+                break;
+            case 'month':
+                $datatable->group(['month', 'year']);
+                break;
+            case 'day':
+                $datatable->group(['day', 'month', 'year']);
+                break;
+        }
+
+        $datatable = $datatable
+            ->order([
+                'CustomerMutationPoints.created' => 'ASC'
+            ])
+            ->map(function(\AdminPanel\Model\Entity\CustomerMutationPoint $row) use($type) {
+                switch ($type) {
+                    case 'year':
+                        $row->name = $row->year;
+                        break;
+                    case 'month':
+                        $row->name = date('M', strtotime($row->year . '-' . $row->month . '-' . $row->day));
+                        break;
+                    case 'day':
+                        $row->name = $row->day;
+                        break;
+                }
+
+                unset($row->year);
+                unset($row->month);
+                unset($row->day);
+                return $row;
+            })
+            ->toArray();
+        return $datatable;
     }
 
 }

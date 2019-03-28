@@ -313,6 +313,12 @@
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
+                    [
+                        'name' => 'Coupon And Point Mutation Report',
+                        'url' => ['controller' => 'Reports', 'action' => 'couponAndPoint'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
                 ]
             ],
             [

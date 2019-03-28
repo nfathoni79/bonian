@@ -51,7 +51,7 @@ class ExpiredPointCommand extends Command
 
         $check = $this->CustomerBalances->find()
             ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
-                return $exp->lte('modified_point', (Time::now())->addDays(-3)->format('Y-m-d H:i:s'));
+                return $exp->lte('modified_point', (Time::now())->addDays(-90)->format('Y-m-d H:i:s'));
             })
             ->where(['point >' => 0])
             ->all();
