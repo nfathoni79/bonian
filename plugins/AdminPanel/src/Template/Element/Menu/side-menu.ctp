@@ -319,6 +319,12 @@
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
+                    [
+                        'name' => 'Sales Report',
+                        'url' => ['controller' => 'Sales', 'prefix' => 'report'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
                 ]
             ],
             [
