@@ -207,22 +207,26 @@ class TopPurchaseProductController  extends AppController
 
         switch ($type) {
             case 'year':
-                $datatable->group(['year']);
+                $datatable->group(['year'])
+                    ->limit(10);
                 break;
             case 'month':
-                $datatable->group(['month', 'year']);
+                $datatable->group(['month', 'year'])
+                    ->limit(12);
                 break;
             case 'day':
-                $datatable->group(['day', 'month', 'year']);
+                $datatable->group(['day', 'month', 'year'])
+                    ->limit(31);
                 break;
         }
+        
+        $datatable
+            ->order([
+                'Orders.created' => 'ASC'
+            ]);
 
 
         $datatable = $datatable
-            ->order([
-                'Orders.created' => 'ASC'
-            ])
-            ->limit(10)
             ->map(function(\AdminPanel\Model\Entity\OrderDetailProduct $row) use($type) {
                 switch ($type) {
                     case 'year':
