@@ -26,14 +26,14 @@ class SalesController extends AppController
         $report_type = $this->request->getData('report_type', 1);
         $branch_id = $this->request->getData('branch_id');
 
-        $start = (Time::now())->addDays(-29)->format('Y-m-d 00:00:00');
-        $end = (Time::now())->format('Y-m-d 23:59:59');
+        $start = (Time::now())->addDays(-29)->format('Y-m-d');
+        $end = (Time::now())->format('Y-m-d');
 
         if ($date_range = $this->request->getData('date_range')) {
             //parse date range
             list($start, $end) = explode('/', $date_range);
-            $start = (Time::parse(trim($start)))->format('Y-m-d 00:00:00');
-            $end = (Time::parse(trim($end)))->format('Y-m-d 23:59:59');
+            $start = (Time::parse(trim($start)))->format('Y-m-d');
+            $end = (Time::parse(trim($end)))->format('Y-m-d');
         }
 
 
@@ -178,8 +178,8 @@ class SalesController extends AppController
 
             if ($start && $end) {
                 $result->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
-                    return $exp->gte('Orders.created', $start)
-                        ->lte('Orders.created', $end);
+                    return $exp->gte('Orders.created', $start . ' 00:00:00')
+                        ->lte('Orders.created', $end . ' 23:59:59');
                 });
             }
 
