@@ -10,7 +10,7 @@ use Cake\View\View;
  *
  * Default view class for rendering API response
  */
-class JsonView extends View
+class JsonView_ extends View
 {
 
     /**

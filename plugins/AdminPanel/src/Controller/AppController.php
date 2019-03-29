@@ -81,6 +81,6 @@ class AppController extends BaseController
     {
 
         parent::beforeRender($event);
-        $this->viewBuilder()->setClassName('AdminPanel.App');
+        //$this->viewBuilder()->setClassName('AdminPanel.App');
     }
 }
