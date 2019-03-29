@@ -125,11 +125,11 @@
                         </div>
                         <div class="col-lg-2 m--margin-bottom-10-tablet-and-mobile">
                             <label>Branch:</label>
-                            <?= $this->Form->select('branch_id', $branches, ['empty' => '-', 'id' => 'branch_id', 'class' => 'form-control m-input', 'data-col-index' => 3]); ?>
+                            <?= $this->Form->select('branch_id', $branches, ['empty' => '-', 'id' => 'branch_id', 'class' => 'form-control m-input selectpicker', 'data-col-index' => 3]); ?>
                         </div>
                         <div class="col-lg-2 m--margin-bottom-10-tablet-and-mobile">
                             <label>Report By:</label>
-                            <?= $this->Form->select('report_type', [1 => 'Category', 2 => 'Brand', 3 => 'Period'], ['value' => 1, 'id' => 'report_type', 'class' => 'form-control m-input', 'data-col-index' => 3]); ?>
+                            <?= $this->Form->select('report_type', [1 => 'Category', 2 => 'Brand', 3 => 'Period'], ['value' => 1, 'id' => 'report_type', 'class' => 'form-control selectpicker', 'data-col-index' => 3]); ?>
                         </div>
                     </div>
 
@@ -188,7 +188,7 @@ $this->Html->script([
 
     $(document).ready(function(){
 
-        $('select.m-input').selectpicker();
+        $('select.selectpicker').selectpicker();
 
         // predefined ranges
         var start = moment().subtract(29, 'days');
