@@ -1027,7 +1027,7 @@ echo $this->Html->script([
                                         <?php $typeList = ['consignment', 'retail']?>
                                         <?php foreach($typeList as $k => $vals):?>
                                         <label class="m-radio">
-                                            <input type="checkbox" name="type" value="<?php echo $vals;?>" <?= ($vals == $product['type']) ? 'checked="checked"' : '';?> > <?php echo ucfirst($vals);?>
+                                            <input type="radio" name="type" value="<?php echo $vals;?>" <?= ($vals == $product['type']) ? 'checked="checked"' : '';?> > <?php echo ucfirst($vals);?>
                                             <span></span>
                                         </label>
                                         <?php endforeach;?>
