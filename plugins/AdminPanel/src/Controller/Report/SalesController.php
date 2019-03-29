@@ -26,14 +26,14 @@ class SalesController extends AppController
         $report_type = $this->request->getData('report_type', 1);
         $branch_id = $this->request->getData('branch_id');
 
-        $start = (Time::now())->addDays(-29)->format('Y-m-d');
-        $end = (Time::now())->format('Y-m-d');
+        $start = (Time::now())->addDays(-29)->format('Y-m-d 00:00:00');
+        $end = (Time::now())->format('Y-m-d 23:59:59');
 
         if ($date_range = $this->request->getData('date_range')) {
             //parse date range
             list($start, $end) = explode('/', $date_range);
-            $start = trim($start);
-            $end = trim($end);
+            $start = (Time::parse(trim($start)))->format('Y-m-d 00:00:00');
+            $end = (Time::parse(trim($end)))->format('Y-m-d 23:59:59');
         }
 
 
