@@ -117,7 +117,7 @@
                         <div class="col-lg-2 m--margin-bottom-10-tablet-and-mobile">
                             <label>Tanggal:</label>
                             <div class='input-group ' id='m_daterangepicker_6'>
-                                <input type='text' name="date_range" class="form-control m-input" readonly placeholder="Select date range" id="date_range" />
+                                <input type='text' name="date_range" value="<?= $start; ?> / <?= $end; ?>" class="form-control m-input" readonly placeholder="Select date range" id="date_range" />
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>
                                 </div>
@@ -250,7 +250,7 @@ $this->Html->script([
         },
         columns: [
             {data: 'id'},
-            {data: 'item_sales'},
+            {data: 'total'},
             {data: 'gross_sales'},
             {data: 'discount'},
             {data: 'net_sales'},
@@ -266,6 +266,7 @@ $this->Html->script([
             {
                 targets: 1,
                 className: 'text-right',
+                orderable: false,
                 render: function (data, type, row, meta) {
                     return parseInt(row.total).format(0, 3, ',', '.');
                 }
@@ -273,6 +274,7 @@ $this->Html->script([
             {
                 targets: 2,
                 className: 'text-right',
+                orderable: false,
                 render: function (data, type, row, meta) {
                     return parseInt(row.gross_sales).format(0, 3, ',', '.');
                 }
@@ -280,6 +282,7 @@ $this->Html->script([
             {
                 targets: 3,
                 className: 'text-right',
+                orderable: false,
                 render: function (data, type, row, meta) {
                     return row.discount ? parseInt(row.discount).format(0, 3, ',', '.') : 0;
                 }
@@ -287,6 +290,7 @@ $this->Html->script([
             {
                 targets: 4,
                 className: 'text-right',
+                orderable: false,
                 render: function (data, type, row, meta) {
                     return parseInt(row.net_sales).format(0, 3, ',', '.');
                 }
