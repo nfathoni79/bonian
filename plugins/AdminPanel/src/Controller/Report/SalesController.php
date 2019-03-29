@@ -84,8 +84,26 @@ class SalesController extends AppController
                             'min' => $range->func()->min('Orders.created'),
                             'max' => $range->func()->max('Orders.created'),
                         ])
+                        ->leftJoinWith('ProductOptionStocks')
                         ->leftJoinWith('OrderDetails')
-                        ->leftJoinWith('OrderDetails.Orders')
+                        ->leftJoinWith('OrderDetails.Orders');
+
+
+                    if ($branch_id) {
+                        $range->where([
+                            'ProductOptionStocks.branch_id' => $branch_id
+                        ]);
+                    }
+
+                    if ($start && $end) {
+                        $range->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
+                            return $exp->gte('Orders.created', $start . ' 00:00:00')
+                                ->lte('Orders.created', $end . ' 23:59:59');
+                        });
+                    }
+
+
+                    $range = $range
                         ->first();
 
                     $timeInYear = 0;
