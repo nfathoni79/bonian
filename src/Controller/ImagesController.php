@@ -95,7 +95,7 @@ class ImagesController extends AppController
                     list($width, $height) = explode('x', $dimension);
                     if ($entity = $this->ImageSizes->resize($data, $width, $height)) {
                         return $this->response->withAddedHeader('content-type', $data->get('type'))
-                            ->withStringBody(file_get_contents(ROOT . DS . $entity->get('path')));
+                            ->withStringBody(file_get_contents(WWW_ROOT  . $entity->get('path')));
                     }
                 }
             }
