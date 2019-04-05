@@ -14,6 +14,8 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductImageSizesTable $ProductImageSizes
  * @property \AdminPanel\Model\Table\CustomersTable $Customers
  * @property \AdminPanel\Model\Table\ProductRatingImagesTable $ProductRatingImages
+ * @property \AdminPanel\Model\Table\BannersTable $Banners
+ * @property \AdminPanel\Model\Table\ImageSizesTable $ImageSizes
  */
 class ImagesController extends AppController
 {
@@ -29,6 +31,8 @@ class ImagesController extends AppController
         $this->loadModel('AdminPanel.ProductImageSizes');
         $this->loadModel('AdminPanel.Customers');
         $this->loadModel('AdminPanel.ProductRatingImages');
+        $this->loadModel('AdminPanel.Banners');
+        $this->loadModel('AdminPanel.ImageSizes');
     }
 
     /**
@@ -66,6 +70,34 @@ class ImagesController extends AppController
                 }
 
 
+            }
+        } else {
+            $find = $this->Banners->find()
+                ->select([
+                    'image_dimension' => 'ImageSizes.dimension',
+                    'image_path' => 'ImageSizes.path',
+                ])
+                ->where([
+                    'Banners.name' => $name . '.' . $ext
+                ])
+                ->leftJoin(['ImageSizes' => 'image_sizes'], [
+                    'ImageSizes.model' => 'AdminPanel.Banners',
+                    'ImageSizes.foreign_key = Banners.id',
+                ])
+                ->enableAutoFields(true);
+
+            if (!$find->isEmpty()) {
+                /**
+                 * @var \AdminPanel\Model\Entity\Banner $data
+                 */
+                $data = $find->first();
+                if (!$data->get('image_path')) {
+                    list($width, $height) = explode('x', $dimension);
+                    if ($entity = $this->ImageSizes->resize($data, $width, $height)) {
+                        return $this->response->withAddedHeader('content-type', $data->get('type'))
+                            ->withStringBody(file_get_contents(ROOT . DS . $entity->get('path')));
+                    }
+                }
             }
         }
     }
