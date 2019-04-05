@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Utility\Text;
 
 /**
  * Banners Model
@@ -51,8 +52,10 @@ class BannersTable extends Table
                 ],
 //                'path' => 'webroot{DS}files{DS}{model}{DS}{field}{DS}{year}{DS}{month}{DS}',
                 'nameCallback' => function ($tableObj, $entity, $data, $field, $settings) {
+                    //$ext = substr(strrchr($data['name'], '.'), 1);
+                    //return time() . rand(100, 999) . '.' . $ext;
                     $ext = substr(strrchr($data['name'], '.'), 1);
-                    return time() . rand(100, 999) . '.' . $ext;
+                    return str_replace('-', '', Text::uuid()) . '.' . 'jpg'; //strtolower($ext);
                 },
                 'transformer' =>  function ($table, \AdminPanel\Model\Entity\Banner $entity, $data, $field, $settings) {
                     $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
