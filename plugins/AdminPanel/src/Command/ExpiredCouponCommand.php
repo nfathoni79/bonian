@@ -1,0 +1,78 @@
+<?php
+namespace AdminPanel\Command;
+
+use Cake\Console\Arguments;
+use Cake\Console\Command;
+use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleOptionParser;
+
+/**
+ * ExpiredCoupon command.
+ * @property \AdminPanel\Model\Table\ProductCouponsTable $ProductCoupons
+ * @property \AdminPanel\Model\Table\CustomerCartsTable $CustomerCarts
+ * @property \AdminPanel\Model\Table\CustomerCartDetailsTable $CustomerCartDetails
+ */
+class ExpiredCouponCommand extends Command
+{
+
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('AdminPanel.ProductCoupons');
+        $this->loadModel('AdminPanel.CustomerCarts');
+        $this->loadModel('AdminPanel.CustomerCartDetails');
+    }
+    /**
+     * Hook method for defining this command's option parser.
+     *
+     * @see https://book.cakephp.org/3.0/en/console-and-shells/commands.html#defining-arguments-and-options
+     *
+     * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+     * @return \Cake\Console\ConsoleOptionParser The built parser.
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser)
+    {
+        $parser = parent::buildOptionParser($parser);
+
+        return $parser;
+    }
+
+    /**
+     * Implement this method with your command's logic.
+     *
+     * @param \Cake\Console\Arguments $args The command arguments.
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return null|int The exit code or null for success
+     */
+    public function execute(Arguments $args, ConsoleIo $io)
+    {
+        $io->out("checking data product coupon");
+
+        $check = $this->ProductCoupons->find()
+            ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
+                return $exp->lte('expired', (new \DateTime())->format('Y-m-d H:i:s'));
+            })
+            ->where([
+                'status' => 1
+            ])
+            ->all();
+        if($check){
+            foreach($check as $vals){
+                $save = $vals;
+                $save['status'] = 2;
+                if($this->ProductCoupons->save($save)){
+                    $query = $this->CustomerCartDetails->query();
+                    $query->update()
+                        ->set(['status' => 2])
+                        ->where([
+                            'status' => 1,
+                            'product_id' => $vals['product_id'],
+                        ])
+                        ->execute();
+                }
+            }
+        }
+
+        $io->out("finished checking data product coupon");
+    }
+}
