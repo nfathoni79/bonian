@@ -66,7 +66,7 @@ class BannersTable extends Table
 
                     $tmp_name = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
 
-                    $size = new \Imagine\Image\Box(796, 235);
+                    $size = new \Imagine\Image\Box(2048, 1080);
                     $mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
                     $imagine = new \Imagine\Gd\Imagine();
 

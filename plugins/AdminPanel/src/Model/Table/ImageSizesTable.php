@@ -107,14 +107,14 @@ class ImageSizesTable extends Table
 
             $size = new \Imagine\Image\Box($width, $height);
             $mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+            //$mode = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
 
             $dimension = $size->getWidth() . 'x' . $size->getHeight();
             $new_location = $this->cachePath . $dimension . DS;
 
 
-
-            if (!file_exists(ROOT . DS . $this->cachePath)) {
-                mkdir(ROOT . DS . $this->cachePath);
+            if (!file_exists(WWW_ROOT  . $this->cachePath)) {
+                mkdir(WWW_ROOT  . $this->cachePath);
             }
 
 

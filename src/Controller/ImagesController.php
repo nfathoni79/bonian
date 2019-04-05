@@ -83,6 +83,7 @@ class ImagesController extends AppController
                 ->leftJoin(['ImageSizes' => 'image_sizes'], [
                     'ImageSizes.model' => 'AdminPanel.Banners',
                     'ImageSizes.foreign_key = Banners.id',
+                    'ImageSizes.dimension' => $dimension,
                 ])
                 ->enableAutoFields(true);
 
