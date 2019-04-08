@@ -16,6 +16,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductRatingImagesTable $ProductRatingImages
  * @property \AdminPanel\Model\Table\BannersTable $Banners
  * @property \AdminPanel\Model\Table\ImageSizesTable $ImageSizes
+ * @property \AdminPanel\Model\Table\ProductImagesTable $ProductImages
  */
 class ImagesController extends AppController
 {
@@ -33,6 +34,7 @@ class ImagesController extends AppController
         $this->loadModel('AdminPanel.ProductRatingImages');
         $this->loadModel('AdminPanel.Banners');
         $this->loadModel('AdminPanel.ImageSizes');
+        $this->loadModel('AdminPanel.ProductImages');
     }
 
     /**
@@ -68,7 +70,7 @@ class ImagesController extends AppController
                     return $this->response->withAddedHeader('content-type', $data->get('type'))
                         ->withStringBody(file_get_contents(ROOT . DS . $entity->get('path')));
                 }else{
-                    $entity = $this->ProductImageSizes->newEntity(['dir' => WWW_ROOT.'img/', 'name' => 'not-found.png']);
+                    $entity = $this->ProductImages->newEntity(['dir' => WWW_ROOT.'img/', 'name' => 'not-found.png']);
                     $this->ProductImageSizes->resize($entity, $width, $height, false);
                     return $this->response->withAddedHeader('content-type', 'image/png')
                         ->withStringBody(file_get_contents(WWW_ROOT  . 'img/not-found.png'));
