@@ -70,10 +70,15 @@ class ImagesController extends AppController
                     return $this->response->withAddedHeader('content-type', $data->get('type'))
                         ->withStringBody(file_get_contents(ROOT . DS . $entity->get('path')));
                 }else{
-                    $entity = $this->ProductImages->newEntity(['dir' => WWW_ROOT.'img/', 'name' => 'not-found.png']);
-                    $this->ProductImageSizes->resize($entity, $width, $height, false);
-                    return $this->response->withAddedHeader('content-type', 'image/png')
-                        ->withStringBody(file_get_contents(WWW_ROOT  . 'img/not-found.png'));
+					
+					$imagine = new \Imagine\Gd\Imagine();
+					$o = $imagine->open(WWW_ROOT  . 'img/not-found.png');
+					$size = new \Imagine\Image\Box($width, $height);
+					$mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+					
+					return $this->response->withAddedHeader('content-type', 'image/png')
+                        ->withStringBody($o->thumbnail($size, $mode)
+						->get('png'));
                 }
 
 
