@@ -67,6 +67,9 @@ class ImagesController extends AppController
                 if ($entity = $this->ProductImageSizes->resize($data, $width, $height)) {
                     return $this->response->withAddedHeader('content-type', $data->get('type'))
                         ->withStringBody(file_get_contents(ROOT . DS . $entity->get('path')));
+                }else{
+                    return $this->response->withAddedHeader('content-type', 'image/png')
+                        ->withStringBody(file_get_contents(WWW_ROOT  . 'img/not-found.png'));
                 }
 
 
