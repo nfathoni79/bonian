@@ -115,7 +115,7 @@ class ProductImageSizesTable extends Table
      * @param $height
      * @return \AdminPanel\Model\Entity\ProductImageSize|bool
      */
-    public function resize(\AdminPanel\Model\Entity\ProductImage $entity, $width, $height)
+    public function resize(\AdminPanel\Model\Entity\ProductImage $entity, $width, $height, $save = true)
     {
         //WWW_ROOT
         $path = ROOT . DS . $entity->get('dir') . $entity->get('name');
@@ -146,16 +146,17 @@ class ProductImageSizesTable extends Table
             $o->thumbnail($size, $mode)
                 ->save(ROOT . DS . $new_path);
 
+            if($save){
+                $entitySize = $this->newEntity([
+                    'product_image_id' => $entity->get('id'),
+                    'dimension' => $dimension,
+                    'path' => $new_path,
+                    'size' => filesize(ROOT . DS . $new_path)
+                ]);
 
-            $entitySize = $this->newEntity([
-                'product_image_id' => $entity->get('id'),
-                'dimension' => $dimension,
-                'path' => $new_path,
-                'size' => filesize(ROOT . DS . $new_path)
-            ]);
 
-
-            return $this->save($entitySize);
+                return $this->save($entitySize);
+            }
         }
     }
 }
