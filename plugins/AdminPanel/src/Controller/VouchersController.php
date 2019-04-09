@@ -146,9 +146,14 @@ class VouchersController extends AppController
 
             $validator
                 ->requirePresence('percent')
+                ->numeric('percent', 'gunakan format angka')
+                ->greaterThanOrEqual('percent',0,'harus lebih besar daripada 0')
+                ->lessThanOrEqual('percent', 100, ,'maksimum 100 persen')
                 ->notBlank('percent', 'Masukkan jumlah diskon');
             $validator
                 ->requirePresence('value')
+                ->numeric('value', 'gunakan format angka')
+                ->greaterThanOrEqual('value',0,'harus lebih besar daripada 0')
                 ->notBlank('value', 'Masukkan jumlah nilai maksimum voucher');
             $validator
                 ->requirePresence('tos')
@@ -158,6 +163,8 @@ class VouchersController extends AppController
                 case '1':
                     $validator
                         ->requirePresence('point')
+                        ->numeric('point', 'gunakan format angka')
+                        ->greaterThanOrEqual('point',0,'harus lebih besar daripada 0')
                         ->notBlank('point', 'Masukkan jumlah redeem point');
                 break;
                 case '2':
