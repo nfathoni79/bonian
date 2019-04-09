@@ -160,7 +160,7 @@ class AttributesController extends AppController
 
             $validator->addNestedMany('attribute', $attributeDetail);
 
-
+            $error = $validator->errors($this->request->getData());
             if (empty($error)) {
                 $product_category_id = $this->request->getData('product_category_id.0');
 
@@ -198,7 +198,7 @@ class AttributesController extends AppController
                 }
             }
 
-            $response['error'] = $validator->errors($this->request->getData());
+            $response['error'] = $error;
             return $this->response->withType('application/json')
                 ->withStringBody(json_encode($response));
         }

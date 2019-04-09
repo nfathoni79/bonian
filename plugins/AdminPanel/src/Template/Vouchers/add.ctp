@@ -80,9 +80,13 @@
                     <div class="col-md-12">
                         <div class="form-group m-form__group row">
                             <div class="col-lg-4">
-                                <?php  echo $this->Form->control('name',['class' => $default_class,'label' => 'Code Voucher']); ?>
+                                <?php  echo $this->Form->control('name',['class' => $default_class,'required' => false,'label' => 'Judul Promosi']); ?>
                             </div>
-                            <div class="col-lg-6"> </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-4">
+                                <?php  echo $this->Form->control('code_voucher',['class' => $default_class,'required' => false,'label' => 'Code Voucher']); ?>
+                            </div>
                         </div>
                         <div class="form-group m-form__group row">
                             <div class="col-lg-4">
@@ -94,6 +98,14 @@
                         </div>
                         <div class="form-group m-form__group row">
                             <div class="col-lg-4">
+                                <?php  echo $this->Form->control('percent',['class' => $default_class, 'label' => 'Nilai Diskon','required' => false, 'placeholder' => 'Nilai diskon yang diberikan dalam format % (contoh 10)']); ?>
+                            </div>
+                            <div class="col-lg-4">
+                                <?php  echo $this->Form->control('value',['class' => $default_class, 'label' => 'Nilai Maximum Voucher','required' => false, 'placeholder' => 'Nilai voucher yang diberikan']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-4">
                                 <?php echo $this->Form->control('type',['class' => $default_class, 'label' => 'Tipe', 'options' => ['1' => 'Penukaran Point', '2' => 'Seleksi Berdasarkan Kategori'],'empty' => 'Pilih Tipe Voucher']); ?>
                             </div>
                         </div>
@@ -101,22 +113,8 @@
                             <div class="col-lg-4">
                                 <?php echo $this->Form->control('point',['class' => $default_class, 'label' => 'Jumlah Point','required' => false, 'placeholder' => 'Jumlah point yang akan di redeem']); ?>
                             </div>
-                            <div class="col-lg-4">
-                                <?php  echo $this->Form->control('percent',['class' => $default_class, 'label' => 'Nilai Diskon','required' => false, 'placeholder' => 'Nilai diskon yang diberikan dalam format % (contoh 10)']); ?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?php  echo $this->Form->control('value',['class' => $default_class, 'label' => 'Nilai Maximum Voucher','required' => false, 'placeholder' => 'Nilai voucher yang diberikan']); ?>
-                            </div>
                         </div>
                         <div class="category mt-3" style="display:none;">
-                            <div class="form-group m-form__group row">
-                                <div class="col-lg-4">
-                                    <?php  echo $this->Form->control('percent',['class' => $default_class, 'label' => 'Nilai Diskon','required' => false, 'placeholder' => 'Nilai diskon yang diberikan dalam format % (contoh 10)']); ?>
-                                </div>
-                                <div class="col-lg-4">
-                                    <?php  echo $this->Form->control('value',['class' => $default_class, 'label' => 'Nilai Maximum Voucher','required' => false, 'placeholder' => 'Nilai voucher yang diberikan']); ?>
-                                </div>
-                            </div>
                             <div class="form-group  m-form__group row">
                                 <label  class="col-lg-1 col-form-label">Kategori </label>
                                 <div class="col-lg-9">
@@ -144,13 +142,19 @@
                                                 <div data-repeater-create="" class="btn btn btn-primary m-btn m-btn--icon button">
                                                 <span>
                                                     <i class="la la-plus"></i>
-                                                    <span>Add</span>
+                                                    <span>Tambah Kategori</span>
                                                 </span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label class="col-lg-1 col-form-label">Konten:</label>
+                            <div class="col-lg-9">
+                                <?php  echo $this->Form->control('tos',['label' => 'Syarat & Ketentuan', 'div' => false, 'class' => $default_class. ' froala-editor']);?>
                             </div>
                         </div>
                         <div class="form-group m-form__group row">
@@ -221,6 +225,8 @@
 
 
 <?php $this->append('script'); ?>
+
+<?= $this->Element('Script/froala-editor'); ?>
 <?php
 $this->Html->css([
 '/admin-assets/vendors/custom/datatables/datatables.bundle.css'

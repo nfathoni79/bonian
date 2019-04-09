@@ -14,6 +14,16 @@ class AlterTableVouchers extends AbstractMigration
     {
         $table = $this->table('vouchers');
 
+        $table->addColumn('name', 'string', [
+            'limit' => '100',
+            'null' => false,
+            'after' => 'id'
+        ]);
+        $table->addColumn('slug', 'string', [
+            'limit' => '100',
+            'null' => false,
+            'after' => 'name'
+        ]);
         $table->changeColumn('type', 'integer', [
             'default' => 0,
             'null' => true,
@@ -33,6 +43,11 @@ class AlterTableVouchers extends AbstractMigration
         $table->changeColumn('value', 'float', [
             'default' => null,
             'comment' => 'nilai maksimal voucher'
+        ]);
+        $table->addColumn('tos', 'text', [
+            'default' => null,
+            'null' => true,
+            'after' => 'value'
         ]);
         $table->update();
     }

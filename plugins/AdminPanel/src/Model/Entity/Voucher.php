@@ -30,6 +30,8 @@ class Voucher extends Entity
      * @var array
      */
     protected $_accessible = [
+        'name' => true,
+        'slug' => true,
         'code_voucher' => true,
         'date_start' => true,
         'date_end' => true,

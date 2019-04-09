@@ -3,6 +3,7 @@ namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
 use Cake\Validation\Validator;
+use Cake\Utility\Text;
 
 /**
  * Vouchers Controller
@@ -132,7 +133,10 @@ class VouchersController extends AppController
 
             $validator
                 ->requirePresence('name')
-                ->notBlank('name', 'Code voucher harus diisi');
+                ->notBlank('name', 'Judul Promosi harus diisi');
+            $validator
+                ->requirePresence('code_voucher')
+                ->notBlank('code_voucher', 'Code voucher harus diisi');
             $validator
                 ->requirePresence('date_start')
                 ->notBlank('date_start', 'Schedule awal harus di isi');
@@ -140,29 +144,23 @@ class VouchersController extends AppController
                 ->requirePresence('date_end')
                 ->notBlank('date_end', 'Schedule akhir harus di isi');
 
+            $validator
+                ->requirePresence('percent')
+                ->notBlank('percent', 'Masukkan jumlah diskon');
+            $validator
+                ->requirePresence('value')
+                ->notBlank('value', 'Masukkan jumlah nilai maksimum voucher');
+            $validator
+                ->requirePresence('tos')
+                ->notBlank('tos', 'Syarat dan ketentuan wajib di isi');
+
             switch ($type) {
                 case '1':
-
                     $validator
                         ->requirePresence('point')
                         ->notBlank('point', 'Masukkan jumlah redeem point');
-                    $validator
-                        ->requirePresence('percent')
-                        ->notBlank('percent', 'Masukkan jumlah diskon');
-                    $validator
-                        ->requirePresence('value')
-                        ->notBlank('value', 'Masukkan jumlah nilai maksimum voucher');
-
-                    break;
+                break;
                 case '2':
-                    $validator
-                        ->requirePresence('percent')
-                        ->notBlank('percent', 'Masukkan jumlah diskon');
-                    $validator
-                        ->requirePresence('value')
-                        ->notBlank('value', 'Masukkan jumlah nilai maksimum voucher');
-
-
                     $category = new Validator();
                     $category
                         ->requirePresence('id')
@@ -174,58 +172,24 @@ class VouchersController extends AppController
                         ->hasAtLeast('name', 1, 'Nama Kategori Tidak boleh kosong');
 
                     $validator->addNestedMany('categories', $category);
-                    break;
+                break;
             }
+            $error = $validator->errors($this->request->getData());
             if (empty($error)) {
-//                $product_category_id = $this->request->getData('product_category_id.0');
-//
-//                if ($attributes = $this->request->getData('attribute')) {
-//                    foreach($attributes as $attribute) {
-//                        $attributeEntity = $this->Attributes->newEntity([
-//                            'product_category_id' => $product_category_id,
-//                            'name' => $attribute['name'],
-//                            'parent_id' => null
-//                        ]);
-//
-//                        $this->Attributes->setLogMessageBuilder(function () use($attributeEntity){
-//                            return 'Manajemen Atribut - Penambahan atribut : '.$attributeEntity->get('name');
-//                        });
-//
-//                        if ($this->Attributes->save($attributeEntity)) {
-//                            foreach($attribute['value'] as $child) {
-//                                $attributeChildEntity = $this->Attributes->newEntity([
-//                                    'product_category_id' => $product_category_id,
-//                                    'name' => $child,
-//                                    'parent_id' => $attributeEntity->get('id')
-//                                ]);
-//                                $this->Attributes->setLogMessageBuilder(function () use($attributeChildEntity){
-//                                    return 'Manajemen Atribut - Penambahan atribut : '.$attributeChildEntity->get('name');
-//                                });
-//                                $this->Attributes->save($attributeChildEntity);
-//                            }
-//
-//                        }
-//                    }
-//                    if ($attributeEntity->get('id')) {
-//                        $this->Flash->success(__('The attribute has been saved.'));
-//                    }
-//
-//                }
+                $voucher = $this->Vouchers->patchEntity($voucher, $this->request->getData());
+                $voucher->slug = Text::slug($this->request->getData('name'));
+                if ($this->Vouchers->save($voucher)) {
+                    /* Loop save voucher details */
+
+                    $this->Flash->success(__('Konfigurasi voucher berhasil disimpan'));
+                }
             }
 
-            $response['error'] = $validator->errors($this->request->getData());
+            $response['error'] = $error;
             return $this->response->withType('application/json')
                 ->withStringBody(json_encode($response));
         }
-//        if ($this->request->is('post')) {
-//            $voucher = $this->Vouchers->patchEntity($voucher, $this->request->getData());
-//            if ($this->Vouchers->save($voucher)) {
-//                $this->Flash->success(__('The voucher has been saved.'));
-//
-//                return $this->redirect(['action' => 'index']);
-//            }
-//            $this->Flash->error(__('The voucher could not be saved. Please, try again.'));
-//        }
+
         $parent_categories = $this->ProductCategories->find('list')
             ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
                 return $exp->isNull('parent_id');
