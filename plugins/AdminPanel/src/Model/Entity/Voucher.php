@@ -35,6 +35,8 @@ class Voucher extends Entity
         'date_end' => true,
         'qty' => true,
         'type' => true,
+        'point' => true,
+        'percent' => true,
         'value' => true,
         'status' => true,
         'orders' => true

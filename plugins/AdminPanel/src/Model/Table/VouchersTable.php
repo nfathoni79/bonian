@@ -71,16 +71,23 @@ class VouchersTable extends Table
             ->requirePresence('date_end', 'create')
             ->allowEmptyDateTime('date_end', false);
 
-        $validator
-            ->integer('qty')
-            ->requirePresence('qty', 'create')
-            ->allowEmptyString('qty', false);
+//        $validator
+//            ->integer('qty')
+//            ->requirePresence('qty', 'create')
+//            ->allowEmptyString('qty', false);
 
         $validator
             ->integer('type')
             ->requirePresence('type', 'create')
             ->allowEmptyString('type', false);
-
+        $validator
+            ->numeric('point')
+            ->requirePresence('point', 'create')
+            ->allowEmptyString('point', false);
+        $validator
+            ->numeric('percent')
+            ->requirePresence('percent', 'create')
+            ->allowEmptyString('percent', false);
         $validator
             ->numeric('value')
             ->requirePresence('value', 'create')
