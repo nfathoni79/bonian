@@ -152,9 +152,9 @@
                             </div>
                         </div>
                         <div class="form-group m-form__group row">
-                            <label class="col-lg-1 col-form-label">Konten:</label>
+                            <label class="col-lg-1 col-form-label">Syarat & Ketentuan</label>
                             <div class="col-lg-9">
-                                <?php  echo $this->Form->control('tos',['label' => 'Syarat & Ketentuan', 'div' => false, 'class' => $default_class. ' froala-editor']);?>
+                                <?php  echo $this->Form->control('tos',['label' => false, 'div' => false, 'class' => $default_class. ' froala-editor']);?>
                             </div>
                         </div>
                         <div class="form-group m-form__group row">
