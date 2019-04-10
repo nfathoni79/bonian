@@ -9,6 +9,7 @@ use Cake\Utility\Text;
  * Vouchers Controller
  * @property \AdminPanel\Model\Table\VouchersTable $Vouchers
  * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
+ * @property \AdminPanel\Model\Table\VoucherDetailsTable $VoucherDetails
  *
  * @method \AdminPanel\Model\Entity\Voucher[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -20,6 +21,7 @@ class VouchersController extends AppController
         parent::initialize();
         $this->loadModel('AdminPanel.ProductCategories');
         $this->loadModel('AdminPanel.Vouchers');
+        $this->loadModel('AdminPanel.VoucherDetails');
 
     }
     /**
@@ -136,6 +138,7 @@ class VouchersController extends AppController
                 ->notBlank('name', 'Judul Promosi harus diisi');
             $validator
                 ->requirePresence('code_voucher')
+                ->regex('code_voucher','/[^\s]+/', 'Format no whitespace')
                 ->notBlank('code_voucher', 'Code voucher harus diisi');
             $validator
                 ->requirePresence('date_start')
@@ -148,13 +151,18 @@ class VouchersController extends AppController
                 ->requirePresence('percent')
                 ->numeric('percent', 'gunakan format angka')
                 ->greaterThanOrEqual('percent',0,'harus lebih besar daripada 0')
-                ->lessThanOrEqual('percent', 100, ,'maksimum 100 persen')
+                ->lessThanOrEqual('percent', 100, 'maksimum 100 persen')
                 ->notBlank('percent', 'Masukkan jumlah diskon');
             $validator
                 ->requirePresence('value')
                 ->numeric('value', 'gunakan format angka')
                 ->greaterThanOrEqual('value',0,'harus lebih besar daripada 0')
                 ->notBlank('value', 'Masukkan jumlah nilai maksimum voucher');
+            $validator
+                ->requirePresence('qty')
+                ->numeric('qty', 'gunakan format angka')
+                ->greaterThanOrEqual('qty',0,'harus lebih besar daripada 0')
+                ->notBlank('qty', 'Masukkan jumlah kuota');
             $validator
                 ->requirePresence('tos')
                 ->notBlank('tos', 'Syarat dan ketentuan wajib di isi');
@@ -175,8 +183,7 @@ class VouchersController extends AppController
 
                     $category
                         ->requirePresence('name')
-                        ->notBlank('name', 'Nama Kategori Tidak boleh kosong')
-                        ->hasAtLeast('name', 1, 'Nama Kategori Tidak boleh kosong');
+                        ->notBlank('name', 'Nama Kategori Tidak boleh kosong');
 
                     $validator->addNestedMany('categories', $category);
                 break;
@@ -186,8 +193,15 @@ class VouchersController extends AppController
                 $voucher = $this->Vouchers->patchEntity($voucher, $this->request->getData());
                 $voucher->slug = Text::slug($this->request->getData('name'));
                 if ($this->Vouchers->save($voucher)) {
-                    /* Loop save voucher details */
-
+                    if ($categories = $this->request->getData('categories')) {
+                        foreach($categories as $category) {
+                            $categoryEntity = $this->VoucherDetails->newEntity([
+                                'voucher_id' => $voucher->get('id'),
+                                'product_category_id' => $category['id']
+                            ]);
+                            $this->VoucherDetails->save($categoryEntity);
+                        }
+                    }
                     $this->Flash->success(__('Konfigurasi voucher berhasil disimpan'));
                 }
             }

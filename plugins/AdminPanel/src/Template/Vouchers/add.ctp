@@ -108,6 +108,9 @@
                             <div class="col-lg-4">
                                 <?php echo $this->Form->control('type',['class' => $default_class, 'label' => 'Tipe', 'options' => ['1' => 'Penukaran Point', '2' => 'Seleksi Berdasarkan Kategori'],'empty' => 'Pilih Tipe Voucher']); ?>
                             </div>
+                            <div class="col-lg-4">
+                                <?php echo $this->Form->control('qty',['class' => $default_class, 'label' => 'Kuota','required' => false, 'placeholder' => 'Jumlah kuota']); ?>
+                            </div>
                         </div>
                         <div class="form-group m-form__group row point" style="display:none;">
                             <div class="col-lg-4">

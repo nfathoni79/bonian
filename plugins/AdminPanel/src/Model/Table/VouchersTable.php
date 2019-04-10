@@ -57,7 +57,7 @@ class VouchersTable extends Table
 
         $validator
             ->scalar('code_voucher')
-            ->maxLength('code_voucher', 8)
+            ->maxLength('code_voucher', 15)
             ->requirePresence('code_voucher', 'create')
             ->allowEmptyString('code_voucher', false);
 
