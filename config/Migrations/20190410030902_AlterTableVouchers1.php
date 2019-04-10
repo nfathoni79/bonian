@@ -17,6 +17,12 @@ class AlterTableVouchers1 extends AbstractMigration
             'null' => false,
             'limit' => 15
         ]);
+        $table->addColumn('stock', 'integer', [
+            'default' => 0,
+            'null' => true,
+            'limit' => 11,
+            'after' => 'qty'
+        ]);
         $table->update();
     }
 }

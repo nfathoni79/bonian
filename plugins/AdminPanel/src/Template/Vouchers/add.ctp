@@ -68,7 +68,7 @@
             </div>
 
 
-            <?= $this->Form->create($voucher,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form', 'id' => 'm_form']); ?>
+            <?= $this->Form->create($voucher,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form', 'id' => 'm_form','type' => 'file']); ?>
             <div class="m-portlet__body">
                 <?php
                     $this->Form->setConfig('errorClass', 'is-invalid');
@@ -84,6 +84,14 @@
                             </div>
                         </div>
                         <div class="form-group m-form__group row">
+                            <div class="col-lg-4">
+                                <?php echo $this->Form->control('type',['class' => $default_class, 'label' => 'Tipe', 'options' => ['1' => 'Penukaran Point', '2' => 'Seleksi Berdasarkan Kategori', '3' => 'Private Voucher'],'empty' => 'Pilih Tipe Voucher']); ?>
+                            </div>
+                            <div class="col-lg-4">
+                                <?php echo $this->Form->control('qty',['class' => $default_class, 'label' => 'Kuota','required' => false, 'placeholder' => 'Jumlah kuota']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row code" style="display:none;">
                             <div class="col-lg-4">
                                 <?php  echo $this->Form->control('code_voucher',['class' => $default_class,'required' => false,'label' => 'Code Voucher']); ?>
                             </div>
@@ -102,14 +110,6 @@
                             </div>
                             <div class="col-lg-4">
                                 <?php  echo $this->Form->control('value',['class' => $default_class, 'label' => 'Nilai Maximum Voucher','required' => false, 'placeholder' => 'Nilai voucher yang diberikan']); ?>
-                            </div>
-                        </div>
-                        <div class="form-group m-form__group row">
-                            <div class="col-lg-4">
-                                <?php echo $this->Form->control('type',['class' => $default_class, 'label' => 'Tipe', 'options' => ['1' => 'Penukaran Point', '2' => 'Seleksi Berdasarkan Kategori'],'empty' => 'Pilih Tipe Voucher']); ?>
-                            </div>
-                            <div class="col-lg-4">
-                                <?php echo $this->Form->control('qty',['class' => $default_class, 'label' => 'Kuota','required' => false, 'placeholder' => 'Jumlah kuota']); ?>
                             </div>
                         </div>
                         <div class="form-group m-form__group row point" style="display:none;">
@@ -154,10 +154,28 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group m-form__group row">
+                        <div class="form-group m-form__group row syarat" style="display:none;">
                             <label class="col-lg-1 col-form-label">Syarat & Ketentuan</label>
                             <div class="col-lg-9">
                                 <?php  echo $this->Form->control('tos',['label' => false, 'div' => false, 'class' => $default_class. ' froala-editor']);?>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row file"  style="display:none;">
+                            <label class="col-lg-1 col-form-label">Import File</label>
+                            <div class="col-lg-4">
+                                <div></div>
+                                <div class="custom-file">
+                                    <input type="file" name="files" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label"  for="customFile">Pilih file</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 offset-1">
+                                <a href="<?= $this->Url->build('/files/csv/vouchers.csv'); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                                <span>
+                                    <i class="la la-download"></i>
+                                    <span><?= __('Contoh CSV Voucher') ?></span>
+                                </span>
+                                </a>
                             </div>
                         </div>
                         <div class="form-group m-form__group row">
@@ -262,9 +280,21 @@ $this->Html->script([
             if(tipe == '1'){
                 $('.point').show();
                 $('.category').hide();
-            }else{
+                $('.file').hide();
+                $('.syarat').hide();
+                $('.code').show();
+            }else if(tipe == '2'){
                 $('.point').hide();
+                $('.file').hide();
                 $('.category').show();
+                $('.syarat').show();
+                $('.code').show();
+            }else if(tipe == '3'){
+                $('.point').hide();
+                $('.category').hide();
+                $('.syarat').hide();
+                $('.code').hide();
+                $('.file').show();
             }
         });
 
@@ -275,6 +305,7 @@ $this->Html->script([
 
 
         $("#m_form").submit(function(e) {
+            console.log(formEl.find(':input'));
             ajaxRequest.post(url, formEl.find(':input'), function(data,saved) {
                 if (data.success) {
                     location.reload();
