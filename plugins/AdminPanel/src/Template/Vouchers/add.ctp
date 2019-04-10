@@ -43,7 +43,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Voucher') ?>
+                                <?= __('Tambah Voucher') ?>
                             </span>
                         </a>
                     </li>
@@ -58,7 +58,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Daftar Voucher') ?>
+                            <?= __('Tambah Voucher') ?>
                         </h3>
                     </div>
                 </div>
@@ -129,12 +129,12 @@
                                                     <?php echo $this->Form->control('categories[0][name]', ['label' => false, 'class' => $default_class . ' category-name', 'readonly' => true, 'data-id' => 0]);?>
                                                 </div>
                                                 <div class="col-lg-2">
-                                                    <a href="javascript:void(0);" class="btn btn-info m-btn m-btn--icon btn-pick"  data-id="0"  data-toggle="modal" data-target="#m_modal_1">
+                                                    <a href="javascript:void(0);" class="btn btn-info m-btn m-btn--icon btn-sm btn-pick"  data-id="0"  data-toggle="modal" data-target="#m_modal_1">
                                                         <i class="la la-list-alt"></i> Pilih Kategori
                                                     </a>
                                                 </div>
                                                 <div class="col-lg-2">
-                                                    <a href="javascript:void(0);" data-repeater-delete="" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only remove-row">
+                                                    <a href="javascript:void(0);" data-repeater-delete="" class="btn btn-danger btn-sm m-btn m-btn--icon m-btn--icon-only remove-row">
                                                         <i class="la la-remove"></i>
                                                     </a>
                                                 </div>
@@ -142,7 +142,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <div data-repeater-create="" class="btn btn btn-primary m-btn m-btn--icon button">
+                                                <div data-repeater-create="" class="btn btn btn-primary btn-sm m-btn m-btn--icon button">
                                                 <span>
                                                     <i class="la la-plus"></i>
                                                     <span>Tambah Kategori</span>

@@ -41,6 +41,10 @@ class VouchersTable extends Table
             'foreignKey' => 'voucher_id',
             'className' => 'AdminPanel.Orders'
         ]);
+        $this->hasMany('VoucherDetails', [
+            'foreignKey' => 'voucher_id',
+            'className' => 'AdminPanel.VoucherDetails'
+        ]);
     }
 
     /**
