@@ -103,6 +103,11 @@
                                 echo $this->Form->control('url', ['label' => false, 'div' => false,'empty' => true, 'required' => false, 'class' => $default_class]);
                             ?>
                         </div>
+                        <div class="col-lg-4">
+                            <a href="javascript:void(0);" class="btn btn-info m-btn m-btn--icon"  data-toggle="modal" data-target="#m_modal_1">
+                                <i class="la la-list-alt"></i> Pick Content
+                            </a>
+                        </div>
                     </div>
                     <div class="form-group m-form__group row">
                         <label class="col-lg-2 col-form-label">Gambar Banner </label>
@@ -136,6 +141,76 @@
         </div>
     </div>
 </div>
+
+
+<!--begin::Modal-->
+<div class="modal fade" id="m_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Pilih Konten Promosi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <ul class="nav nav-tabs  m-tabs-line" role="tablist">
+                    <li class="nav-item m-tabs__item">
+                        <a class="nav-link m-tabs__link produk active" data-toggle="tab" href="#Produk" role="tab" data-content="produk">Produk</a>
+                    </li>
+                    <li class="nav-item m-tabs__item">
+                        <a class="nav-link m-tabs__link voucher" data-toggle="tab" href="#Voucher" role="tab" data-content="voucher">Voucher</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="Produk" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="table-produk">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nama Produk</th>
+                                    <th>SKU</th>
+                                    <th>Aksi</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="Voucher" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="table-voucher">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Tipe Voucher</th>
+                                    <th>Nama Voucher</th>
+                                    <th>Aksi</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php
+$this->Html->css([
+'/admin-assets/vendors/custom/datatables/datatables.bundle.css'
+], ['block' => true]);
+$this->Html->script([
+'/admin-assets/vendors/custom/datatables/datatables.bundle',
+], ['block' => true]);
+?>
 <?php
 $this->Html->script([
 '/admin-assets/vendors/custom/libs/validation-render',
@@ -143,6 +218,12 @@ $this->Html->script([
 ?>
 <?php $this->append('script'); ?>
 <script>
+
+    function picked(url) {
+        $('#url').val(url);
+        $('#m_modal_1').modal('hide');
+    }
+
     $(document).ready(function () {
         var select = $('#product-category-id').val();
         if(select){
@@ -163,6 +244,92 @@ $this->Html->script([
                 $('#position').prop('disabled', false);
             }
         })
+
+        $(window).on('shown.bs.modal', function() {
+            $('.active').trigger('click');
+
+
+        });
+
+
+        $('.nav-link').on('click',function(){
+
+
+            var content = $(this).data('content');
+            if(content == 'voucher'){
+                var url = "<?= $this->Url->build(['controller' => 'Vouchers','action' => 'index']); ?>";
+
+                $('#table-voucher').DataTable({
+
+                    "bDestroy": true,
+                    processing: true,
+                    serverSide: true,
+                    order: [[0, 'desc']],
+                    ajax: {
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            pagination: {
+                                perpage: 50,
+                            },
+                            _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
+                        },
+                    },
+                    initComplete: function(settings, json) {
+
+                    },
+                    columns: [
+                        {data: 'id'},
+                        {data: 'type_text'},
+                        {data: 'name'},
+                    ],
+                    columnDefs: [
+                        {
+                            targets: 3,
+                            render: function (data, type, row, meta) {
+                                return '<a href="javascript:picked(\'/promotion/'+row.slug+'\');" class="m-portlet__nav-link btn btn-sm btn-primary " title="Pick">Pilih</a>';
+                            }
+                        },
+                    ]
+
+                });
+            }else if(content == 'produk'){
+                var url = "<?= $this->Url->build(['controller' => 'Products','action' => 'indexpick']); ?>";
+
+                $('#table-produk').DataTable({
+
+                    "bDestroy": true,
+                    processing: true,
+                    serverSide: true,
+                    order: [[0, 'desc']],
+                    ajax: {
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            pagination: {
+                                perpage: 50,
+                            },
+                            _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
+                        },
+                    },
+                    columns: [
+                        {data: 'id'},
+                        {data: 'name'},
+                        {data: 'sku'},
+                    ],
+                    columnDefs: [
+                        {
+                            targets: 3,
+                            render: function (data, type, row, meta) {
+                                return '<a href="javascript:picked(\'/products/detail/'+row.slug+'\');" class="m-portlet__nav-link btn btn-sm btn-primary " title="Pick">Pilih</a>';
+                            }
+                        },
+                    ]
+
+                });
+            }
+
+        });
     })
 </script>
 <?php $this->end(); ?>

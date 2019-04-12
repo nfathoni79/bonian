@@ -1853,4 +1853,33 @@ class ProductsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function indexpick(){
+
+
+        if ($this->DataTable->isAjax()) {
+            $datatable = $this->DataTable->adapter('AdminPanel.Products')
+                ->contain([
+
+                ])
+                ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+                    $orConditions = $exp->or_([
+                        'Products.name LIKE' => '%' . $search .'%',
+                        'Products.sku LIKE' => '%' . $search .'%',
+                    ]);
+                    return $exp
+                        ->add($orConditions);
+                });
+
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->toArray();
+
+            //set again datatable
+            $datatable->setData($result);
+            return $datatable->response();
+        }
+
+    }
 }
