@@ -35,6 +35,8 @@ class AlterCustomerAuthenticate extends AbstractMigration
             'after' => 'browser'
         ]);
 
+        $table->addIndex(['bid']);
+
         $table->update();
     }
 }
