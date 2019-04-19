@@ -204,13 +204,23 @@ class VouchersController extends AppController
                 case '3':
 
                     $validator
-                        ->requirePresence('files')
-                        ->add('files', [
-                            'validExtension' => [
-                                'rule' => ['extension',['csv']], // default  ['gif', 'jpeg', 'png', 'jpg']
-                                'message' => __('These files extension are allowed: .csv')
-                            ]
-                        ]);
+                        ->requirePresence('prefix')
+                        ->regex('prefix','/^[a-z]{2}$/i', '2 karakter prefix')
+                        ->notBlank('prefix', 'Prefix harus diisi');
+                    $validator
+                        ->requirePresence('jumlah')
+                        ->numeric('jumlah', 'gunakan format angka')
+                        ->greaterThanOrEqual('jumlah',0,'harus lebih besar daripada 0')
+                        ->notBlank('jumlah', 'Jumlah voucher harus diisi');
+
+//                    $validator
+//                        ->requirePresence('files')
+//                        ->add('files', [
+//                            'validExtension' => [
+//                                'rule' => ['extension',['csv']], // default  ['gif', 'jpeg', 'png', 'jpg']
+//                                'message' => __('These files extension are allowed: .csv')
+//                            ]
+//                        ]);
                 break;
             }
             $error = $validator->errors($this->request->getData());
@@ -250,32 +260,26 @@ class VouchersController extends AppController
                     case '3':
 
                         /* Import data */
+                        $prefix = $this->request->getData('prefix');
+                        $jumlah = $this->request->getData('jumlah');
+
                         try {
 
-                            $data = $this->request->getData('files');
-                            $file = $data['tmp_name'];
-                            $handle = fopen($file, "r");
                             $success = true;
                             $this->Vouchers->getConnection()->begin();
 
-                            $count = 0;
-                            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
-
-                                /* SKIP ROW 0*/
-                                $count++;
-                                if ($count == 1) {
-                                    continue;
-                                }
+                            for($i=0;$i<=$jumlah;$i++){
+                                $codeVoucher = $prefix . $this->randomNumber(8);
 
                                 /* CHECK TO DB EXSIST */
                                 $find = $this->Vouchers->find()
-                                    ->where(['code_voucher' => trim($row[0])])
+                                    ->where(['code_voucher' => $codeVoucher])
                                     ->first();
                                 if(empty($find)){
                                     $entity = $this->Vouchers->newEntity([
                                         'name' => $this->request->getData('name'),
                                         'slug' => Text::slug(strtolower($this->request->getData('name'))),
-                                        'code_voucher' => trim($row[0]),
+                                        'code_voucher' => $codeVoucher,
                                         'date_start' => $this->request->getData('date_start'),
                                         'date_end' => $this->request->getData('date_end'),
                                         'qty' => 1,
@@ -307,10 +311,10 @@ class VouchersController extends AppController
                             }else{
                                 $this->Vouchers->getConnection()->rollback();
                             }
-
-                        } catch(\Cake\ORM\Exception\PersistenceFailedException $e) {
+                        }catch(\Cake\ORM\Exception\PersistenceFailedException $e) {
                             $this->Vouchers->getConnection()->rollback();
                         }
+
 
                         break;
                 }
@@ -327,6 +331,16 @@ class VouchersController extends AppController
                 return $exp->isNull('parent_id');
             })->toArray();
         $this->set(compact('voucher','parent_categories'));
+    }
+
+    private function randomNumber($length) {
+        $result = '';
+
+        for($i = 0; $i < $length; $i++) {
+            $result .= mt_rand(0, 9);
+        }
+
+        return $result;
     }
 
     /**
