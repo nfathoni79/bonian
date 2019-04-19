@@ -87,7 +87,7 @@
                             <div class="col-lg-4">
                                 <?php echo $this->Form->control('type',['class' => $default_class, 'label' => 'Tipe', 'options' => ['1' => 'Penukaran Point', '2' => 'Seleksi Berdasarkan Kategori', '3' => 'Private Voucher'],'empty' => 'Pilih Tipe Voucher']); ?>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 qty">
                                 <?php echo $this->Form->control('qty',['class' => $default_class, 'label' => 'Kuota','required' => false, 'placeholder' => 'Jumlah kuota']); ?>
                             </div>
                         </div>
@@ -161,21 +161,11 @@
                             </div>
                         </div>
                         <div class="form-group m-form__group row file"  style="display:none;">
-                            <label class="col-lg-1 col-form-label">Import File</label>
                             <div class="col-lg-4">
-                                <div></div>
-                                <div class="custom-file">
-                                    <input type="file" name="files" class="custom-file-input" id="customFile">
-                                    <label class="custom-file-label"  for="customFile">Pilih file</label>
-                                </div>
+                                <?php echo $this->Form->control('prefix',['type' => 'text','required' => false,'class' => $default_class, 'label' => 'Prefix', 'placeholder' => 'Prefix voucher, 2 katekter']); ?>
                             </div>
-                            <div class="col-lg-4 offset-1">
-                                <a href="<?= $this->Url->build('/files/csv/vouchers.csv'); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
-                                <span>
-                                    <i class="la la-download"></i>
-                                    <span><?= __('Contoh CSV Voucher') ?></span>
-                                </span>
-                                </a>
+                            <div class="col-lg-4">
+                                <?php echo $this->Form->control('jumlah',['type' => 'text','required' => false,'class' => $default_class, 'label' => 'Jumlah voucher', 'placeholder' => 'Generate jumlah voucher']); ?>
                             </div>
                         </div>
                         <div class="form-group m-form__group row">
@@ -283,18 +273,24 @@ $this->Html->script([
                 $('.file').hide();
                 $('.syarat').hide();
                 $('.code').show();
+                $('#qty').val('');
+                $('.qty').show();
             }else if(tipe == '2'){
                 $('.point').hide();
                 $('.file').hide();
                 $('.category').show();
                 $('.syarat').show();
                 $('.code').show();
+                $('#qty').val('');
+                $('.qty').show();
             }else if(tipe == '3'){
                 $('.point').hide();
                 $('.category').hide();
                 $('.syarat').hide();
                 $('.code').hide();
                 $('.file').show();
+                $('#qty').val('1');
+                $('.qty').hide();
             }
         });
 
