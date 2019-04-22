@@ -155,6 +155,7 @@ class DigitalsController extends AppController
                 $details->set('denom', $vals['denom']);
                 $details->set('price', $vals['price']);
                 $details->set('operator', $vals['operator']);
+                $details->set('point', $vals['point']);
                 $details->set('status', $vals['status']);
                 $this->DigitalDetails->save($details);
             }

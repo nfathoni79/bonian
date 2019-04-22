@@ -91,6 +91,7 @@
                             <th>Denom</th>
                             <th>Operator</th>
                             <th>Price</th>
+                            <th>Point</th>
                             <th>Status</th>
                         </tr>
                         </thead>
@@ -239,6 +240,12 @@ $this->Html->script([
             },
             {
                 targets: 6,
+                render: function (data, type, row, meta) {
+                    return '<div class="form-group m-form__group row"><div class="col-xl-12"><input type="text" class="form-control numberinput"  name="DigitalDetails['+row.id+'][point]" value="'+(new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})).format(row.point)+'"/></div></div>';
+                }
+            },
+            {
+                targets: 7,
                 width: "15%",
                 render: function (data, type, row, meta) {
                     var status = {
