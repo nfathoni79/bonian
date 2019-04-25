@@ -119,6 +119,9 @@
                     <label class="col-form-label col-lg-4">Jumlah Potongan</label>
                     <div class="col-lg-6">
                         <?php
+                            echo $this->Form->control('sku',['type' => 'hidden']);
+                        ?>
+                        <?php
                              echo $this->Form->control('price',['type' => 'number','div' => false, 'label' => false, 'class' => 'form-control' ]);
                         ?>
                     </div>
@@ -216,6 +219,7 @@ echo $this->Html->script([
 
         $('.k_typeahead').on('typeahead:select', function(evt, item) {
             $("#product-id").val(item.id)
+            $("#sku").val(item.sku)
             console.log(item);
         })
     }

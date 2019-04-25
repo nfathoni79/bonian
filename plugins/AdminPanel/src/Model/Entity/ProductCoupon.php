@@ -31,6 +31,7 @@ class ProductCoupon extends Entity
         'product_id' => true,
         'price' => true,
         'expired' => true,
+        'sku' => true,
         'status' => true,
         'created' => true,
         'product' => true
