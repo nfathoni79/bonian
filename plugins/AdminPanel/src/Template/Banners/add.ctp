@@ -257,7 +257,7 @@ $this->Html->script([
 
             var content = $(this).data('content');
             if(content == 'voucher'){
-                var url = "<?= $this->Url->build(['controller' => 'Vouchers','action' => 'index']); ?>";
+                var url = "<?= $this->Url->build(['controller' => 'Vouchers','action' => 'picker']); ?>";
 
                 $('#table-voucher').DataTable({
 

@@ -1890,7 +1890,7 @@ class ProductsController extends AppController
                     ]);
                     return $exp
                         ->add($orConditions);
-                });
+                })->where(['Products.name !=' => '','Products.product_status_id' =>1]);
 
             $result = $datatable
                 ->setSorting()

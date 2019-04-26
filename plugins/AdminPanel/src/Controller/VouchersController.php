@@ -97,6 +97,65 @@ class VouchersController extends AppController
         $this->set(compact('voucherType'));
     }
 
+    public function picker()
+    {
+
+
+        if ($this->DataTable->isAjax()) {
+
+            $datatable = $this->DataTable->adapter('AdminPanel.Vouchers')
+                ->select([]) 
+                ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+                    $orConditions = $exp->or_([
+                        'Vouchers.code_voucher LIKE' => '%' . $search .'%',
+                        'Vouchers.date_start LIKE' => '%' . $search .'%',
+                        'Vouchers.date_end LIKE' => '%' . $search .'%',
+                    ]);
+                    return $exp
+                        ->add($orConditions);
+                })
+                ->getRequestColumn(1, function($request, \Cake\ORM\Query $table) {
+                    if (!empty($request['search']['value'])) {
+                        $type_id = $request['search']['value'];
+                        $table->where([
+                            'Vouchers.type' => $type_id
+                        ]);
+                    }
+                })
+                ->getRequestColumn(2, function($request, \Cake\ORM\Query $table) {
+                    if (!empty($request['search']['value'])) {
+                        $codeVoucher = $request['search']['value'];
+                        $table->where([
+                            'Vouchers.code_voucher' => $codeVoucher
+                        ]);
+                    }
+                })
+				->where(['Vouchers.type' => 2])
+            ;
+
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->map(function (\AdminPanel\Model\Entity\Voucher $row) {
+                    $type = ['1' => 'Penukaran Point', '2' => 'Seleksi Kategori', '3' => 'Private Voucher'];
+                     $row->type_text = $type[$row->type];
+                    return $row;
+                })
+                ->toArray();
+
+
+
+
+            //set again datatable
+            $datatable->setData($result);
+            return $datatable->response();
+        }
+
+
+        $voucherType = ['1' => 'Penukaran Point', '2' => 'Seleksi Kategori', '3' => 'Private Voucher'];
+        $this->set(compact('voucherType'));
+    }
+
 
 
     /**
