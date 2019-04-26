@@ -339,12 +339,21 @@ class ProductsController extends AppController
                     ->requirePresence('sku')
                     ->notBlank('sku', 'tidak boleh kosong');
 
-                $validator->addNestedMany('ProductOptionPrices', $productPrice);
-
-
                 $productSize = new Validator();
-                $productSize
-                    ->notBlank('weight');
+                $validator->addNestedMany('ProductOptionPrices', $productPrice);
+				foreach($this->request->getData('ProductOptionStocks') as $vals){
+					if(!empty($vals['weight'])){ 
+						$productSize
+							->notBlank('weight');
+					}else{ 
+						$productSize
+							->notBlank('length');
+						$productSize
+							->notBlank('width');
+						$productSize
+							->notBlank('height');
+					} 
+				} 
 
 
                 //added nested validation on branches -> 0 -> branch_id
@@ -360,8 +369,7 @@ class ProductsController extends AppController
 
                 $validator->addNestedMany('ProductOptionStocks', $productSize);
 
-                $error = $validator->errors($this->request->getData());
-
+                $error = $validator->errors($this->request->getData()); 
                 if (empty($error)) {
 
                     $productEntity = $this->Products->find()
@@ -1249,8 +1257,21 @@ class ProductsController extends AppController
 
 
             $productSize = new Validator();
-            $productSize
-                ->notBlank('weight');
+			
+			
+			foreach($this->request->getData('ProductOptionStocks') as $vals){
+				if(!empty($vals['weight'])){ 
+					$productSize
+						->notBlank('weight');
+				}else{ 
+					$productSize
+						->notBlank('length');
+					$productSize
+						->notBlank('width');
+					$productSize
+						->notBlank('height');
+				} 
+			}  
 
 
             //added nested validation on branches -> 0 -> branch_id
