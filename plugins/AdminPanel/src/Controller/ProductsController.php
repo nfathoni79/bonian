@@ -1288,7 +1288,7 @@ class ProductsController extends AppController
             $validator->addNestedMany('ProductOptionStocks', $productSize);
 
             $error = $validator->errors($this->request->getData());
-
+			
             if (empty($error)) {
                 $getData = $this->request->getData();
 
@@ -1468,19 +1468,18 @@ class ProductsController extends AppController
                     }
 
                     if ($option_prices = $this->request->getData('ProductOptionPrices')) {
-                        $idx = 1;
-
-
+                        // $idx = 1;
+ 
                         foreach($option_prices as $key => $price) {
 
-                            $price['idx'] = $idx;
+                            // $price['idx'] = $idx;
                             $getOptionPrice = $this
                                 ->Products
                                 ->ProductOptionPrices
                                 ->find()
                                 ->where([
-                                    'product_id' => $product->get('id'),
-                                    'idx' => $idx
+                                    'id' => $price['id'],
+                                    // 'idx' => $idx
                                 ])
                                 ->first();
 
@@ -1507,7 +1506,7 @@ class ProductsController extends AppController
                                 //exit;
                             }
 
-                            $idx++;
+                            // $idx++;
                         }
 
                         /**
