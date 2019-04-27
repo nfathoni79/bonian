@@ -385,6 +385,7 @@ class ProductsController extends AppController
                     }
 
                     $getData['highlight_text'] = strip_tags($getData['highlight']);
+                    $getData['slug'] = $getData['slug'].'-'.$getData['sku'];
 
                     $this->Products->patchEntity($productEntity, $getData, ['validate' => false]);
 
@@ -1298,6 +1299,7 @@ class ProductsController extends AppController
                 }
 				 
 				$getData['highlight_text'] = strip_tags($getData['highlight']);
+                $getData['slug'] = $getData['slug'].'-'.$getData['sku'];
                 $this->Products->patchEntity($product, $getData, ['validate' => false]);
                 if ($this->Products->save($product)) {
 
