@@ -82,6 +82,7 @@ class Product extends Entity
         'brand_id' => true,
         'product_status_id' => true,
         'highlight' => true,
+        'highlight_text' => true,
         'condition' => true,
         'profile' => true,
         'view' => true,
