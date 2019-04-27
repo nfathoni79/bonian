@@ -384,6 +384,7 @@ class ProductsController extends AppController
                         $getData[$val] = preg_replace('/[,.]/', '', $getData[$val]);
                     }
 
+                    $getData['highlight_text'] = strip_tags($getData['highlight']);
 
                     $this->Products->patchEntity($productEntity, $getData, ['validate' => false]);
 
@@ -1295,6 +1296,8 @@ class ProductsController extends AppController
                 foreach(['price', 'price_sale', 'point'] as $val) {
                     $getData[$val] = preg_replace('/[,.]/', '', $getData[$val]);
                 }
+				 
+				$getData['highlight_text'] = strip_tags($getData['highlight']);
                 $this->Products->patchEntity($product, $getData, ['validate' => false]);
                 if ($this->Products->save($product)) {
 
