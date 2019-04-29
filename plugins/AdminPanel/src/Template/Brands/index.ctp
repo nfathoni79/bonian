@@ -259,7 +259,7 @@
                         field: 'Brands.name',
                         title: 'Nama Brand',
                         template: function(row) {
-                            return row.name;
+                            return row.brand ? row.brand.name : '-';
                         }
                     },
 

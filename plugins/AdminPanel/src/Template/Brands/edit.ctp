@@ -74,8 +74,8 @@
             <?php
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
-                echo $this->Form->control('product_category_id', ['options' => $productCategories, 'empty' => true, 'class' => $default_class, 'escape' => false]);
-                echo $this->Form->control('name',['class' => $default_class]);
+                echo $this->Form->control('product_category_id', ['options' => $productCategories, 'empty' => true, 'class' => $default_class . ' selectpicker', 'escape' => false]);
+                echo $this->Form->control('brand_id', ['options' => $brands,  'class' => $default_class . ' select2']);
             ?>
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">
@@ -93,6 +93,7 @@
     </div>
 </div>
 <script>
-    $('select').selectpicker();
+    $('.selectpicker').selectpicker();
+    $('.select2').select2();
 </script>
 

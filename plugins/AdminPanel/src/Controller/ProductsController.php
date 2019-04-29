@@ -19,7 +19,8 @@ use Cake\Utility\Hash;
  * @property \AdminPanel\Model\Table\ProductOptionValueListsTable $ProductOptionValueLists
  * @property \AdminPanel\Model\Table\ProductWarrantiesTable $ProductWarranties
  * @property \AdminPanel\Model\Table\AttributesTable $Attributes
- * @property \AdminPanel\Model\Table\BrandsTable Brands
+ * @property \AdminPanel\Model\Table\BrandsTable $Brands
+ * @property \AdminPanel\Model\Table\CategoryToBrandsTable $CategoryToBrands
  * @property \AdminPanel\Model\Table\TagsTable $Tags
  *
  * @method \AdminPanel\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
@@ -44,6 +45,7 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.ProductWarranties');
         $this->loadModel('AdminPanel.Attributes');
         $this->loadModel('AdminPanel.Brands');
+        $this->loadModel('AdminPanel.CategoryToBrands');
 
         $this->allowedFileType = [
             'image/jpg',
@@ -910,6 +912,7 @@ class ProductsController extends AppController
             $cat = $this->request->getData('code_cat');
             $name = $this->request->getData('name');
 
+            /*
             $getBrands = $this->Brands->find()
                 ->where(['Brands.product_category_id' => $cat, 'Brands.name' => $name ])
                 ->first();
@@ -929,7 +932,56 @@ class ProductsController extends AppController
                 }
             }else{
                 $respon = ['is_error' => true, 'message' => 'Brand telah terdaftar'];
+            }*/
+
+            $getBrands = $this->Brands->find()
+                ->where(['Brands.product_category_id' => $cat, 'Brands.name' => $name ])
+                ->first();
+
+            if ($getBrands) {
+                $categoryBrands = $this->CategoryToBrands->find()
+                    ->where([
+                        'product_category_id' => $cat,
+                        'brand_id' => $getBrands->get('id')
+                    ])
+                    ->first();
+                if (!$categoryBrands) {
+                    $CategoryToBrandsEntity = $this->CategoryToBrands->newEntity([
+                        'product_category_id' => $cat,
+                        'brand_id' => $getBrands->get('id'),
+                    ]);
+                    if ($this->CategoryToBrands->save($CategoryToBrandsEntity)) {
+                        $data = ['id' => $CategoryToBrandsEntity->get('brand_id'), 'name' => $name];
+                        $respon = ['is_error' => false, 'message' => 'Brands berhasil didaftarkan', 'data' => $data];
+                    }
+                }
+
+            } else {
+                $newEntity = $this->Brands->newEntity([
+                    'name' => $this->request->getData('name')
+                ]);
+
+                if($this->Brands->save($newEntity)) {
+                    $CategoryToBrandsEntity = $this->CategoryToBrands->newEntity([
+                        'product_category_id' => $cat,
+                        'brand_id' => $newEntity->get('id'),
+                    ]);
+                    if ($this->CategoryToBrands->save($CategoryToBrandsEntity)) {
+                        $data = ['id' => $newEntity->get('id'), 'name' => $name];
+                        $respon = ['is_error' => false, 'message' => 'Brands berhasil didaftarkan', 'data' => $data];
+                    } else {
+                        $respon = ['is_error' => true, 'message' => 'Gagal menyimpan data / pilihan sudah terdaftar'];
+                    }
+
+                }else{
+                    $respon = ['is_error' => true, 'message' => 'Gagal menyimpan data / pilihan sudah terdaftar'];
+                }
             }
+
+
+
+
+
         }else{
             $respon = ['is_error' => true, 'message' => 'Gagal menyimpan data'];
         }
@@ -1099,10 +1151,25 @@ class ProductsController extends AppController
             $listAttribute = $this->Attributes->find('threaded')
                 ->where(['Attributes.product_category_id' => $this->request->getData('categories.0')])
                 ->toArray();
-            $listBrands = $this->Brands->find('list')
+            /*$listBrands = $this->Brands->find('list')
                 ->where(['Brands.product_category_id' => $this->request->getData('categories.0')])
-                ->toArray();
-            $listdata = ['attribute' => $listAttribute,'brand' => $listBrands,];
+                ->toArray();*/
+
+            $listBrands = $this->CategoryToBrands->find('list', [
+                'keyField' => 'brand_id',
+                'valueField' => function(\AdminPanel\Model\Entity\CategoryToBrand $row) {
+                    return $row->get('brand')->name;
+                }
+            ])->contain([
+                'Brands'
+            ])
+            ->where([
+                'CategoryToBrands.product_category_id' => $this->request->getData('categories.0')
+            ])
+            ->group('brand_id')
+            ->toArray();
+
+            $listdata = ['attribute' => $listAttribute,'brand' => $listBrands];
             return $this->response->withType('application/json')
                 ->withStringBody(json_encode($listdata));
         }
@@ -1728,11 +1795,23 @@ class ProductsController extends AppController
             ->toArray();
 
 
-        $brands = $this->Products->Brands->find('list')
+        /*$brands = $this->Products->Brands->find('list')
             ->where([
                 'product_category_id IN' => $product_categories
             ])
-            ->toArray();
+            ->toArray();*/
+
+        $brands = $this->CategoryToBrands->find('list', [
+            'keyField' => 'brand_id',
+            'valueField' => function(\AdminPanel\Model\Entity\CategoryToBrand $row) {
+                return $row->get('brand')->name;
+            }
+        ])->contain([
+            'Brands'
+        ])
+        ->group('brand_id')
+        ->toArray();
+
 
         $get_product_tag_selected = $this->Products->ProductTags->find()
             ->select()

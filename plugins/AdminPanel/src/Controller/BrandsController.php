@@ -2,12 +2,14 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use AdminPanel\Model\Entity\Product;
 use Cake\Validation\Validator;
 
 /**
  * Brands Controller
  * @property \AdminPanel\Model\Table\BrandsTable $Brands
  * @property \AdminPanel\Model\Table\ProductCategoriesTable ProductCategories
+ * @property \AdminPanel\Model\Table\CategoryToBrandsTable CategoryToBrands
  *
  * @method \AdminPanel\Model\Entity\Brand[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -18,6 +20,7 @@ class BrandsController extends AppController
     {
         parent::initialize();
         $this->loadModel('AdminPanel.ProductCategories');
+        $this->loadModel('AdminPanel.CategoryToBrands');
     }
     /**
      * Index method
@@ -36,9 +39,13 @@ class BrandsController extends AppController
             $query = $this->request->getData('query');
 
             /** custom default query : select, where, contain, etc. **/
-            $data = $this->Brands->find('all')
+            /*$data = $this->Brands->find('all')
                 ->select();
-            $data->contain(['ProductCategories', 'ParentBrands']);
+            $data->contain(['ProductCategories', 'ParentBrands']);*/
+
+            $data = $this->CategoryToBrands->find('all')
+                ->select();
+            $data->contain(['ProductCategories', 'Brands']);
 
             if ($query && is_array($query)) {
                 if (isset($query['generalSearch'])) {
@@ -99,6 +106,32 @@ class BrandsController extends AppController
         $this->set('brand', $brand);
     }
 
+    public function categoryBrands()
+    {
+        $this->disableAutoRender();
+        if ($this->request->is(['ajax'])) {
+            if ($product_category_id = $this->request->getData('product_category_id')) {
+                $brands = $this->CategoryToBrands->find('list', [
+                    'keyField' => 'brand_id',
+                    'valueField' => function(\AdminPanel\Model\Entity\CategoryToBrand $row) {
+                        return $row->get('brand')->name;
+                    }
+                ])->contain([
+                    'Brands'
+                ])
+                ->where([
+                    'CategoryToBrands.product_category_id' => $product_category_id
+                ])
+                ->group('brand_id')
+                ->toArray();
+
+                return $this->response->withType('application/json')
+                    ->withStringBody(json_encode($brands));
+
+            }
+        }
+    }
+
     /**
      * Add method
      *
@@ -130,21 +163,79 @@ class BrandsController extends AppController
             if (empty($error)) {
                 $product_category_id = $this->request->getData('product_category_id.0');
 
+                $categoryBrandEntity = $this->CategoryToBrands->find()
+                ->select([
+                    'id',
+                    'brand_id'
+                ])
+                ->where([
+                    'product_category_id' => $product_category_id
+                ])
+                ->toArray();
+
+
                 if ($brands = $this->request->getData('brand')) {
+
+                    $exist_lists = [];
+                    foreach($categoryBrandEntity as $val) {
+                        array_push($exist_lists, $val->get('brand_id'));
+                    }
+                    $is_new = [];
 
                     foreach($brands as $brand) {
                         foreach($brand['value'] as $child) {
-                            $brandChildEntity = $this->Brands->newEntity([
-                                'product_category_id' => $product_category_id,
-                                'name' => $child,
-                                'parent_id' => null
-                            ]);
-                            $this->Brands->setLogMessageBuilder(function () use($brandChildEntity){
-                                return 'Manajemen Brand - penambahan : '.$brandChildEntity->get('name');
-                            });
-                            $this->Brands->save($brandChildEntity);
+                            if (is_numeric($child)) {
+                                if (!in_array($child, $exist_lists) && !in_array($child, $is_new)) {
+                                    array_push($is_new, $child);
+                                }
+                            } else {
+                                $brandChildEntity = $this->Brands->newEntity([
+                                    'product_category_id' => null,
+                                    'name' => $child,
+                                    'parent_id' => null
+                                ]);
+                                $this->Brands->setLogMessageBuilder(function () use($brandChildEntity){
+                                    return 'Manajemen Brand - penambahan : '.$brandChildEntity->get('name');
+                                });
+                                if ($this->Brands->save($brandChildEntity)) {
+                                    $CategoryToBrandsEntity = $this->CategoryToBrands->newEntity([
+                                        'product_category_id' => $product_category_id,
+                                        'brand_id' => $brandChildEntity->get('id'),
+                                    ]);
+                                    $this->CategoryToBrands->save($CategoryToBrandsEntity);
+                                }
+                            }
+
+
                         }
                     }
+
+
+                    foreach($is_new as $brand_id) {
+                        $CategoryToBrandsEntity = $this->CategoryToBrands->newEntity([
+                            'product_category_id' => $product_category_id,
+                            'brand_id' => $brand_id,
+                        ]);
+                        $this->CategoryToBrands->save($CategoryToBrandsEntity);
+                    }
+
+                    /**
+                     * @var \AdminPanel\Model\Entity\CategoryToBrand[] $categoryBrandEntity
+                     */
+                    foreach($categoryBrandEntity as $entity) {
+                        foreach($brands as $brand) {
+                            $brand = array_values($brand['value']);
+                            if (!in_array($entity->get('brand_id'), $brand)) {
+                                $this->CategoryToBrands->delete($entity);
+                            }
+                        }
+                    }
+
+
+
+
+
+
 //                    if ($attributeEntity->get('id')) {
                         $this->Flash->success(__('The brand has been saved.'));
 //                    }
@@ -168,9 +259,16 @@ class BrandsController extends AppController
             $this->Flash->error(__('The brand could not be saved. Please, try again.'));
         }
         */
-        $productCategories = $this->Brands->ProductCategories->find('list', ['limit' => 200]);
+
+        $brands = $this->Brands->find('list')->toArray();
+
+        //$productCategories = $this->Brands->ProductCategories->find('list', ['limit' => 200]);
+        $productCategories = $this->Brands->ProductCategories->find('list', ['limit' => 200])
+        ->where(function(\Cake\Database\Expression\QueryExpression $exp) {
+            return $exp->isNull('parent_id');
+        });
         $parentBrands = $this->Brands->ParentBrands->find('list', ['limit' => 200]);
-        $this->set(compact('brand', 'productCategories', 'parentBrands'));
+        $this->set(compact('brand', 'productCategories', 'parentBrands', 'brands'));
 
     }
 
@@ -183,16 +281,16 @@ class BrandsController extends AppController
      */
     public function edit($id = null)
     {
-        $brand = $this->Brands->get($id, [
+        $brand = $this->CategoryToBrands->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $brand = $this->Brands->patchEntity($brand, $this->request->getData());
+            $brand = $this->CategoryToBrands->patchEntity($brand, $this->request->getData());
 
-            $this->Brands->setLogMessageBuilder(function () use($brand){
-                return 'Manajemen Brand - perubahan : '.$brand->get('name');
-            });
-            if ($this->Brands->save($brand)) {
+            //$this->Brands->setLogMessageBuilder(function () use($brand){
+            //    return 'Manajemen Brand - perubahan : '.$brand->get('name');
+            //});
+            if ($this->CategoryToBrands->save($brand)) {
                 $this->Flash->success(__('The brand has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -206,7 +304,12 @@ class BrandsController extends AppController
             'spacer' => '&nbsp;&nbsp;&nbsp;'
         ]);
         $parentBrands = $this->Brands->ParentBrands->find('list', ['limit' => 200]);
-        $this->set(compact('brand', 'productCategories', 'parentBrands'));
+
+        $brands = $this->Brands->find('list')
+            ->orderAsc('Brands.name')
+            ->toArray();
+
+        $this->set(compact('brand', 'productCategories', 'parentBrands', 'brands'));
     }
 
     /**
@@ -219,12 +322,12 @@ class BrandsController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $brand = $this->Brands->get($id);
+        $brand = $this->CategoryToBrands->get($id);
         try {
-            $this->Brands->setLogMessageBuilder(function () use($brand){
-                return 'Manajemen Brand - penghapusan : '.$brand->get('name');
-            });
-            if ($this->Brands->delete($brand)) {
+            //$this->Brands->setLogMessageBuilder(function () use($brand){
+            //    return 'Manajemen Brand - penghapusan : '.$brand->get('name');
+           // });
+            if ($this->CategoryToBrands->delete($brand)) {
                 $this->Flash->success(__('The brand has been deleted.'));
             } else {
                 $this->Flash->error(__('The brand could not be deleted. Please, try again.'));

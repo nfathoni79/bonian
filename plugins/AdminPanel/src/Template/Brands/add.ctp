@@ -106,7 +106,7 @@
                             <div data-repeatable data-repeater-list="" class="col-lg-12">
                                 <div data-repeater-item class="row m--margin-bottom-10">
                                     <div class="col-lg-5">
-                                        <?php echo $this->Form->control('brand[0][value]', ['options' => [], 'label' => false, 'class' => $default_class . ' attribute-value', 'id' => 'tags-0', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
+                                        <?php echo $this->Form->control('brand[0][value]', ['options' => $brands, 'label' => false, 'class' => $default_class . ' attribute-value', 'id' => 'tags-0', 'multiple' => true, 'style' => 'width: 100% !important;']);?>
                                     </div>
                                 </div>
                             </div>
@@ -260,6 +260,24 @@ echo $this->Html->script([
         }
     });
 
+    $("#level3").change(function(e) {
+        var target = $("#tags-0");
+
+
+        $.ajax({
+            type: 'POST',
+            url: '<?= $this->Url->build(['controller' => 'Brands','action' => 'categoryBrands']); ?>',
+            data: {product_category_id: $(this).find(":selected").val(), _csrfToken : $('input[name=_csrfToken]').val()},
+            success: function (data) {
+                target.find("option:selected").prop("selected", false);
+                for(var i in data) {
+                    target.find('option[value="' + i + '"]').prop('selected', true);
+                }
+                target.trigger('change');
+            }
+        });
+    });
+
     function createAttributeValues(selector) {
         selector.select2({
             placeholder: "Tambah Brand",
@@ -267,10 +285,19 @@ echo $this->Html->script([
         }).on("change", function(e) {
             var isNew = $(this).find('[data-select2-tag="true"]');
             if(isNew.length && $.inArray(isNew.val(), $(this).val()) !== -1){
-                //isNew.replaceWith('<option selected value="' + isNew.val() + '">' + isNew.val() + '</option>');
+                isNew.replaceWith('<option selected value="' + isNew.val() + '">' + isNew.val() + '</option>');
                 console.log('New tag: ', isNew.val());
             }
-        });
+        })
+        .on(
+            'select2:close',
+            function () {
+                var select2SearchField = $(this).parent().find('.select2-search__field'),
+                    setfocus = setTimeout(function() {
+                        select2SearchField.focus();
+                    }, 100);
+            }
+        );
     }
 
     createAttributeValues($('#tags-0'));
