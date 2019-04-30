@@ -30,8 +30,8 @@
         var url = '<?= $this->Url->build(['action' => 'validationWizard']); ?>';
         var url_category = '<?= $this->Url->build(['action' => 'getCategory']); ?>';
         var url_attribute = '<?= $this->Url->build(['action' => 'getAttributeAndBrand']); ?>';
-        var preview_url = '<?= $this->Url->build(['action' => 'preview',($lastId->id +1),1]); ?>';
-        var preview_url_bottom = '<?= $this->Url->build(['action' => 'preview',($lastId->id +1),2]); ?>';
+        var preview_url = '<?= $this->Url->build(['action' => 'preview',($lastId +1),1]); ?>';
+        var preview_url_bottom = '<?= $this->Url->build(['action' => 'preview',($lastId +1),2]); ?>';
 
         var product;
         var sku_variant = {};

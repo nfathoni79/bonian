@@ -1124,7 +1124,7 @@ class ProductsController extends AppController
         }
 
 
-        $lastId = $this->Products->find()->select('id')->last();
+        $lastId = ($this->Products->find()->select('id')->last() == null) ? 0 : ($this->Products->find()->select('id')->last()->id );
 
         $productStockStatuses = $this->Products->ProductStockStatuses->find('list', ['limit' => 200]);
         $productWeightClasses = $this->Products->ProductWeightClasses->find('list', ['limit' => 200]);
