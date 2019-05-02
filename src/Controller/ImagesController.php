@@ -128,6 +128,12 @@ class ImagesController extends AppController
                     'rule' => ['extension',['jpg','png','image/jpeg']], // default  ['gif', 'jpeg', 'png', 'jpg']
                     'message' => __('These files extension are allowed: .jpg, .png')
                 ]
+            ])
+            ->add('avatar', [
+                'validExtension' => [
+                    'rule' => array('fileSize', '<=', '1MB'), // default  ['gif', 'jpeg', 'png', 'jpg']
+                    'message' => __('Image must be less than 1MB')
+                ]
             ]);
         $validator
             ->requirePresence('customer_id')
@@ -136,9 +142,16 @@ class ImagesController extends AppController
         $errors = $validator->errors($this->request->getData());
         if (empty($errors)) {
             $entity = $this->Customers->get($this->request->getData('customer_id'));
+            $avatar = $entity->get('avatar');
             $entity->set('avatar',$this->request->getData('avatar'));
             if($this->Customers->save($entity)){
-                $response = ['is_success' => true];
+                if($avatar != 'avatar.jpg'){
+                    if (file_exists(WWW_ROOT."/files/Customers/avatar/".$avatar)){
+                        unlink(WWW_ROOT."/files/Customers/avatar/".$avatar);
+                        unlink(WWW_ROOT."/files/Customers/avatar/thumbnail-".$avatar);
+                    }
+                }
+                $response = ['is_success' => true, 'data' => $entity->get('avatar')];
             }else{
                 $response = ['is_success' => false];
             }
