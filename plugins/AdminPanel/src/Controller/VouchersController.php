@@ -327,7 +327,7 @@ class VouchersController extends AppController
                             $success = true;
                             $this->Vouchers->getConnection()->begin();
 
-                            for($i=0;$i<=$jumlah;$i++){
+                            for($i=0;$i<=($jumlah -1);$i++){
                                 $codeVoucher = $prefix . $this->randomNumber(8);
 
                                 /* CHECK TO DB EXSIST */
