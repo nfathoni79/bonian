@@ -45,6 +45,12 @@ class ProductCouponsTable extends Table
             'foreignKey' => 'product_id',
             'className' => 'AdminPanel.Products'
         ]);
+
+        $this->hasMany('CustomerCartCoupons', [
+            'dependent' => true,
+            'cascadeCallbacks' => true,
+            'foreignKey' => 'product_coupon_id',
+        ]);
     }
 
     /**
@@ -87,7 +93,7 @@ class ProductCouponsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['product_id'], 'Products'));
-
+        $rules->add($rules->isUnique(['product_id']));
         return $rules;
     }
 }
