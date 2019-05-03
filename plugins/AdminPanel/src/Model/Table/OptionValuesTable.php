@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * OptionValues Model
@@ -98,5 +99,51 @@ class OptionValuesTable extends Table
             ->where(['id' => $id])
             ->first();
         return $getValues['name'];
+    }
+
+
+
+
+    public function getId($slug = null){
+
+
+        $option = TableRegistry::get('Options');
+        $result = [];
+        $explodeSlug = array_map('trim',explode(',', $slug));
+        foreach($explodeSlug as $vals){
+            $explodeOption = array_map('trim',explode(':', $vals));
+            $findOpt = $option->find()
+                ->where(['name' => $explodeOption[0]])
+                ->first();
+            $id = null;
+            if($findOpt){
+                $id = $findOpt->get('id');
+            }else{
+                $entity = $option->newEntity();
+                $entity->name = $explodeOption[0];
+                $option->save($entity);
+                $id = $entity->get('id');
+            }
+
+            $idVal = null;
+            $findOptVal = $this->find()
+                ->where(['name' => $explodeOption[1], 'option_id' => $id])
+                ->first();
+            if($findOptVal){
+                $idVal = $findOptVal->get('id');
+            }else{
+                $entity = $this->newEntity();
+                $entity->option_id = $id;
+                $entity->name = $explodeOption[1];
+                $this->save($entity);
+                $idVal = $entity->get('id');
+            }
+
+            $result[$id] = $idVal;
+
+        }
+
+        return $result;
+
     }
 }

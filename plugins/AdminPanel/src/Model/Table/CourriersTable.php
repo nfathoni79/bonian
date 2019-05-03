@@ -78,4 +78,14 @@ class CourriersTable extends Table
 
         return $validator;
     }
+
+
+    public function getId($slug = null){
+        $find = $this->find()
+            ->where(['name' => $slug])
+            ->first();
+        if($find) {
+            return $find->get('id');
+        }
+    }
 }

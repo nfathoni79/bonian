@@ -107,4 +107,22 @@ class BrandsTable extends Table
 
         return $rules;
     }
+
+
+    public function getId($slug,$categoryId = null){
+        $find = $this->find()
+            ->where(['name' => $slug,'product_category_id' => $categoryId,])
+            ->first();
+        if($find){
+            return $find->get('id');
+        }else{
+            $entity = $this->newEntity();
+            $entity->parent_id = null;
+            $entity->product_category_id = $categoryId;
+            $entity->name = $slug;
+            if($this->save($entity)){
+                return $entity->get('id');
+            }
+        }
+    }
 }

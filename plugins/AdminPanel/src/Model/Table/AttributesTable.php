@@ -114,4 +114,36 @@ class AttributesTable extends Table
             ->first();
         return $find['name'];
     }
+
+    public function finder($slug,$categoryId,$parentId = null){
+        $find = $this->find()
+            ->where(['name' => $slug,'product_category_id' => $categoryId,])
+            ->first();
+        if($find){
+            return $find->get('id');
+        }else{
+            $entity = $this->newEntity();
+            $entity->parent_id = $parentId;
+            $entity->product_category_id = $categoryId;
+            $entity->name = $slug;
+            if($this->save($entity)){
+                return $entity->get('id');
+            }
+        }
+    }
+
+    public function getId($slug,$categoryId = null){
+
+        $explodeSlug = array_map('trim',explode(':', $slug)); // 'Material:Karet Silicone, Stainless, Steel, Others, Not Specified'
+        $result = [];
+        $parentId = $this->finder($explodeSlug[0], $categoryId);
+
+        $explodeChild = array_map('trim',explode(',', $explodeSlug[1])); //Karet Silicone, Stainless, Steel, Others, Not Specified'
+        foreach($explodeChild as $vals){
+            $result[] = $this->finder($vals, $categoryId, $parentId);
+        }
+
+        return $result;
+
+    }
 }

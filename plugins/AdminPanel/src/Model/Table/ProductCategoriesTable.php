@@ -188,4 +188,12 @@ class ProductCategoriesTable extends Table
 
         return $rules;
     }
+
+
+    public function getIdByName($slug = null){
+        $getCategory = $this->find()
+            ->where(['name' => $slug])
+            ->first();
+        return $getCategory['id'];
+    }
 }

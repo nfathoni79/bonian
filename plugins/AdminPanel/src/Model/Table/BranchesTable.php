@@ -148,4 +148,16 @@ class BranchesTable extends Table
             ->first();
         return $getBranch['name'];
     }
+
+    public function getId($slug = null){
+        $getBranch = $this->find()
+            ->where(['name like ' => '%'.$slug.'%'])
+            ->first();
+        if($getBranch){
+            return $getBranch->get('id');
+        }else{
+            return '';
+        }
+
+    }
 }

@@ -72,4 +72,20 @@ class TagsTable extends Table
 
         return $validator;
     }
+
+
+    public function getName($slug = null){
+        $find = $this->find()
+            ->where(['name' => $slug])
+            ->first();
+        if($find){
+            return $find->get('name');
+        }else{
+            $entity = $this->newEntity();
+            $entity->name = $slug;
+            if($this->save($entity)){
+                return $entity->get('name');
+            }
+        }
+    }
 }

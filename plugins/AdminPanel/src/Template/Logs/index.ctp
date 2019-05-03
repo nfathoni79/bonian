@@ -125,7 +125,6 @@
                             </tr>
                             </thead>
                         </table>
-                        <button class="btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-info mt-5">Simpan</button></p>
                     </form>
                 </div>
 
