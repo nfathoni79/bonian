@@ -3,8 +3,10 @@ namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
 use AdminPanel\Model\Entity\Product;
+use Cake\Core\Configure;
 use Cake\Validation\Validator;
 use Cake\Utility\Hash;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * Products Controller
@@ -64,8 +66,9 @@ class ProductsController extends AppController
         return $str;
     }
 
-    public function import(){
 
+    public function import(){
+        Configure::write('debug', 0);
         if ($this->request->is('post')) {
 
 
@@ -183,6 +186,8 @@ class ProductsController extends AppController
                 for($i=0;$i<=count($option) -1;$i++){
                     $data['ProductOptionStocks'][($i+1)]['branches'] = $branch[$i];
                 }
+
+                $data['ProductImages'] = array_map('trim',explode(',', $row[24]));
 
                 /* END DATA */
 
@@ -337,6 +342,29 @@ class ProductsController extends AppController
 
                     $this->Products->save($productEntity);
 
+
+                    foreach($data['ProductImages'] as $vals){
+                        $tmpfname = tempnam(sys_get_temp_dir(), "FOO");
+
+                        $handle = fopen($tmpfname, "w");
+                        fwrite($handle, file_get_contents($vals));
+                        fclose($handle);
+
+                        $img = get_headers($vals, 1);
+                        $size = getimagesize($vals);
+                        $saveImage['product_id'] = $productEntity->get('id'); // replace nanti
+                        $saveImage['idx'] = 0;
+                        $saveImage['name']['tmp_name'] = $tmpfname;
+                        $saveImage['name']['error'] = 0;
+                        $saveImage['name']['name'] = 'sembarang.jpg';
+                        $saveImage['name']['type'] = $size['mime'];
+                        $saveImage['name']['size'] = intval($img["Content-Length"]);
+
+                        $entityImage = $this->ProductImageSizes->ProductImages->newEntity();
+                        $this->ProductImageSizes->ProductImages->patchEntity($entityImage, $saveImage);
+                        $this->ProductImageSizes->ProductImages->save($entityImage);
+                        unlink($tmpfname);
+                    }
 
                     $getProductToCategory = null;
                     $getProductToCategory = $this->ProductToCategories->find()
@@ -706,7 +734,7 @@ class ProductsController extends AppController
 
                 }else{
                     $success = false;
-                    $this->Flash->error(__('Failed Unknown product SKU : '.$row[0]));
+                    $this->Flash->error(__('Failed error on row product name : '.$row[1]));
                     break;
                 }
 

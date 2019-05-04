@@ -135,12 +135,15 @@ class AttributesTable extends Table
     public function getId($slug,$categoryId = null){
 
         $explodeSlug = array_map('trim',explode(':', $slug)); // 'Material:Karet Silicone, Stainless, Steel, Others, Not Specified'
+
         $result = [];
         $parentId = $this->finder($explodeSlug[0], $categoryId);
+        if(!empty($explodeSlug[1])){
 
-        $explodeChild = array_map('trim',explode(',', $explodeSlug[1])); //Karet Silicone, Stainless, Steel, Others, Not Specified'
-        foreach($explodeChild as $vals){
-            $result[] = $this->finder($vals, $categoryId, $parentId);
+            $explodeChild = array_map('trim',explode(',', $explodeSlug[1])); //Karet Silicone, Stainless, Steel, Others, Not Specified'
+            foreach($explodeChild as $vals){
+                $result[] = $this->finder($vals, $categoryId, $parentId);
+            }
         }
 
         return $result;

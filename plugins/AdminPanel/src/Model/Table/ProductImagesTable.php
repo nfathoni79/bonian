@@ -63,7 +63,6 @@ class ProductImagesTable extends Table
 
                     //$extension = pathinfo($data['name'], PATHINFO_EXTENSION);
 
-
                     $tmp_name = tempnam(sys_get_temp_dir(), 'upload') . '.' . 'jpg'; //force convert to jpg
 
                     /*
