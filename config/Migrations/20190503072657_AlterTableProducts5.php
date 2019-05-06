@@ -15,10 +15,12 @@ class AlterTableProducts5 extends AbstractMigration
         $table = $this->table('products');
         $table->addColumn('price_sale_previous', 'float', [
             'default' => 0,
+            'after' => 'price_sale',
             'null' => true
         ]);
         $table->addColumn('is_flash_sale', 'boolean', [
-            'default' => false
+            'default' => false,
+            'after' => 'price_sale_previous'
         ]);
         $table->update();
     }
