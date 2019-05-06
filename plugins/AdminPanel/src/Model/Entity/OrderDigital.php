@@ -7,7 +7,7 @@ use Cake\ORM\Entity;
  * OrderDigital Entity
  *
  * @property int $id
- * @property int|null $order_detail
+ * @property int|null $order_id
  * @property int|null $digital_detail_id
  * @property string|null $customer_number
  * @property float|null $price
@@ -16,6 +16,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $modified
  *
  * @property \AdminPanel\Model\Entity\DigitalDetail $digital_detail
+ * @property \AdminPanel\Model\Entity\Order $order
  */
 class OrderDigital extends Entity
 {
@@ -30,13 +31,14 @@ class OrderDigital extends Entity
      * @var array
      */
     protected $_accessible = [
-        'order_detail' => true,
+        'order_id' => true,
         'digital_detail_id' => true,
         'customer_number' => true,
         'price' => true,
         'raw_response' => true,
         'created' => true,
         'modified' => true,
-        'digital_detail' => true
+        'digital_detail' => true,
+        'order' => true
     ];
 }

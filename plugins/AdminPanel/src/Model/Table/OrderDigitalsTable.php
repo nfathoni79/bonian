@@ -9,6 +9,7 @@ use Cake\Validation\Validator;
 /**
  * OrderDigitals Model
  *
+ * @property \AdminPanel\Model\Table\OrdersTable|\Cake\ORM\Association\BelongsTo $Orders
  * @property \AdminPanel\Model\Table\DigitalDetailsTable|\Cake\ORM\Association\BelongsTo $DigitalDetails
  *
  * @method \AdminPanel\Model\Entity\OrderDigital get($primaryKey, $options = [])
@@ -40,6 +41,11 @@ class OrderDigitalsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Orders', [
+            'foreignKey' => 'order_id',
+            'className' => 'AdminPanel.Orders'
+        ]);
 
         $this->belongsTo('DigitalDetails', [
             'foreignKey' => 'digital_detail_id',
