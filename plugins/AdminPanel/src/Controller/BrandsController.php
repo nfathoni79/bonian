@@ -3,6 +3,7 @@ namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
 use AdminPanel\Model\Entity\Product;
+use Cake\Core\Configure;
 use Cake\Validation\Validator;
 
 /**
@@ -341,6 +342,7 @@ class BrandsController extends AppController
 
     public function import(){
 
+        Configure::write('debug', 0);
         if ($this->request->is('post')) {
 
             $data = $this->request->getData('files');

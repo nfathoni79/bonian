@@ -2,6 +2,7 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use Cake\Core\Configure;
 use Cake\Validation\Validator;
 
 /**
@@ -146,6 +147,8 @@ class ProductPricesController extends AppController
     }
 
     public function validateUpload(){
+
+        Configure::write('debug', 0);
         $this->disableAutoRender();
 
         $response = [];
