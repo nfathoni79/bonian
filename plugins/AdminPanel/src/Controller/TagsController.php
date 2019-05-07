@@ -2,6 +2,7 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Tags Controller
@@ -169,6 +170,8 @@ class TagsController extends AppController
     }
 
     public function import(){
+
+        Configure::write('debug', 0);
         if ($this->request->is('post')) {
 
             $data = $this->request->data['files'];
