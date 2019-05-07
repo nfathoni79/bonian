@@ -13,6 +13,7 @@ use Cake\ORM\Entity;
  * @property string $operator
  * @property float $price
  * @property int|null $status
+ * @property string|null $type
  *
  * @property \AdminPanel\Model\Entity\Digital $digital
  */
@@ -37,6 +38,7 @@ class DigitalDetail extends Entity
         'price' => true,
         'point' => true,
         'status' => true,
+        'type' => true,
         'digital' => true
     ];
 }

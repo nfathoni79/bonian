@@ -28,6 +28,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Axis',
                 'price' => '5930',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '2',
@@ -38,6 +39,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Axis',
                 'price' => '11250',
                 'status' => '0',
+                'type' => 'mobile'
             ],
             [
                 'id' => '3',
@@ -48,6 +50,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Axis',
                 'price' => '15350',
                 'status' => '0',
+                'type' => 'mobile'
             ],
             [
                 'id' => '4',
@@ -58,6 +61,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Axis',
                 'price' => '24850',
                 'status' => '0',
+                'type' => 'mobile'
             ],
             [
                 'id' => '5',
@@ -68,6 +72,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Axis',
                 'price' => '29700',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '6',
@@ -78,6 +83,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Axis',
                 'price' => '49690',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '7',
@@ -88,6 +94,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Axis',
                 'price' => '99390',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '8',
@@ -98,6 +105,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Axis',
                 'price' => '198770',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '9',
@@ -108,6 +116,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '6010',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '10',
@@ -118,6 +127,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '11060',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '11',
@@ -128,6 +138,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '20200',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '12',
@@ -138,6 +149,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '25200',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '13',
@@ -148,6 +160,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '29700',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '14',
@@ -158,6 +171,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '49500',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '15',
@@ -168,6 +182,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '97470',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '16',
@@ -178,6 +193,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '144350',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '17',
@@ -188,6 +204,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '189000',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '18',
@@ -198,6 +215,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '234000',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '19',
@@ -208,6 +226,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '467900',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '20',
@@ -218,6 +237,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Indosat',
                 'price' => '935000',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '21',
@@ -228,6 +248,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '5100',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '22',
@@ -238,6 +259,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '10000',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '23',
@@ -248,6 +270,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '19800',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '24',
@@ -258,6 +281,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '24750',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '25',
@@ -268,6 +292,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '49240',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '26',
@@ -278,6 +303,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '59090',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '27',
@@ -288,6 +314,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '97970',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '28',
@@ -298,6 +325,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '146960',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '29',
@@ -308,6 +336,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '195970',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '30',
@@ -318,6 +347,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '244940',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '31',
@@ -328,6 +358,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '293910',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '32',
@@ -338,6 +369,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '489850',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '33',
@@ -348,6 +380,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Smartfren',
                 'price' => '979760',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '34',
@@ -358,6 +391,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '5960',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '35',
@@ -368,6 +402,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '10750',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '36',
@@ -378,6 +413,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '22320',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '37',
@@ -388,6 +424,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '25152',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '38',
@@ -398,6 +435,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '39720',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '39',
@@ -408,6 +446,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '49900',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '40',
@@ -418,6 +457,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '98232',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '41',
@@ -428,6 +468,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '148000',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '42',
@@ -438,6 +479,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '199000',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '43',
@@ -448,6 +490,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '294860',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '44',
@@ -458,6 +501,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '491430',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '45',
@@ -468,6 +512,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Telkomsel',
                 'price' => '985380',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '46',
@@ -478,6 +523,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '1217',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '47',
@@ -488,6 +534,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '2229',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '48',
@@ -498,6 +545,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '5471',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '49',
@@ -508,6 +556,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '8167',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '50',
@@ -518,6 +567,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '10536',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '51',
@@ -528,6 +578,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '14900',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '52',
@@ -538,6 +589,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '19800',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '53',
@@ -548,6 +600,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '24750',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '54',
@@ -558,6 +611,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '29690',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '55',
@@ -568,6 +622,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '49490',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '56',
@@ -578,6 +633,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '98980',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '57',
@@ -588,6 +644,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '148470',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '58',
@@ -598,6 +655,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '198230',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '59',
@@ -608,6 +666,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '296940',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '60',
@@ -618,6 +677,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'Tri',
                 'price' => '494900',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '61',
@@ -628,6 +688,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '5930',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '62',
@@ -638,6 +699,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '10960',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '63',
@@ -648,6 +710,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '14910',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '64',
@@ -658,6 +721,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '24850',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '65',
@@ -668,6 +732,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '29640',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '66',
@@ -678,6 +743,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '49690',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '67',
@@ -688,6 +754,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '99390',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '68',
@@ -698,6 +765,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '149080',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '69',
@@ -708,6 +776,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '198770',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '70',
@@ -718,6 +787,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '298160',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '71',
@@ -728,6 +798,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '496930',
                 'status' => '0',
+'type' => 'mobile'
             ],
             [
                 'id' => '72',
@@ -738,6 +809,7 @@ class DigitalDetailsSeed extends AbstractSeed
                 'operator' => 'XL',
                 'price' => '993870',
                 'status' => '0',
+'type' => 'mobile'
             ],
         ];
 
