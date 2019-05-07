@@ -9,6 +9,8 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int|null $order_detail_id
  * @property int|null $product_id
+ * @property int|null $product_category_id
+ * @property int|null $bonus_point
  * @property int|null $product_option_value_id
  * @property int|null $qty
  * @property float|null $price
@@ -42,6 +44,8 @@ class OrderDetailProduct extends Entity
     protected $_accessible = [
         'order_detail_id' => true,
         'product_id' => true,
+        'product_category_id' => true,
+        'bonus_point' => true,
         'product_option_value_id' => true,
         'qty' => true,
         'price' => true,
