@@ -80,6 +80,8 @@ class AppController extends BaseController
     public function beforeRender(Event $event)
     {
 
+        $_baseFront = Configure::read('Frontend.url');
+        $this->set(compact('_baseFront'));
         parent::beforeRender($event);
         //$this->viewBuilder()->setClassName('AdminPanel.App');
     }
