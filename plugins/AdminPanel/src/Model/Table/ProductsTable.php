@@ -139,6 +139,10 @@ class ProductsTable extends Table
             'foreignKey' => 'product_id',
             'className' => 'AdminPanel.ProductTags'
         ]);
+        $this->hasMany('ProductDiscussions', [
+            'foreignKey' => 'product_id',
+            'className' => 'AdminPanel.ProductDiscussions'
+        ]);
     }
 
     /**

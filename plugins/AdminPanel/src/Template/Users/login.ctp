@@ -5,15 +5,10 @@
             <div class="m-login__container">
                 <div class="m-login__logo">
                     <a href="#">
-                        <?= $this->Html->image('/admin-assets/app/media/img/logos/logo-1.png'); ?>
+                        <?= $this->Html->image('/admin-assets/media/logos/logo-white.png'); ?>
                     </a>
                 </div>
                 <div class="m-login__signin">
-                    <div class="m-login__head">
-                        <h3 class="m-login__title">
-                            Sign In To Admin
-                        </h3>
-                    </div>
                     <?= $this->Flash->render() ?>
                     <?= $this->Form->create(null, ['class' => 'm-login__form m-form']); ?>
                         <div class="form-group m-form__group">

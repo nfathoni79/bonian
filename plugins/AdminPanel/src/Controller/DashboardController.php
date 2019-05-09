@@ -3,11 +3,13 @@ namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
 use AdminPanel\Plugin;
+use Cake\Database\Expression\QueryExpression;
 
 /**
  * Dashboard Controller
  *
  * @property \AdminPanel\Model\Table\CustomersTable $Customers
+ * @property \AdminPanel\Model\Table\ProductDiscussionsTable $ProductDiscussions
  * @method \AdminPanel\Model\Entity\Dashboard[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class DashboardController extends AppController
@@ -17,6 +19,7 @@ class DashboardController extends AppController
     {
         parent::initialize();
         $this->loadModel('AdminPanel.Customers');
+        $this->loadModel('AdminPanel.ProductDiscussions');
     }
 
     /**
