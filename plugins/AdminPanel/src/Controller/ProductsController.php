@@ -18,7 +18,6 @@ use phpDocumentor\Reflection\Types\Integer;
  * @property \AdminPanel\Model\Table\ProductImageSizesTable $ProductImageSizes
  * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable $ProductToCategories
- * @property \AdminPanel\Model\Table\CourriersTable $Courriers
  * @property \AdminPanel\Model\Table\ProductOptionValueListsTable $ProductOptionValueLists
  * @property \AdminPanel\Model\Table\ProductWarrantiesTable $ProductWarranties
  * @property \AdminPanel\Model\Table\AttributesTable $Attributes
@@ -748,7 +747,7 @@ class ProductsController extends AppController
                 }else{
                     $success = false;
                     $this->Flash->error(__('Failed error on row product name : '.$row[1]));
-                    debug($error);
+                    //debug($error);
 					foreach($error as $field => $value){ 
 						$newError = $field ;
 						foreach($value as $val){
