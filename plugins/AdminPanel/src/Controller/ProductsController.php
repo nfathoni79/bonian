@@ -68,7 +68,7 @@ class ProductsController extends AppController
 
 
     public function import(){
-        Configure::write('debug', 0);
+        // Configure::write('debug', 0);
         if ($this->request->is('post')) {
 
 
@@ -84,7 +84,11 @@ class ProductsController extends AppController
                 if ($count == 1) {
                     continue;
                 }
-
+				if(count($row) != 25){ 
+                    $this->Flash->error(__('Terjadi kesalahan penginputan pada baris ke '. $count.',  panjang format tidak sama.')); 
+					return $this->redirect(['action' => 'index']);
+					break; 
+				}  
                 $categoryId = $this->ProductCategories->getIdByName($row[0]);
 
                 $data = [];
