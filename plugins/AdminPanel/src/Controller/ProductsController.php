@@ -68,7 +68,7 @@ class ProductsController extends AppController
 
 
     public function import(){
-        // Configure::write('debug', 0);
+        Configure::write('debug', 0);
         if ($this->request->is('post')) {
 
 
