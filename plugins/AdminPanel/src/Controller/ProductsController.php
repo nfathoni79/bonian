@@ -740,7 +740,15 @@ class ProductsController extends AppController
 
                 }else{
                     $success = false;
-                    $this->Flash->error(__('Failed error on row product name : '.$row[1]));
+                    $this->Flash->error(__('Failed error on row product name : '.$row[1])); 
+					foreach($error as $field => $value){ 
+						$newError = $field ;
+						foreach($value as $val){
+							$newError .= ' '.$val;
+						}
+						$this->Flash->error($newError); 
+					}
+					
                     break;
                 }
 
