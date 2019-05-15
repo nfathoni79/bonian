@@ -84,6 +84,8 @@ class ProductsController extends AppController
                 if ($count == 1) {
                     continue;
                 }
+				/* debug($row);
+				exit; */
 				if(count($row) != 25){ 
                     $this->Flash->error(__('Terjadi kesalahan penginputan pada baris ke '. $count.',  panjang format tidak sama.')); 
 					return $this->redirect(['action' => 'index']);
@@ -97,7 +99,7 @@ class ProductsController extends AppController
                 $data['ProductMetaTags']['description'] = $row[3];
                 $data['ProductToAttributes'] = [];
 
-                $material = array_map('trim',explode('|', $row[4]));
+                $material = array_filter(array_map('trim',explode('|', $row[4])));
                 foreach($material as $vals){
                     $data['ProductToAttributes'][] = $this->Attributes->getId($vals,$categoryId);
                 }
@@ -116,13 +118,13 @@ class ProductsController extends AppController
                 $data['supplier_code'] =  trim($row[13]);
                 $data['ProductTags'] = [];
 
-                $tags = array_map('trim',explode(',', $row[14]));
+                $tags = array_filter(array_map('trim',explode(',', $row[14])));
                 foreach($tags as $value){
                     $data['ProductTags'][] =  $this->Tags->getName($value);
                 }
 
                 $data['ProductToCourriers'] = [];
-                $courier = array_map('trim',explode(',', $row[15]));
+                $courier = array_filter(array_map('trim',explode(',', $row[15])));
                 foreach($courier as $values){
                     $data['ProductToCourriers'][] = $this->Courriers->getId($values);
                 }
@@ -134,14 +136,14 @@ class ProductsController extends AppController
                 $data['profile'] = trim($row[19]);
 
                 $data['ProductOptionValueLists'] = [];
-                $option = array_map('trim',explode('|', $row[20]));
+                $option = array_filter(array_map('trim',explode('|', $row[20])));
                 $i = 1;
                 foreach($option as $vals){
                     $data['ProductOptionValueLists'][$i] = $this->OptionValues->getId($vals);
                     $i++;
                 }
 
-                $optionPrice = array_map('trim',explode('|', $row[21]));
+                $optionPrice = array_filter(array_map('trim',explode('|', $row[21])));
                 $data['ProductOptionPrices'] = [];
                 for($i=0;$i<=count($option) -1;$i++){
                     $data['ProductOptionPrices'][($i+1)]['expired'] = null;
@@ -150,7 +152,7 @@ class ProductsController extends AppController
                 }
 
 
-                $weight = array_map('trim',explode(':', $row[23]));
+                $weight = array_filter(array_map('trim',explode(':', $row[23])));
 
                 $data['ProductOptionStocks'] = [];
                 for($i=0;$i<=count($option) -1;$i++){
@@ -161,7 +163,7 @@ class ProductsController extends AppController
                         $data['ProductOptionStocks'][($i+1)]['height'] = '';
                     }else{
                         /* DEMENSION */
-                        $demesion = array_map('trim',explode('x', $weight[1]));
+                        $demesion = array_filter(array_map('trim',explode('x', $weight[1])));
                         $data['ProductOptionStocks'][($i+1)]['weight'] = '';
                         $data['ProductOptionStocks'][($i+1)]['length'] = $demesion[0];
                         $data['ProductOptionStocks'][($i+1)]['width'] =  $demesion[1];
@@ -170,7 +172,7 @@ class ProductsController extends AppController
                 }
 
                 $branch = [];
-                $branches = array_map('trim',explode('|', $row[22])); //'Jakarta : 15, 20, 10 | Bandung: 10, 15, 3 | Surabaya : 20, 18, 9',
+                $branches = array_filter(array_map('trim',explode('|', $row[22]))); //'Jakarta : 15, 20, 10 | Bandung: 10, 15, 3 | Surabaya : 20, 18, 9',
                 $cityName = [];
                 foreach($branches as $k => $vals){
                     $getBranch = array_map('trim',explode(':', $vals));
@@ -191,7 +193,7 @@ class ProductsController extends AppController
                     $data['ProductOptionStocks'][($i+1)]['branches'] = $branch[$i];
                 }
 
-                $data['ProductImages'] = array_map('trim',explode(',', $row[24]));
+                $data['ProductImages'] = array_filter(array_map('trim',explode(',', $row[24])));
 
                 /* END DATA */
 
