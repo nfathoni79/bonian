@@ -90,7 +90,8 @@ class ProductsController extends AppController
                     $this->Flash->error(__('Terjadi kesalahan penginputan pada baris ke '. $count.',  panjang format tidak sama.')); 
 					return $this->redirect(['action' => 'index']);
 					break; 
-				}  
+				}
+
                 $categoryId = $this->ProductCategories->getIdByName($row[0]);
 
                 $data = [];
@@ -328,6 +329,8 @@ class ProductsController extends AppController
                 $validator->addNestedMany('ProductOptionStocks', $productSize);
 
                 $error = $validator->errors($data);
+
+
                 if (empty($error)) {
 
 
@@ -350,11 +353,14 @@ class ProductsController extends AppController
 
 
                     foreach($data['ProductImages'] as $vals){
+
                         $tmpfname = tempnam(sys_get_temp_dir(), "FOO");
 
-                        $handle = fopen($tmpfname, "w");
-                        fwrite($handle, file_get_contents($vals));
-                        fclose($handle);
+                        //$handle = fopen($tmpfname, "w+");
+                        //fwrite($handle, file_get_contents($vals));
+                        //fclose($handle);
+                        file_put_contents($tmpfname, file_get_contents($vals));
+
 
                         $img = get_headers($vals, 1);
                         $size = getimagesize($vals);
@@ -365,6 +371,7 @@ class ProductsController extends AppController
                         $saveImage['name']['name'] = 'sembarang.jpg';
                         $saveImage['name']['type'] = $size['mime'];
                         $saveImage['name']['size'] = intval($img["Content-Length"]);
+
 
                         $entityImage = $this->ProductImageSizes->ProductImages->newEntity();
                         $this->ProductImageSizes->ProductImages->patchEntity($entityImage, $saveImage);
