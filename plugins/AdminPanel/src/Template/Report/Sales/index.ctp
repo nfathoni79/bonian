@@ -114,7 +114,7 @@
                 <!--begin: Search Form -->
                 <form class="m-form m-form--fit m--margin-bottom-20">
                     <div class="row m--margin-bottom-20">
-                        <div class="col-lg-2 m--margin-bottom-10-tablet-and-mobile">
+                        <div class="col-lg-3 m--margin-bottom-10-tablet-and-mobile">
                             <label>Tanggal:</label>
                             <div class='input-group ' id='m_daterangepicker_6'>
                                 <input type='text' name="date_range" value="<?= $start; ?> / <?= $end; ?>" class="form-control m-input" readonly placeholder="Select date range" id="date_range" />
