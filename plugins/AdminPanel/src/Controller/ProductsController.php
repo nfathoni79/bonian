@@ -146,9 +146,10 @@ class ProductsController extends AppController
                 $optionPrice = array_filter(array_map('trim',explode('|', $row[21])));
                 $data['ProductOptionPrices'] = [];
                 for($i=0;$i<=count($option) -1;$i++){
+                    $prices = preg_replace('/[,.]/', '', trim(@$optionPrice[$i]));
                     $data['ProductOptionPrices'][($i+1)]['expired'] = null;
                     $data['ProductOptionPrices'][($i+1)]['sku'] = $data['sku'].sprintf("%02d", ($i+1));
-                    $data['ProductOptionPrices'][($i+1)]['price'] = preg_replace('/[,.]/', '', trim($optionPrice[$i]));
+                    $data['ProductOptionPrices'][($i+1)]['price'] = $prices ? $prices : 0;
                 }
 
 
@@ -196,7 +197,6 @@ class ProductsController extends AppController
                 $data['ProductImages'] = array_filter(array_map('trim',explode(',', $row[24])));
 
                 /* END DATA */
-
 
                 $validator = new Validator();
 
@@ -269,7 +269,7 @@ class ProductsController extends AppController
 
                 $validator
                     ->requirePresence('ProductToCourriers')
-                    ->hasAtLeast('ProductToCourriers', 2, __d('AdminPanel', __d('AdminPanel','pilihan minimal 2 kurir')));
+                    ->hasAtLeast('ProductToCourriers', 1, __d('AdminPanel', __d('AdminPanel','pilihan minimal 1 kurir')));
 
                 $productOption = new Validator();
 
@@ -740,7 +740,8 @@ class ProductsController extends AppController
 
                 }else{
                     $success = false;
-                    $this->Flash->error(__('Failed error on row product name : '.$row[1])); 
+                    $this->Flash->error(__('Failed error on row product name : '.$row[1]));
+                    debug($error);
 					foreach($error as $field => $value){ 
 						$newError = $field ;
 						foreach($value as $val){
