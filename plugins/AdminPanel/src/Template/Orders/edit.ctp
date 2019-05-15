@@ -171,92 +171,99 @@
                         </div>
                     </div>
 
+                    <?php $shipping_cost = 0;?>
+                    <?php foreach($order->order_details as $key => $val) : ?>
+                    <?php $shipping_cost += $val->shipping_cost;?>
+                    <?php endforeach;?>
+
                     <div class="m-portlet__body">
                         <div class="m-widget16">
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="m-widget16__head">
                                         <div class="m-widget16__item">
-															<span class="m-widget16__sceduled">
-																Type
-															</span>
+                                            <span class="m-widget16__sceduled">
+                                                Type
+                                            </span>
                                             <span class="m-widget16__amount m--align-right">
-																Value
-															</span>
+                                                Value
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="m-widget16__body">
                                         <!--begin::widget item-->
                                         <div class="m-widget16__item">
                                                 <span class="m-widget16__date">
+                                                    Shop Amount
+                                                </span>
+                                            <span class="m-widget16__price m--align-right">
+                                                <?= $this->Number->format($order->gross_total - $shipping_cost); ?>
+                                            </span>
+                                        </div>
+                                        <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
+                                                    Shipping Cost
+                                                </span>
+                                            <span class="m-widget16__price m--align-right">
+                                                +<?= $this->Number->format($shipping_cost); ?>
+                                            </span>
+                                        </div>
+                                        <div class="m-widget16__item">
+                                                <span class="m-widget16__date">
                                                     Gross Total
                                                 </span>
                                             <span class="m-widget16__price m--align-right">
-                                                <?php $gross_total = $order->get('gross_total'); ?>
-                                                    <?= $this->Number->format($gross_total); ?>
-                                                </span>
+                                                <?= $this->Number->format($order->gross_total); ?>
+                                            </span>
                                         </div>
                                         <!--end::widget item-->
 
-                                        <?php if ($order->use_point > 0) : ?>
-                                            <!--begin::widget item-->
-                                            <div class="m-widget16__item">
-                                                <span class="m-widget16__date">
-                                                    Using Point
-                                                </span>
-                                                <span class="m-widget16__price m--align-right">
-                                                    <?php
-                                                    $use_point = $order->get('use_point');
-                                                    $gross_total -= $use_point;
-                                                    ?>
-                                                    -<?= $this->Number->format($use_point); ?>
-                                                </span>
-                                            </div>
-                                            <!--end::widget item-->
-                                        <?php endif; ?>
+                                        <!--begin::widget item-->
+                                        <div class="m-widget16__item">
+                                            <span class="m-widget16__date">
+                                                Using Point
+                                            </span>
+                                            <span class="m-widget16__price m--align-right">
+                                                -<?= $this->Number->format($order->use_point); ?>
+                                            </span>
+                                        </div>
+                                        <!--end::widget item-->
 
                                         <?php if ($order->has('voucher_id')) : ?>
-                                            <!--begin::widget item-->
                                             <div class="m-widget16__item">
                                                 <span class="m-widget16__date">
                                                     Voucher Amount
                                                 </span>
                                                 <span class="m-widget16__price m--align-right">
-                                                    <?php
-                                                    $voucher_value = $order->voucher->get('value');
-                                                    $discount = 0;
-                                                    switch($order->voucher->get('type')) {
-                                                        case '1':
-                                                            $discount = ($voucher_value / 100 * $gross_total);
-                                                            break;
-                                                        case '2':
-                                                            $discount = $voucher_value;
-                                                            break;
-                                                    }
-                                                    $gross_total -= $discount;
-                                                    ?>
-                                                    -<?= $this->Number->format($discount); ?>
+                                                    -<?= $this->Number->format($order->discount_voucher); ?>
                                                 </span>
                                             </div>
-                                            <!--end::widget item-->
-                                        <!--begin::widget item-->
-                                        <div class="m-widget16__item">
+                                            <div class="m-widget16__item">
                                                 <span class="m-widget16__date">
                                                     Code Voucher
                                                 </span>
-                                            <span class="m-widget16__price m--align-right">
-                                                    <?= $order->voucher->get('code_voucher'); ?>
+                                                <span class="m-widget16__price m--align-right">
+                                                    -<?= $order->voucher->get('code_voucher'); ?>
                                                 </span>
-                                        </div>
-                                        <!--end::widget item-->
+                                            </div>
                                         <?php endif; ?>
+
+                                        <div class="m-widget16__item">
+                                            <span class="m-widget16__date">
+                                                Coupon Amount
+                                            </span>
+                                            <span class="m-widget16__price m--align-right">
+                                                -<?= $this->Number->format($order->discount_kupon); ?>
+                                            </span>
+                                        </div>
+
                                         <!--begin::widget item-->
                                         <div class="m-widget16__item">
                                                 <span class="m-widget16__date">
                                                     Net Total
                                                 </span>
                                             <span class="m-widget16__price m--align-right">
-                                                <?= $this->Number->format($gross_total); ?>
+                                                <?= $this->Number->format($order->total); ?>
                                                 </span>
                                         </div>
                                         <!--end::widget item-->
@@ -385,17 +392,16 @@
                     </div>
 
 
-
                     <div class="m-portlet__body">
                         <div class="m-widget16">
                             <div class="m-widget16__head">
                                 <div class="m-widget16__item">
-															<span class="m-widget16__sceduled">
-																Type
-															</span>
+                                    <span class="m-widget16__sceduled">
+                                        Type
+                                    </span>
                                     <span class="m-widget16__amount m--align-right">
-																Value
-															</span>
+                                        Value
+                                    </span>
                                 </div>
                             </div>
                             <div class="m-widget16__body">
@@ -545,7 +551,8 @@
                                         'div' => false,
                                         'label' => false,
                                         'class' => 'form-control m-input col-lg-4 form-event-changed',
-                                        'style' => 'display: block;'
+                                        'style' => 'display: block;',
+                                        'empty' => '-'
                                     ]); ?>
                             </div>
 
