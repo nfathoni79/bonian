@@ -272,7 +272,6 @@
 
 <?php $this->append('script'); ?>
 
-<?= $this->Element('Script/froala-editor'); ?>
 <?php
 $this->Html->css([
 '/admin-assets/vendors/custom/datatables/datatables.bundle.css'
@@ -512,3 +511,6 @@ $this->Html->script([
 
 
 <?php $this->end(); ?>
+
+
+<?= $this->Element('Script/froala-editor'); ?>
