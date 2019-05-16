@@ -49,8 +49,15 @@ class ProductCategoriesController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['ProductCategories.name LIKE' => '%' . $search .'%']);
-                    $data->where(['ParentProductCategories.name LIKE' => '%' . $search .'%']);
+                    //$data->where(['ProductCategories.name LIKE' => '%' . $search .'%']);
+                    //$data->where(['ParentProductCategories.name LIKE' => '%' . $search .'%']);
+
+                    $data->where([
+                        'OR' => [
+                            'ProductCategories.name LIKE' => '%' . $search .'%',
+                            'ParentProductCategories.name LIKE' => '%' . $search .'%'
+                        ]
+                    ]);
                 }
                 $data->where($query);
             }

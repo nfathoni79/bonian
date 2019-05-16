@@ -85,14 +85,20 @@ class ProductsController extends AppController
                 }
 				/* debug($row);
 				exit; */
-				if(count($row) != 25){ 
-                    $this->Flash->error(__('Terjadi kesalahan penginputan pada baris ke '. $count.',  panjang format tidak sama.')); 
-					return $this->redirect(['action' => 'index']);
-					break; 
-				}
 
                 $categoryId = $this->ProductCategories->getIdByName($row[0]);
 
+                if(empty($categoryId)){
+                    $this->Flash->error(__('Terjadi kesalahan penginputan pada baris ke '. $count.',  kategori tidak ditemukan.'));
+                    return $this->redirect(['action' => 'index']);
+                    break;
+                }
+                if(count($row) != 25){
+                    $this->Flash->error(__('Terjadi kesalahan penginputan pada baris ke '. $count.',  panjang format tidak sama.'));
+                    return $this->redirect(['action' => 'index']);
+                    break;
+                }
+                
                 $data = [];
                 $data['name'] = $row[1];
                 $data['ProductMetaTags']['keyword'] = $row[2];
@@ -195,7 +201,8 @@ class ProductsController extends AppController
                 }
 
                 $data['ProductImages'] = array_filter(array_map('trim',explode(',', $row[24])));
-
+//                debug($data);
+//                continue;
                 /* END DATA */
 
                 $validator = new Validator();
