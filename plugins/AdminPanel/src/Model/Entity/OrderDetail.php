@@ -19,6 +19,7 @@ use Cake\ORM\Entity;
  * @property string|null $shipping_service
  * @property int|null $shipping_weight
  * @property float|null $shipping_cost
+ * @property string|null $shipping_etd
  * @property float|null $total
  * @property int|null $order_status_id
  * @property \Cake\I18n\FrozenTime $created
@@ -60,6 +61,7 @@ class OrderDetail extends Entity
         'shipping_service' => true,
         'shipping_weight' => true,
         'shipping_cost' => true,
+        'shipping_etd' => true,
         'total' => true,
         'order_status_id' => true,
         'created' => true,
