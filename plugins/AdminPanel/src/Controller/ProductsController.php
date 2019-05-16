@@ -98,7 +98,7 @@ class ProductsController extends AppController
                     return $this->redirect(['action' => 'index']);
                     break;
                 }
-                
+
                 $data = [];
                 $data['name'] = $row[1];
                 $data['ProductMetaTags']['keyword'] = $row[2];
