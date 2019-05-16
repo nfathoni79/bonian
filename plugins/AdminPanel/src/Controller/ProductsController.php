@@ -101,7 +101,7 @@ class ProductsController extends AppController
 
                 $data = [];
                 $data['name'] = $row[1];
-                $data['ProductMetaTags']['keyword'] = $row[2];
+                $data['ProductMetaTags']['keyword'] = $row[2] ? $row[2] : '';
                 $data['ProductMetaTags']['description'] = $row[3];
                 $data['ProductToAttributes'] = [];
 
@@ -754,11 +754,17 @@ class ProductsController extends AppController
                 }else{
                     $success = false;
                     $this->Flash->error(__('Failed error on row product name : '.$row[1]));
-                    //debug($error);
+
 					foreach($error as $field => $value){ 
 						$newError = $field ;
 						foreach($value as $val){
-							$newError .= ' '.$val;
+							if(is_array($val)){
+							    foreach($val as $vals){
+                                    $newError .= ' '.$vals;
+                                }
+                            }else{
+                                $newError .= ' '.$val;
+                            }
 						}
 						$this->Flash->error($newError); 
 					}
