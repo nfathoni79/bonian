@@ -31,6 +31,7 @@ class SortSeed extends AbstractSeed
          $this->call('ProductCategoriesSeed');
          $this->call('ProductWarrantiesSeed');
          $this->call('GameWheelsSeed');
+         $this->call('CustomerNotificationTypesSeed');
 
     }
 }
