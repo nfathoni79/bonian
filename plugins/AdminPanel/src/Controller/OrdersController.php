@@ -6,10 +6,19 @@ use AdminPanel\Controller\AppController;
 /**
  * Orders Controller
  * @property \AdminPanel\Model\Table\OrdersTable $Orders
+ * @property \AdminPanel\Model\Table\OrderShippingDetailsTable $OrderShippingDetails
  * @method \AdminPanel\Model\Entity\Order[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class OrdersController extends AppController
 {
+
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('AdminPanel.Orders');
+        $this->loadModel('AdminPanel.OrderShippingDetails');
+    }
+
 
     /**
      * Index method
@@ -194,26 +203,38 @@ class OrdersController extends AppController
 
             //    return $this->redirect(['action' => 'index']);
             //}
-
+//            debug($this->request->getData('origin'));
+//            exit;
             foreach($order->order_details as $detail) {
                 foreach($this->request->getData('origin') as $origin => $shipping) {
-                    if ($detail->get('branch_id') == $origin) {
-                        $detail = $this->Orders->OrderDetails->patchEntity($detail, $shipping);
-                        if ($this->Orders->OrderDetails->save($detail)) {
-                            $this->Flash->success(__('The order has been saved.'));
-                        } else {
-                            $this->Flash->error(__('The order could not be saved. Please, try again.'));
+                    if(!empty($shipping['order_status_id'])){
+                        if ($detail->get('branch_id') == $origin) {
+                            $detail = $this->Orders->OrderDetails->patchEntity($detail, $shipping);
+                            if ($this->Orders->OrderDetails->save($detail)) {
+                                $query = $this->OrderShippingDetails->query();
+                                $query->update()
+                                    ->set(['status' => $shipping['order_status_id']])
+                                    ->where([
+                                        'order_detail_id' => $detail->get('id'),
+                                    ])
+                                    ->execute();
+
+                                $this->Flash->success(__('The order has been saved.'));
+                            } else {
+                                $this->Flash->error(__('The order could not be saved. Please, try again.'));
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
 
         }
-
-
-        $order_detail_statuses = $this->Orders->OrderDetails->OrderStatuses->find('list');
-
+//        $order_detail_statuses = $this->Orders->OrderDetails->OrderStatuses->find('list');
+        $order_detail_statuses = [
+            '3' => 'Dikirim',
+            '4' => 'Selesai',
+        ];
         //debug($order);exit;
         $this->set(compact('order', 'order_detail_statuses'));
     }
