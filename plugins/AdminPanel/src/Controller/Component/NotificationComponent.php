@@ -13,7 +13,7 @@ use Cake\ORM\Locator\TableLocator;
  */
 class NotificationComponent extends Component
 {
-    public $components = ['Pusher'];
+    public $components = ['AdminPanel.Pusher'];
 
     /**
      * Default configuration.
