@@ -187,14 +187,12 @@
             <div class="modal-body">
                 <?= $this->Form->create('ProductStocks',['action' => 'import','class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form','type' => 'file']); ?>
 
-                <div class="form-group m-form__group">
-                    <label>Cari FIle</label>
-                    <div></div>
-                    <div class="custom-file">
+                <div class="form-group m-form__group row">
+                    <label class="col-form-label col-lg-4">Cari FIle</label>
+                    <div class="col-lg-8">
                         <?php
-                             echo $this->Form->control('files',['class' => 'custom-file-input', 'type' => 'file']);
+                             echo $this->Form->control('files',['class' => 'form-control', 'type' => 'file','div' => false, 'label' => false,]);
                         ?>
-                        <label class="custom-file-label" for="files">Pilih file</label>
                     </div>
                 </div>
             </div>
