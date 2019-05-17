@@ -6,6 +6,7 @@ use AdminPanel\Model\Entity\Product;
 use Cake\Core\Configure;
 use Cake\Validation\Validator;
 use Cake\Utility\Hash;
+use function GuzzleHttp\Psr7\str;
 use phpDocumentor\Reflection\Types\Integer;
 
 /**
@@ -215,8 +216,17 @@ class ProductsController extends AppController
 
 
                 $data['ProductImages'] = array_filter(array_map('trim',explode(',', $row[24])));
-//                debug($data);
-//                continue;
+
+                foreach($data['ProductImages'] as $vals){
+                    if($vals){
+                        $format = explode('.',$vals);
+                        if(strtolower(end($format)) == 'webp'){
+                            $this->Flash->error(__('Terjadi kesalahan penginputan pada baris ke '. $count.',  Format gambar tidak sesuai.'));
+                            return $this->redirect(['action' => 'index']);
+                            break;
+                        }
+                    }
+                } 
                 /* END DATA */
 
                 $validator = new Validator();
