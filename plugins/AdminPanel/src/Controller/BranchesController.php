@@ -129,12 +129,16 @@ class BranchesController extends AppController
             $this->viewBuilder()->setLayout('ajax');
             $options = $this->Cities->find('list', [
                     'keyField' => 'id',
-                    'valueField' => 'name'
+                    'valueField' => function (\AdminPanel\Model\Entity\City $city) {
+                        return $city->get('type') . ' ' . $city->get('name');
+                    }
                 ])
                 ->where(['province_id' => $this->request->getData('province')])
                 ->toArray();
             return $this->response->withType('application/json')
                 ->withStringBody(json_encode($options));
+
+
         }
 
     }
