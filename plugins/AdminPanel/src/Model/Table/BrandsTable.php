@@ -13,6 +13,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\BrandsTable|\Cake\ORM\Association\BelongsTo $ParentBrands
  * @property \AdminPanel\Model\Table\BrandsTable|\Cake\ORM\Association\HasMany $ChildBrands
  * @property \AdminPanel\Model\Table\ProductsTable|\Cake\ORM\Association\HasMany $Products
+ * @property \AdminPanel\Model\Table\CategoryToBrandsTable|\Cake\ORM\Association\HasMany $CategoryToBrands
  *
  * @method \AdminPanel\Model\Entity\Brand get($primaryKey, $options = [])
  * @method \AdminPanel\Model\Entity\Brand newEntity($data = null, array $options = [])
@@ -70,6 +71,10 @@ class BrandsTable extends Table
             'foreignKey' => 'brand_id',
             'className' => 'AdminPanel.Products'
         ]);
+        $this->hasMany('CategoryToBrands', [
+            'foreignKey' => 'brand_id',
+            'className' => 'AdminPanel.CategoryToBrands'
+        ]);
     }
 
     /**
@@ -108,8 +113,51 @@ class BrandsTable extends Table
         return $rules;
     }
 
+    /**
+     * @param $name
+     * @param $category_id
+     * @return mixed
+     */
+    public function getId($name, $category_id)
+    {
+        $name = trim($name);
+        $brandEntity = $this->find()
+            ->where([
+                'name' => $name
+            ])
+            ->first();
 
-    public function getId($slug,$categoryId = null){
+        if ($brandEntity) {
+            return $brandEntity->get('id');
+        } else {
+            $brandEntity = $this->newEntity();
+            $brandEntity->parent_id = null;
+            $brandEntity->product_category_id = null;
+            $brandEntity->name = $name;
+            if ($this->save($brandEntity)) {
+
+                $categoryToBrandEntity = $this->CategoryToBrands->find()
+                    ->where([
+                        'product_category_id' => $category_id,
+                        'brand_id' => $brandEntity->get('id')
+                    ])
+                    ->first();
+
+                if (!$categoryToBrandEntity) {
+                    $categoryToBrandEntity = $this->CategoryToBrands->newEntity();
+                    $categoryToBrandEntity->product_category_id = $category_id;
+                    $categoryToBrandEntity->brand_id = $brandEntity->get('id');
+                    $this->CategoryToBrands->save($categoryToBrandEntity);
+                }
+
+                return $brandEntity->get('id');
+            }
+        }
+
+    }
+
+
+    public function getId_($slug,$categoryId = null){
         $find = $this->find()
             ->where(['name' => $slug,'product_category_id' => $categoryId,])
             ->first();
