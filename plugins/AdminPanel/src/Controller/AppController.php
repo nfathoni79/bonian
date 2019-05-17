@@ -12,6 +12,7 @@ use Cake\Routing\Router;
  * Class AppController
  * @package AdminPanel\Controller
  * @property \AdminPanel\Controller\Component\DataTableComponent $DataTable
+ * @property \AdminPanel\Controller\Component\NotificationComponent $Notification
  */
 
 class AppController extends BaseController
@@ -21,6 +22,7 @@ class AppController extends BaseController
         //parent::initialize();
         $this->loadComponent('Flash');
         $this->loadComponent('AdminPanel.DataTable');
+        $this->loadComponent('AdminPanel.Notification');
         $this->loadComponent('Acl.Acl');
         $this->loadComponent('Auth', [
             'authorize' => [

@@ -219,6 +219,46 @@ class OrdersController extends AppController
                                     ])
                                     ->execute();
 
+                                $templates = [
+                                    3 => [
+                                        'title' => 'Status Pengiriman',
+                                        'message' => vsprintf('Order dengan invoice %s sudah dikirim dengan nomor resi %', [
+                                            $order->invoice,
+                                            $shipping['awb']
+                                        ])
+                                    ],
+                                    4 => [
+                                        'title' => 'Status Pengiriman',
+                                        'message' => vsprintf('Order dengan invoice %s sudah selesai ', [
+                                            $order->invoice
+                                        ])
+                                    ],
+                                ];
+
+                                if (isset($templates[$shipping['order_status_id']])) {
+                                    $template = $templates[$shipping['order_status_id']];
+                                    if ($this->Notification->create(
+                                        $order->customer_id,
+                                        '1',
+                                        $template['title'],
+                                        $template['message'],
+                                        'Orders',
+                                        $order->id,
+                                        1,
+                                        $this->Notification->getImageConfirmationPath(),
+                                        '/user/history/detail/' . $order->invoice
+                                    )) {
+
+                                        $this->Notification->triggerCount(
+                                            $order->customer_id,
+                                            $order->customer->reffcode
+                                        );
+                                    }
+                                }
+
+
+
+
                                 $this->Flash->success(__('The order has been saved.'));
                             } else {
                                 $this->Flash->error(__('The order could not be saved. Please, try again.'));
