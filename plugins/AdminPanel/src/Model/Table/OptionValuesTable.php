@@ -89,7 +89,7 @@ class OptionValuesTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['option_id'], 'Options'));
-        $rules->add($rules->isUnique(['name']));
+//        $rules->add($rules->isUnique(['name']));
 
         return $rules;
     }
@@ -112,6 +112,7 @@ class OptionValuesTable extends Table
         $explodeSlug = array_map('trim',explode(',', $slug));
         foreach($explodeSlug as $vals){
             $explodeOption = array_map('trim',explode(':', $vals));
+
             $findOpt = $option->find()
                 ->where(['name' => $explodeOption[0]])
                 ->first();

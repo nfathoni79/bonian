@@ -68,6 +68,7 @@ class ProductsController extends AppController
 
     public function import(){
         Configure::write('debug', 0);
+        set_time_limit(600);
         if ($this->request->is('post')) {
 
 
@@ -83,8 +84,8 @@ class ProductsController extends AppController
                 if ($count == 1) {
                     continue;
                 }
-				/* debug($row);
-				exit; */
+//				 debug($row);
+//				exit;
 
                 $categoryId = $this->ProductCategories->getIdByName($row[0]);
 
@@ -179,26 +180,39 @@ class ProductsController extends AppController
                 }
 
                 $branch = [];
-                $branches = array_filter(array_map('trim',explode('|', $row[22]))); //'Jakarta : 15, 20, 10 | Bandung: 10, 15, 3 | Surabaya : 20, 18, 9',
+                $branches = array_filter(array_map('trim',explode('|', $row[22])));
                 $cityName = [];
+
+                $branch_names = [];
                 foreach($branches as $k => $vals){
                     $getBranch = array_map('trim',explode(':', $vals));
                     $supply = array_map('trim',explode(',', $getBranch[1]));
                     $cityName[] = $getBranch[0];
+
+                    $branch_id = $this->Branches->getId($getBranch[0]);
+                    $branch_names[$branch_id] = $supply;
+
                     foreach($supply as $ky => $val){
                         $branch[$k][$ky]['stock'] = $val;
+
+                    }
+
+                }
+
+
+
+
+                foreach($data['ProductOptionStocks'] as $key_stock => $stock) {
+                    foreach($branch_names as  $branch_id => $val){
+                        $data['ProductOptionStocks'][$key_stock]['branches'][] = [
+                            'stock' => array_shift($branch_names[$branch_id]),
+                            'branch_id' => $branch_id
+                        ];
                     }
                 }
 
-                foreach($branch as $k => $vals){
-                    foreach($vals as $ky => $v) {
-                        $branch[$k][$ky]['branch_id'] = $this->Branches->getId($cityName[$ky]);
-                    }
-                }
 
-                for($i=0;$i<=count($option) -1;$i++){
-                    $data['ProductOptionStocks'][($i+1)]['branches'] = $branch[$i];
-                }
+
 
                 $data['ProductImages'] = array_filter(array_map('trim',explode(',', $row[24])));
 //                debug($data);
@@ -754,19 +768,19 @@ class ProductsController extends AppController
                 }else{
                     $success = false;
                     $this->Flash->error(__('Failed error on row product name : '.$row[1]));
-
-					foreach($error as $field => $value){ 
-						$newError = $field ;
-						foreach($value as $val){
-							if(is_array($val)){
-							    foreach($val as $vals){
-                                    $newError .= ' '.$vals;
-                                }
-                            }else{
-                                $newError .= ' '.$val;
-                            }
-						}
-						$this->Flash->error($newError); 
+//                    debug($error);
+					foreach($error as $field => $value){
+						$newError = $field .' Tidak boleh kosong atau format tidak sah atau tidak terdaftar';
+//						foreach($value as $val){
+//							if(is_array($val)){
+//							    foreach($val as $vals){
+//                                    $newError .= ' '.$vals;
+//                                }
+//                            }else{
+//                                $newError .= ' '.$val;
+//                            }
+//						}
+						$this->Flash->error($newError);
 					}
 					
                     break;

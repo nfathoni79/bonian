@@ -70,10 +70,10 @@ class OptionsTable extends Table
             ->requirePresence('name', 'create')
             ->allowEmptyString('name', false);
 
-        $validator
-            ->integer('sort_order')
-            ->requirePresence('sort_order', 'create')
-            ->allowEmptyString('sort_order', false);
+//        $validator
+//            ->integer('sort_order')
+//            ->requirePresence('sort_order', 'create')
+//            ->allowEmptyString('sort_order', false);
 
         return $validator;
     }
