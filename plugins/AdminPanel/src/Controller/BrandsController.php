@@ -361,16 +361,55 @@ class BrandsController extends AppController
                 if($findMainCategory){
                     if(!empty($row[3])){
                         $explode = explode(',', $row[3]);
-                        foreach($explode as $val){
-                            $newEntity = $this->Brands->newEntity();
-                            $newEntity = $this->Brands->patchEntity($newEntity, $this->request->getData());
-                            $newEntity->set('parent_id', null);
-                            $newEntity->set('product_category_id', $findMainCategory->get('id'));
-                            $newEntity->set('name', trim($val));
-                            $this->Brands->setLogMessageBuilder(function () use($newEntity){
-                                return 'Manajemen Brand - penambahan import : '.$newEntity->get('name');
-                            });
-                            $this->Brands->save($newEntity);
+                        foreach($explode as $val) {
+
+                            $newEntity = $this->Brands->find()
+                                ->where([
+                                    'name' => trim($val)
+                                ])
+                                ->first();
+
+                            if (!$newEntity) {
+                                $newEntity = $this->Brands->newEntity();
+                                $newEntity = $this->Brands->patchEntity($newEntity, $this->request->getData());
+                                $newEntity->set('parent_id', null);
+                                $newEntity->set('product_category_id', $findMainCategory->get('id'));
+                                $newEntity->set('name', trim($val));
+                                $this->Brands->setLogMessageBuilder(function () use($newEntity){
+                                    return 'Manajemen Brand - penambahan import : '.$newEntity->get('name');
+                                });
+                                if($this->Brands->save($newEntity)) {
+                                    $categoryToBrandEntity = $this->CategoryToBrands->find()
+                                        ->where([
+                                            'product_category_id' => $findMainCategory->get('id'),
+                                            'brand_id' => $newEntity->get('id'),
+                                        ])
+                                        ->first();
+                                    if (!$categoryToBrandEntity) {
+                                        $CategoryToBrandsEntity = $this->CategoryToBrands->newEntity([
+                                            'product_category_id' => $findMainCategory->get('id'),
+                                            'brand_id' => $newEntity->get('id'),
+                                        ]);
+                                        $this->CategoryToBrands->save($CategoryToBrandsEntity);
+                                    }
+                                }
+                            } else {
+                                $categoryToBrandEntity = $this->CategoryToBrands->find()
+                                    ->where([
+                                        'product_category_id' => $findMainCategory->get('id'),
+                                        'brand_id' => $newEntity->get('id'),
+                                    ])
+                                    ->first();
+                                if (!$categoryToBrandEntity) {
+                                    $CategoryToBrandsEntity = $this->CategoryToBrands->newEntity([
+                                        'product_category_id' => $findMainCategory->get('id'),
+                                        'brand_id' => $newEntity->get('id'),
+                                    ]);
+                                    $this->CategoryToBrands->save($CategoryToBrandsEntity);
+                                }
+                            }
+
+
                         }
                     }
                 }
