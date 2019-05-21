@@ -224,6 +224,7 @@ $this->Html->script([
             'pdfHtml5',
         ],
 
+        lengthMenu: [10, 25, 50, 100, 1000],
         processing: true,
         serverSide: true,
         order: [[0, 'desc']],

@@ -283,7 +283,7 @@ echo $this->Html->script([
     // AREA CHART
     new Morris.Area({
         element: 'm_morris_2',
-        data: <?php echo json_encode($newList);?>,
+        data: "<?php echo json_encode($newList);?>",
         xkey: 'date',
         ykeys: ['value'],
         labels: ['In percent (%)']
@@ -300,6 +300,7 @@ echo $this->Html->script([
             'pdfHtml5',
         ],
 
+        lengthMenu: [10, 25, 50, 100, 1000],
         processing: true,
         serverSide: true,
         order: [[0, 'desc']],
