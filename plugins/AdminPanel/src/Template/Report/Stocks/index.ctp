@@ -149,13 +149,16 @@
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="table-review">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nama Produk</th>
                             <th>SKU</th>
-                            <th>branch</th>
+                            <th>Nama Produk</th>
+                            <th>Sub SKU</th>
+                            <th>Cabang</th>
+                            <th>Variant</th>
                             <th>Category</th>
                             <th>Brand</th>
+                            <th>Supplier</th>
                             <th>Stock</th>
+                            <th>Harga Jual</th>
                         </tr>
                         </thead>
                     </table>
@@ -176,6 +179,11 @@ $this->Html->script([
 ], ['block' => true]);
 ?>
 <?php $this->append('script'); ?>
+<?php
+echo $this->Html->script([
+'/admin-assets/app/js/lib-tools.js',
+]);
+?>
 <script>
 
 
@@ -206,14 +214,18 @@ $this->Html->script([
         initComplete: function(settings, json) {
 
         },
+        // SKU ID	NAMA PRODUK	SUB SKU	VARIAN	CATEGORY (LVL3)	BRAND	SUPPLIER	STOCK	HARGA JUAL
         columns: [
-            {data: 'id'},
+            {data: 'Products.sku'},
             {data: 'Products.name'},
             {data: 'ProductOptionPrices.sku'},
             {data: 'Branches.name'},
             {data: 'category'},
+            {data: 'variant'},
             {data: 'Brands.name'},
+            {data: 'Products.supplier_code'},
             {data: 'stock'},
+            {data: 'products.price_sale'},
             // {data: 'comment'},
             // {data: 'created'},
         ],
@@ -222,7 +234,7 @@ $this->Html->script([
             {
                 targets: 0,
                 render: function (data, type, row, meta) {
-                    return row.id;
+                    return row.product.sku;
                 }
             },
             {
@@ -245,15 +257,33 @@ $this->Html->script([
             },
             {
                 targets: 4,
+                render: function (data, type, row, meta) {
+                    return row.variant ? row.variant : '-';
+                }
+            },
+            {
+                targets: 5,
                 orderable: false,
                 render: function (data, type, row, meta) {
                     return row.product.product_to_categories[0].product_category.name;
                 }
             },
             {
-                targets: 5,
+                targets: 6,
                 render: function (data, type, row, meta) {
                     return row.product.brand ? row.product.brand.name : '';
+                }
+            },
+            {
+                targets: 7,
+                render: function (data, type, row, meta) {
+                    return row.product ? row.product.supplier_code : '-';
+                }
+            },
+            {
+                targets: 9,
+                render: function (data, type, row, meta) {
+                    return row.product ? parseInt(row.product.price_sale).format(0, 3, '.', ',') : '-';
                 }
             },
         ]

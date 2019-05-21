@@ -30,7 +30,12 @@ class StocksController extends AppController
                             'ProductCategories'
                         ]
                     ],
-                    'ProductOptionPrices',
+                    'ProductOptionPrices' => [
+                        'ProductOptionValueLists' => [
+                            'Options',
+                            'OptionValues'
+                        ],
+                    ],
                     'Branches',
                 ])
                 ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
@@ -66,6 +71,13 @@ class StocksController extends AppController
                 ->setSorting()
                 ->getTable()
                 ->map(function (\AdminPanel\Model\Entity\ProductOptionStock $row) {
+
+                    $variant = [];
+                    foreach($row->product_option_price['product_option_value_lists'] as $val){
+                        $variant[] = $val['option']['name'] .' : '. $val['option_value']['name'];
+                    }
+
+                    $row->variant = implode(', ', $variant);
                     return $row;
                 })
                 ->toArray();
