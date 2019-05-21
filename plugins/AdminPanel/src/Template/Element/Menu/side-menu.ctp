@@ -276,6 +276,12 @@
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
+                    [
+                        'name' => 'List Brands',
+                        'url' => ['controller' => 'Brands', 'action' => 'lists'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
                 ]
             ],
             [

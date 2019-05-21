@@ -4,6 +4,7 @@ namespace AdminPanel\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Utility\Text;
 use Cake\Validation\Validator;
 
 /**
@@ -44,6 +45,7 @@ class BrandsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Tree');
+        $this->addBehavior('Timestamp');
 
         $this->addBehavior('Elastic/ActivityLogger.Logger', [
             'scope' => [
@@ -52,6 +54,72 @@ class BrandsTable extends Table
             'issuer' => \Cake\Core\Configure::read('User') ?
                 \Cake\ORM\TableRegistry::get('AdminPanel.Users')->get(\Cake\Core\Configure::read('User.id'))
                 : null
+        ]);
+
+        $this->addBehavior('Josegonzalez/Upload.Upload', [
+            'logo' => [
+                'fields' => [
+                    // if these fields or their defaults exist
+                    // the values will be set.
+                    'dir' => 'dir', // defaults to `dir`
+                    'size' => 'size', // defaults to `size`
+                    'type' => 'type', // defaults to `type`
+                ],
+//                'path' => 'webroot{DS}files{DS}{model}{DS}{field}{DS}{year}{DS}{month}{DS}',
+                'nameCallback' => function ($tableObj, $entity, $data, $field, $settings) {
+                    //$ext = substr(strrchr($data['name'], '.'), 1);
+                    //return time() . rand(100, 999) . '.' . $ext;
+                    //$ext = substr(strrchr($data['logo'], '.'), 1);
+                    return str_replace('-', '', Text::uuid()) . '.' . 'jpg';
+                },
+                'transformer' =>  function ($table, \AdminPanel\Model\Entity\Brand $entity, $data, $field, $settings) {
+                    $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
+
+
+
+
+
+                    // Store the thumbnail in a temporary file
+                    $tmp = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
+
+                    $tmp_name = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
+
+                    $size = new \Imagine\Image\Box(160, 72);
+                    $mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+                    $imagine = new \Imagine\Gd\Imagine();
+
+                    // Save that modified file to our temp file
+                    $imagine->open($data['tmp_name'])
+                        ->thumbnail($size, $mode)
+                        ->save($tmp_name);
+
+                    $data['tmp_name'] = $tmp_name;
+
+
+
+                    //process delete old image
+                    $original = $entity->getOriginal('path');
+                    if ($original) {
+                        $path = $this->getPathProcessor($entity, $data, $field, $settings);
+                        $basename = rtrim(ROOT, DS) . DS . $path->basepath();
+
+                        if (file_exists($basename . $original)) {
+                            unlink($basename . $original);
+                        }
+
+                        if (file_exists($basename . 'thumbnail-' . $original)) {
+                            unlink($basename . 'thumbnail-' . $original);
+                        }
+                    }
+
+
+                    // Now return the original *and* the thumbnail
+                    return [
+                        $data['tmp_name'] => $data['name'],
+                        //$tmp => 'thumbnail-' . $data['name'],
+                    ];
+                }
+            ],
         ]);
 
 

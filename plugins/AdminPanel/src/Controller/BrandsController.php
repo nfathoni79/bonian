@@ -420,4 +420,128 @@ class BrandsController extends AppController
 
     }
 
+
+
+    public function editList($id = null)
+    {
+        $brands = $this->Brands->get($id, [
+            'contain' => []
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $brands = $this->Brands->patchEntity($brands, $this->request->getData());
+
+            //$this->Brands->setLogMessageBuilder(function () use($brand){
+            //    return 'Manajemen Brand - perubahan : '.$brand->get('name');
+            //});
+            if ($this->Brands->save($brands)) {
+                $this->Flash->success(__('The brand has been saved.'));
+
+                return $this->redirect(['action' => 'lists']);
+            }
+            $this->Flash->error(__('The brand could not be saved. Please, try again.'));
+        }
+
+        $this->set(compact('brands'));
+    }
+
+
+    public function addList()
+    {
+        $brands = $this->Brands->newEntity();
+        if ($this->request->is('post')) {
+            //debug($this->request->getData());
+            //exit;
+            $brands = $this->Brands->patchEntity($brands, $this->request->getData());
+            $this->Brands->setLogMessageBuilder(function () use($brands){
+                return 'Manajemen Brand - penambahan : '. $brands->get('name');
+            });
+
+            if ($this->Brands->save($brands)) {
+                $this->Flash->success(__('The brand has been saved.'));
+
+                return $this->redirect(['action' => 'lists']);
+            }
+            $this->Flash->error(__('The brand could not be saved. Please, try again.'));
+        }
+
+        $this->set(compact('brands'));
+    }
+
+    public function deleteList($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $brand = $this->Brands->get($id);
+        try {
+            //$this->Brands->setLogMessageBuilder(function () use($brand){
+            //    return 'Manajemen Brand - penghapusan : '.$brand->get('name');
+            // });
+            if ($this->Brands->delete($brand)) {
+                $this->Flash->success(__('The brand has been deleted.'));
+            } else {
+                $this->Flash->error(__('The brand could not be deleted. Please, try again.'));
+            }
+        } catch (Exception $e) {
+            $this->Flash->error(__('The brand could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
+    }
+
+    public function lists()
+    {
+        if ($this->request->is('ajax')) {
+            $this->viewBuilder()->setLayout('ajax');
+
+            $pagination = $this->request->getData('pagination');
+            $sort = $this->request->getData('sort');
+            $query = $this->request->getData('query');
+
+            /** custom default query : select, where, contain, etc. **/
+            /*$data = $this->Brands->find('all')
+                ->select();
+            $data->contain(['ProductCategories', 'ParentBrands']);*/
+
+            $data = $this->Brands->find('all')
+                ->select();
+
+
+            if ($query && is_array($query)) {
+                if (isset($query['generalSearch'])) {
+                    $search = $query['generalSearch'];
+                    unset($query['generalSearch']);
+                    /**
+                    custom field for general search
+                    ex : 'Users.email LIKE' => '%' . $search .'%'
+                     **/
+                    $data->where(['Brands.name LIKE' => '%' . $search .'%']);
+                }
+                $data->where($query);
+            }
+
+            if (isset($sort['field']) && isset($sort['sort'])) {
+                $data->order([$sort['field'] => $sort['sort']]);
+            }
+
+            if (isset($pagination['perpage']) && is_numeric($pagination['perpage'])) {
+                $data->limit($pagination['perpage']);
+            }
+            if (isset($pagination['page']) && is_numeric($pagination['page'])) {
+                $data->page($pagination['page']);
+            }
+
+            $total = $data->count();
+
+            $result = [];
+            $result['data'] = $data->toArray();
+
+
+            $result['meta'] = array_merge((array) $pagination, (array) $sort);
+            $result['meta']['total'] = $total;
+
+
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($result));
+        }
+    }
+
 }
