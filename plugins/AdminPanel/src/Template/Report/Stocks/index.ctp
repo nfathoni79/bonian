@@ -214,7 +214,6 @@ echo $this->Html->script([
         initComplete: function(settings, json) {
 
         },
-        // SKU ID	NAMA PRODUK	SUB SKU	VARIAN	CATEGORY (LVL3)	BRAND	SUPPLIER	STOCK	HARGA JUAL
         columns: [
             {data: 'Products.sku'},
             {data: 'Products.name'},

@@ -135,6 +135,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>SKU ID</th>
+                                <th>SUB SKU</th>
                                 <th>Product</th>
                                 <th>SKU Name</th>
                                 <th>Warehouse</th>
@@ -240,6 +241,7 @@ $this->Html->script([
             'csvHtml5',
             'pdfHtml5',
         ],
+        lengthMenu: [10, 25, 50, 100, 1000],
         processing: true,
         serverSide: true,
         order: [[1, 'desc']],
@@ -255,6 +257,7 @@ $this->Html->script([
         },
         columns: [
             {data: 'id'},
+            {data: 'Products.sku'},
             {data: 'ProductOptionPrices.sku'},
             {data: 'Products.name'},
             {data: 'skuname'},
@@ -279,17 +282,23 @@ $this->Html->script([
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return row.product_option_price.sku;
+                    return row.product ? row.product.sku : '-';
                 }
             },
             {
                 targets: 2,
                 render: function (data, type, row, meta) {
-                    return row.product.name;
+                    return row.product_option_price.sku;
                 }
             },
             {
                 targets: 3,
+                render: function (data, type, row, meta) {
+                    return row.product.name;
+                }
+            },
+            {
+                targets: 4,
                 orderable: false,
                 render: function (data, type, row, meta) {
                     var combo = '';
@@ -300,26 +309,26 @@ $this->Html->script([
                 }
             },
             {
-                targets: 4,
+                targets: 5,
                 render: function (data, type, row, meta) {
                     return row.branches;
                 }
             },
             {
-                targets: 5,
+                targets: 6,
                 orderable: false,
                 render: function (data, type, row, meta) {
                     return row.stock > 0 ? 'In Stock' : 'Out Of Stock';
                 }
             },
             {
-                targets: 6,
+                targets: 7,
                 render: function (data, type, row, meta) {
                     return row.stock;
                 }
             },
             {
-                targets: 7,
+                targets: 8,
                 orderable: false,
                 render: function (data, type, row, meta) {
                     return '<div class="m-form__group form-group mt-2">\n' +
@@ -341,13 +350,13 @@ $this->Html->script([
                 }
             },
             {
-                targets: 8,
+                targets: 9,
                 render: function (data, type, row, meta) {
                     return row.stock;
                 }
             },
             {
-                targets: 9,
+                targets: 10,
                 orderable: false,
                 render: function (data, type, row, meta) {
                     return '<button type="button" class="m-btn btn btn-primary"><i class="la la-refresh"></i></button>';

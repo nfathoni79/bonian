@@ -128,7 +128,8 @@
                         <tr>
                             <th>Tanggal</th>
                             <th>Nama Produk</th>
-                            <th>SKU</th>
+                            <th>SKU ID</th>
+                            <th>Sub SKU</th>
                             <th>Warehouse</th>
                             <th>SKU Name</th>
                             <th>Tipe</th>
@@ -185,6 +186,7 @@ $this->Html->script([
             'pdfHtml5',
         ],
 
+        lengthMenu: [10, 25, 50, 100, 1000],
         processing: true,
         serverSide: true,
         order: [[0, 'desc']],
@@ -201,6 +203,7 @@ $this->Html->script([
         columns: [
             {data: 'created'},
             {data: 'Products.name'},
+            {data: 'Products.sku'},
             {data: 'ProductOptionStocks.ProductOptionPrices.sku'},
             {data: 'Branches.name'},
             {data: 'ProductOptionStocks.ProductOptionPrices.id'},
@@ -226,17 +229,23 @@ $this->Html->script([
             {
                 targets: 2,
                 render: function (data, type, row, meta) {
-                    return row.product_option_stock.product_option_price.sku;
+                    return row.product.sku;
                 }
             },
             {
                 targets: 3,
                 render: function (data, type, row, meta) {
-                    return row.branch.name;
+                    return row.product_option_stock.product_option_price.sku;
                 }
             },
             {
                 targets: 4,
+                render: function (data, type, row, meta) {
+                    return row.branch.name;
+                }
+            },
+            {
+                targets: 5,
                 render: function (data, type, row, meta) {
                     var optlist = '';
                     $.each(row.product_option_stock.product_option_price.product_option_value_lists, function(k,v){
@@ -246,25 +255,25 @@ $this->Html->script([
                 }
             },
             {
-                targets: 5,
+                targets: 6,
                 render: function (data, type, row, meta) {
                     return row.product_stock_mutation_type.name;
                 }
             },
             {
-                targets: 6,
+                targets: 7,
                 render: function (data, type, row, meta) {
                     return row.description;
                 }
             },
             {
-                targets: 7,
+                targets: 8,
                 render: function (data, type, row, meta) {
                     return row.amount;
                 }
             },
             {
-                targets: 8,
+                targets: 9,
                 render: function (data, type, row, meta) {
                     return row.balance;
                 }
