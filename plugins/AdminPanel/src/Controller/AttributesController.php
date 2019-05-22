@@ -40,12 +40,13 @@ class AttributesController extends AppController
             $query = $this->request->getData('query');
 
             /** custom default query : select, where, contain, etc. **/
-            $data = $this->Attributes->find('all')
+            $data = $this->ProductCategories->find('all')
                 ->select();
-            $data->contain(['ParentAttributes', 'ProductCategories']);
+            $data->contain(['ParentProductCategories', 'Attributes']);
+//            $data->contain(['ParentAttributes', 'ProductCategories']);
 
             $data->where(function (\Cake\Database\Expression\QueryExpression $exp) {
-                return $exp->isNull('Attributes.parent_id');
+                return $exp->isNotNull('ProductCategories.parent_id');
             });
 
             if ($query && is_array($query)) {
@@ -56,7 +57,7 @@ class AttributesController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Attributes.name LIKE' => '%' . $search .'%']);
+//                    $data->where(['Attributes.name LIKE' => '%' . $search .'%']);
                 }
                 $data->where($query);
             }
@@ -224,7 +225,21 @@ class AttributesController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function preview($category = null){
+        if ($this->request->is(['ajax'])) {
+            $this->disableAutoRender();
+            $attribute = $this->Attributes->find()
+                ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
+                    return $exp->isNull('parent_id');
+                });
+            $attribute = $attribute->where(['Attributes.product_category_id' => $category]);
+
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($attribute));
+        }
+    }
+
+    public function edit($id , $category = null)
     {
         $attribute = $this->Attributes->get($id, [
             'contain' => []
@@ -356,7 +371,7 @@ class AttributesController extends AppController
          */
 
         $childValues = $this->Attributes->find('list')
-            ->where(['parent_id' => $id])
+            ->where(['parent_id' => $id, 'product_category_id' => $category])
             ->toArray();
 
 

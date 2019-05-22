@@ -104,7 +104,7 @@
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-attributes"></div>
+                <div class="m_datatable" id="table-preview-attributes"></div>
 
             </div>
         </div>
@@ -179,13 +179,13 @@
 
     var DatatableRemoteAjaxDemo = function() {
         var demo = function() {
-            var datatable = $('#table-attributes').mDatatable({
+            var datatable = $('#table-preview-attributes').mDatatable({
                 data: {
                     type: 'remote',
                     source: {
                         read: {
                             method: 'POST',
-                            url: '<?= $this->Url->build(['action' => 'index']); ?>',
+                            url: '<?= $this->Url->build(); ?>',
                             cache: false,
                             params: {
                                 _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
@@ -223,45 +223,24 @@
                 },
                 order: [[ 0, "desc" ]],
                 columns: [
-                    // {
-                    //     field: 'ParentProductCategories.name',
-                    //     title: 'Induk Kategori',
-                    //     template: function(row) {
-                    //         if(row.parent_product_category){
-                    //             return row.parent_product_category.name;
-                    //         }else{
-                    //             return null;
-                    //         }
-                    //     }
-                    // },
-
                     {
-                        field: 'ParentProductCategories.name',
-                        title: 'Kategori',
-                        template: function(row) {
-                            if(row.parent_product_category){
-                                return row.parent_product_category.name;
-                            }else{
-                                return null;
-                            }
+                        field: 'id',
+                        title: '#',
+                        sortable: true,
+                        width: 40,
+                        selector: false,
+                        textAlign: 'center',
+                        template: function(row, index, datatable) {
+                            return ++index;
                         }
                     },
-
                     {
-                        field: 'ProductCategories.name',
-                        title: 'Nama',
+                        field: 'name',
+                        title: 'Tipe Atribut',
                         template: function(row) {
                             return row.name;
                         }
                     },
-                    {
-                        field: 'ProductCategories.attributes',
-                        title: 'Jumlah attribute',
-                        template: function(row) {
-                            return row.attributes.length;
-                        }
-                    },
-
                     /** Action button **/
                     {
                         field: "Actions",
@@ -270,7 +249,7 @@
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {
-                            return '<a href="<?= $this->Url->build(['action' => 'priview']); ?>/'+ row.id+' "class="m-portlet__nav-link btn m-btn  m-btn--icon btn-primary btn-sm" title="Edit"><i class="la la-eye"></i> Tampilkan atribut</a>';
+                            return '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'/'+row.product_category_id+'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
                         }
                     }
                 ]

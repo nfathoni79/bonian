@@ -64,6 +64,10 @@ class ProductCategoriesTable extends Table
             'foreignKey' => 'product_category_id',
             'className' => 'AdminPanel.ProductToCategories'
         ]);
+        $this->hasMany('Attributes', [
+            'foreignKey' => 'product_category_id',
+            'className' => 'AdminPanel.Attributes'
+        ]);
 
         $this->addBehavior('Josegonzalez/Upload.Upload', [
             'path' => [
