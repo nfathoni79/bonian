@@ -254,13 +254,6 @@
                             return row.name;
                         }
                     },
-                    {
-                        field: 'ProductCategories.attributes',
-                        title: 'Jumlah attribute',
-                        template: function(row) {
-                            return row.attributes.length;
-                        }
-                    },
 
                     /** Action button **/
                     {

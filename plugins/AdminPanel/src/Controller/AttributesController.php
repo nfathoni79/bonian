@@ -42,7 +42,7 @@ class AttributesController extends AppController
             /** custom default query : select, where, contain, etc. **/
             $data = $this->ProductCategories->find('all')
                 ->select();
-            $data->contain(['ParentProductCategories', 'Attributes']);
+            $data->contain(['ParentProductCategories']);
 //            $data->contain(['ParentAttributes', 'ProductCategories']);
 
             $data->where(function (\Cake\Database\Expression\QueryExpression $exp) {
