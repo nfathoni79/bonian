@@ -410,6 +410,7 @@ class AttributesController extends AppController
     public function import(){
 
         Configure::write('debug', 0);
+        set_time_limit(600);
         if ($this->request->is('post')) {
 
             $this->Attributes->getConnection()->begin();
