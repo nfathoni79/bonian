@@ -208,7 +208,7 @@
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
-                    [
+                    /*[
                         'name' => 'Group Sales',
                         'url' => ['controller' => 'ProductGroups', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
@@ -219,7 +219,7 @@
                         'url' => ['controller' => 'ProductPromotions', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
-                    ],
+                    ],*/
                     [
                         'name' => 'Voucher',
                         'url' => ['controller' => 'Vouchers', 'action' => 'index'],
