@@ -270,7 +270,7 @@
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {
-                            return '<a href="<?= $this->Url->build(['action' => 'priview']); ?>/'+ row.id+' "class="m-portlet__nav-link btn m-btn  m-btn--icon btn-primary btn-sm" title="Edit"><i class="la la-eye"></i> Tampilkan atribut</a>';
+                            return '<a href="<?= $this->Url->build(['action' => 'preview']); ?>/'+ row.id+' "class="m-portlet__nav-link btn m-btn  m-btn--icon btn-primary btn-sm" title="Edit"><i class="la la-eye"></i> Tampilkan atribut</a>';
                         }
                     }
                 ]
