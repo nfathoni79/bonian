@@ -13,7 +13,7 @@
     <div class="m-content">
         <div class="m-portlet__body">
             <div class="row">
-                <div class="col-xl-4">
+                <div class="col-xl-6">
                     <!--begin::Portlet-->
                     <div class="m-portlet m-portlet--tab">
                         <div class="m-portlet__head">
@@ -34,7 +34,7 @@
                     </div>
                     <!--end::Portlet-->
                 </div>
-                <div class="col-xl-4">
+                <div class="col-xl-6">
 
                     <div class="m-portlet m-portlet--full-height ">
                         <div class="m-portlet__head">
