@@ -2,6 +2,7 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use AdminPanel\Model\Entity\Attribute;
 use Cake\Core\Configure;
 use Cake\Validation\Validator;
 
@@ -396,24 +397,29 @@ class AttributesController extends AppController
         Configure::write('debug', 0);
         if ($this->request->is('post')) {
 
+            $this->Attributes->getConnection()->begin();
             $data = $this->request->getData('files');
             $file = $data['tmp_name'];
             $handle = fopen($file, "r");
             $count = 0;
+
+            $success = true;
             while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
 
                 $count++;
                 if ($count == 1) {
                     continue;
                 }
+
                 $findMainCategory = $this->ProductCategories->find()
-                    ->where(['ProductCategories.name' => $row[2]])
+                    ->where(['ProductCategories.name' => trim($row[2])])
                     ->first();
                 if($findMainCategory){
                     if(!empty($row[3])){
-                        $explode = explode('|', $row[3]);
+
+                        $explode = array_filter(array_map('trim',explode('|', $row[3])));
                         foreach($explode as $vals){
-                            $explodes = explode(':', $vals);
+                            $explodes = array_filter(array_map('trim',explode(':', $vals)));
                             $parents = trim($explodes[0]);
 
 
@@ -431,31 +437,63 @@ class AttributesController extends AppController
                                 $this->Attributes->setLogMessageBuilder(function () use($newEntities){
                                     return 'Manajemen Atribut - Import data atribut : '.$newEntities->get('name');
                                 });
-                                $this->Attributes->save($newEntities);
+                                if($this->Attributes->save($newEntities))
                                 $id = $newEntities->get('id');
                             }
                             if($id){
-                                $values = explode(',', $explodes[1]);
+                                $values = array_filter(array_map('trim',explode(',', $explodes[1])));
+
                                 foreach($values as $v){
+                                    $nameAttr = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', trim($v));
                                     $findValueName = $this->Attributes->find()
-                                        ->where(['Attributes.product_category_id' => $findMainCategory->get('id'),'Attributes.name' => trim($v), 'Attributes.parent_id !=' => NULL])
+                                        ->where(['Attributes.product_category_id' => $findMainCategory->get('id'),'Attributes.name' => $nameAttr, 'Attributes.parent_id !=' => NULL])
                                         ->first();
                                     if(empty($findValueName)){
                                         $newEntity = $this->Attributes->newEntity();
                                         $newEntity = $this->Attributes->patchEntity($newEntity, $this->request->getData());
                                         $newEntity->set('parent_id', $id);
                                         $newEntity->set('product_category_id', $findMainCategory->get('id'));
-                                        $newEntity->set('name', trim($v));
-                                        $this->Attributes->save($newEntity);
+                                        $newEntity->set('name', $nameAttr);
+                                        if($this->Attributes->save($newEntity)){
+
+                                        }else{
+                                            $success = false;
+                                            $this->Flash->error(__('Data tidak valid pada baris ke '.$count.' "'.trim($v).'"'));
+                                            return $this->redirect(['action' => 'index']);
+                                            break;
+                                        }
                                     }
                                 }
+                            }else{
+                                $success = false;
+                                $this->Flash->error(__('gagal menyimpan data untuk row ke '.$count));
+                                return $this->redirect(['action' => 'index']);
+                                break;
                             }
 
                         }
+                    }else{
+
+                        $success = false;
+                        $this->Flash->error(__('data tidak di temukan pada baris ke '.$count.' tidak ditemukan.'));
+                        return $this->redirect(['action' => 'index']);
+                        break;
                     }
+                }else{
+
+                    $success = false;
+                    $this->Flash->error(__('Kategori level 3 pada baris ke '.$count.' tidak ditemukan.'));
+                    return $this->redirect(['action' => 'index']);
+                    break;
                 }
             }
-            $this->Flash->success(__('Success import file'));
+
+            if($success){
+                $this->Attributes->getConnection()->commit();
+                $this->Flash->success(__('Success import file'));
+            }else{
+                $this->Attributes->getConnection()->rollback();
+            }
             $this->redirect(['action' => 'index']);
         }
 
