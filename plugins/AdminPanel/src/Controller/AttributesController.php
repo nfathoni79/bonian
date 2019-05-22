@@ -509,8 +509,8 @@ class AttributesController extends AppController
             }else{
                 $this->Attributes->getConnection()->rollback();
             }
-            $this->redirect(['action' => 'index']);
         }
 
+        $this->redirect(['action' => 'index']);
     }
 }
