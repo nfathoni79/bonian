@@ -2,12 +2,14 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use Cake\Core\Configure;
 use Cake\Validation\Validator;
 
 /**
  * ProductGroups Controller
  * @property \AdminPanel\Model\Table\ProductDiscussionsTable $ProductDiscussions
  * @property \AdminPanel\Model\Table\ProductsTable $Products
+ * @property \AdminPanel\Model\Table\CustomersTable $Customers
  *
  * @method \AdminPanel\Model\Entity\ProductGroup[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -18,6 +20,7 @@ class ProductDiscussionController extends AppController
         parent::initialize();
         $this->loadModel('AdminPanel.ProductDiscussions');
         $this->loadModel('AdminPanel.Products');
+        $this->loadModel('AdminPanel.Customers');
     }
 
 
@@ -63,13 +66,17 @@ class ProductDiscussionController extends AppController
                         'last_name',
                         'email'
                     ]
+                ],
+                'Users' => [
+                    'fields' => [
+                        'first_name'
+                    ]
                 ]
-            ]) 
-            ->leftJoinWith('Users')
+            ])
             ->where(['ProductDiscussions.product_id' => $product_id]);
         $discuss = $discuss->orderAsc('ProductDiscussions.id')->toArray();
-        debug($discuss);
-        exit;
+//        debug($discuss);
+//        exit;
         $product = $this->Products->find()
             ->contain([
                 'ProductImages'
@@ -101,7 +108,8 @@ class ProductDiscussionController extends AppController
 
             $allData = $this->request->getData();
             $entity = $this->ProductDiscussions->newEntity();
-            $entity->set('customer_id', 3);
+            $entity->set('customer_id', null);
+            $entity->set('to_customer', null);
             $entity->set('user_id', $this->Auth->user('id'));
             $entity->set('is_admin', true);
             $this->ProductDiscussions->patchEntity($entity, $allData, [
@@ -116,13 +124,28 @@ class ProductDiscussionController extends AppController
                 ],
                 ['validate' => false]
             ]);
-            $this->ProductDiscussions->save($entity);
-//            debug($entity);
-//            exit;
-//            if() {
-//
-//                $this->Flash->success(__('The discussion has been saved.'));
-//            }
+            if($this->ProductDiscussions->save($entity)){
+                $this->Flash->success(__('The discussion has been saved.'));
+                /*SEND EMAIL TO USER*/
+                $findProduct = $this->Products->find()
+                    ->select(['name', 'slug'])
+                    ->where(['Products.id' => $entity->get('product_id')])->first();
+                $findCustomer = $this->Customers->find()
+                    ->select(['username'])
+                    ->where(['Customers.id' => $entity->get('to_customer')])->first();
+                $this->Mailer
+                    ->setVar([
+                        'name' => $findCustomer->get('username'),
+                        'message' => 'Balasan : '.$entity->get('comment').'<br>Diskusi produk telah di balas oleh administrator, silahkan memberikan balasan.<br>'.Configure::read('frontsite') .'products/detail/'.$findProduct->get('slug'),'#tab-diskusi'
+                    ])
+                    ->send(
+                        $entity->get('to_customer'),
+                        'Diskusi produk '.$findProduct->get('name').' telah di balas oleh admin.',
+                        'notification'
+                    );
+
+            }
+
 
         }
         $response['error'] = $error;

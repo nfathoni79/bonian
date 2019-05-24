@@ -18,7 +18,7 @@ class MailerComponent extends Component
      *
      * @var array
      */
-    protected $_defaultConfig = ['transport' => 'mailgun'];
+    protected $_defaultConfig = ['transport' => 'default'];
 
     protected $params = [];
 
@@ -70,6 +70,8 @@ class MailerComponent extends Component
                 $this->params['name'] = $data->get('username');
             }
         }
+//        debug($this->_defaultConfig['transport']);
+//        exit;
         $this->Email = new Email($this->_defaultConfig['transport']);
         $this->Email->setFrom(['noreply@zolaku.com' => 'Zolaku'])
             ->setTo($destination)
