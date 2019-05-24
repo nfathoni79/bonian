@@ -44,9 +44,9 @@ class ProductRatingsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('OrderDetailProducts', [
-            'foreignKey' => 'order_detail_product_id',
-            'className' => 'AdminPanel.OrderDetailProducts'
+        $this->belongsTo('Orders', [
+            'foreignKey' => 'order_id',
+            'className' => 'AdminPanel.Orders'
         ]);
         $this->belongsTo('Products', [
             'foreignKey' => 'product_id',
@@ -98,7 +98,7 @@ class ProductRatingsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['order_detail_product_id'], 'OrderDetailProducts'));
+        $rules->add($rules->existsIn(['order_id'], 'Orders'));
         $rules->add($rules->existsIn(['product_id'], 'Products'));
         $rules->add($rules->existsIn(['customer_id'], 'Customers'));
 
