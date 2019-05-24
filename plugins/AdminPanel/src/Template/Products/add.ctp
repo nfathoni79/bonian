@@ -368,8 +368,8 @@
                     '<div class="col-xl-4"><input type="text" name="ProductOptionPrices['+i+'][expired]" class="form-control m-input datepicker" placeholder="Expired"></div> \n' +
                     '</div>  \n' +
                     '<div class="form-group m-form__group row">\n' +
-                    '<label class="col-xl-4 col-form-label">SKU *</label>\n' +
-                    '<div class="col-xl-6"><input type="text" name="ProductOptionPrices['+i+'][sku]" class="form-control m-input sku-number" placeholder="Sku" readonly="readonly"></div> \n' +
+                    '<label class="col-xl-4 col-form-label">SUB SKU  *</label>\n' +
+                    '<div class="col-xl-8"><input type="text" name="ProductOptionPrices['+i+'][sku]" class="form-control m-input sku-number" placeholder="Sku" readonly="readonly"></div> \n' +
                     '</div>  \n' +
                     '<div class="form-group m-form__group row">\n' +
                     '<label class="col-xl-4 col-form-label">Harga Tambahan  *</label>\n' +
