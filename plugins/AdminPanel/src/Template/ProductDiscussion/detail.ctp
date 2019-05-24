@@ -66,6 +66,8 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-8">
+
+                                    <?= $this->Flash->render() ?>
                                     <div class="m--margin-bottom-10" style="height: 400px; overflow: scroll">
                                     <?php foreach($discuss as $discus):?>
 
@@ -212,9 +214,9 @@ $this->Html->script([
     $("#comment").submit(function(e) {
         console.log(formEl.find(':input'));
         ajaxRequest.post(url, formEl.find(':input'), function(data,saved) {
-            // if (data.success) {
-            //     location.reload();
-            // }
+            if (data.success) {
+                location.reload();
+            }
         });
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
