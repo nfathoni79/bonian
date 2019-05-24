@@ -440,7 +440,7 @@ class AttributesController extends AppController
 
 
                             $findParentName = $this->Attributes->find()
-                                ->where(['Attributes.name' => $parents])
+                                ->where(['Attributes.name' => $parents,'Attributes.product_category_id' => $findMainCategory->get('id'),])
                                 ->first();
                             if($findParentName){
                                 $id = $findParentName->get('id');
@@ -462,7 +462,7 @@ class AttributesController extends AppController
                                 foreach($values as $v){
                                     $nameAttr = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', trim($v));
                                     $findValueName = $this->Attributes->find()
-                                        ->where(['Attributes.product_category_id' => $findMainCategory->get('id'),'Attributes.name' => $nameAttr, 'Attributes.parent_id !=' => NULL])
+                                        ->where(['Attributes.product_category_id' => $findMainCategory->get('id'),'Attributes.name' => $nameAttr])
                                         ->first();
                                     if(empty($findValueName)){
                                         $newEntity = $this->Attributes->newEntity();
