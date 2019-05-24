@@ -60,6 +60,11 @@ class ProductDiscussionsTable extends Table
             'joinType' => 'INNER',
             'className' => 'AdminPanel.Customers'
         ]);
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER',
+            'className' => 'AdminPanel.Users'
+        ]);
         $this->hasMany('ChildProductDiscussions', [
             'className' => 'AdminPanel.ProductDiscussions',
             'foreignKey' => 'parent_id'

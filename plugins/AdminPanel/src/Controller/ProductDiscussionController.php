@@ -54,7 +54,6 @@ class ProductDiscussionController extends AppController
     }
 
     public function detail($product_id = null){
-
         $discuss = $this->ProductDiscussions->find('threaded')
             ->contain([
                 'Customers' => [
@@ -64,16 +63,20 @@ class ProductDiscussionController extends AppController
                         'last_name',
                         'email'
                     ]
-                ],
-            ])
+                ]
+            ]) 
+            ->leftJoinWith('Users')
             ->where(['ProductDiscussions.product_id' => $product_id]);
         $discuss = $discuss->orderAsc('ProductDiscussions.id')->toArray();
+        debug($discuss);
+        exit;
         $product = $this->Products->find()
             ->contain([
                 'ProductImages'
             ])
             ->where(['Products.id' => $product_id])
             ->first();
+
         $this->set(compact('product', 'discuss'));
     }
 
@@ -81,7 +84,11 @@ class ProductDiscussionController extends AppController
 
 
     public function add(){
+//        parent_id: 1
+//product_id: 61
+//comment: Test
 
+        $this->disableAutoRender();
         $validator = new Validator();
 
         $validator->requirePresence('comment')
@@ -94,25 +101,33 @@ class ProductDiscussionController extends AppController
 
             $allData = $this->request->getData();
             $entity = $this->ProductDiscussions->newEntity();
+            $entity->set('customer_id', 3);
+            $entity->set('user_id', $this->Auth->user('id'));
+            $entity->set('is_admin', true);
             $this->ProductDiscussions->patchEntity($entity, $allData, [
                 'fields' => [
                     'parent_id',
                     'product_id',
-                    'comment'
-                ]
+                    'to_customer',
+                    'user_id',
+                    'is_admin',
+                    'comment',
+                    'customer_id'
+                ],
+                ['validate' => false]
             ]);
-            $entity->set('customer_id', $this->Authenticate->getId());
-            if(!$this->ProductDiscussions->save($entity)) {
-                $this->setResponse($this->response->withStatus(406, 'Failed to add address'));
-                $error = $entity->getErrors();
-            }
+            $this->ProductDiscussions->save($entity);
+//            debug($entity);
+//            exit;
+//            if() {
+//
+//                $this->Flash->success(__('The discussion has been saved.'));
+//            }
 
         }
-        if ($error) {
-            $this->setResponse($this->response->withStatus(406, 'Failed to add address'));
-        }
-
-        $this->set(compact('error'));
+        $response['error'] = $error;
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($response));
     }
 
     public function delete(){
