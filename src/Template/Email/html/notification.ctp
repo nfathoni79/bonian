@@ -3,7 +3,7 @@
     <p>&nbsp;</p>
     <div style="color: #636363; font-size: 14px;">
         <p><?php echo $message; ?></p>
-        <p>&nbsp;</p> 
+        <p>&nbsp;</p>
         <p><?= __d('AdminPanel', 'Terima kasih'); ?>,</p>
     </div>
 </div>

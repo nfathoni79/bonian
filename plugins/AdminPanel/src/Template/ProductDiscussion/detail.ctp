@@ -43,7 +43,7 @@
                                                         <?= $product['name'];?>
                                                     </h4>
                                                     <div class="m-widget5__desc">
-                                                        <a href="<?= $this->Url->build($_baseFront .'products/detail/' .  $product['slug']);?>" target="_blank" class="btn btn-primary btn-sm m-btn m-btn--custom">Pratinjau Halaman Produk</a>
+                                                        <a href="<?= $this->Url->build($_baseFront .'/products/detail/' .  $product['slug']);?>" target="_blank" class="btn btn-primary btn-sm m-btn m-btn--custom">Pratinjau Halaman Produk</a>
                                                     </div>
                                                     <div class="m-widget5__info">
                                                 <span class="m-widget5__author">
@@ -66,6 +66,8 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-8">
+
+                                    <?= $this->Flash->render() ?>
                                     <div class="m--margin-bottom-10" style="height: 400px; overflow: scroll">
                                     <?php foreach($discuss as $discus):?>
 
@@ -78,20 +80,21 @@
                                                             <img class="m-widget3__img" src="<?= $this->Url->build('/files/Customers/avatar/thumbnail-'.$discus['customer']['avatar']);?>" alt="">
                                                         </div>
                                                         <div class="m-widget3__info">
-                                                    <span class="m-widget3__username">
-                                                        <?= $discus['customer']['full_name'];?>
-                                                    </span><br>
+                                                            <span class="m-widget3__username text-white">
+                                                                <?= $discus['customer']['full_name'];?>
+                                                            </span>
+                                                            <br>
                                                             <span class="m-widget3__time">
-                                                        <?php
-                                                            echo $this->Time->timeAgoInWords(
-                                                                   $discus['created'], array(
-                                                                    'end' => '+10 year',
-                                                                    'format' => 'F jS, Y',
-                                                                    'accuracy' => array('second' => 'second')
-                                                                )
-                                                            );
-                                                        ?>
-                                                    </span>
+                                                                <?php
+                                                                    echo $this->Time->timeAgoInWords(
+                                                                           $discus['created'], array(
+                                                                            'end' => '+10 year',
+                                                                            'format' => 'F jS, Y',
+                                                                            'accuracy' => array('second' => 'second')
+                                                                        )
+                                                                    );
+                                                                ?>
+                                                            </span>
                                                         </div>
                                                         <a href="javascript:void(0);" class="m-widget3__status m--font-brand reply-msg" data-to="<?= $discus['customer_id'];?>"  data-for-name="<?= $discus['customer']['full_name']?>" data-for-id="<?= $discus['id']?>">
                                                                 Balas
@@ -111,8 +114,8 @@
                                                                 <img class="m-widget3__img" src="<?= $this->Url->build('/files/Customers/avatar/thumbnail-'.$val['customer']['avatar']);?>" alt="">
                                                             </div>
                                                             <div class="m-widget3__info">
-                                                                <span class="m-widget3__username">
-                                                                    <?= $val['customer']['full_name'];?>
+                                                                <span class="m-widget3__username text-white">
+                                                                    <?= $val['is_admin'] ? 'Administrator - '.$val['user']['first_name'] : $val['customer']['full_name'];?>
                                                                 </span><br>
                                                                 <span class="m-widget3__time">
                                                                     <?php
@@ -127,7 +130,7 @@
                                                                 </span>
                                                             </div>
                                                             <?php if($val['customer_id'] != 0): ?>
-                                                            <a href="javascript:void(0);" class="m-widget3__status m--font-brand reply-msg" data-for-name="<?= $val['customer']['full_name']?>" data-to="<?= $val['customer_id'];?>" data-for-id="<?= $val['id']?>">
+                                                            <a href="javascript:void(0);" class="m-widget3__status m--font-brand reply-msg" data-for-name="<?= $val['customer']['full_name']?>" data-to="<?= $val['customer_id'];?>" data-for-id="<?= $discus['id']?>">
                                                                 Balas
                                                             </a>
                                                             <?php endif;?>
@@ -158,7 +161,7 @@
 
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="form-group m-form__group row">
+                                                <div class="form-group m-form__group">
                                                     <?php echo $this->Form->control('comment', ['type' => 'textarea', 'class' => 'form-control m-input', 'rows' => '3', 'label' => false, 'div' => false,'placeholder' => 'Tulis diskusi anda disini', 'id' => 'komentar'])?>
                                                 </div>
                                                 <div class="m-form__actions">
@@ -211,9 +214,9 @@ $this->Html->script([
     $("#comment").submit(function(e) {
         console.log(formEl.find(':input'));
         ajaxRequest.post(url, formEl.find(':input'), function(data,saved) {
-            // if (data.success) {
-            //     location.reload();
-            // }
+            if (data.success) {
+                location.reload();
+            }
         });
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
