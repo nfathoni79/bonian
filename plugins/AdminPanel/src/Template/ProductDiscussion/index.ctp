@@ -106,7 +106,7 @@ $this->Html->script([
                 targets: 1,
                 orderable: false,
                 render: function (data, type, row, meta) {
-                    return '<a href="<?= $this->Url->build($_baseFront .'products/detail/' );?>'+row.product.slug+'" target="_blank">'+row.product.name+'</a>';
+                    return '<a href="<?= $this->Url->build($_baseFront .'/products/detail/' );?>'+row.product.slug+'" target="_blank">'+row.product.name+'</a>';
                 }
             },
             {
@@ -121,7 +121,12 @@ $this->Html->script([
                             '</span>\n' +
                             '</a>';
                     }else{
-                        return '';
+                        return '<a href="<?= $this->Url->build(['action' => 'detail']);?>/'+row.product.id+'" class="btn btn-outline-danger m-btn btn-sm  m-btn--icon m-btn--pill">\n' +
+                        '<span>\n' +
+                        '<i class="fa fa-comment"></i>\n' +
+                        '<span>Lihat diskusi</span>\n' +
+                        '</span>\n' +
+                        '</a>';
                     }
                 }
             },

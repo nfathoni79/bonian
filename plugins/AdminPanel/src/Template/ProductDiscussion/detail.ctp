@@ -43,7 +43,7 @@
                                                         <?= $product['name'];?>
                                                     </h4>
                                                     <div class="m-widget5__desc">
-                                                        <a href="<?= $this->Url->build($_baseFront .'products/detail/' .  $product['slug']);?>" target="_blank" class="btn btn-primary btn-sm m-btn m-btn--custom">Pratinjau Halaman Produk</a>
+                                                        <a href="<?= $this->Url->build($_baseFront .'/products/detail/' .  $product['slug']);?>" target="_blank" class="btn btn-primary btn-sm m-btn m-btn--custom">Pratinjau Halaman Produk</a>
                                                     </div>
                                                     <div class="m-widget5__info">
                                                 <span class="m-widget5__author">
@@ -159,7 +159,7 @@
 
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="form-group m-form__group row">
+                                                <div class="form-group m-form__group">
                                                     <?php echo $this->Form->control('comment', ['type' => 'textarea', 'class' => 'form-control m-input', 'rows' => '3', 'label' => false, 'div' => false,'placeholder' => 'Tulis diskusi anda disini', 'id' => 'komentar'])?>
                                                 </div>
                                                 <div class="m-form__actions">

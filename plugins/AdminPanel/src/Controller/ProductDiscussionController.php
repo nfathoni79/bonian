@@ -57,6 +57,15 @@ class ProductDiscussionController extends AppController
     }
 
     public function detail($product_id = null){
+
+        $query = $this->ProductDiscussions->query();
+        $query->update()
+            ->set(['read' => 1])
+            ->where([
+                'product_id' => $product_id,
+            ])
+            ->execute();
+
         $discuss = $this->ProductDiscussions->find('threaded')
             ->contain([
                 'Customers' => [
@@ -75,8 +84,6 @@ class ProductDiscussionController extends AppController
             ])
             ->where(['ProductDiscussions.product_id' => $product_id]);
         $discuss = $discuss->orderAsc('ProductDiscussions.id')->toArray();
-//        debug($discuss);
-//        exit;
         $product = $this->Products->find()
             ->contain([
                 'ProductImages'
@@ -91,15 +98,12 @@ class ProductDiscussionController extends AppController
 
 
     public function add(){
-//        parent_id: 1
-//product_id: 61
-//comment: Test
 
         $this->disableAutoRender();
         $validator = new Validator();
 
         $validator->requirePresence('comment')
-            ->notBlank('comment', 'Pertanyaan diskusi tidak boleh kosong');
+            ->notBlank('comment', 'Jawaban diskusi tidak boleh kosong');
         $validator->requirePresence('product_id')
             ->notBlank('product_id', 'produk tidak ditemukan') ;
 
@@ -136,11 +140,11 @@ class ProductDiscussionController extends AppController
                 $this->Mailer
                     ->setVar([
                         'name' => $findCustomer->get('username'),
-                        'message' => 'Balasan : '.$entity->get('comment').'<br>Diskusi produk telah di balas oleh administrator, silahkan memberikan balasan.<br>'.Configure::read('frontsite') .'products/detail/'.$findProduct->get('slug'),'#tab-diskusi'
+                        'message' => 'Balasan : "'.$entity->get('comment').'"<br><br>Diskusi produk telah di balas oleh administrator, silahkan memberikan balasan.<br>'.Configure::read('frontsite') .'products/detail/'.$findProduct->get('slug'),'#tab-diskusi'
                     ])
                     ->send(
                         $entity->get('to_customer'),
-                        'Diskusi produk '.$findProduct->get('name').' telah di balas oleh admin.',
+                        'Diskusi produk '.$findProduct->get('name'),
                         'notification'
                     );
 

@@ -341,6 +341,13 @@
                 ]
             ],
             [
+                'name' => 'Diskusi Produk',
+                'url' => ['controller' => 'ProductDiscussion', 'action' => 'index'],
+                'icon' => 'm-menu__link-icon flaticon-apps',
+                'children' => [
+                ]
+            ],
+            [
                 'name' => 'FAQ',
                 'url' => '#',
                 'icon' => 'm-menu__link-icon flaticon-apps',
