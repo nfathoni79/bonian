@@ -140,7 +140,7 @@ class ProductDiscussionController extends AppController
                 $this->Mailer
                     ->setVar([
                         'name' => $findCustomer->get('username'),
-                        'message' => 'Balasan : "'.$entity->get('comment').'"<br><br>Diskusi produk telah di balas oleh administrator, silahkan memberikan balasan.<br>'.Configure::read('frontsite') .'products/detail/'.$findProduct->get('slug'),'#tab-diskusi'
+                        'message' => 'Balasan : "'.$entity->get('comment').'"<br><br>Diskusi produk telah di balas oleh administrator, silahkan memberikan balasan.<br>'.Configure::read('frontsite') .'products/detail/'.$findProduct->get('slug').'#tab-diskusi'
                     ])
                     ->send(
                         $entity->get('to_customer'),
