@@ -242,7 +242,9 @@ echo $this->Html->script([
                         selector: false,
                         textAlign: 'center',
                         template: function(row, index, datatable) {
-                            return ++index;
+                            var p = datatable.getPageSize();
+                            var c = (datatable.getCurrentPage() - 1) * p;
+                            return (index + 1) + c;
                         }
                     },
                     {
