@@ -183,7 +183,8 @@ class ImagesController extends AppController
 
         $errors = $validator->errors($this->request->getData());
         if (empty($errors)) {
-
+//            debug($this->request->getData());
+//            exit;
             $success = true;
             foreach($this->request->getData('name') as $vals){
                 $entity = $this->ProductRatingImages->newEntity();

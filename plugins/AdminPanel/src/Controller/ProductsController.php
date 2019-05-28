@@ -1161,7 +1161,11 @@ class ProductsController extends AppController
                             $this
                                 ->Products
                                 ->ProductMetaTags
-                                ->newEntity(['product_id' => $productEntity->get('id')]);
+                                ->newEntity([
+                                    'product_id' => $productEntity->get('id'),
+                                    'keyword' =>$this->request->getData('ProductMetaTags.keyword'),
+                                    'description' =>$this->request->getData('ProductMetaTags.description')
+                                ]);
 
                         $this
                             ->Products
@@ -2150,7 +2154,6 @@ class ProductsController extends AppController
                         ->Products
                         ->ProductMetaTags
                         ->save($metaTagEntity);
-
                     //product tags
                     if ($product_tags = $this->request->getData('ProductTags')) {
                         /**

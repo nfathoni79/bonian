@@ -56,17 +56,17 @@ class ProductMetaTagsTable extends Table
             ->integer('id')
             ->allowEmptyString('id', 'create');
 
-        $validator
-            ->scalar('keyword')
-            ->maxLength('keyword', 255)
-            ->requirePresence('keyword', 'create')
-            ->allowEmptyString('keyword', false);
-
-        $validator
-            ->scalar('description')
-            ->maxLength('description', 255)
-            ->requirePresence('description', 'create')
-            ->allowEmptyString('description', false);
+//        $validator
+//            ->scalar('keyword')
+//            ->maxLength('keyword', 255)
+//            ->requirePresence('keyword', 'create')
+//            ->allowEmptyString('keyword', false);
+//
+//        $validator
+//            ->scalar('description')
+//            ->maxLength('description', 255)
+//            ->requirePresence('description', 'create')
+//            ->allowEmptyString('description', false);
 
         return $validator;
     }

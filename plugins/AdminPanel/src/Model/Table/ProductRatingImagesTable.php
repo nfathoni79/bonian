@@ -53,7 +53,7 @@ class ProductRatingImagesTable extends Table
                     'size' => 'size', // defaults to `size`
                     'type' => 'type', // defaults to `type`
                 ],
-                'path' => 'webroot{DS}files{DS}{model}{DS}{field}{DS}{year}{DS}{month}{DS}',
+                'path' => 'webroot{DS}files{DS}{model}{DS}',
                 'nameCallback' => function ($tableObj, $entity, $data, $field, $settings) {
                     $ext = substr(strrchr($data['name'], '.'), 1);
                     return str_replace('-', '', Text::uuid()) . '.' . 'jpg'; //strtolower($ext);
