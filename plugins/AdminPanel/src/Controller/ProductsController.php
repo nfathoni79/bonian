@@ -2753,4 +2753,46 @@ class ProductsController extends AppController
         }
 
     }
+
+    public function setPrimaryImage($id)
+    {
+        $images = $this->Products->ProductImages->find()
+            ->where([
+                'product_id' => $id
+            ])
+            ->orderAsc('idx');
+
+        if ($this->request->is('post')) {
+            if ($product_images = $this->request->getData('ProductImages')) {
+                $product_image_id = $product_images['primary'];
+
+                $this->Products->ProductImages->query()
+                    ->update()
+                    ->set([
+                        'primary' => 0
+                    ])
+                    ->where([
+                        'product_id' => $id,
+                        'id !=' => $product_image_id
+                    ])
+                    ->execute();
+
+                $this->Products->ProductImages->query()
+                    ->update()
+                    ->set([
+                        'primary' => 1
+                    ])
+                    ->where([
+                        'product_id' => $id,
+                        'id' => $product_image_id
+                    ])
+                    ->execute();
+
+            }
+            return $this->redirect(['action' => 'index']);
+        }
+
+
+        $this->set(compact('images'));
+    }
 }
