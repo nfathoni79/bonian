@@ -239,32 +239,34 @@ class OrdersController extends AppController
 
                                 if (isset($templates[$shipping['order_status_id']])) {
                                     $template = $templates[$shipping['order_status_id']];
-//                                    if ($this->Notification->create(
-//                                        $order->customer_id,
-//                                        '1',
-//                                        $template['title'],
-//                                        $template['message'],
-//                                        'Orders',
-//                                        $order->id,
-//                                        1,
-//                                        $this->Notification->getImageConfirmationPath(),
-//                                        '/user/history/detail/' . $order->invoice
-//                                    )) {
-//
-//                                        $this->Notification->triggerCount(
-//                                            $order->customer_id,
-//                                            $order->customer->reffcode
-//                                        );
-//                                    }
+                                    if ($this->Notification->create(
+                                        $order->customer_id,
+                                        '1',
+                                        $template['title'],
+                                        $template['message'],
+                                        'Orders',
+                                        $order->id,
+                                        1,
+                                        $this->Notification->getImageConfirmationPath(),
+                                        '/user/history/detail/' . $order->invoice
+                                    )) {
+
+                                        $this->Notification->triggerCount(
+                                            $order->customer_id,
+                                            $order->customer->reffcode
+                                        );
+                                    }
 									
 									/* MAILER SHIPPING */
+                                    $statusShiping = [3 => 'dikirimkan', 4 => 'sampai'];
                                     $this->Mailer
                                         ->setVar([
                                             'orderEntity' => $order,
                                             'awb' => $shipping['awb'],
                                             'send_date' => date('d-m-Y'),
                                             'courier' => $detail->shipping_code,
-                                            'transactionEntity' => $order->transactions
+                                            'transactionEntity' => $order->transactions,
+                                            'status' => $statusShiping[$shipping['order_status_id']]
                                         ])
                                         ->send(
                                             $order->customer->email,
@@ -273,7 +275,6 @@ class OrdersController extends AppController
                                         );
 
                                 }
-
 
 
 

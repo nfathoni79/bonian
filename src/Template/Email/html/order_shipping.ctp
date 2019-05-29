@@ -6,7 +6,7 @@
 ?>
 <div style="padding: 5px 20px; border-top: 1px solid rgba(0,0,0,0.05);">
     <div style="color: #636363; font-size: 12px;">
-        <p><strong>Pesanan anda telah dikirimkan</strong> </p>
+        <p><strong>Pesanan anda telah <?= $status;?></strong> </p>
         <table  border="0" cellspacing="0" cellpadding="0" style="width:70%;">
             <tr style="margin-top:15px;">
                 <td>Invoice</td>
@@ -14,7 +14,7 @@
             </tr>
             <tr style="margin-top:15px;">
                 <td>Jasa Pengiriman</td>
-                <td>:<?= $courier;?></td>
+                <td>:<?= strtoupper($courier);?></td>
             </tr>
             <tr style="margin-top:15px;">
                 <td>Nomor AWB</td>
