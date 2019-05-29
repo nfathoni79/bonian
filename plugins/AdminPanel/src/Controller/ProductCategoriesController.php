@@ -119,7 +119,7 @@ class ProductCategoriesController extends AppController
         if ($this->request->is('post')) {
             //debug($this->request->getData());
             //exit;
-            $productCategory = $this->ProductCategories->patchEntity($productCategory, $this->request->getData());
+            $productCategory = $this->ProductCategories->patchEntity($productCategory, $this->request->getData(),['validate' => false]);
             $this->ProductCategories->setLogMessageBuilder(function () use($productCategory){
                 return 'Manajemen Kategori - penambahan : '.$productCategory->get('name');
             });
@@ -162,7 +162,7 @@ class ProductCategoriesController extends AppController
                             ->first();
                             if(empty($findMainCategory)){
                                 $newEntity = $this->ProductCategories->newEntity();
-                                $newEntity = $this->ProductCategories->patchEntity($newEntity, $this->request->getData());
+                                $newEntity = $this->ProductCategories->patchEntity($newEntity, $this->request->getData(),['validate' => false]);
                                 $newEntity->set('parent_id', null);
                                 $newEntity->set('name', $row[$i]);
                                 $newEntity->set('slug', strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $row[$i]))));
@@ -179,7 +179,7 @@ class ProductCategoriesController extends AppController
                             ->first();
                             if(!empty($findMainCategory)){
                                 $newEntity = $this->ProductCategories->newEntity();
-                                $newEntity = $this->ProductCategories->patchEntity($newEntity, $this->request->getData());
+                                $newEntity = $this->ProductCategories->patchEntity($newEntity, $this->request->getData(),['validate' => false]);
                                 $newEntity->set('parent_id', $findMainCategory->get('id'));
                                 $newEntity->set('name', $row[$i]);
                                 $newEntity->set('slug', strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $row[$i]))));
@@ -196,7 +196,7 @@ class ProductCategoriesController extends AppController
                             ->first();
                             if(!empty($findMainCategory)){
                                 $newEntity = $this->ProductCategories->newEntity();
-                                $newEntity = $this->ProductCategories->patchEntity($newEntity, $this->request->getData());
+                                $newEntity = $this->ProductCategories->patchEntity($newEntity, $this->request->getData(),['validate' => false]);
                                 $newEntity->set('parent_id', $findMainCategory->get('id'));
                                 $newEntity->set('name', $row[$i]);
                                 $newEntity->set('slug', strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $row[$i]))));
@@ -229,13 +229,13 @@ class ProductCategoriesController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $productCategory = $this->ProductCategories->patchEntity($productCategory, $this->request->getData());
+            $productCategory = $this->ProductCategories->patchEntity($productCategory, $this->request->getData(),['validate' => false]);
             $this->ProductCategories->setLogMessageBuilder(function () use($productCategory){
                 return 'Manajemen Kategori - perubahan : '.$productCategory->get('name');
             });
             if ($this->ProductCategories->save($productCategory)) {
-                $this->Flash->success(__('The product category has been saved.'));
 
+                $this->Flash->success(__('The product category has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The product category could not be saved. Please, try again.'));
