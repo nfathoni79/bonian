@@ -226,7 +226,7 @@ class ProductsController extends AppController
                             break;
                         }
 
-                        if(!file_get_contents($vals)){
+                        if(!@file_get_contents($vals)){
                             $this->Flash->error(__('Terjadi kesalahan penginputan pada baris ke '. $count.',  data gagal di download '.$vals));
                             return $this->redirect(['action' => 'index']);
                             break;
