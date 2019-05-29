@@ -235,16 +235,10 @@ echo $this->Html->script([
                 order: [[ 0, "desc" ]],
                 columns: [
                     {
-                        field: 'id',
+                        field: 'Products.id',
                         title: '#',
-                        sortable: false,
-                        width: 40,
-                        selector: false,
-                        textAlign: 'center',
-                        template: function(row, index, datatable) {
-                            var p = datatable.getPageSize();
-                            var c = (datatable.getCurrentPage() - 1) * p;
-                            return (index + 1) + c;
+                        template: function(row) {
+                            return row.id;
                         }
                     },
                     {
@@ -253,7 +247,7 @@ echo $this->Html->script([
                         sortable: false,
                         template: function(row) {
                             // return row.name;
-                            var primary_image = '<img src="<?= $this->Url->build('/admin-assets/app/media/img/products/no-image.png');?>" style="width: 50px;" />';
+                            var primary_image = '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"><img src="<?= $this->Url->build('/admin-assets/app/media/img/products/no-image.png');?>" style="width: 50px;" /></a>';
                             if (typeof row.product_images != 'undefined' && row.product_images.length > 0) {
                                 primary_image = row.product_images[0].name;
                                 for(var i in row.product_images) {
@@ -261,7 +255,7 @@ echo $this->Html->script([
                                         primary_image = row.product_images[i].name;
                                     }
                                 }
-                                primary_image = '<img src="<?= $this->Url->build('/images/50x50/');?>' + primary_image + '" style="width: 50px;" />';
+                                primary_image = '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"><img src="<?= $this->Url->build('/images/50x50/');?>' + primary_image + '" style="width: 50px;" /></a>';
                             }
                             return primary_image;
                         }
@@ -355,7 +349,7 @@ echo $this->Html->script([
                         sortable: false,
                         overflow: 'visible',
                         template: function (row, index, datatable) {
-                            return '<a href="javascript:view_data('+row.id+');" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="VIew"><i class="la la-eye"></i></a><a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
+                            return '<a href="javascript:view_data('+row.id+');" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="VIew"><i class="la la-eye"></i></a><a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
                         }
                     }
                 ]
