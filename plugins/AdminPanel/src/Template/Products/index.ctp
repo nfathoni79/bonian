@@ -235,10 +235,16 @@ echo $this->Html->script([
                 order: [[ 0, "desc" ]],
                 columns: [
                     {
-                        field: 'Products.id',
+                        field: 'id',
                         title: '#',
-                        template: function(row) {
-                            return row.id;
+                        sortable: false,
+                        width: 40,
+                        selector: false,
+                        textAlign: 'center',
+                        template: function(row, index, datatable) {
+                            var p = datatable.getPageSize();
+                            var c = (datatable.getCurrentPage() - 1) * p;
+                            return (index + 1) + c;
                         }
                     },
                     {
