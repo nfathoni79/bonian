@@ -18,7 +18,7 @@ class MailerComponent extends Component
      *
      * @var array
      */
-    protected $_defaultConfig = ['transport' => 'default'];
+    protected $_defaultConfig = ['transport' => 'mailgun'];
 
     protected $params = [];
 

@@ -24,9 +24,9 @@ class AppController extends BaseController
         $this->loadComponent('Flash');
         $this->loadComponent('AdminPanel.DataTable');
         $this->loadComponent('AdminPanel.Notification');
-        $this->loadComponent('Mailer');
+        $this->loadComponent('Mailer', ['transport' => 'default']);
         $this->loadComponent('Acl.Acl');
-        $this->loadComponent('Auth', [
+        $this->loadComponent('Auth', [ 
             'authorize' => [
                 'Acl.Actions' => [
                     'actionPath' => 'controllers/',
