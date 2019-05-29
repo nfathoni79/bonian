@@ -7,6 +7,7 @@ use AdminPanel\Controller\AppController;
  * Orders Controller
  * @property \AdminPanel\Model\Table\OrdersTable $Orders
  * @property \AdminPanel\Model\Table\OrderShippingDetailsTable $OrderShippingDetails
+ * @property \AdminPanel\Model\Table\TransactionsTable $Transactions
  * @method \AdminPanel\Model\Entity\Order[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class OrdersController extends AppController
@@ -17,6 +18,7 @@ class OrdersController extends AppController
         parent::initialize();
         $this->loadModel('AdminPanel.Orders');
         $this->loadModel('AdminPanel.OrderShippingDetails');
+        $this->loadModel('AdminPanel.Transactions');
     }
 
 
@@ -237,26 +239,38 @@ class OrdersController extends AppController
 
                                 if (isset($templates[$shipping['order_status_id']])) {
                                     $template = $templates[$shipping['order_status_id']];
-                                    if ($this->Notification->create(
-                                        $order->customer_id,
-                                        '1',
-                                        $template['title'],
-                                        $template['message'],
-                                        'Orders',
-                                        $order->id,
-                                        1,
-                                        $this->Notification->getImageConfirmationPath(),
-                                        '/user/history/detail/' . $order->invoice
-                                    )) {
-
-                                        $this->Notification->triggerCount(
-                                            $order->customer_id,
-                                            $order->customer->reffcode
-                                        );
-                                    }
+//                                    if ($this->Notification->create(
+//                                        $order->customer_id,
+//                                        '1',
+//                                        $template['title'],
+//                                        $template['message'],
+//                                        'Orders',
+//                                        $order->id,
+//                                        1,
+//                                        $this->Notification->getImageConfirmationPath(),
+//                                        '/user/history/detail/' . $order->invoice
+//                                    )) {
+//
+//                                        $this->Notification->triggerCount(
+//                                            $order->customer_id,
+//                                            $order->customer->reffcode
+//                                        );
+//                                    }
 									
 									/* MAILER SHIPPING */
-									
+                                    $this->Mailer
+                                        ->setVar([
+                                            'orderEntity' => $order,
+                                            'awb' => $shipping['awb'],
+                                            'send_date' => date('d-m-Y'),
+                                            'courier' => $detail->shipping_code,
+                                            'transactionEntity' => $order->transactions
+                                        ])
+                                        ->send(
+                                            $order->customer->email,
+                                            'Konfirmasi pengiriman',
+                                            'order_shipping'
+                                        );
 
                                 }
 
