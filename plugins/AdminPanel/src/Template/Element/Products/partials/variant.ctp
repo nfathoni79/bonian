@@ -39,8 +39,8 @@
                         </div>
                     </div>
                     <div class="form-group m-form__group row">
-                        <label class="col-xl-4 col-form-label">SKU *</label>
-                        <div class="col-xl-5">
+                        <label class="col-xl-4 col-form-label">SUB SKU *</label>
+                        <div class="col-xl-8">
                             <input type="text" name="ProductOptionPrices[<?= $key; ?>][sku]" class="form-control m-input sku-number disabled" placeholder="Sku" value="<?= h($val->get('sku')); ?>" readonly="readonly">
                             <input type="hidden" name="ProductOptionPrices[<?= $key; ?>][id]" value="<?= $val->get('id'); ?>">
                         </div>
