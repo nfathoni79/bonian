@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface $order
+ * @var \AdminPanel\Model\Entity\Order $order
  */
 ?>
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
@@ -200,6 +200,7 @@
                                                 <?= $this->Number->format($order->gross_total - $shipping_cost); ?>
                                             </span>
                                         </div>
+                                        <?php if ($order->order_type == 1) :?>
                                         <div class="m-widget16__item">
                                                 <span class="m-widget16__date">
                                                     Shipping Cost
@@ -256,6 +257,7 @@
                                                 -<?= $this->Number->format($order->discount_kupon); ?>
                                             </span>
                                         </div>
+                                        <?php endif; ?>
 
                                         <!--begin::widget item-->
                                         <div class="m-widget16__item">
@@ -376,7 +378,9 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-6">
+
                 <div class="m-portlet m-portlet--mobile">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
@@ -427,7 +431,7 @@
                                                 </span>
                                 </div>
                                 <!--end::widget item-->
-
+                                <?php if ($order->order_type == 1) : ?>
                                 <!--begin::widget item-->
                                 <div class="m-widget16__item">
                                                 <span class="m-widget16__date">
@@ -438,7 +442,6 @@
                                                 </span>
                                 </div>
                                 <!--end::widget item-->
-
                                 <!--begin::widget item-->
                                 <div class="m-widget16__item">
                                                 <span class="m-widget16__date">
@@ -471,13 +474,70 @@
                                                 </span>
                                 </div>
                                 <!--end::widget item-->
+                                <?php endif; ?>
 
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
+
+        <?php if ($order->order_type == 2): ?>
+        <?php $status_transaction_digital = [
+                0 => 'Pending',
+                1 => 'Success',
+                2 => 'Failed'
+        ]; ?>
+        <?php foreach($order->order_digitals as $val) : ?>
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                           Digital Produk
+                        </h3>
+                    </div>
+                </div>
+                <div class="m-portlet__head-tools">
+
+                </div>
+            </div>
+
+
+
+            <div class="m-portlet__body">
+                <!--begin::Form-->
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6">
+                            <label>Tipe Produk:</label>
+                            <div style="font-weight: bolder"><?= $val->digital_detail->operator ?> <?= $val->digital_detail->type ?></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="">Nomor Tujuan :</label>
+                            <div style="font-weight: bolder"><?= $val->customer_number; ?></div>
+                        </div>
+                    </div>
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6">
+                            <label>Denom:</label>
+                            <div style="font-weight: bolder"><?= $this->Number->format($val->digital_detail->denom); ?></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="">Status Transaksi :</label>
+                            <div style="font-weight: bolder"><?= $status_transaction_digital[$val->digital_detail->status]; ?></div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+        <?php endforeach; ?>
+        <?php endif; ?>
 
         <?php foreach($order->order_details as $key => $val) : ?>
         <div class="m-portlet m-portlet--mobile">
