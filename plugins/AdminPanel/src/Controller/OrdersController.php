@@ -192,7 +192,10 @@ class OrdersController extends AppController
                             ],
                         ],
                     ]
-                ]
+                ],
+                'OrderDigitals' => [
+                    'DigitalDetails'
+                ],
             ]
         ]);
 
