@@ -58,7 +58,7 @@ class ExpiredPointCommand extends Command
         if($check){
             foreach($check as $vals){
                 $note = 'Point Expired';
-                $this->CustomerMutationPoints->saving($vals['customer_id'],'5', ($vals['point'] * -1),$note); //mutation point
+                $this->CustomerMutationPoints->saving($vals['customer_id'],'6', ($vals['point'] * -1),$note); //mutation point
             }
         }
 
