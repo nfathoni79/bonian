@@ -50,14 +50,17 @@ class ExpiredVoucherCommand extends Command
         $check = $this->CustomerVouchers->find()
             ->contain(['Vouchers'])
             ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
-                return $exp->lte('CustomerVouchers.expired', (Time::now())->addDays(-30)->format('Y-m-d H:i:s'));
+                return $exp->lte('CustomerVouchers.expired', (Time::now())->format('Y-m-d H:i:s'));
             })
-            ->where(['CustomerVouchers.status' => 1, 'Vouchers.type' => 1]) // Filter hanya voucher dengan type 1. claim point
+            ->where([
+                'CustomerVouchers.status' => 1,
+//                'Vouchers.type' => 1 // Filter hanya voucher dengan type 1. claim point
+            ])
             ->all();
 
         if($check){
             foreach($check as $vals){
-                if($vals['voucher']['type'] == 1){
+//                if($vals['voucher']['type'] == 1){
                     $query = $this->CustomerVouchers->query();
                     $query->update()
                         ->set(['status' => 3])
@@ -65,7 +68,9 @@ class ExpiredVoucherCommand extends Command
                             'id' => $vals['id'],
                         ])
                         ->execute();
-                }
+//                }else{
+//
+//                }
             }
         }
 
