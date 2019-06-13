@@ -273,10 +273,26 @@ $this->Html->script([
                 className: 'dt-right',
                 orderable: false,
                 render: function (data, type, row, meta) {
-                    return '<label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand">\n' +
+
+                    var ret ='<label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand">\n' +
                         '<input type="checkbox" name="ProductOptionStocks['+row.id+'][id]" value="'+row.id+'" class="m-checkable">\n' +
+                        '<input type="hidden" name="ProductOptionStocks['+row.id+'][product_id]" value="'+row.product.id+'">';
+
+                        $.each(row.product.product_images, function(k,v){
+                            ret +=  '<input type="hidden" name="ProductOptionStocks['+row.id+'][image]" value="'+v.name+'">';
+                            return false;
+                        });
+                        var combo = '';
+                        $.each(row.value_lists, function (k,v) {
+                            combo += v.option +' : '+v.values+ '<br>';
+                        })
+                        ret += '<input type="hidden" name="ProductOptionStocks['+row.id+'][name]" value="'+row.product.name+'">\n' +
+                        '<input type="hidden" name="ProductOptionStocks['+row.id+'][slug]" value="'+row.product.slug+'">\n' +
+                        '<input type="hidden" name="ProductOptionStocks['+row.id+'][variant]" value="'+combo+'">\n' +
                         '<span></span>\n' +
                         '</label>';
+
+                    return ret;
                 }
             },
             {
@@ -377,7 +393,7 @@ $this->Html->script([
 
         var formEl = $("#frm-example");
 
-        $('input[type="hidden"]', formEl).remove();
+        // $('input[type="hidden"]', formEl).remove();
 
         var ajaxRequest = new ajaxValidation(formEl);
         ajaxRequest.setblockUI('.m-portlet__body');
