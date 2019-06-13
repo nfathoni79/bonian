@@ -366,6 +366,13 @@
                     ],
                 ]
             ],
+            [
+                'name' => 'Customer Chat',
+                'url' => ['controller' => 'Chat', 'action' => 'index'],
+                'icon' => 'm-menu__link-icon flaticon-apps',
+                'children' => [
+                ]
+            ],
         ];
 
         echo $this->SideMenu->create('main')
