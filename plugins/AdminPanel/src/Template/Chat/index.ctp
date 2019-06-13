@@ -251,6 +251,18 @@ $this->Html->script([
         }
 
         function renderMessage(message) {
+
+            currentUser.setReadCursor({
+                roomId: message.roomId,
+                position: message.id
+            })
+                .then(() => {
+                    //console.log('Success!')
+                })
+                .catch(err => {
+                    //console.log(`Error setting cursor: ${err}`)
+                });
+
             var template = '';
             if (user_id.toUpperCase() === message.senderId.toUpperCase()) {
                 template += `<li>
@@ -382,6 +394,16 @@ $this->Html->script([
                 .then(messageId => {
                     console.log("Success!", messageId)
                     messageToSend.val('');
+                    currentUser.setReadCursor({
+                        roomId: roomId,
+                        position: messageId
+                    })
+                        .then(() => {
+
+                        })
+                        .catch(err => {
+                            //console.log(`Error setting cursor: ${err}`)
+                        });
                     var scroll = $('#room-' + roomId).find('#scroll');
                     scroll.scrollTop(scroll.find('ul').height());
                 })
