@@ -92,6 +92,7 @@
                                     'Home Bottom Left' => 'Home Bottom Left',
                                     'Home Bottom Right' => 'Home Bottom Right',
                                     'Product List By Category' => 'Product List By Category',
+                                    'Flash Sale' => 'Flash Sale',
                                 ], 'empty' => 'Pilih Posisi', 'label' => false, 'required' => false, 'div' => false, 'class' => $default_class]);
                             ?>
                         </div>
