@@ -685,7 +685,7 @@ a.dropdown-item {
 
 .discussions>li>a {
     display: block;
-    padding: 25px 0;
+    padding: 5px 0 10px 0px;
     border-bottom: 2px solid #fbfbfb
 }
 
@@ -711,7 +711,7 @@ a.dropdown-item {
     display: flex;
     -ms-flex-align: start;
     align-items: flex-start;
-    margin-bottom: 10px
+    margin-bottom: 3px
 }
 
 .discussions>li .groups .headline {
