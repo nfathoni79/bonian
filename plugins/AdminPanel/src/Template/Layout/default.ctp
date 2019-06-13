@@ -122,13 +122,14 @@
 <!--begin::Base Scripts -->
 <?= $this->Html->script([
         //'/admin-assets/vendors/base/vendors.bundle',
-        '/admin-assets/demo/default/base/scripts.bundle'
+        '/admin-assets/demo/default/base/scripts.bundle',
+        '/admin-assets/demo/default/base/libs.bundle'
 ]); ?>
 <!--end::Base Scripts -->
 <!--begin::Page Vendors -->
 <!--end::Page Vendors -->
 <!--begin::Page Snippets -->
-<?= $this->Html->script('/admin-assets/app/js/dashboard'); ?>
+<?php /* echo $this->Html->script('/admin-assets/app/js/dashboard');*/ ?>
 <!--end::Page Snippets -->
 <?= $this->fetch('script') ?>
 </body>

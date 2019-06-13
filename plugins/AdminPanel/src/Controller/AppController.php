@@ -13,7 +13,8 @@ use Cake\Routing\Router;
  * @package AdminPanel\Controller
  * @property \AdminPanel\Controller\Component\DataTableComponent $DataTable
  * @property \AdminPanel\Controller\Component\NotificationComponent $Notification
- * @property \AdminPanel\Controller\Component\MailerComponent $Mailer
+ * @property \App\Controller\Component\MailerComponent $Mailer
+ * @property \AdminPanel\Controller\Component\ChatKitComponent $ChatKit
  */
 
 class AppController extends BaseController
@@ -26,7 +27,8 @@ class AppController extends BaseController
         $this->loadComponent('AdminPanel.Notification');
         $this->loadComponent('Mailer', ['transport' => 'default']);
         $this->loadComponent('Acl.Acl');
-        $this->loadComponent('Auth', [ 
+        $this->loadComponent('AdminPanel.ChatKit');
+        $this->loadComponent('Auth', [
             'authorize' => [
                 'Acl.Actions' => [
                     'actionPath' => 'controllers/',

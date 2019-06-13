@@ -19,10 +19,10 @@ $this->Html->css([
 			<ul class="nav" role="tablist">
 				<li><a href="#conversations" class="active" data-toggle="tab" role="tab" aria-controls="conversations" aria-selected="true"><i data-eva="message-square" data-eva-animation="pulse"></i></a></li>
 				<li><a href="#friends" data-toggle="tab" role="tab" aria-controls="friends" aria-selected="false"><i data-eva="people" data-eva-animation="pulse"></i></a></li>
-				<li><a href="#notifications" data-toggle="tab" role="tab" aria-controls="notifications" aria-selected="false"><i data-eva="bell" data-eva-animation="pulse"></i></a></li>
+				<?php /*<li><a href="#notifications" data-toggle="tab" role="tab" aria-controls="notifications" aria-selected="false"><i data-eva="bell" data-eva-animation="pulse"></i></a></li>
 				<li><a href="#settings" data-toggle="tab" role="tab" aria-controls="settings" aria-selected="false"><i data-eva="settings" data-eva-animation="pulse"></i></a></li>
 				<li><button type="button" class="btn mode"><i data-eva="bulb" data-eva-animation="pulse"></i></button></li>
-				<li><button type="button" class="btn"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-1.jpg" alt="avatar"><i data-eva="radio-button-on"></i></button></li>
+				<li><button type="button" class="btn"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-1.jpg" alt="avatar"><i data-eva="radio-button-on"></i></button></li>*/ ?>
 			</ul>
 		</div>
 	</nav>
@@ -39,7 +39,7 @@ $this->Html->css([
 							<button type="submit" class="btn prepend"><i data-eva="search"></i></button>
 						</form>
 						<ul class="nav" role="tablist">
-							<li><a href="#direct" class="filter-btn active" data-toggle="tab" data-filter="direct">Direct</a></li>
+							<li><a href="#invoice" class="filter-btn active" data-toggle="tab" data-filter="direct">Invoice</a></li>
 							<li><a href="#groups" class="filter-btn" data-toggle="tab" data-filter="groups">Groups</a></li>
 						</ul>
 					</div>
@@ -48,126 +48,7 @@ $this->Html->css([
 						<button type="button" class="btn round" data-toggle="modal" data-target="#compose"><i data-eva="edit-2"></i></button>
 						<hr>
 						<ul class="nav discussions" role="tablist">
-							<li>
-								<a href="#chat1" class="filter direct active" data-chat="open" data-toggle="tab" role="tab" aria-controls="chat1" aria-selected="true">
-									<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-1.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<div class="headline">
-											<h5>Ham Chuwon</h5>
-											<span>Today</span>
-										</div>
-										<p>Please review and sign the binding agreement.</p>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="#chat1" class="filter direct" data-chat="open" data-toggle="tab" role="tab" aria-controls="chat1" aria-selected="false">
-									<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-2.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<div class="headline">
-											<h5>Quincy Hensen</h5>
-											<span>Today</span>
-										</div>
-										<p>Additional information about the previous clients.</p>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="#chat1" class="filter direct" data-chat="open" data-toggle="tab" role="tab" aria-controls="chat1" aria-selected="false">
-									<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<div class="headline">
-											<h5>Mark Hog</h5>
-											<span>Feb 23</span>
-										</div>
-										<p>I'm looking to get a quote for the move from LA to NY.</p>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="#chat1" class="filter direct" data-chat="open" data-toggle="tab" role="tab" aria-controls="chat1" aria-selected="false">
-									<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-4.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<div class="headline">
-											<h5>Sanne Viscaal</h5>
-											<span>Jan 18</span>
-										</div>
-										<p>My delivery address is pending final confirmation.</p>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="#chat1" class="filter direct" data-chat="open" data-toggle="tab" role="tab" aria-controls="chat1" aria-selected="false">
-									<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-5.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<div class="headline">
-											<h5>Alex Just</h5>
-											<span>May 2</span>
-										</div>
-										<p>Sending all the requested insurance documents.</p>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="#chat2" class="filter groups" data-chat="open" data-toggle="tab" role="tab" aria-controls="chat2" aria-selected="false">
-									<div class="content">
-										<div class="headline">
-											<img src="../admin-assets/vendors/swipe/img/avatars/avatar-group-1.jpg" alt="avatar">
-											<h5>The Musketeers</h5>
-											<span>Today</span>
-										</div>
-										<p>Please review and sign the binding agreement.</p>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="#chat2" class="filter groups" data-chat="open" data-toggle="tab" role="tab" aria-controls="chat2" aria-selected="false">
-									<div class="content">
-										<div class="headline">
-											<img src="../admin-assets/vendors/swipe/img/avatars/avatar-group-2.jpg" alt="avatar">
-											<h5>Watts Up</h5>
-											<span>Today</span>
-										</div>
-										<p>Additional information about the previous clients.</p>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="#chat2" class="filter groups" data-chat="open" data-toggle="tab" role="tab" aria-controls="chat2" aria-selected="false">
-									<div class="content">
-										<div class="headline">
-											<img src="../admin-assets/vendors/swipe/img/avatars/avatar-group-3.jpg" alt="avatar">
-											<h5>Memes</h5>
-											<span>Feb 23</span>
-										</div>
-										<p>I'm looking to get a quote for the move from LA to NY.</p>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="#chat2" class="filter groups" data-chat="open" data-toggle="tab" role="tab" aria-controls="chat2" aria-selected="false">
-									<div class="content">
-										<div class="headline">
-											<img src="../admin-assets/vendors/swipe/img/avatars/avatar-group-4.jpg" alt="avatar">
-											<h5>Supernovas</h5>
-											<span>Jan 18</span>
-										</div>
-										<p>My delivery address is pending final confirmation.</p>
-									</div>
-								</a>
-							</li>
-							<li>
-								<a href="#chat2" class="filter groups" data-chat="open" data-toggle="tab" role="tab" aria-controls="chat2" aria-selected="false">
-									<div class="content">
-										<div class="headline">
-											<img src="../admin-assets/vendors/swipe/img/avatars/avatar-group-5.jpg" alt="avatar">
-											<h5>Squad Ghouls</h5>
-											<span>May 2</span>
-										</div>
-										<p>Sending all the requested insurance documents.</p>
-									</div>
-								</a>
-							</li>
+
 						</ul>
 					</div>
 				</div>
@@ -278,6 +159,7 @@ $this->Html->css([
 					</div>
 				</div>
 				<!-- End of Friends -->
+                <?php /*
 				<!-- Start of Notifications -->
 				<div class="tab-pane fade" id="notifications" role="tabpanel">
 					<div class="top">
@@ -589,7 +471,7 @@ $this->Html->css([
 						<!-- End of Appearance -->
 					</ul>
 				</div>
-				<!-- End of Settings -->
+				<!-- End of Settings --> */ ?>
 			</div>
 		</div>
 	</div>
@@ -598,701 +480,7 @@ $this->Html->css([
 	<div class="chat">
 		<div class="tab-content">
 			<!-- Start of Chat Room -->
-			<div class="tab-pane fade show active" id="chat1" role="tabpanel">
-				<div class="item">
-					<div class="content">
-						<div class="container">
-							<div class="top">
-								<div class="headline">
-									<img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar">
-									<div class="content">
-										<h5>Quincy Hensen</h5>
-										<span>Away</span>
-									</div>
-								</div>
-								<ul>
-									<li><button type="button" class="btn"><i data-eva="video" data-eva-animation="pulse"></i></button></li>
-									<li><button type="button" class="btn"><i data-eva="phone" data-eva-animation="pulse"></i></button></li>
-									<li><button type="button" class="btn" data-toggle="modal" data-target="#compose"><i data-eva="person-add" data-eva-animation="pulse"></i></button></li>
-									<li><button type="button" class="btn" data-utility="open"><i data-eva="info" data-eva-animation="pulse"></i></button></li>
-									<li><button type="button" class="btn round" data-chat="open"><i data-eva="arrow-ios-back"></i></button></li>
-									<li><button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical" data-eva-animation="pulse"></i></button>
-										<div class="dropdown-menu">
-											<button type="button" class="dropdown-item"><i data-eva="video"></i>Video call</button>
-											<button type="button" class="dropdown-item"><i data-eva="phone"></i>Voice call</button>
-											<button type="button" class="dropdown-item" data-toggle="modal" data-target="#compose"><i data-eva="person-add"></i>Add people</button>
-											<button type="button" class="dropdown-item" data-utility="open"><i data-eva="info"></i>Information</button>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div class="middle" id="scroll">
-							<div class="container">
-								<ul>
-									<li>
-										<img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar">
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-												</div>
-											</div>
-											<span>07:30am</span>
-										</div>
-									</li>
-									<li>
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>Many desktop publishing packages.</p>
-												</div>
-											</div>
-											<span>11:56am</span>
-										</div>
-									</li>
-									<li>
-										<img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar">
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<div class="attachment">
-														<a href="#" class="round"><i data-eva="file-text"></i></a>
-														<div class="meta">
-															<a href="#"><h5>build-plugins.js</h5></a>
-															<span>3kb</span>
-														</div>
-													</div>
-												</div>
-											</div>
-											<span>01:03pm</span>
-										</div>
-									</li>
-									<li>
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>It was popularised in the 1960s.</p>
-												</div>
-											</div>
-											<span>05:42pm</span>
-										</div>
-									</li>
-									<li>
-										<img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar">
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>It is a long established fact that a reader will be distracted.</p>
-												</div>
-											</div>
-											<span>08:20pm</span>
-										</div>
-									</li>
-									<li>
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>Contrary to popular belief, Lorem Ipsum is not simply random text.</p>
-												</div>
-											</div>
-											<span>10:15pm <i data-eva="done-all"></i></span>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div class="container">
-							<div class="bottom">
-								<form>
-									<textarea class="form-control" placeholder="Type message..." rows="1"></textarea>
-									<button type="submit" class="btn prepend"><i data-eva="paper-plane"></i></button>
-								</form>
-							</div>
-						</div>
-					</div>
-					<!-- Start of Utility -->
-					<div class="utility">
-						<div class="container">
-							<button type="button" class="close" data-utility="open"><i data-eva="close"></i></button>
-							<button type="button" class="btn primary" data-toggle="modal" data-target="#compose">Add people</button>
-							<ul class="nav" role="tablist">
-								<li><a href="#users" class="active" data-toggle="tab" role="tab" aria-controls="users" aria-selected="true">Users</a></li>
-								<li><a href="#files" data-toggle="tab" role="tab" aria-controls="files" aria-selected="false">Files</a></li>
-							</ul>
-							<div class="tab-content">
-								<!-- Start of Users -->
-								<div class="tab-pane fade active show" id="users" role="tabpanel">
-									<h4>Users</h4>
-									<hr>
-									<ul class="users">
-										<li>
-											<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-1.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Ham Chuwon</h5>
-												<span>Florida, US</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-2.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Quincy Hensen</h5>
-												<span>Shanghai, China</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Mark Hog</h5>
-												<span>Olso, Norway</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-4.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Sanne Viscaal</h5>
-												<span>Helena, Montana</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-5.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Alex Just</h5>
-												<span>London, UK</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-6.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Arturo Thomas</h5>
-												<span>Vienna, Austria</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</div>
-								<!-- End of Users -->
-								<!-- Start of Files -->
-								<div class="tab-pane fade" id="files" role="tabpanel">
-									<h4>Files</h4>
-									<div class="upload">
-										<label>
-											<input type="file">
-											<span>Drag & drop files here</span>
-										</label>
-									</div>
-									<ul class="files">
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="file-text"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-1.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>workbox.js</h5></a>
-												<span>2kb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="folder"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-2.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>bug_report</h5></a>
-												<span>1kb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="briefcase"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>nuget.zip</h5></a>
-												<span>7mb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="image-2"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-4.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>clearfix.jpg</h5></a>
-												<span>1kb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="folder"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-5.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>package</h5></a>
-												<span>4mb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="file-text"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-6.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>plugins.js</h5></a>
-												<span>3kb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</div>
-								<!-- End of Files -->
-							</div>
-						</div>
-					</div>
-					<!-- End of Utility -->
-				</div>
-			</div>
-			<!-- End of Chat Room -->
-			<!-- Start of Chat Room -->
-			<div class="tab-pane fade" id="chat2" role="tabpanel">
-				<div class="item">
-					<div class="content">
-						<div class="container">
-							<div class="top">
-								<div class="headline">
-									<img src="../admin-assets/vendors/swipe/img/avatars/avatar-group-1.jpg" alt="avatar">
-									<div class="content">
-										<h5>The Musketeers</h5>
-										<span>Group discussion</span>
-									</div>
-								</div>
-								<ul>
-									<li><button type="button" class="btn"><i data-eva="video" data-eva-animation="pulse"></i></button></li>
-									<li><button type="button" class="btn"><i data-eva="phone" data-eva-animation="pulse"></i></button></li>
-									<li><button type="button" class="btn" data-toggle="modal" data-target="#compose"><i data-eva="person-add" data-eva-animation="pulse"></i></button></li>
-									<li><button type="button" class="btn" data-utility="open"><i data-eva="info" data-eva-animation="pulse"></i></button></li>
-									<li><button type="button" class="btn round" data-chat="open"><i data-eva="arrow-ios-back"></i></button></li>
-									<li><button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical" data-eva-animation="pulse"></i></button>
-										<div class="dropdown-menu">
-											<button type="button" class="dropdown-item"><i data-eva="video"></i>Video call</button>
-											<button type="button" class="dropdown-item"><i data-eva="phone"></i>Voice call</button>
-											<button type="button" class="dropdown-item" data-toggle="modal" data-target="#compose"><i data-eva="person-add"></i>Add people</button>
-											<button type="button" class="dropdown-item" data-utility="open"><i data-eva="info"></i>Information</button>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div class="middle">
-							<div class="container">
-								<ul>
-									<li>
-										<img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar">
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-												</div>
-											</div>
-											<span>07:30am</span>
-										</div>
-									</li>
-									<li>
-										<img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-5.jpg" alt="avatar">
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>Many desktop publishing packages.</p>
-												</div>
-											</div>
-											<span>11:56am</span>
-										</div>
-									</li>
-									<li>
-										<img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar">
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>It has survived not only five centuries, but also the leap into electronic typesetting.</p>
-												</div>
-											</div>
-											<span>01:03pm</span>
-										</div>
-									</li>
-									<li>
-										<img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-5.jpg" alt="avatar">
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>It was popularised in the 1960s.</p>
-												</div>
-											</div>
-											<span>05:42pm</span>
-										</div>
-									</li>
-									<li>
-										<img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar">
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>It is a long established fact that a reader will be distracted.</p>
-												</div>
-											</div>
-											<span>08:20pm</span>
-										</div>
-									</li>
-									<li>
-										<img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-5.jpg" alt="avatar">
-										<div class="content">
-											<div class="message">
-												<div class="bubble">
-													<p>Contrary to popular belief, Lorem Ipsum is not simply random text.</p>
-												</div>
-											</div>
-											<span>10:15pm <i data-eva="done-all"></i></span>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div class="container">
-							<div class="bottom">
-								<form>
-									<textarea class="form-control" placeholder="Type message..." rows="1"></textarea>
-									<button type="submit" class="btn prepend"><i data-eva="paper-plane"></i></button>
-								</form>
-							</div>
-						</div>
-					</div>
-					<!-- Start of Utility -->
-					<div class="utility">
-						<div class="container">
-							<button type="button" class="close" data-utility="open"><i data-eva="close"></i></button>
-							<button type="button" class="btn primary" data-toggle="modal" data-target="#compose">Add people</button>
-							<ul class="nav" role="tablist">
-								<li><a href="#users2" class="active" data-toggle="tab" role="tab" aria-controls="users2" aria-selected="true">Users</a></li>
-								<li><a href="#files2" data-toggle="tab" role="tab" aria-controls="files2" aria-selected="false">Files</a></li>
-							</ul>
-							<div class="tab-content">
-								<!-- Start of Users -->
-								<div class="tab-pane fade active show" id="users2" role="tabpanel">
-									<h4>Users</h4>
-									<hr>
-									<ul class="users">
-										<li>
-											<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-1.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Ham Chuwon</h5>
-												<span>Florida, US</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-2.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Quincy Hensen</h5>
-												<span>Shanghai, China</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Mark Hog</h5>
-												<span>Olso, Norway</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-4.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Sanne Viscaal</h5>
-												<span>Helena, Montana</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-5.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Alex Just</h5>
-												<span>London, UK</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-6.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-											<div class="content">
-												<h5>Arturo Thomas</h5>
-												<span>Vienna, Austria</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</div>
-								<!-- End of Users -->
-								<!-- Start of Files -->
-								<div class="tab-pane fade" id="files2" role="tabpanel">
-									<h4>Files</h4>
-									<div class="upload">
-										<label>
-											<input type="file">
-											<span>Drag & drop files here</span>
-										</label>
-									</div>
-									<ul class="files">
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="file-text"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-1.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>workbox.js</h5></a>
-												<span>2kb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="folder"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-2.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>bug_report</h5></a>
-												<span>1kb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="briefcase"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>nuget.zip</h5></a>
-												<span>7mb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="image-2"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-4.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>clearfix.jpg</h5></a>
-												<span>1kb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="folder"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-5.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>package</h5></a>
-												<span>4mb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-										<li>
-											<ul class="avatars">
-												<li><button class="btn round"><i data-eva="file-text"></i></button></li>
-												<li><a href="#"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-6.jpg" alt="avatar"></a></li>
-											</ul>
-											<div class="meta">
-												<a href="#"><h5>plugins.js</h5></a>
-												<span>3kb</span>
-											</div>
-											<div class="dropdown">
-												<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical"></i></button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item">Edit</button>
-													<button type="button" class="dropdown-item">Share</button>
-													<button type="button" class="dropdown-item">Delete</button>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</div>
-								<!-- End of Files -->
-							</div>
-						</div>
-					</div>
-					<!-- End of Utility -->
-				</div>
-			</div>
+
 			<!-- End of Chat Room -->
 		</div>
 	</div>
@@ -1360,83 +548,7 @@ $this->Html->css([
 										<label class="custom-control-label" for="user2"></label>
 									</div>
 								</li>
-								<li>
-									<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-3.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<h5>Mark Hog</h5>
-										<span>Olso, Norway</span>
-									</div>
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="user3">
-										<label class="custom-control-label" for="user3"></label>
-									</div>
-								</li>
-								<li>
-									<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-4.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<h5>Sanne Viscaal</h5>
-										<span>Helena, Montana</span>
-									</div>
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="user4">
-										<label class="custom-control-label" for="user4"></label>
-									</div>
-								</li>
-								<li>
-									<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-5.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<h5>Alex Just</h5>
-										<span>London, UK</span>
-									</div>
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="user5">
-										<label class="custom-control-label" for="user5"></label>
-									</div>
-								</li>
-								<li>
-									<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-male-6.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<h5>Arturo Thomas</h5>
-										<span>Vienna, Austria</span>
-									</div>
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="user6">
-										<label class="custom-control-label" for="user6"></label>
-									</div>
-								</li>
-								<li>
-									<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-female-1.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<h5>Victoria Garner</h5>
-										<span>Chisinau, Moldova</span>
-									</div>
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="user7">
-										<label class="custom-control-label" for="user7"></label>
-									</div>
-								</li>
-								<li>
-									<div class="status offline"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-female-2.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<h5>Maria Baron</h5>
-										<span>Indore, India</span>
-									</div>
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="user8">
-										<label class="custom-control-label" for="user8"></label>
-									</div>
-								</li>
-								<li>
-									<div class="status online"><img src="../admin-assets/vendors/swipe/img/avatars/avatar-female-3.jpg" alt="avatar"><i data-eva="radio-button-on"></i></div>
-									<div class="content">
-										<h5>Sara Koch</h5>
-										<span>Sofia, BG</span>
-									</div>
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="user9">
-										<label class="custom-control-label" for="user9"></label>
-									</div>
-								</li>
+
 							</ul>
 						</div>
 						<!-- End of Participants -->
@@ -1451,12 +563,7 @@ $this->Html->css([
 	<!-- End of Compose -->
 </div>
 <!-- Layout -->
-<script src="../admin-assets/vendors/swipe/js/vendor/jquery-slim.min.js"></script>
-<script src="../admin-assets/vendors/swipe/js/vendor/popper.min.js"></script>
-<script src="../admin-assets/vendors/swipe/js/vendor/feather.min.js"></script>
-<script src="../admin-assets/vendors/swipe/js/vendor/eva.min.js"></script>
-<script src="../admin-assets/vendors/swipe/js/vendor/bootstrap.min.js"></script>
-<script src="../admin-assets/vendors/swipe/js/swipe.min.js"></script>
+
 
 <?php
 $this->Html->script([
@@ -1469,4 +576,228 @@ $this->Html->script([
 ], ['block' => true]);
 ?>
 
+<?php $this->append('script'); ?>
+<script>
+    const user_id = '<?= $this->request->getSession()->read('Auth.Users.username'); ?>';
+    const csrfToken = '<?= $this->request->getParam('_csrfToken'); ?>';
+    var currentUser;
+    $(document).ready(function () {
+        const tokenProvider = new Chatkit.TokenProvider({
+            url: '<?= $this->Url->build(['action' => 'authorize']); ?>',
+            queryParams: {
+                type: 'chatkit'
+            },
+            headers: {
+                'X-CSRF-Token': csrfToken,
+                'x-requested-with': 'XMLHttpRequest'
+            }
+        });
+
+        const noopLogger = (...items) => {}
+
+        const chatManager = new Chatkit.ChatManager({
+            instanceLocator: 'v1:us1:643558e4-7a90-485c-b398-56de24a33bff',
+            tokenProvider: tokenProvider,
+            userId: user_id
+        });
+
+        chatManager
+            .connect({
+                onAddedToRoom: room => {
+                    console.log("added to room: ", room);
+                },
+                onRemovedFromRoom: room => {
+                    console.log("removed from room: ", room);
+
+                },
+                onUserJoinedRoom: (room, user) => {
+                    console.log("user: ", user, " joined room: ", room)
+                },
+                onUserLeftRoom: (room, user) => {
+                    console.log("user: ", user, " left room: ", room)
+                },
+                onPresenceChanged: ({ previous, current }, user) => {
+                    console.log("user: ", user, " was ", previous, " but is now ", current)
+                },
+            })
+            .then(cUser => {
+                currentUser = cUser
+                window.currentUser = cUser
+                var domInvoice = '';
+                var rooms = currentUser.rooms.reverse();
+                for(var i in rooms) {
+                    if (rooms[i]) {
+                        console.log(rooms[i])
+                        domInvoice += subscribeRoom(rooms[i]);
+                    }
+                }
+                $('#conversations').find('.discussions').prepend(domInvoice);
+
+
+            })
+            .catch(err => {
+                console.log("Error on connection: ", err)
+            });
+
+        function renderChatContainer(room)
+        {
+            return `<div class="tab-pane fade" id="room-${room.id}" role="tabpanel">
+                <div class="item">
+                 <div class="content">
+                  <div class="container">
+                   <div class="top">
+                    <div class="headline">
+                         <div class="content">
+                          <h5>Quincy Hensen</h5>
+                          <span>Away</span>
+                         </div>
+                        </div>
+                        <ul>
+                         <li><button type="button" class="btn" data-toggle="modal" data-target="#compose"><i data-eva="person-add" data-eva-animation="pulse"></i></button></li>
+                         <li><button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-eva="more-vertical" data-eva-animation="pulse"></i></button>
+                          <div class="dropdown-menu">
+                           <button type="button" class="dropdown-item" data-toggle="modal" data-target="#compose"><i data-eva="person-add"></i>Add people</button>
+                          </div>
+                         </li>
+                        </ul>
+                       </div>
+                      </div>
+                      <div class="middle" id="scroll">
+                       <div class="container">
+                        <ul>
+
+                        </ul>
+                       </div>
+                      </div>
+                      <div class="container">
+                       <div class="bottom">
+                        <form class="message-to-send" data-room-id="${room.id}">
+                         <input class="form-control" placeholder="Type message..." rows="1"></input>
+                         <button type="submit" class="btn prepend"><i data-eva="paper-plane"></i></button>
+                        </form>
+                       </div>
+                      </div>
+                     </div>
+
+                    </div>
+                   </div>`;
+        }
+
+        function renderMessage(message) {
+            var template = '';
+            if (user_id.toUpperCase() === message.senderId.toUpperCase()) {
+                template += `<li>
+                          <div class="content">
+                            <span style="color: #555555; margin-bottom: 10px;">${message.senderId}</span>
+                           <div class="message">
+                            <div class="bubble">
+                             <p>${message.text}</p>
+                            </div>
+                           </div>
+                           <span>${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})} <!-- <i data-eva="done-all"></i> --></span>
+                          </div>
+                         </li>`;
+            } else {
+                template += `<li class="left">
+                          <div class="content">
+                            <span style="color: #555555; margin-bottom: 10px;">${message.senderId}</span>
+                           <div class="message">
+                            <div class="bubble">
+                             <p>${message.text}</p>
+                            </div>
+                           </div>
+                           <span>${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})}</span>
+                          </div>
+                         </li>`;
+            }
+
+            $('#room-' + message.roomId).find('#scroll ul').append(template);
+            var scroll = $('#room-' + message.roomId).find('#scroll');
+            scroll.scrollTop(scroll.find('ul').height());
+
+            $('[aria-controls="room-'+message.roomId+'"]').find('p').html(message.text);
+        }
+
+        function subscribeRoom(room) {
+            //console.log("Going to subscribe to", room)
+
+            var chatRoom = renderChatContainer(room);
+
+            $('.chat').find('.tab-content').append(chatRoom);
+
+            currentUser.subscribeToRoom({
+                roomId: room.id,
+                hooks: {
+                    onMessage: message => {
+                        console.log("new message:", message);
+                        renderMessage(message);
+                    },
+
+                    onUserStartedTyping: user => {
+                        console.log(`User ${user.name} started typing`, user);
+                    },
+                    onUserStoppedTyping: user => {
+                        console.log(`User ${user.name} stopped typing`);
+                    }
+                },
+            });
+            var unreadCount = room.unreadCount > 0 ? `<span class="badge">${room.unreadCount}</span>` : '';
+            unreadCount = '';
+
+            return `<li>
+                <a href="#room-${room.id}" class="filter invoice" data-chat="open" data-toggle="tab" role="tab" aria-controls="room-${room.id}" aria-selected="true">
+                    <div class="content">
+                        <div class="headline">
+                            <h5>${room.name}</h5>
+                            <span>${moment(room.lastMessageAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})}</span>
+                        </div>
+                    <p></p>
+                    </div>
+                </a>
+                </li>`;
+        }
+
+        $(document).on('click', '[data-chat="open"]', function() {
+            $('.chat').toggleClass('open');
+            var target = $(this).attr('aria-controls');
+            var scroll = $('#' + target).find('#scroll');
+            setTimeout(function() {
+                scroll.scrollTop(scroll.find('ul').height());
+            }, 100);
+
+            eva.replace();
+        });
+
+        $(document).on('submit', '.message-to-send', function(e) {
+           e.preventDefault();
+           var roomId = $(this).data('room-id').toString();
+           var messageToSend = $(this).find('input');
+            currentUser
+                .sendMessage({
+                    text: messageToSend.val(),
+                    roomId: roomId,
+                    // attachment: {
+                    //   link: 'https://assets.zeit.co/image/upload/front/api/deployment-state.png',
+                    //   type: 'image',
+                    // },
+                    attachment: undefined
+                })
+                .then(messageId => {
+                    console.log("Success!", messageId)
+                    messageToSend.val('');
+                    var scroll = $('#room-' + roomId).find('#scroll');
+                    scroll.scrollTop(scroll.find('ul').height());
+                })
+                .catch(error => {
+                    console.log("Error", error)
+                })
+
+
+        });
+
+
+    });
+</script>
 <?php $this->end(); ?>
+
+

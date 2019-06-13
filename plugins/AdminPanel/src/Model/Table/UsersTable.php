@@ -161,7 +161,7 @@ class UsersTable extends Table
     public function findAuth(Query $query, array $options)
     {
         $query
-            ->select(['id', 'email', 'password', 'first_name', 'last_name', 'group_id'])
+            ->select(['id', 'email', 'username', 'password', 'first_name', 'last_name', 'group_id'])
             ->contain([
                 'Groups' => [
                     'fields' => ['Groups.name', 'Groups.level']
