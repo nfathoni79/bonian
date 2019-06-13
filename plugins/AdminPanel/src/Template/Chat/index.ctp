@@ -573,6 +573,8 @@ $this->Html->script([
 '/admin-assets/vendors/swipe/js/vendor/eva.min.js',
 '/admin-assets/vendors/swipe/js/vendor/bootstrap.min.js',
 '/admin-assets/vendors/swipe/js/swipe.min.js',
+'/admin-assets/app/js/tinysort.js',
+'/admin-assets/app/js/jquery.tinysort.js',
 ], ['block' => true]);
 ?>
 
@@ -728,11 +730,12 @@ $this->Html->script([
 
             //sort list
 
-            $('.discussions li').sort(function (a, b) {
+            /*$('.discussions li').sort(function (a, b) {
                 var contentA = (new Date($(a).find('a').attr('data-last-message'))).getTime();
                 var contentB = (new Date($(b).find('a').attr('data-last-message'))).getTime();
                 return (contentA > contentB) ? -1 : (contentA < contentB) ? 1 : 0;
-            }).appendTo('.discussions');
+            }).appendTo('.discussions');*/
+            tinysort('ul.discussions>li',{selector:'a',data:'last-message',order:'desc'});
 
 
         }
@@ -766,7 +769,7 @@ $this->Html->script([
             unreadCount = '';
 
             return `<li>
-                <a href="#room-${room.id}" data-last-message="${room.lastMessageAt}" class="filter invoice" data-chat="open" data-toggle="tab" role="tab" aria-controls="room-${room.id}" aria-selected="true">
+                <a href="#room-${room.id}" data-last-message="${room.lastMessageAt ? room.lastMessageAt : room.createdAt}" class="filter invoice" data-chat="open" data-toggle="tab" role="tab" aria-controls="room-${room.id}" aria-selected="true">
                     <div class="content">
                         <div class="headline">
                             <h5>${room.name}</h5>
