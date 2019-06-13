@@ -237,6 +237,7 @@ class ProductStocksController  extends AppController
                 $findSKU = $this->ProductOptionPrices->find()
                     ->where(['ProductOptionPrices.sku LIKE ' => $row[0].'%'])
                     ->first();
+
                 if($findSKU){
                     $productOptionPricesId = $findSKU->get('id');
                     $productId = $findSKU->get('product_id');
@@ -247,6 +248,7 @@ class ProductStocksController  extends AppController
 
                     if($findBranch){
                         $findStocks = $this->ProductOptionStocks->find()
+                            ->contain(['ProductOptionPrices'])
                             ->where([
                                 'ProductOptionStocks.product_id' => $productId,
                                 'ProductOptionStocks.product_option_price_id' => $productOptionPricesId,
@@ -254,9 +256,55 @@ class ProductStocksController  extends AppController
                             ])
                             ->first();
                         if($findStocks){
+
+                            $findStocksQuery = $this->ProductOptionValueLists->find()
+                                ->where(['ProductOptionValueLists.product_option_price_id' => $findStocks->product_option_price->id])
+                                ->first();
+                            $findStocks['option'] = $this->Options->getNameById($findStocksQuery->option_id) .' : '.$this->OptionValues->getNameById($findStocksQuery->option_value_id);
+
+
                             switch ($row[2]) {
                                 case 'penambahan':
                                     $this->ProductStockMutations->saving($findStocks->get('id'),'5', $row[3],$row[4]);
+
+                                    /* Find on whistlist CustomerWishes */
+                                    $listWhises = $this->CustomerWishes->find()
+                                        ->contain([
+                                            'Customers',
+                                            'Products' => [
+                                                'ProductImages' => [
+                                                    'sort' => ['ProductImages.primary' => 'DESC','ProductImages.created' => 'ASC']
+                                                ]
+                                            ]
+                                        ])
+                                        ->where(['CustomerWishes.product_id' => $productId])
+                                        ->all();
+                                    foreach($listWhises as $vals){
+
+                                        foreach($vals['product']['product_images'] as $val){
+                                            $image = $val['name'];
+                                            break;
+                                        }
+
+                                        if ($this->Notification->create(
+                                            $vals['customer_id'],
+                                            '2',
+                                            $vals['product']['name']. ' produk restock',
+                                            'Produk '.$vals['product']['name'].', variant : '. $findStocks['option'] .' telah di restock. Kini anda  dapat melakukan order untuk produk tersebut.',
+                                            'Products',
+                                            $vals['product_id'],
+                                            2,
+                                            Configure::read('mainSite').'/images/70x59/'. $image,
+                                            Configure::read('frontsite').'products/detail/'. $vals['product']['slug']
+                                        )) {
+
+                                            $this->Notification->triggerCount(
+                                                $vals['customer_id'],
+                                                $vals['customer']['reffcode']
+                                            );
+                                        }
+                                    }
+
                                 break;
                                 case 'pengurangan':
                                     $this->ProductStockMutations->saving($findStocks->get('id'),'6', ($row[3] * -1),$row[4]);
