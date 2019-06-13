@@ -1,7 +1,7 @@
 body {
     background: #fbfbfb;
     font-family: 'Inter UI', sans-serif;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 1.7
 }
@@ -19,7 +19,7 @@ a:hover {
 }
 
 p {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 1.7;
     color: #bdbac2;
@@ -92,7 +92,7 @@ hr {
     background: #f5f5f5;
     color: #bdbac2;
     border: none;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 500;
     border-radius: 6px
 }
@@ -121,7 +121,7 @@ hr {
 }
 
 .form-control::placeholder {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 500;
     color: #bdbac2
 }
@@ -210,7 +210,7 @@ input[type="search"]::-webkit-search-cancel-button {
     display: inline-block;
     padding: 9px 0;
     width: 100%;
-    background: #007bff;
+    background: #2c2e3e;
     font-weight: 600;
     line-height: 1.7;
     color: #fff;
@@ -378,7 +378,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .dropdown-item.active,
 .dropdown-item:active {
-    background: #007bff;
+    background: #2c2e3e;
     color: #fff
 }
 
@@ -440,7 +440,7 @@ a.dropdown-item {
 }
 
 .switch input:checked + .slider {
-    background-color: #007bff!important
+    background-color: #2c2e3e!important
 }
 
 .switch input:checked + .slider:before {
@@ -533,11 +533,11 @@ a.dropdown-item {
 }
 
 .navigation ul>li>a.active .eva {
-    fill: #007bff
+    fill: #2c2e3e
 }
 
 .navigation ul>li>a:hover .eva {
-    fill: #007bff
+    fill: #2c2e3e
 }
 
 .navigation .btn {
@@ -561,7 +561,7 @@ a.dropdown-item {
 }
 
 .navigation .btn .eva-bulb:hover {
-    fill: #007bff
+    fill: #2c2e3e
 }
 
 .navigation .btn .eva-radio-button-on {
@@ -629,7 +629,7 @@ a.dropdown-item {
 
 .sidebar .top .nav li .active {
     background: #fff;
-    color: #007bff
+    color: #2c2e3e
 }
 
 .sidebar .top .nav li a {
@@ -690,11 +690,11 @@ a.dropdown-item {
 }
 
 .discussions>li>a:hover {
-    border-bottom: 2px solid #007bff
+    border-bottom: 2px solid #2c2e3e
 }
 
 .discussions>li>a.active {
-    border-bottom: 2px solid #007bff
+    border-bottom: 2px solid #2c2e3e
 }
 
 .discussions>li>a.active p {
@@ -732,7 +732,7 @@ a.dropdown-item {
 }
 
 .discussions>li>a h5 {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 1.7;
     color: #212529;
@@ -771,11 +771,11 @@ a.dropdown-item {
 }
 
 .users>li>a:hover {
-    border-bottom: 2px solid #007bff
+    border-bottom: 2px solid #2c2e3e
 }
 
 .users>li>a.active {
-    border-bottom: 2px solid #007bff
+    border-bottom: 2px solid #2c2e3e
 }
 
 .users>li .content {
@@ -801,7 +801,7 @@ a.dropdown-item {
 }
 
 .users>li h5 {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 1.2;
     color: #212529;
@@ -848,11 +848,11 @@ a.dropdown-item {
 }
 
 .notifications>li:hover {
-    border-bottom: 2px solid #007bff
+    border-bottom: 2px solid #2c2e3e
 }
 
 .notifications>li.active {
-    border-bottom: 2px solid #007bff
+    border-bottom: 2px solid #2c2e3e
 }
 
 .notifications>li.active p {
@@ -872,7 +872,7 @@ a.dropdown-item {
 
 .notifications>li>p>strong {
     font-weight: 600;
-    color: #007bff
+    color: #2c2e3e
 }
 
 .settings .user {
@@ -899,7 +899,7 @@ a.dropdown-item {
 }
 
 .settings .user h5 {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     margin-bottom: 8px
 }
@@ -944,7 +944,7 @@ a.dropdown-item {
 }
 
 .settings>ul>li>.headline[data-toggle="collapse"][aria-expanded="true"] h5 {
-    color: #007bff
+    color: #2c2e3e
 }
 
 .settings>ul>li>.headline[data-toggle="collapse"][aria-expanded="true"] .eva-arrow-ios-forward {
@@ -953,11 +953,11 @@ a.dropdown-item {
 
 .settings>ul>li>.headline[data-toggle="collapse"][aria-expanded="true"] .eva-arrow-ios-downward {
     display: inline-block;
-    fill: #007bff
+    fill: #2c2e3e
 }
 
 .settings>ul>li>.headline h5 {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     margin-bottom: 7px;
     -moz-transition: all 0.3s;
@@ -973,11 +973,11 @@ a.dropdown-item {
 }
 
 .settings>ul>li>.headline:hover h5 {
-    color: #007bff
+    color: #2c2e3e
 }
 
 .settings>ul>li>.headline:hover .eva {
-    fill: #007bff
+    fill: #2c2e3e
 }
 
 .settings>ul>li>.headline .eva-arrow-ios-downward {
@@ -1045,7 +1045,7 @@ a.dropdown-item {
 }
 
 .settings .options>li .headline h5 {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 1.7;
     margin-bottom: 0
@@ -1084,7 +1084,7 @@ a.dropdown-item {
 }
 
 .settings .integrations>li:nth-child(3) .btn {
-    background: #007bff
+    background: #2c2e3e
 }
 
 .settings .integrations>li:nth-child(4) .btn {
@@ -1115,7 +1115,7 @@ a.dropdown-item {
 }
 
 .settings .integrations>li .headline h5 {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 1.7;
     margin-bottom: 0
@@ -1148,7 +1148,7 @@ a.dropdown-item {
     -ms-flex-pack: justify;
     justify-content: space-between;
     padding: 30px 0;
-    border-bottom: 2px solid #f9f9f9
+    border-bottom: 2px solid #2c2e3e
 }
 
 .chat .item .top .headline {
@@ -1166,7 +1166,7 @@ a.dropdown-item {
 }
 
 .chat .item .top h5 {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     margin-bottom: 8px
 }
@@ -1206,7 +1206,7 @@ a.dropdown-item {
 }
 
 .chat .item .top ul>li .btn:hover .eva {
-    fill: #007bff
+    fill: #2c2e3e
 }
 
 .chat .item .top ul>li .eva {
@@ -1226,7 +1226,7 @@ a.dropdown-item {
 .chat .item .middle {
     display: -ms-flexbox;
     display: flex;
-    height: calc(100vh - 221px);
+    height: calc(80vh - 221px);
     overflow-y: auto;
     -ms-overflow-style: none;
     overflow-x: hidden
@@ -1257,7 +1257,7 @@ a.dropdown-item {
 }
 
 .chat .item .middle ul>li + li {
-    margin-top: 30px
+    margin-top: 20px
 }
 
 .chat .item .middle ul>li img {
@@ -1285,13 +1285,13 @@ a.dropdown-item {
 .chat .item .middle ul>li .bubble {
     display: inline-block;
     max-width: 360px;
-    background: #007bff;
+    background: #2c2e3e;
     text-align: left;
     border-radius: 6px
 }
 
 .chat .item .middle ul>li p {
-    padding: 15px 20px;
+    padding: 10px 15px;
     color: #fff
 }
 
@@ -1302,6 +1302,10 @@ a.dropdown-item {
     line-height: 1.2;
     color: #bdbac2;
     margin-top: 15px
+}
+
+.chat .item .middle ul>li span.msg-date {
+	font-size: 10px;
 }
 
 .chat .item .middle ul>li span .eva {
@@ -1330,11 +1334,11 @@ a.dropdown-item {
 }
 
 .chat .item .middle ul>li .attachment .round .eva {
-    fill: #007bff
+    fill: #2c2e3e
 }
 
 .chat .item .middle ul>li .attachment h5 {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     color: #fff;
     margin-bottom: 8px
@@ -1378,7 +1382,7 @@ a.dropdown-item {
 }
 
 .chat .item .middle ul>li:nth-of-type(odd) .attachment .round {
-    background: #007bff
+    background: #2c2e3e
 }
 
 .chat .item .middle ul>li:nth-of-type(odd) .attachment .round .eva {
@@ -1386,7 +1390,7 @@ a.dropdown-item {
 }
 
 .chat .item .middle ul>li:nth-of-type(odd) .attachment h5 {
-    color: #007bff
+    color: #2c2e3e
 }
 
 .chat .item .middle ul>li:nth-of-type(odd) .attachment span {
@@ -1413,15 +1417,17 @@ a.dropdown-item {
 }
 
 .chat .item .middle ul>li.left .bubble {
-    background: #f5f5f5
+    /*background: #f5f5f5*/
+    background: #5761c7
 }
 
 .chat .item .middle ul>li.left p {
-    color: #bdbac2
+    /*color: #bdbac2*/
+    color: #fff
 }
 
 .chat .item .middle ul>li.left .attachment .round {
-    background: #007bff
+    background: #2c2e3e
 }
 
 .chat .item .middle ul>li.left .attachment .round .eva {
@@ -1429,7 +1435,7 @@ a.dropdown-item {
 }
 
 .chat .item .middle ul>li.left .attachment h5 {
-    color: #007bff
+    color: #2c2e3e
 }
 
 .chat .item .middle ul>li.left .attachment span {
@@ -1512,7 +1518,7 @@ a.dropdown-item {
 
 .utility .nav li .active {
     background: #fff;
-    color: #007bff
+    color: #2c2e3e
 }
 
 .utility .nav li a {
@@ -1608,9 +1614,9 @@ a.dropdown-item {
 }
 
 .files>li h5 {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
-    color: #007bff;
+    color: #2c2e3e;
     white-space: normal;
     margin-bottom: 8px
 }
@@ -1645,7 +1651,7 @@ a.dropdown-item {
     -ms-flex-align: center;
     align-items: center;
     padding: 25px 30px;
-    background: #007bff;
+    background: #2c2e3e;
     border-bottom: none
 }
 
@@ -1661,7 +1667,7 @@ a.dropdown-item {
 }
 
 .modal-header .round:hover {
-    color: #007bff
+    color: #2c2e3e
 }
 
 .modal-header .round .eva {
@@ -1694,7 +1700,7 @@ a.dropdown-item {
 
 .modal-body .nav li .active {
     background: #fff;
-    color: #007bff
+    color: #2c2e3e
 }
 
 .modal-body .nav li a {
@@ -1705,7 +1711,7 @@ a.dropdown-item {
 }
 
 .modal-body h5 {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
     margin-bottom: 15px
 }
@@ -1782,7 +1788,7 @@ a.dropdown-item {
 }
 
 .modal-body .custom-control-input:checked~.custom-control-label::before {
-    background: #007bff
+    background: #2c2e3e
 }
 
 .modal-footer {
@@ -1847,7 +1853,7 @@ a.dropdown-item {
 
 .sign .item a {
     font-weight: 500;
-    color: #007bff
+    color: #2c2e3e
 }
 
 .sign .item a:hover {
@@ -1943,12 +1949,12 @@ a.dropdown-item {
     }
     .sidebar {
         width: 336px;
-        height: 100vh
+        height: 80vh
     }
     .chat {
         flex: 1;
         max-width: calc(100vw - 300px);
-        height: 100vh;
+        height: 80vh;
         overflow: hidden
     }
     .chat .item .top ul>li:nth-child(5) {
