@@ -74,7 +74,7 @@ class ProductStocksController  extends AppController
                             ->contain(['Customers'])
                             ->where(['CustomerWishes.product_id' => $val['product_id']])
                             ->all();
-                        foreach($listWhises as $vals){  
+                        foreach($listWhises as $vals){
                             if ($this->Notification->create(
                                 $vals['customer_id'],
                                 '2',
@@ -84,7 +84,7 @@ class ProductStocksController  extends AppController
                                 $val['product_id'],
                                 2,
                                 Configure::read('mainSite').'/images/70x59/'. $val['image'],
-                                Configure::read('frontsite').'products/detail/'. $val['slug'],
+                                Configure::read('frontsite').'products/detail/'. $val['slug']
                             )) {
 
                                 $this->Notification->triggerCount(
