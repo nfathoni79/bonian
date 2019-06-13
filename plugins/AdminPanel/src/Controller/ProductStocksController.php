@@ -15,6 +15,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductStockMutationsTable ProductStockMutations
  * @property \AdminPanel\Model\Table\ProductOptionStocksTable ProductOptionStocks
  * @property \AdminPanel\Model\Table\ProductOptionValueListsTable ProductOptionValueLists
+ * @property \AdminPanel\Model\Table\CustomerWishesTable CustomerWishes
  *
  * @method \AdminPanel\Model\Entity\Brand[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -32,6 +33,7 @@ class ProductStocksController  extends AppController
         $this->loadModel('AdminPanel.ProductOptionValueLists');
         $this->loadModel('AdminPanel.ProductOptionStocks');
         $this->loadModel('AdminPanel.Branches');
+        $this->loadModel('AdminPanel.CustomerWishes');
     }
 
 
@@ -66,6 +68,33 @@ class ProductStocksController  extends AppController
                 switch ($val['tipe']) {
                     case 'penambahan':
                         $this->ProductStockMutations->saving($val['id'],'1', $val['stock'],$val['description']);
+
+                        /* Find on whistlist CustomerWishes */
+                        $listWhises = $this->CustomerWishes->find()
+                            ->contain(['Customers'])
+                            ->where(['CustomerWishes.product_id' => $val['product_id']])
+                            ->all();
+                        foreach($listWhises as $vals){
+                            if ($this->Notification->create(
+                                $vals['customer_id'],
+                                '2',
+                                $val['name']. ' produk restock',
+                                'Produk '.$val['name'].', variant : '. $val['variant'].' telah di restock. Kini anda  dapat melakukan order untuk produk tersebut.',
+                                'Products',
+                                $val['product_id'],
+                                2,
+                                Configure::read('mainSite').'/images/70x59/'. $val['image'],
+                                Configure::read('frontsite').'products/detail/'. $val['slug']
+                            )) {
+
+                                $this->Notification->triggerCount(
+                                    $vals['customer_id'],
+                                    $vals['reffcode']
+                                );
+                            }
+                        }
+
+
                     break;
                     case 'pengurangan':
                         $this->ProductStockMutations->saving($val['id'],'2', ($val['stock'] * -1),$val['description']);
@@ -86,9 +115,21 @@ class ProductStocksController  extends AppController
 
         if ($this->DataTable->isAjax()) {
             $datatable = $this->DataTable->adapter('AdminPanel.ProductOptionStocks')
-                ->contain(['Products','ProductOptionPrices'])
+                ->contain([
+                    'Products' => [
+                        'ProductImages'
+                    ],
+                    'ProductOptionPrices'
+                ])
                 ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
-                    return $exp->like('ProductOptionPrices.sku', '%' . $search . '%');
+
+                    $orConditions = $exp->or_([
+                        'ProductOptionPrices.sku LIKE' => '%' . $search .'%',
+                        'Products.name LIKE' => '%' . $search .'%',
+                        'Products.sku LIKE' => '%' . $search .'%',
+                    ]);
+                    return $exp
+                        ->add($orConditions);
                 });
 
 
