@@ -10,6 +10,7 @@ use Cake\ORM\TableRegistry;
  *
  * @property int $id
  * @property string $email
+ * @property string $username
  * @property string $password
  * @property int $group_id
  * @property int $user_status_id
@@ -33,6 +34,7 @@ class User extends Entity
      */
     protected $_accessible = [
         'email' => true,
+        'username' => true,
         'password' => true,
         'group_id' => true,
         'user_status_id' => true,
