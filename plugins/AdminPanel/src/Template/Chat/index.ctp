@@ -701,7 +701,7 @@ $this->Html->script([
                              <p>${message.text}</p>
                             </div>
                            </div>
-                           <span>${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})} <!-- <i data-eva="done-all"></i> --></span>
+                           <span class="msg-date">${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})} <!-- <i data-eva="done-all"></i> --></span>
                           </div>
                          </li>`;
             } else {
@@ -713,7 +713,7 @@ $this->Html->script([
                              <p>${message.text}</p>
                             </div>
                            </div>
-                           <span>${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})}</span>
+                           <span class="msg-date">${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})}</span>
                           </div>
                          </li>`;
             }
@@ -773,7 +773,7 @@ $this->Html->script([
                     <div class="content">
                         <div class="headline">
                             <h5>${room.name}</h5>
-                            <span>${moment(room.lastMessageAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})}</span>
+                            <span class="msg-date">${moment(room.lastMessageAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})}</span>
                         </div>
                     <p></p>
                     </div>
