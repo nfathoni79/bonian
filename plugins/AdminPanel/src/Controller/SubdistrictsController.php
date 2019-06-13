@@ -109,7 +109,13 @@ class SubdistrictsController extends AppController
             }
             $this->Flash->error(__('The subdistrict could not be saved. Please, try again.'));
         }
-        $cities = $this->Subdistricts->Cities->find('list', ['limit' => 200]);
+
+        $cities = $this->Subdistricts->Cities->find('list', [
+            'keyField' => 'id',
+            'valueField' => function (\AdminPanel\Model\Entity\City $cities) {
+                return $cities->get('type') . ' ' . $cities->get('name');
+            }
+        ]);
         $this->set(compact('subdistrict', 'cities'));
     }
 
