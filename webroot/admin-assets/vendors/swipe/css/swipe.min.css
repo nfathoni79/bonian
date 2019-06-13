@@ -2079,3 +2079,10 @@ a.dropdown-item {
         overflow: hidden
     }
 }
+
+.typing {
+    font-size:12px;
+    font-style: italic;
+    font-weight: normal;
+    color:#999999;
+}

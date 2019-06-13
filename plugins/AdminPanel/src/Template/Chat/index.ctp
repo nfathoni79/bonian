@@ -675,6 +675,7 @@ $this->Html->script([
                          <input class="form-control" placeholder="Type message..." rows="1"></input>
                          <button type="submit" class="btn prepend"><i data-eva="paper-plane"></i></button>
                         </form>
+                        <span class="typing" style=""></span>
                        </div>
                       </div>
                      </div>
@@ -734,10 +735,12 @@ $this->Html->script([
                     },
 
                     onUserStartedTyping: user => {
-                        console.log(`User ${user.name} started typing`, user);
+                        //console.log(`User ${user.name} started typing`, user);
+                        $("#room-" + room.id).find('.typing').text(`${user.name} started typing`);
                     },
                     onUserStoppedTyping: user => {
-                        console.log(`User ${user.name} stopped typing`);
+                        //console.log(`User ${user.name} stopped typing`);
+                        $("#room-" + room.id).find('.typing').text('');
                     }
                 },
             });
@@ -766,6 +769,19 @@ $this->Html->script([
             }, 100);
 
             eva.replace();
+        });
+
+        $(document).on('keyup', 'form.message-to-send input', function () {
+            //console.log('sedang menulis');
+            var roomId = $(this).parents('form')
+                .data('room-id').toString();
+            currentUser.isTypingIn({ roomId: roomId })
+                .then(() => {
+                    console.log('Success!')
+                })
+                .catch(err => {
+                    //console.log(`Error sending typing indicator: ${err}`)
+                });
         });
 
         $(document).on('submit', '.message-to-send', function(e) {
