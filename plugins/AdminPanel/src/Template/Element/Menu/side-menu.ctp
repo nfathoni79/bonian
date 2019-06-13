@@ -271,7 +271,7 @@
                         'children' => []
                     ],
                     [
-                        'name' => 'Kabupaten',
+                        'name' => 'Kecamatan',
                         'url' => ['controller' => 'Subdistricts', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []

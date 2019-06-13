@@ -47,23 +47,12 @@ class ReportsController extends AppController
         }
 
         $by_periods = $this->byPeriodShare($datestart, $dateend);
-//        debug($by_periods);
-//        exit;
         $this->set(compact('by_periods'));
     }
 
     protected function byPeriodShare($start = null, $end = null)
     {
 
-        //get date diff
-        if ($this->validDate($start) && $this->validDate($end)) {
-            $time = Time::parse($start);
-            $diff_days = $time->diffInDays(Time::parse($end));
-            $diff_months = $time->diffInMonths(Time::parse($end));
-            $diff_years = $time->diffInYears(Time::parse($end));
-
-
-        }
 
         $datatable = $this->ShareStatistics->find()->group(['media_type']);
         $datatable->select([
@@ -87,20 +76,7 @@ class ReportsController extends AppController
             });
         }
 
-//        debug($datatable);
-//        exit;
-//        $datatable->group(['media_type']);
-//        switch ($type) {
-//            case 'year':
-//                $datatable->group(['year']);
-//                break;
-//            case 'month':
-//                $datatable->group(['month', 'year']);
-//                break;
-//            case 'day':
-                $datatable->group(['day', 'month', 'year']);
-//                break;
-//        }
+        $datatable->group(['month', 'year']);
 
         $datatable = $datatable
             ->order([
@@ -110,22 +86,22 @@ class ReportsController extends AppController
 
                 switch ($row['type']) {
                     case 'wa':
-                        $row->name = date('d M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Whatsapp';
+                        $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Whatsapp';
                         break;
                     case 'tw':
-                        $row->name = date('d M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Twitter';
+                        $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Twitter';
                         break;
                     case 'fb':
-                        $row->name = date('d M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Facebook';
+                        $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Facebook';
                         break;
                     case 'sms':
-                        $row->name = date('d M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Sms';
+                        $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Sms';
                         break;
                     case 'line':
-                        $row->name = date('d M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Line';
+                        $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Line';
                         break;
                 }
- 
+
                 return $row;
             })
             ->toArray();
@@ -532,7 +508,7 @@ class ReportsController extends AppController
                 $datatable->group(['month', 'year']);
                 break;
             case 'day':
-                $datatable->group(['day', 'month', 'year']);
+                $datatable->group(['month', 'year']);
                 break;
         }
 
@@ -543,13 +519,13 @@ class ReportsController extends AppController
             ->map(function(\AdminPanel\Model\Entity\CustomerMutationPoint $row) use($type) {
                 switch ($type) {
                     case 'year':
-                        $row->name = date('d M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day));
+                        $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day));
                         break;
                     case 'month':
-                        $row->name = date('d M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day));
+                        $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day));
                         break;
                     case 'day':
-                        $row->name = date('d M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day));
+                        $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day));
                         break;
                 }
 

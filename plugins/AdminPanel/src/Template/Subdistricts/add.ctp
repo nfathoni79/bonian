@@ -33,7 +33,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Kabupaten') ?>
+                                <?= __('Kecamatan') ?>
                             </span>
                         </a>
                     </li>
@@ -43,7 +43,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Kabupaten') ?>
+                                <?= __('Daftar Kecamatan') ?>
                             </span>
                         </a>
                     </li>
@@ -53,7 +53,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Tambah Kabupaten') ?>
+                                <?= __('Tambah Kecamatan') ?>
                             </span>
                         </a>
                     </li>
@@ -68,7 +68,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Tambah Kabupaten') ?>
+                            <?= __('Tambah Kecamatan') ?>
                         </h3>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
                 echo $this->Form->control('city_id', ['options' => $cities, 'class' => $default_class.' select2','label' => 'Kategori Kota']);
-                echo $this->Form->control('name',['class' => $default_class,'label' => 'Nama Kabupaten']);
+                echo $this->Form->control('name',['class' => $default_class,'label' => 'Nama Kecamatan']);
             ?>
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">

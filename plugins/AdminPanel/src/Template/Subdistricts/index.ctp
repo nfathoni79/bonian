@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Kabupaten') ?>
+                                <?= __('Kecamatan') ?>
                             </span>
                         </a>
                     </li>
@@ -44,7 +44,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Kabupaten') ?>
+                                <?= __('Daftar Kecamatan') ?>
                             </span>
                         </a>
                     </li>
@@ -59,7 +59,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Daftar Kabupaten') ?>
+                            <?= __('Daftar Kecamatan') ?>
                         </h3>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                             <a href="<?= $this->Url->build(['action' => 'add']); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
                                 <span>
                                     <i class="la la-plus"></i>
-                                    <span><?= __('Tambah Kabupaten') ?></span>
+                                    <span><?= __('Tambah Kecamatan') ?></span>
                                 </span>
                             </a>
                         </li>
@@ -207,7 +207,7 @@
 
                     {
                         field: 'Subdistricts.name',
-                        title: 'Nama Kabupaten',
+                        title: 'Nama Kecamatan',
                         template: function(row) {
                             return row.name;
                         }
