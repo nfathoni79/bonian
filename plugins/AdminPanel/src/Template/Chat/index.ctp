@@ -604,30 +604,34 @@ $this->Html->script([
         chatManager
             .connect({
                 onAddedToRoom: room => {
-                    console.log("added to room: ", room);
+                    //console.log("added to room: ", room);
+                    var domInvoice = subscribeRoom(room);
+                    $('#conversations').find('.discussions').prepend(domInvoice);
                 },
                 onRemovedFromRoom: room => {
-                    console.log("removed from room: ", room);
+                    //console.log("removed from room: ", room);
 
                 },
                 onUserJoinedRoom: (room, user) => {
-                    console.log("user: ", user, " joined room: ", room)
+                    //console.log("user: ", user, " joined room: ", room)
                 },
                 onUserLeftRoom: (room, user) => {
-                    console.log("user: ", user, " left room: ", room)
+                    //console.log("user: ", user, " left room: ", room)
                 },
                 onPresenceChanged: ({ previous, current }, user) => {
-                    console.log("user: ", user, " was ", previous, " but is now ", current)
+                    //console.log("user: ", user, " was ", previous, " but is now ", current)
                 },
             })
             .then(cUser => {
                 currentUser = cUser
                 window.currentUser = cUser
                 var domInvoice = '';
-                var rooms = currentUser.rooms.reverse();
+                //var rooms = currentUser.rooms.reverse();
+                var rooms = _.sortBy(currentUser.rooms, [function(o) { return o.lastMessageAt ? o.lastMessageAt : o.updatedAt; }]);
+                rooms = rooms.reverse();
                 for(var i in rooms) {
                     if (rooms[i]) {
-                        console.log(rooms[i])
+                        //console.log(rooms[i])
                         domInvoice += subscribeRoom(rooms[i]);
                     }
                 }
@@ -716,7 +720,21 @@ $this->Html->script([
             var scroll = $('#room-' + message.roomId).find('#scroll');
             scroll.scrollTop(scroll.find('ul').height());
 
-            $('[aria-controls="room-'+message.roomId+'"]').find('p').html(message.text);
+            var roomList = $('[aria-controls="room-'+message.roomId+'"]');
+            roomList.attr('data-last-message', message.createdAt)
+                .find('p').html(message.text);
+
+            roomList.find('span').text(moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'}));
+
+            //sort list
+
+            $('.discussions li').sort(function (a, b) {
+                var contentA = (new Date($(a).find('a').attr('data-last-message'))).getTime();
+                var contentB = (new Date($(b).find('a').attr('data-last-message'))).getTime();
+                return (contentA > contentB) ? -1 : (contentA < contentB) ? 1 : 0;
+            }).appendTo('.discussions');
+
+
         }
 
         function subscribeRoom(room) {
@@ -730,7 +748,7 @@ $this->Html->script([
                 roomId: room.id,
                 hooks: {
                     onMessage: message => {
-                        console.log("new message:", message);
+                        //console.log("new message:", message);
                         renderMessage(message);
                     },
 
@@ -748,7 +766,7 @@ $this->Html->script([
             unreadCount = '';
 
             return `<li>
-                <a href="#room-${room.id}" class="filter invoice" data-chat="open" data-toggle="tab" role="tab" aria-controls="room-${room.id}" aria-selected="true">
+                <a href="#room-${room.id}" data-last-message="${room.lastMessageAt}" class="filter invoice" data-chat="open" data-toggle="tab" role="tab" aria-controls="room-${room.id}" aria-selected="true">
                     <div class="content">
                         <div class="headline">
                             <h5>${room.name}</h5>
@@ -777,7 +795,7 @@ $this->Html->script([
                 .data('room-id').toString();
             currentUser.isTypingIn({ roomId: roomId })
                 .then(() => {
-                    console.log('Success!')
+                    //console.log('Success!')
                 })
                 .catch(err => {
                     //console.log(`Error sending typing indicator: ${err}`)
