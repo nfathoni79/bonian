@@ -88,7 +88,7 @@ class CustomersController  extends AppController
                         ])
                         ->send(
                             $save->get('id'),
-                            'Verifikasi Alamat Email Kamu Di Zolaku',
+                            'Verifikasi Alamat Email Kamu Di Bonian',
                             'verification'
                         );
 

@@ -30,6 +30,13 @@
                 ]
             ],
             [
+                'name' => 'Customer Chat',
+                'url' => ['controller' => 'Chat', 'action' => 'index'],
+                'icon' => 'm-menu__link-icon flaticon-chat-1',
+                'children' => [
+                ]
+            ],
+            [
                 'name' => 'Konten Halaman',
                 'url' => '#',
                 'icon' => 'm-menu__link-icon  flaticon-browser',
@@ -81,13 +88,13 @@
             [
                 'name' => 'Toko Cabang',
                 'url' => ['controller' => 'Branches', 'action' => 'index'],
-                'icon' => 'm-menu__link-icon flaticon-settings',
+                'icon' => 'm-menu__link-icon flaticon-network',
                 'children' => []
             ],
             [
                 'name' => 'Produk',
                 'url' => '#',
-                'icon' => 'm-menu__link-icon flaticon-box',
+                'icon' => 'm-menu__link-icon flaticon-tool',
                 'children' => [
                     [
                         'name' => 'Manajemen Produk',
@@ -168,7 +175,7 @@
             [
                 'name' => 'Produk Digital',
                 'url' => '#',
-                'icon' => 'm-menu__link-icon flaticon-box',
+                'icon' => 'm-menu__link-icon flaticon-laptop',
                 'children' => [
                     [
                         'name' => 'Daftar Produk',
@@ -181,7 +188,7 @@
             [
                 'name' => 'Penjualan',
                 'url' => '#',
-                'icon' => 'm-menu__link-icon flaticon-box',
+                'icon' => 'm-menu__link-icon flaticon-business',
                 'children' => [
                     [
                         'name' => 'Daftar Pembelian',
@@ -285,9 +292,16 @@
                 ]
             ],
             [
+                'name' => 'Diskusi Produk',
+                'url' => ['controller' => 'ProductDiscussion', 'action' => 'index'],
+                'icon' => 'm-menu__link-icon flaticon-comment',
+                'children' => [
+                ]
+            ],
+            [
                 'name' => 'Reports',
                 'url' => '#',
-                'icon' => 'm-menu__link-icon flaticon-settings',
+                'icon' => 'm-menu__link-icon flaticon-diagram',
                 'children' => [
                     [
                         'name' => 'Product Review Report',
@@ -340,23 +354,9 @@
                 ]
             ],
             [
-                'name' => 'Log Aktifitas',
-                'url' => ['controller' => 'Logs', 'action' => 'index'],
-                'icon' => 'm-menu__link-icon flaticon-apps',
-                'children' => [
-                ]
-            ],
-            [
-                'name' => 'Diskusi Produk',
-                'url' => ['controller' => 'ProductDiscussion', 'action' => 'index'],
-                'icon' => 'm-menu__link-icon flaticon-apps',
-                'children' => [
-                ]
-            ],
-            [
                 'name' => 'FAQ',
                 'url' => '#',
-                'icon' => 'm-menu__link-icon flaticon-apps',
+                'icon' => 'm-menu__link-icon flaticon-questions-circular-button',
                 'children' => [
                     [
                         'name' => 'Faq Kategori',
@@ -373,9 +373,9 @@
                 ]
             ],
             [
-                'name' => 'Customer Chat',
-                'url' => ['controller' => 'Chat', 'action' => 'index'],
-                'icon' => 'm-menu__link-icon flaticon-apps',
+                'name' => 'Log Aktifitas',
+                'url' => ['controller' => 'Logs', 'action' => 'index'],
+                'icon' => 'm-menu__link-icon flaticon-time',
                 'children' => [
                 ]
             ],

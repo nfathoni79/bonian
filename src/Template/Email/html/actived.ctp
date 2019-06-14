@@ -3,7 +3,7 @@
     <p>&nbsp;</p>
     <div style="color: #636363; font-size: 14px;">
         <p>Selamat akun kamu telah aktif, dan alamat email <?php echo $email;?> telah di anggap valid. </p>
-        <p>Mari berbelanja dan dapatkan berbagai penawaran ekslusif dan tips-tips menarik dari zolaku.</p>
+        <p>Mari berbelanja dan dapatkan berbagai penawaran ekslusif dan tips-tips menarik dari bonian.</p>
         <p></p>
     </div>
 </div>
