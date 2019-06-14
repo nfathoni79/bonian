@@ -77,12 +77,7 @@
                         'name' => 'Networking',
                         'url' => ['controller' => 'Customers', 'action' => 'network'],
                         'icon' => 'm-menu__link-bullet'
-                    ],
-                    [
-                        'name' => 'Statistik Share',
-                        'url' => ['controller' => 'Customers', 'action' => 'share'],
-                        'icon' => 'm-menu__link-bullet'
-                    ],
+                    ], 
                 ]
             ],
             [

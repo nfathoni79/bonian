@@ -9,7 +9,7 @@
 									Bonian.id
 								</a>
 							</span>
-            </div> 
+            </div>
         </div>
     </div>
 </footer>
