@@ -91,6 +91,10 @@ class UsersTable extends Table
             ->notBlank('user_status_id');
 
         $validator
+            ->notBlank('username')
+            ->alphaNumeric('username', 'username harus alfanumeric');
+
+        $validator
             ->notBlank('first_name', 'first name is empty');
 
         return $validator;
@@ -147,6 +151,7 @@ class UsersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->isUnique(['username']));
         $rules->add($rules->existsIn(['group_id'], 'Groups'));
         $rules->add($rules->existsIn(['user_status_id'], 'UserStatus'));
 

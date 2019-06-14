@@ -73,6 +73,7 @@
                     $default_class = 'form-control form-control-danger m-input m-input--air';
                     echo $this->Form->controls([
                             'email' => ['class' => $default_class,'label' => 'Alamat Email'],
+                            'username' => ['class' => $default_class,'label' => 'Username'],
                             'first_name' => ['class' => $default_class,'label' => 'Nama Depan'],
                             'last_name' => ['class' => $default_class,'label' => 'Nama Belakang'],
                             'password' => ['class' => $default_class, 'required' => false, 'value' => '','label' => 'Password'],

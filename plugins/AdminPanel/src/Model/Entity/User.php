@@ -12,6 +12,8 @@ use Cake\ORM\TableRegistry;
  * @property string $email
  * @property string $username
  * @property string $password
+ * @property string $first_name
+ * @property string $last_name
  * @property int $group_id
  * @property int $user_status_id
  * @property \Cake\I18n\FrozenTime $created

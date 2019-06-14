@@ -3,6 +3,7 @@ namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
 use AdminPanel\Lib\AclSync;
+use Cake\Core\Configure;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Database\Query;
 use Cake\Auth\DefaultPasswordHasher;
@@ -205,6 +206,19 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
+
+
+                try {
+
+                    $entity = [
+                        'id' => $user->username,
+                        'name' => $user->first_name . ' ' . $user->last_name
+                    ];
+
+                    $user = $this->ChatKit->getInstance()->createUser($entity);
+                } catch(\Exception $e) {
+
+                }
 
                 return $this->redirect(['action' => 'index']);
             }
