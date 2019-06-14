@@ -125,16 +125,16 @@ class ReportsController extends AppController
                 ->contain([
                     'ProductRatings'
                 ])
+                ->where(['Products.rating_count > ' => 0])
                 ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
                     $orConditions = $exp->or_([
                         'Products.name LIKE' => '%' . $search .'%',
-                        'Products.modified LIKE' => '%' . $search .'%',
-                        'Products.rating_count LIKE' => '%' . $search .'%',
+//                        'Products.modified LIKE' => '%' . $search .'%',
+//                        'Products.rating_count LIKE' => '%' . $search .'%'
                     ]);
                     return $exp
                         ->add($orConditions);
                 })
-                ->where(['Products.rating_count > ' => 0])
             ;
 
             $result = $datatable
