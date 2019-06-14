@@ -2,12 +2,14 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Orders Controller
  * @property \AdminPanel\Model\Table\OrdersTable $Orders
  * @property \AdminPanel\Model\Table\OrderShippingDetailsTable $OrderShippingDetails
  * @property \AdminPanel\Model\Table\TransactionsTable $Transactions
+ * @property \AdminPanel\Model\Table\ProductRatingsTable $ProductRatings
  * @method \AdminPanel\Model\Entity\Order[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class OrdersController extends AppController
@@ -19,6 +21,7 @@ class OrdersController extends AppController
         $this->loadModel('AdminPanel.Orders');
         $this->loadModel('AdminPanel.OrderShippingDetails');
         $this->loadModel('AdminPanel.Transactions');
+        $this->loadModel('AdminPanel.ProductRatings');
     }
 
 
@@ -202,20 +205,47 @@ class OrdersController extends AppController
 
 
         if ($this->request->is(['patch', 'post', 'put'])) {
+//            Configure::write('debug',true);
             //$order = $this->Orders->patchEntity($order, $this->request->getData());
             //if ($this->Orders->save($order)) {
             //    $this->Flash->success(__('The order has been saved.'));
 
             //    return $this->redirect(['action' => 'index']);
             //}
-//            debug($this->request->getData('origin'));
-//            exit;
             foreach($order->order_details as $detail) {
                 foreach($this->request->getData('origin') as $origin => $shipping) {
                     if(!empty($shipping['order_status_id'])){
                         if ($detail->get('branch_id') == $origin) {
+
+
+                            /* Sementara menunggu IPN dari JNE */
+                            /* Pemberian ratting produk ketika selesai order ke table ProductRatings */
+                            if($shipping['order_status_id'] == 4){
+                                foreach($detail->order_detail_products as $vals){
+                                    $check = $this->ProductRatings->find()
+                                        ->where([
+                                            'order_id' => $detail->order_id,
+                                            'product_id' => $vals->product_id,
+                                        ])->first();
+                                    if(empty($check)){
+                                        $saveRatting = $this->ProductRatings->newEntity([
+                                            'order_id' =>  $detail->order_id,
+                                            'product_id' => $vals->product_id,
+                                            'customer_id' => $order->get('customer_id'),
+                                            'rating' => 0,
+                                            'status' => 0,
+                                        ]);
+                                        $this->ProductRatings->save($saveRatting);
+
+                                    }
+                                }
+                            }
+                            /* END SEMENTARA */
+
                             $detail = $this->Orders->OrderDetails->patchEntity($detail, $shipping);
                             if ($this->Orders->OrderDetails->save($detail)) {
+
+
                                 $query = $this->OrderShippingDetails->query();
                                 $query->update()
                                     ->set(['status' => $shipping['order_status_id']])
@@ -259,7 +289,7 @@ class OrdersController extends AppController
                                             $order->customer->reffcode
                                         );
                                     }
-									
+
 									/* MAILER SHIPPING */
                                     $statusShiping = [3 => 'dikirimkan', 4 => 'sampai'];
                                     $this->Mailer
@@ -278,7 +308,6 @@ class OrdersController extends AppController
                                         );
 
                                 }
-
 
 
                                 $this->Flash->success(__('The order has been saved.'));
