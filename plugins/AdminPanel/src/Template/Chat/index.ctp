@@ -11,7 +11,7 @@ $this->Html->css([
 <!-- Layout -->
 <div class="layout">
 	<!-- Start of Sidebar -->
-	<div class="sidebar">
+	<div class="sidebar m-scrollable" data-scrollable="true" data-height="auto">
 		<div class="container">
 			<div class="tab-content">
 				<!-- Start of Discussions -->
@@ -144,6 +144,11 @@ $this->Html->script([
     const csrfToken = '<?= $this->request->getParam('_csrfToken'); ?>';
     var currentUser;
     $(document).ready(function () {
+
+        //$('.sidebar.m-scrollable').attr('data-height', $(window).height() + 600);
+
+
+
         const tokenProvider = new Chatkit.TokenProvider({
             url: '<?= $this->Url->build(['action' => 'authorize']); ?>',
             queryParams: {
