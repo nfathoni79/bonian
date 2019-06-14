@@ -207,6 +207,14 @@ $this->Html->script([
 
         function renderChatContainer(room)
         {
+
+            //var participant = [];
+            //for(var i in room.userIds) {
+            //    participant.push(`<span class="member ${room.userIds[i]}">${room.userIds[i]}</span>`);
+            //}
+
+            //participant = participant.join(', ');
+
             return `<div class="tab-pane fade" id="room-${room.id}" role="tabpanel">
                 <div class="item">
                  <div class="content">
@@ -214,8 +222,8 @@ $this->Html->script([
                    <div class="top">
                     <div class="headline">
                          <div class="content">
-                          <h5>Quincy Hensen</h5>
-                          <span>Away</span>
+                          <h5>${room.name}</h5>
+                          <span></span>
                          </div>
                         </div>
                         <ul>
@@ -313,7 +321,7 @@ $this->Html->script([
         }
 
         function subscribeRoom(room) {
-            //console.log("Going to subscribe to", room)
+            //console.log("Going to subscribe to", room.userIds)
 
             var chatRoom = renderChatContainer(room);
 
