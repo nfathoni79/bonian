@@ -124,11 +124,11 @@
                                         <label class="col-form-label col-md-3">Periode Filter</label>
                                         <div class="col-md-9">
                                             <div class="input-daterange input-group" id="m_datepicker_5">
-                                                <input type="text" class="form-control m-input" name="start" value="<?= $datestart;?>" />
+                                                <input type="text" class="form-control m-input" name="start" autocomplete="off"  value="<?= $datestart;?>" />
                                                 <div class="input-group-append">
                                                     <span class="input-group-text"><i class="la la-ellipsis-h"></i></span>
                                                 </div>
-                                                <input type="text" class="form-control" name="end" value="<?= $dateend;?>" />
+                                                <input type="text" class="form-control" name="end" autocomplete="off"  value="<?= $dateend;?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -223,7 +223,6 @@
                 <?= $this->Flash->render() ?>
 
                 <div class="m_datatable">
-
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="table-abandoned">
                         <thead>
                         <tr>
@@ -278,12 +277,14 @@ echo $this->Html->script([
         todayHighlight: true,
         templates: arrows,
         format: 'yyyy-mm-dd',
+        orientation: "bottom",
     });
-
     // AREA CHART
+
+
     new Morris.Area({
         element: 'm_morris_2',
-        data: "<?php echo json_encode($newList);?>",
+        data: <?php echo json_encode($newList);?>,
         xkey: 'date',
         ykeys: ['value'],
         labels: ['In percent (%)']

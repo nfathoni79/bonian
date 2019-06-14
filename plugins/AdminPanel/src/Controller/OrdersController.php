@@ -264,7 +264,7 @@ class OrdersController extends AppController
                                     ],
                                     4 => [
                                         'title' => 'Status Pengiriman',
-                                        'message' => vsprintf('Order dengan invoice %s sudah selesai ', [
+                                        'message' => vsprintf('Order dengan invoice %s sudah selesai, Silahkan memberikan ulasan untuk produk tersebut. ', [
                                             $order->invoice
                                         ])
                                     ],

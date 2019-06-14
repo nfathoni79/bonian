@@ -117,6 +117,7 @@
                         <thead>
                         <tr>
                             <th>ID</th>
+                            <th>SKU</th>
                             <th>Nama Produk</th>
                             <th>Rating</th>
                             <th>Total Review</th>
@@ -185,6 +186,7 @@ $this->Html->script([
         },
         columns: [
             {data: 'id'},
+            {data: 'sku'},
             {data: 'name'},
             {data: 'rating_count'},
             {data: 'count_review'},
@@ -204,30 +206,36 @@ $this->Html->script([
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return row.name.toUpperCase();
+                    return row.sku.toUpperCase();
                 }
             },
             {
                 targets: 2,
+                render: function (data, type, row, meta) {
+                    return row.name.toUpperCase();
+                }
+            },
+            {
+                targets: 3,
                 orderable: false,
                 render: function (data, type, row, meta) {
                     return '<span class="stars" data-rating="'+row.rating_count+'" data-num-stars="5" ></span>';
                 }
             },
             {
-                targets: 3,
+                targets: 4,
                 render: function (data, type, row, meta) {
                     return row.count_review+' Orang';
                 }
             },
             {
-                targets: 4,
+                targets: 5,
                 render: function (data, type, row, meta) {
                     return row.modified;
                 }
             },
             {
-                targets: 5,
+                targets: 6,
                 render: function (data, type, row, meta) {
                     return '<a href="<?= $this->Url->build(['action' => 'listReview']); ?>/'+row.id+'" class="m-btn btn btn-primary btn-sm" title="Show Reviews">\n' +
                         '<i class="la la-eye"></i> Tampilkan Daftar Reviews \n' +

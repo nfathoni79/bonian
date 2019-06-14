@@ -69,11 +69,11 @@
                             <label class="col-form-label col-md-3">Periode Filter</label>
                             <div class="col-md-9">
                                 <div class="input-daterange input-group" id="m_datepicker_5">
-                                    <input type="text" class="form-control m-input" name="start" value="<?= $this->request->getQuery('start'); ?>" />
+                                    <input type="text" class="form-control m-input" name="start" autocomplete="off" value="<?= $this->request->getQuery('start'); ?>" />
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="la la-ellipsis-h"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" name="end" value="<?= $this->request->getQuery('end');?>" />
+                                    <input type="text" class="form-control" name="end" autocomplete="off" value="<?= $this->request->getQuery('end');?>" />
                                 </div>
                             </div>
                         </div>

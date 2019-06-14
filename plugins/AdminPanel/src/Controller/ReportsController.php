@@ -2,6 +2,7 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use Cake\Core\Configure;
 use Cake\Database\Expression\IdentifierExpression;
 use Cake\Database\Expression\QueryExpression;
 use Cake\I18n\Number;
@@ -119,6 +120,7 @@ class ReportsController extends AppController
                 ->select([
                     'id',
                     'name',
+                    'sku',
                     'rating_count',
                     'modified',
                 ])
@@ -129,7 +131,7 @@ class ReportsController extends AppController
                 ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
                     $orConditions = $exp->or_([
                         'Products.name LIKE' => '%' . $search .'%',
-//                        'Products.modified LIKE' => '%' . $search .'%',
+                        'Products.sku LIKE' => '%' . $search .'%',
 //                        'Products.rating_count LIKE' => '%' . $search .'%'
                     ]);
                     return $exp
@@ -230,8 +232,8 @@ class ReportsController extends AppController
                 ])
                 ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
                     $orConditions = $exp->or_([
-//                        'Customers.first_name LIKE' => '%' . $search .'%',
-//                        'Customers.last_name LIKE' => '%' . $search .'%',
+                        'Products.name LIKE' => '%' . $search .'%',
+                        'Products.sku LIKE' => '%' . $search .'%',
 //                        'ProductRatings.comment LIKE' => '%' . $search .'%',
                     ]);
                     return $exp
@@ -353,7 +355,7 @@ class ReportsController extends AppController
                 $percent = $percent;
             }
 
-            $newList[$k]['value'] = $percent;
+            $newList[$k]['value'] = bcdiv((string)$percent, 1, 2);
 
 
         }
@@ -393,8 +395,8 @@ class ReportsController extends AppController
                     $orConditions = $exp->or_([
                         'Products.name LIKE' => '%' . $search .'%',
                         'Products.sku LIKE' => '%' . $search .'%',
-                        'Products.model LIKE' => '%' . $search .'%',
-                        'Products.view LIKE' => '%' . $search .'%',
+//                        'Products.model LIKE' => '%' . $search .'%',
+//                        'Products.view LIKE' => '%' . $search .'%',
                     ]);
                     return $exp
                         ->add($orConditions);
