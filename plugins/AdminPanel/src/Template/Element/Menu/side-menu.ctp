@@ -77,7 +77,7 @@
                         'name' => 'Networking',
                         'url' => ['controller' => 'Customers', 'action' => 'network'],
                         'icon' => 'm-menu__link-bullet'
-                    ], 
+                    ],
                 ]
             ],
             [

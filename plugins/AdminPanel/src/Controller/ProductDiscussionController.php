@@ -36,7 +36,7 @@ class ProductDiscussionController extends AppController
                     ]
                 ])
                 ->where(['ProductDiscussions.id IN ' => $subquery])
-                ->order(['ProductDiscussions.created' => 'DESC']);
+                ->order(['ProductDiscussions.created' => 'DESC','ProductDiscussions.read' => 'ASC']);
 
             $result = $datatable
                 ->setSorting()
