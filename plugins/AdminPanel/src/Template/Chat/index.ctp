@@ -277,13 +277,32 @@ $this->Html->script([
                 });
 
             var template = '';
+
+            let attachment;
+            var m_attachment = '';
+            if (message.attachment) {
+                switch (message.attachment.type) {
+                    case "image":
+                        attachment = document.createElement("img")
+                        break
+                    default:
+                        break
+                }
+
+                attachment.className += " attachment-image"
+                attachment.width = "400"
+                attachment.style = "margin-top: 10px; width: 400px; height: auto; border-radius: 0; display: block;"
+                attachment.src = message.attachment.link;
+                m_attachment = attachment.outerHTML;
+            }
+
             if (user_id.toUpperCase() === message.senderId.toUpperCase()) {
                 template += `<li>
                           <div class="content">
                             <span style="color: #555555; margin-bottom: 10px;">${message.senderId}</span>
                            <div class="message">
                             <div class="bubble">
-                             <p>${message.text}</p>
+                             <p>${message.text + m_attachment}</p>
                             </div>
                            </div>
                            <span class="msg-date">${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})} <!-- <i data-eva="done-all"></i> --></span>
@@ -295,7 +314,7 @@ $this->Html->script([
                             <span style="color: #555555; margin-bottom: 10px;">${message.senderId}</span>
                            <div class="message">
                             <div class="bubble">
-                             <p>${message.text}</p>
+                             <p>${message.text + m_attachment}</p>
                             </div>
                            </div>
                            <span class="msg-date">${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A'})}</span>

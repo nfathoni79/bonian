@@ -1284,7 +1284,7 @@ a.dropdown-item {
 
 .chat .item .middle ul>li .bubble {
     display: inline-block;
-    max-width: 360px;
+    /*max-width: 360px;*/
     background: #2c2e3e;
     text-align: left;
     border-radius: 6px
