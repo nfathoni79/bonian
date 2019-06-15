@@ -13,6 +13,7 @@
 /webroot/uploads/*
 /webroot/files/Customers/avatar/*
 /webroot/files/ProductCategories/path/*
+/webroot/attachments/*
 
 # OS generated files #
 ######################

@@ -79,6 +79,10 @@ Router::scope('/', function (RouteBuilder $routes) {
         $routes->connect('/avatar', ['controller' => 'Images', 'action' => 'avatar']);
         $routes->connect('/ratings', ['controller' => 'Images', 'action' => 'ratings']);
     });
+
+    Router::scope('/attachments', function (RouteBuilder $routes) {
+        $routes->connect('/image', ['controller' => 'Attachments', 'action' => 'image']);
+    });
     /**
      * Connect catchall routes for all controllers.
      *
