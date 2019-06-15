@@ -14,6 +14,7 @@
 /webroot/files/Customers/avatar/*
 /webroot/files/ProductCategories/path/*
 /webroot/attachments/*
+!/webroot/attachments/empty
 
 # OS generated files #
 ######################
