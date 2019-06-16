@@ -73,3 +73,35 @@ input.disabled {
 .dropzone .dz-error {
     border: 1px red dashed;
 }
+
+.chat-discussions {
+    height: calc(100vh - 300px);
+    margin-top: 10px;
+}
+
+.chat-discussions .room {
+    cursor: pointer;
+}
+
+.chat-discussions .room.active {
+    background: #efefef;
+}
+
+.chat-discussions .room-info {
+    text-align: right;
+    padding-right: 10px;
+}
+
+.room-info .chat-date {
+    font-size:11px;
+    display: block;
+    width: 120px;
+}
+
+.m-badge.hidden {
+    display: none;
+}
+
+.m-messenger__messages {
+    height: calc(100vh - 410px);
+}

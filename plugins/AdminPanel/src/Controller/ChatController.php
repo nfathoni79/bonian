@@ -20,6 +20,11 @@ class ChatController extends AppController
         //debug($this->request->getSession()->read());
     }
 
+    public function v2()
+    {
+
+    }
+
     public function authorize()
     {
         $this->request->allowMethod('post');
