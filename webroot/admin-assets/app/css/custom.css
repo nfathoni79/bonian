@@ -124,6 +124,18 @@ input.disabled {
     display: none;
 }
 
+.room .m-widget4__info {
+	padding-right: 0 !important;
+}
+
+.room .m-widget4__title {
+	width: 130px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	float: left;
+}
+
 .chat-time-status-read {
 
     padding-left: 15px;

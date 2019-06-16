@@ -532,9 +532,9 @@ $this->Html->script([
 
             return `<div class="m-widget4__item room ${active}" data-toggle="tab" href="#room-${room.id}" role="tab" data-last-message-id="" data-unread-count="${room.unreadCount}" data-room-id="${room.id}" data-last-message="${room.lastMessageAt ? room.lastMessageAt : room.createdAt}">
                         <div class="m-widget4__info">
-                            <span class="m-widget4__title">
+                            <div class="m-widget4__title">
                                 ${room.name}
-                            </span>
+                            </div>
                             <span class="m-badge m-badge--success m-badge--dot online-status hidden"></span>
                             <br>
                             <span class="m-widget4__sub last-message">
