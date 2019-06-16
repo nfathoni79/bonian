@@ -105,3 +105,13 @@ input.disabled {
 .m-messenger__messages {
     height: calc(100vh - 410px);
 }
+
+.m-messenger .typing {
+    font-style: italic;
+    font-size: 10px;
+}
+
+.m-messenger__message-date {
+    font-size: 10px;
+    margin-left: 15px;
+}

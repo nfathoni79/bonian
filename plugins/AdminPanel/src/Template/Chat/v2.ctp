@@ -39,8 +39,8 @@
 												<span class="m-portlet__head-icon">
 													<i class="flaticon-time"></i>
 												</span>
-                                <h3 class="m-portlet__head-text">
-                                    Portlet Dropdown Icons
+                                <h3 class="m-portlet__head-text chat-head-title">
+
                                 </h3>
                             </div>
                         </div>
@@ -111,7 +111,9 @@
                             </div>
 
 
-                            <div class="m-messenger__seperator"></div>
+                            <div class="m-messenger__seperator">
+                                <span class="typing">&nbsp;</span>
+                            </div>
                             <div class="m-messenger__form">
                                 <div class="m-messenger__form-controls">
                                     <input type="text" name="" placeholder="Type here..." class="m-messenger__form-input form-control">
@@ -184,6 +186,9 @@ $this->Html->script([
                     });
             }
 
+            var typing = $('.typing').attr('id', `typing-${roomId}`);
+            $('.chat-head-title').text($(this).find('.m-widget4__title').text());
+
             var scroll = $('#room-' + roomId);
             var height = 0;
             scroll.find('.m-messenger__wrapper').each(function() {
@@ -193,11 +198,24 @@ $this->Html->script([
 
 
 
+
+
         });
 
 
 
         $(".m-messenger__form-input").on('keyup', function (e) {
+
+            var roomId = String($('.m-messenger .tab-pane.active').data('room-id'));
+            currentUser.isTypingIn({ roomId: roomId })
+                .then(() => {
+                    //console.log('Success!')
+                })
+                .catch(err => {
+                    //console.log(`Error sending typing indicator: ${err}`)
+                });
+
+
             if (e.keyCode == 13) {
                 var roomId = String($('.m-messenger .tab-content .active').data('room-id'));
                 var messageText = $(this);
@@ -319,8 +337,13 @@ $this->Html->script([
                 m_attachment = attachment.outerHTML;
             }
 
-            var t = `<div class="m-messenger__wrapper">
+            var t = '';
+
+            //t += '<div class="m-messenger__datetime">3:15PM</div>';
+
+            t += `<div class="m-messenger__wrapper">
                         <div class="m-messenger__message ${messagePosition}">
+
                             <div class="m-messenger__message-body">
                                 <div class="m-messenger__message-arrow"></div>
                                 <div class="m-messenger__message-content">
@@ -330,6 +353,9 @@ $this->Html->script([
                                     <div class="m-messenger__message-text">
                                         ${message.text + m_attachment}
                                     </div>
+                                </div>
+                                <div class="m-messenger__message-date">
+                                    ${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'})}
                                 </div>
                             </div>
                         </div>
@@ -409,12 +435,12 @@ $this->Html->script([
                     },
 
                     onUserStartedTyping: user => {
-                        console.log(`User ${user.name} started typing`, user);
-                        //$("#room-" + room.id).find('.typing').text(`${user.name} started typing`);
+                        //console.log(`User ${user.name} started typing`, user);
+                        $("#typing-" + room.id).text(`${user.name} started typing`);
                     },
                     onUserStoppedTyping: user => {
-                        console.log(`User ${user.name} stopped typing`);
-                        //$("#room-" + room.id).find('.typing').text('');
+                        //console.log(`User ${user.name} stopped typing`);
+                        $("#typing-" + room.id).html('&nbsp;');
                     }
                 },
             });
