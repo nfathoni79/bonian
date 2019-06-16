@@ -15,6 +15,7 @@
 /webroot/files/ProductCategories/path/*
 /webroot/attachments/*
 !/webroot/attachments/empty
+/webroot/files/ProductRatingImages/*
 
 # OS generated files #
 ######################
