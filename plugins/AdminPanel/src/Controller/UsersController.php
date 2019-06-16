@@ -220,6 +220,15 @@ class UsersController extends AppController
 
                 }
 
+                try {
+                    $this->ChatKit->getInstance()->assignGlobalRoleToUser([
+                        'user_id' => $user->username,
+                        'name' => 'admin'
+                    ]);
+                } catch(\Exception $e) {
+
+                }
+
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));

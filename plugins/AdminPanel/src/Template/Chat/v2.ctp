@@ -101,6 +101,36 @@
                                 </li>
                             </ul>
                             <?php */ ?>
+                            <ul class="m-portlet__nav">
+                                <li class="m-portlet__nav-item m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover">
+                                    <a href="#" class="m-portlet__nav-link m-portlet__nav-link--icon m-dropdown__toggle">
+                                        <i class="la la-ellipsis-h"></i>
+                                    </a>
+                                    <div class="m-dropdown__wrapper">
+                                        <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                                        <div class="m-dropdown__inner">
+                                            <div class="m-dropdown__body">
+                                                <div class="m-dropdown__content">
+                                                    <ul class="m-nav">
+
+                                                        <li class="m-nav__item">
+                                                            <a href="javascript:void(0);" class="m-nav__link delete-chat-conversation">
+                                                                <i class="m-nav__link-icon flaticon-delete"></i>
+                                                                <span class="m-nav__link-text">Hapus chat ini</span>
+                                                            </a>
+                                                        </li>
+                                                        <!-- <li class="m-nav__separator m-nav__separator--fit">
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#" class="btn btn-outline-danger m-btn m-btn--pill m-btn--wide btn-sm">Cancel</a>
+                                                        </li> -->
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="m-portlet__body">
@@ -169,7 +199,7 @@ $this->Html->script([
             var roomId = $(this).data('room-id');
             var self = this;
 
-            if ($(this).data('unread-count') > 0) {
+            if ($(this).attr('data-unread-count') > 0) {
                 currentUser.setReadCursor({
                     roomId: String($(this).data('room-id')),
                     position: lastMessageId
@@ -177,7 +207,7 @@ $this->Html->script([
                     .then(() => {
                         //console.log('Success!')
                         $(self).attr('data-unread-count', 0)
-                            .find('.m-badge')
+                            .find('.unread-status')
                             .addClass('hidden')
                             .text('0');
                     })
@@ -200,6 +230,21 @@ $this->Html->script([
 
 
 
+        });
+
+        $(document).on('click', '.delete-chat-conversation', function(e) {
+            var roomId = $('.m-messenger').find('.tab-pane.active').data('room-id');
+            var roomName = $('.chat-discussions').find('.room.active').find('.m-widget4__title').text().trim();
+           if(confirm(`Apakah anda yakin untuk menghapus ${roomName} conversation ini?`)) {
+               currentUser.deleteRoom({ roomId: String(roomId) })
+                   .then(() => {
+                       console.log(`Deleted room with ID: ${roomId}`)
+
+                   })
+                   .catch(err => {
+                       console.log(`Error deleted room ${roomId}: ${err}`)
+                   })
+           }
         });
 
 
@@ -271,15 +316,24 @@ $this->Html->script([
                     //console.log("added to room: ", room);
                     $('.chat-discussions').prepend(subscribeRoom(room));
                 },
+                onRoomDeleted: room => {
+                    //console.log("delete to room: ", room);
+                    $(`[data-room-id="${room.id}"]`).remove();
+                    $('.chat-discussions .room:first').trigger('click');
+                    delete participant[room.id];
+                },
                 onRemovedFromRoom: room => {
-                    console.log("removed from room: ", room);
+                    //console.log("removed from room: ", room);
+                    _.remove(participant[room.id], _.find(participant[room.id], {'id': currentUser.id}));
 
                 },
                 onUserJoinedRoom: (room, user) => {
                     //console.log("user: ", user, " joined room: ", room)
+                    participant[room.id].push(user);
                 },
                 onUserLeftRoom: (room, user) => {
                     //console.log("user: ", user, " left room: ", room)
+                    _.remove(participant[room.id], _.find(participant[room.id], {'id': user.id}));
                 },
                 onPresenceChanged: ({ previous, current }, user) => {
                     //console.log("user: ", user, " was ", previous, " but is now ", current)
@@ -309,16 +363,16 @@ $this->Html->script([
                 var domInvoice = '';
                 var rooms = _.sortBy(currentUser.rooms, [function(o) { return o.lastMessageAt ? o.lastMessageAt : o.updatedAt; }]);
                 rooms = rooms.reverse();
+                //subscribenewRooms(rooms);
                 for(var i in rooms) {
                     if (rooms[i]) {
-                        //console.log(rooms[i])
                         domInvoice += subscribeRoom(rooms[i], i);
                     }
                 }
-                $('.chat-discussions').prepend(domInvoice);
+                //$('.chat-discussions').prepend(domInvoice);
 
                 setTimeout(function () {
-                    isInitial = true;
+                    //isInitial = true;
                     mUtil.data($('.chat-discussions').get(0)).get('ps').update();
                 }, 2000);
 
@@ -329,7 +383,7 @@ $this->Html->script([
             });
         
         function renderChatContainer(room, position) {
-            var active = (position && position === '0') ? 'active' : '';
+            var active = (parseInt(position) === 0) ? 'active' : '';
             return `<div class="tab-pane ${active}" id="room-${room.id}" data-room-id="${room.id}">
                         <div class="m-messenger__messages m-scrollable m-scrollable--track" data-scrollable="true">
 
@@ -366,6 +420,7 @@ $this->Html->script([
             var cursorPosition = m.data('cursor-position');
 
             if (messagePosition === 'm-messenger__message--out') {
+                //console.log(cursorPosition, message.id, message.id <= cursorPosition)
                 statusMessage = `<div class="chat-time-status-${message.id <= cursorPosition ? 'read' : 'delivery'}">
                 ${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'})}
                 </div>
@@ -398,7 +453,7 @@ $this->Html->script([
 
 
             var isActiveTab = $('.m-messenger .tab-pane.active');
-            if (isActiveTab.length > 0) {
+            if (isActiveTab.length > 0 && isInitial) {
                 var scroll = $('#room-' + message.roomId).find('.m-messenger__messages');
                 var height = 0;
                 scroll.find('.m-messenger__wrapper').each(function() {
@@ -428,11 +483,11 @@ $this->Html->script([
 
             //console.log(discuss.hasClass('active'), isInitial, message.roomId)
 
-            if (!discuss.hasClass('active') && isInitial) {
+            if (isInitial && !discuss.hasClass('active')) {
                 var unreadCount = parseInt(discuss.attr('data-unread-count'));
                 unreadCount++;
                 discuss.attr('data-unread-count', unreadCount);
-                discuss.find('.m-badge')
+                discuss.find('.unread-status')
                     .removeClass('hidden')
                     .text(unreadCount);
             }
@@ -446,7 +501,18 @@ $this->Html->script([
 
         }
 
-        function subscribeRoom(room, position) {
+        function subscribenewRooms(rooms, index) {
+            index = index || 0;
+
+            if (rooms[index]) {
+                subscribeRoom(rooms[index], index, function(room) {
+                    subscribenewRooms(rooms, ++index);
+                })
+            }
+        }
+
+        function subscribeRoom(room, position, callback) {
+            //console.log('subscribe room', room);
 
             $('.m-messenger').find('.tab-content').append(renderChatContainer(room, position));
             var t = $(`#room-${room.id}`).find('.m-messenger__messages');
@@ -484,6 +550,7 @@ $this->Html->script([
                             .removeClass('chat-time-status-delivery')
                             .addClass('chat-time-status-read');*/
                         $(`#room-${cursor.roomId}`)
+                            .attr('data-cursor-position', cursor.position)
                             .find('.m-messenger__wrapper')
                             .each(function(){
                                 if ($(this).data('message-id') <= cursor.position) {
@@ -498,8 +565,21 @@ $this->Html->script([
                     }
                 },
             }).then(currentRoom => {
-                //console.log('oke', currentRoom.name, currentRoom.users);
+                ///console.log('oke', currentRoom.name, currentRoom.users);
                 participant[currentRoom.id] = currentRoom.users;
+
+                if (currentUser.rooms.length === (parseInt(position) + 1)) {
+                    setTimeout(function(){
+                        isInitial = true;
+                        console.log('finish loaded isInitial', isInitial);
+                    }, 2000);
+                }
+
+                if (typeof callback === 'function') {
+                    callback(currentRoom);
+                }
+
+
                 for(var i in currentRoom.users) {
                     if (currentRoom.users[i].id !== user_id) {
                         //read cursor
@@ -510,27 +590,27 @@ $this->Html->script([
                         if (userCursor) {
                             $('.m-messenger')
                                 .find(`[data-room-id="${userCursor.room.id}"]`)
-                                .attr('data-cursor-position', userCursor.position);
-
-                            /*console.log(`${currentRoom.users[i].id} has read up to ${
-                                userCursor.position
-                                } in ${
-                                userCursor.room.name
-                                }.`)*/
+                                .attr('data-cursor-position', userCursor.position)
+                                .find('.m-messenger__wrapper').each(function(){
+                                    if ($(this).data('message-id') <= userCursor.position) {
+                                        $(this).find('.chat-time-status-delivery')
+                                            .removeClass('chat-time-status-delivery')
+                                            .addClass('chat-time-status-read');
+                                    }
+                            })
                         }
 
                     }
                 }
 
 
-
             });
 
 
-            var active = (position && position === '0') ? 'active' : '';
+            var active = (parseInt(position) === 0) ? 'active' : '';
 
 
-            return `<div class="m-widget4__item room ${active}" data-toggle="tab" href="#room-${room.id}" role="tab" data-last-message-id="" data-unread-count="${room.unreadCount}" data-room-id="${room.id}" data-last-message="${room.lastMessageAt ? room.lastMessageAt : room.createdAt}">
+            var template = `<div class="m-widget4__item room ${active}" data-toggle="tab" href="#room-${room.id}" role="tab" data-last-message-id="" data-unread-count="${room.unreadCount}" data-room-id="${room.id}" data-last-message="${room.lastMessageAt ? room.lastMessageAt : room.createdAt}">
                         <div class="m-widget4__info">
                             <div class="m-widget4__title">
                                 ${room.name}
@@ -542,10 +622,12 @@ $this->Html->script([
                             </span>
                         </div>
                         <div class="m-widget4__ext room-info">
-                            <span class="m-widget6__text pull-right chat-date">${moment(room.lastMessageAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'})}</span>
-                            <span class="m-badge m-badge--info ${room.unreadCount > 0 ? '' : 'hidden'}">${room.unreadCount}</span>
+                            <span class="m-widget6__text pull-right chat-date">${moment(room.lastMessageAt ? room.lastMessageAt : room.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'})}</span>
+                            <span class="m-badge m-badge--info unread-status ${room.unreadCount > 0 ? '' : 'hidden'}">${room.unreadCount}</span>
                         </div>
                     </div>`;
+            $('.chat-discussions').prepend(template);
+            tinysort('div.chat-discussions>div',{data:'last-message',order:'desc'});
         }
 
 
