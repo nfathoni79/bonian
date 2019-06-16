@@ -134,7 +134,7 @@ input.disabled {
 }
 
 .room .m-widget4__title.nowrap {
-	width: 130px;
+	width: 128px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;

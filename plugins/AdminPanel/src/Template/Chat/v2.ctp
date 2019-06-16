@@ -194,6 +194,21 @@ $this->Html->script([
 
         const noopLogger = (...items) => {}
 
+        function resizeChatList() {
+            if (parseInt($('.room.active').width()) <= 284) {
+                $('.room').find('.m-widget4__title').addClass('nowrap');
+            } else {
+                $('.room').find('.m-widget4__title').removeClass('nowrap');
+            }
+        }
+
+
+
+        $(window).on('resize', function() {
+           //console.log('resize')
+            resizeChatList();
+        });
+
         $(document).on('click', '.chat-discussions .room', function () {
             var lastMessageId = $(this).data('last-message-id');
             var roomId = $(this).data('room-id');
@@ -571,6 +586,7 @@ $this->Html->script([
                 if (currentUser.rooms.length === (parseInt(position) + 1)) {
                     setTimeout(function(){
                         isInitial = true;
+                        resizeChatList();
                         console.log('finish loaded isInitial', isInitial);
                     }, 2000);
                 }
