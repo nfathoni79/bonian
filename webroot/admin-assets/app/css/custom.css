@@ -115,3 +115,22 @@ input.disabled {
     font-size: 10px;
     margin-left: 15px;
 }
+
+.room .m-badge--dot {
+    margin-top: -5px;
+}
+
+.room .m-badge--dot.hidden {
+    display: none;
+}
+
+.chat-time-status-read {
+
+    padding-left: 15px;
+    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMSIgaGVpZ2h0PSI2Ij48cGF0aCBkPSJNNy4xMyAwTDIuNjI2IDQuNTUuNTk4IDIuNDkzIDAgMy4xbDIuNjI1IDIuNjZMNy43MjcuNjA3ek01LjcxNSA0LjYybC0uMzg4LS40LS41OTkuNjA1Ljk4NyAxLjAwN0wxMC44MTYuNjc4bC0uNTk3LS42MDd6IiBmaWxsPSIjNDJCNTQ5IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=) no-repeat  left center;
+}
+
+.chat-time-status-delivery {
+    padding-left: 15px;
+    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMSIgaGVpZ2h0PSI2Ij48cGF0aCBkPSJNNy4xMyAwTDIuNjI2IDQuNTUuNTk4IDIuNDkzIDAgMy4xbDIuNjI1IDIuNjZMNy43MjcuNjA3ek01LjcxNSA0LjYybC0uMzg4LS40LS41OTkuNjA1Ljk4NyAxLjAwN0wxMC44MTYuNjc4bC0uNTk3LS42MDd6IiBmaWxsPSIjOTk5IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=) no-repeat  left center;
+}

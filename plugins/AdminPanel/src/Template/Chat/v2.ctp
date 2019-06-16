@@ -40,7 +40,6 @@
 													<i class="flaticon-time"></i>
 												</span>
                                 <h3 class="m-portlet__head-text chat-head-title">
-
                                 </h3>
                             </div>
                         </div>
@@ -150,6 +149,7 @@ $this->Html->script([
     const instance_locator = '<?= \Cake\Core\Configure::read('ChatKit.instance_locator'); ?>';
     var isInitial = false;
     var currentUser;
+    var participant = {};
     $(document).ready(function() {
         const tokenProvider = new Chatkit.TokenProvider({
             url: '<?= $this->Url->build(['action' => 'authorize']); ?>',
@@ -269,9 +269,10 @@ $this->Html->script([
             .connect({
                 onAddedToRoom: room => {
                     //console.log("added to room: ", room);
+                    $('.chat-discussions').prepend(subscribeRoom(room));
                 },
                 onRemovedFromRoom: room => {
-                    //console.log("removed from room: ", room);
+                    console.log("removed from room: ", room);
 
                 },
                 onUserJoinedRoom: (room, user) => {
@@ -282,6 +283,24 @@ $this->Html->script([
                 },
                 onPresenceChanged: ({ previous, current }, user) => {
                     //console.log("user: ", user, " was ", previous, " but is now ", current)
+                    for(var roomId in participant) {
+                        for(var i in participant[roomId]) {
+                            if (user.id == participant[roomId][i].id && user.id !== user_id) {
+                                var roomElement = $(`[data-room-id="${roomId}"]`);
+                                roomElement.find('.online-status')
+                                    .attr('data-user-name', user.id);
+                                if(current === 'online') {
+                                    roomElement
+                                        .find('.online-status')
+                                        .removeClass('hidden')
+                                        .attr('title', `user ${user.id} is online`)
+                                } else {
+                                    roomElement.find('.online-status').addClass('hidden')
+                                        .attr('data-user-name', '');
+                                }
+                            }
+                        }
+                    }
                 },
             })
             .then(cUser => {
@@ -293,7 +312,7 @@ $this->Html->script([
                 for(var i in rooms) {
                     if (rooms[i]) {
                         //console.log(rooms[i])
-                        domInvoice += subscribeRoom(rooms[i]);
+                        domInvoice += subscribeRoom(rooms[i], i);
                     }
                 }
                 $('.chat-discussions').prepend(domInvoice);
@@ -309,8 +328,9 @@ $this->Html->script([
                 console.log("Error on connection: ", err)
             });
         
-        function renderChatContainer(room) {
-            return `<div class="tab-pane" id="room-${room.id}" data-room-id="${room.id}">
+        function renderChatContainer(room, position) {
+            var active = (position && position === '0') ? 'active' : '';
+            return `<div class="tab-pane ${active}" id="room-${room.id}" data-room-id="${room.id}">
                         <div class="m-messenger__messages m-scrollable m-scrollable--track" data-scrollable="true">
 
                         </div>
@@ -338,11 +358,23 @@ $this->Html->script([
                 m_attachment = attachment.outerHTML;
             }
 
+
+            var m = $(`#room-${message.roomId}`);
             var t = '';
+            var statusMessage = '';
 
-            //t += '<div class="m-messenger__datetime">3:15PM</div>';
+            var cursorPosition = m.data('cursor-position');
 
-            t += `<div class="m-messenger__wrapper">
+            if (messagePosition === 'm-messenger__message--out') {
+                statusMessage = `<div class="chat-time-status-${message.id <= cursorPosition ? 'read' : 'delivery'}">
+                ${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'})}
+                </div>
+                `;
+            } else {
+                statusMessage = moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'});
+            }
+
+            t += `<div class="m-messenger__wrapper" data-message-id="${message.id}">
                         <div class="m-messenger__message ${messagePosition}">
 
                             <div class="m-messenger__message-body">
@@ -356,13 +388,13 @@ $this->Html->script([
                                     </div>
                                 </div>
                                 <div class="m-messenger__message-date">
-                                    ${moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'})}
+                                   ${statusMessage}
                                 </div>
                             </div>
                         </div>
                     </div>`;
 
-            var m = $(`#room-${message.roomId}`).find('.m-messenger__messages').append(t);
+            m.find('.m-messenger__messages').append(t);
 
 
             var isActiveTab = $('.m-messenger .tab-pane.active');
@@ -414,9 +446,9 @@ $this->Html->script([
 
         }
 
-        function subscribeRoom(room) {
+        function subscribeRoom(room, position) {
 
-            $('.m-messenger').find('.tab-content').append(renderChatContainer(room));
+            $('.m-messenger').find('.tab-content').append(renderChatContainer(room, position));
             var t = $(`#room-${room.id}`).find('.m-messenger__messages');
 
             mUtil.scrollerInit(t.get(0), {
@@ -426,6 +458,7 @@ $this->Html->script([
                     return mUtil.isInResponsiveRange("tablet-and-mobile") && t.data("mobile-height") ? t.data("mobile-height") : t.data("height")
                 }
             });
+
 
             currentUser.subscribeToRoom({
                 roomId: room.id,
@@ -442,16 +475,68 @@ $this->Html->script([
                     onUserStoppedTyping: user => {
                         //console.log(`User ${user.name} stopped typing`);
                         $("#typing-" + room.id).html('&nbsp;');
+                    },
+                    onNewReadCursor: cursor => {
+                        //Object { position: 102685653, updatedAt: "2019-06-16T12:36:10Z", userId: "ridwan", roomId: "23375421", type: 0, userStore: {…}, roomStore: {…} } m-messenger__wrapper
+                        /*$(`#room-${cursor.roomId}`)
+                            .find(`[data-message-id="${cursor.position}"]`)
+                            .find('.chat-time-status-delivery')
+                            .removeClass('chat-time-status-delivery')
+                            .addClass('chat-time-status-read');*/
+                        $(`#room-${cursor.roomId}`)
+                            .find('.m-messenger__wrapper')
+                            .each(function(){
+                                if ($(this).data('message-id') <= cursor.position) {
+                                    $(this)
+                                        .find('.m-messenger__message--out')
+                                        .find('.chat-time-status-delivery')
+                                        .removeClass('chat-time-status-delivery')
+                                        .addClass('chat-time-status-read');
+                                }
+                            });
+
                     }
                 },
+            }).then(currentRoom => {
+                //console.log('oke', currentRoom.name, currentRoom.users);
+                participant[currentRoom.id] = currentRoom.users;
+                for(var i in currentRoom.users) {
+                    if (currentRoom.users[i].id !== user_id) {
+                        //read cursor
+                        const userCursor = currentUser.readCursor({
+                            roomId: currentRoom.id,
+                            userId: currentRoom.users[i].id
+                        })
+                        if (userCursor) {
+                            $('.m-messenger')
+                                .find(`[data-room-id="${userCursor.room.id}"]`)
+                                .attr('data-cursor-position', userCursor.position);
+
+                            /*console.log(`${currentRoom.users[i].id} has read up to ${
+                                userCursor.position
+                                } in ${
+                                userCursor.room.name
+                                }.`)*/
+                        }
+
+                    }
+                }
+
+
+
             });
 
 
-            return `<div class="m-widget4__item room" data-toggle="tab" href="#room-${room.id}" role="tab" data-last-message-id="" data-unread-count="${room.unreadCount}" data-room-id="${room.id}" data-last-message="${room.lastMessageAt ? room.lastMessageAt : room.createdAt}">
+            var active = (position && position === '0') ? 'active' : '';
+
+
+            return `<div class="m-widget4__item room ${active}" data-toggle="tab" href="#room-${room.id}" role="tab" data-last-message-id="" data-unread-count="${room.unreadCount}" data-room-id="${room.id}" data-last-message="${room.lastMessageAt ? room.lastMessageAt : room.createdAt}">
                         <div class="m-widget4__info">
                             <span class="m-widget4__title">
                                 ${room.name}
-                            </span><br>
+                            </span>
+                            <span class="m-badge m-badge--success m-badge--dot online-status hidden"></span>
+                            <br>
                             <span class="m-widget4__sub last-message">
                                 &nbsp;
                             </span>
