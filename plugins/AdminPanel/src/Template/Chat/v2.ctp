@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="m-portlet__body">
-                        <div class="m-widget4 m-scrollable nav chat-discussions" data-scrollable="true" role="tablist">
+                        <div class="m-widget4 m-scrollable m-scrollable--track nav chat-discussions" data-scrollable="true" role="tablist">
                         </div>
                     </div>
                 </div>
@@ -300,6 +300,7 @@ $this->Html->script([
 
                 setTimeout(function () {
                     isInitial = true;
+                    mUtil.data($('.chat-discussions').get(0)).get('ps').update();
                 }, 2000);
 
 
@@ -310,7 +311,7 @@ $this->Html->script([
         
         function renderChatContainer(room) {
             return `<div class="tab-pane" id="room-${room.id}" data-room-id="${room.id}">
-                        <div class="m-messenger__messages m-scrollable" data-scrollable="true">
+                        <div class="m-messenger__messages m-scrollable m-scrollable--track" data-scrollable="true">
 
                         </div>
                     </div>`;
