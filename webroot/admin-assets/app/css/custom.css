@@ -150,3 +150,21 @@ input.disabled {
     padding-left: 15px;
     background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMSIgaGVpZ2h0PSI2Ij48cGF0aCBkPSJNNy4xMyAwTDIuNjI2IDQuNTUuNTk4IDIuNDkzIDAgMy4xbDIuNjI1IDIuNjZMNy43MjcuNjA3ek01LjcxNSA0LjYybC0uMzg4LS40LS41OTkuNjA1Ljk4NyAxLjAwN0wxMC44MTYuNjc4bC0uNTk3LS42MDd6IiBmaWxsPSIjOTk5IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=) no-repeat  left center;
 }
+
+.m-messenger__message-pic.pic-relative {
+    position: relative;
+}
+
+.pic-online-status {
+    position: absolute;
+    top: 36px;
+    right: 11px;
+    border: 2px solid #fff;
+    height: 10px !important;
+    width: 10px !important;
+}
+
+.m-messenger__message-no-pic .pic-online-status {
+    top: 32px;
+    right: 3px;
+}

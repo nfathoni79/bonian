@@ -214,6 +214,7 @@ $this->Html->script([
             $(".chat-discussions .room").filter(function() {
                 $(this).toggle($(this).find('.m-widget4__title').text().toLowerCase().indexOf(value) > -1)
             });
+            mUtil.data($('.chat-discussions').get(0)).get('ps').update();
         });
 
         $(document).on('click', '.chat-discussions .room', function () {
@@ -453,12 +454,14 @@ $this->Html->script([
                 statusMessage = moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'});
                 var avatarURL = message.userStore.users[message.senderId].avatarURL;
                 if (avatarURL) {
-                    avatar = `<div class="m-messenger__message-pic">
+                    avatar = `<div class="m-messenger__message-pic pic-relative">
                         <img src="${avatarURL}" alt="" />
+                        <span class="m-badge m-badge--success m-badge--dot online-status pic-online-status" data-user-name="${message.senderId}"></span>
                     </div>`;
                 } else {
-                    avatar = `<div class="m-messenger__message-no-pic m--bg-fill-danger">
+                    avatar = `<div class="m-messenger__message-no-pic m--bg-fill-danger pic-relative">
                         <span>${message.senderId.substring(0, 1).toUpperCase()}</span>
+                        <span class="m-badge m-badge--success m-badge--dot online-status pic-online-status" data-user-name="${message.senderId}"></span>
                     </div>`;
                 }
             }
@@ -552,8 +555,8 @@ $this->Html->script([
             var t = $(`#room-${room.id}`).find('.m-messenger__messages');
 
             mUtil.scrollerInit(t.get(0), {
-                disableForMobile: !0,
-                handleWindowResize: !0,
+                disableForMobile: true,
+                handleWindowResize: true,
                 height: function() {
                     return mUtil.isInResponsiveRange("tablet-and-mobile") && t.data("mobile-height") ? t.data("mobile-height") : t.data("height")
                 }
