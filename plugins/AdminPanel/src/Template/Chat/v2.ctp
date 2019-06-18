@@ -16,7 +16,7 @@
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption" style="width: 100%; margin-top: 18px;">
                             <div class="m-input-icon m-input-icon--left">
-                                <input type="text" class="form-control m-input m-input--solid" placeholder="Email">
+                                <input type="text" class="form-control m-input m-input--solid chat-search-filter" placeholder="Cari invoice">
                                 <span class="m-input-icon__icon m-input-icon__icon--left"><span><i class="flaticon-search"></i></span></span>
                             </div>
                         </div>
@@ -207,6 +207,13 @@ $this->Html->script([
         $(window).on('resize', function() {
            //console.log('resize')
             resizeChatList();
+        });
+
+        $(".chat-search-filter").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $(".chat-discussions .room").filter(function() {
+                $(this).toggle($(this).find('.m-widget4__title').text().toLowerCase().indexOf(value) > -1)
+            });
         });
 
         $(document).on('click', '.chat-discussions .room', function () {
