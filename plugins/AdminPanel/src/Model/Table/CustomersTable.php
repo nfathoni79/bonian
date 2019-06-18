@@ -78,7 +78,7 @@ class CustomersTable extends Table
                     $tmp = tempnam(sys_get_temp_dir(), 'upload') . '.' . $extension;
                     // Use the Imagine library to DO THE THING
                     $size = new \Imagine\Image\Box(40, 40);
-                    $mode = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
+                    $mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
                     $imagine = new \Imagine\Gd\Imagine();
                     // Save that modified file to our temp file
                     $imagine->open($data['tmp_name'])

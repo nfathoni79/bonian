@@ -428,9 +428,11 @@ $this->Html->script([
             }
 
 
+
             var m = $(`#room-${message.roomId}`);
             var t = '';
             var statusMessage = '';
+            var avatar = '';
 
             var cursorPosition = m.data('cursor-position');
 
@@ -442,11 +444,21 @@ $this->Html->script([
                 `;
             } else {
                 statusMessage = moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'});
+                var avatarURL = message.userStore.users[message.senderId].avatarURL;
+                if (avatarURL) {
+                    avatar = `<div class="m-messenger__message-pic">
+                        <img src="${avatarURL}" alt="" />
+                    </div>`;
+                } else {
+                    avatar = `<div class="m-messenger__message-no-pic m--bg-fill-danger">
+                        <span>${message.senderId.substring(0, 1).toUpperCase()}</span>
+                    </div>`;
+                }
             }
 
             t += `<div class="m-messenger__wrapper" data-message-id="${message.id}">
                         <div class="m-messenger__message ${messagePosition}">
-
+                            ${avatar}
                             <div class="m-messenger__message-body">
                                 <div class="m-messenger__message-arrow"></div>
                                 <div class="m-messenger__message-content">
