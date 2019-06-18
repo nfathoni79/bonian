@@ -368,10 +368,20 @@ $this->Html->script([
                                     .attr('data-user-name', user.id);
                                 if(current === 'online') {
                                     roomElement
+                                        .find(`[data-user-name="${user.id}"]`)
+                                        .removeClass('hidden')
+                                        .attr('title', `user ${user.id} is online`);
+
+                                    roomElement
                                         .find('.online-status')
                                         .removeClass('hidden')
                                         .attr('title', `user ${user.id} is online`)
                                 } else {
+
+                                    roomElement
+                                        .find(`[data-user-name="${user.id}"]`)
+                                        .addClass('hidden');
+
                                     roomElement.find('.online-status').addClass('hidden')
                                         .attr('data-user-name', '');
                                 }
@@ -459,12 +469,12 @@ $this->Html->script([
                 if (avatarURL) {
                     avatar = `<div class="m-messenger__message-pic pic-relative">
                         <img src="${avatarURL}" alt="" />
-                        <span class="m-badge m-badge--success m-badge--dot online-status pic-online-status" data-user-name="${message.senderId}"></span>
+                        <span class="m-badge m-badge--success m-badge--dot  pic-online-status" data-user-name="${message.senderId}"></span>
                     </div>`;
                 } else {
                     avatar = `<div class="m-messenger__message-no-pic m--bg-fill-danger pic-relative">
                         <span>${message.senderId.substring(0, 1).toUpperCase()}</span>
-                        <span class="m-badge m-badge--success m-badge--dot online-status pic-online-status" data-user-name="${message.senderId}"></span>
+                        <span class="m-badge m-badge--success m-badge--dot pic-online-status" data-user-name="${message.senderId}"></span>
                     </div>`;
                 }
             }
