@@ -16,6 +16,7 @@ use phpDocumentor\Reflection\Types\Integer;
  * @property \AdminPanel\Model\Table\OptionsTable $Options
  * @property \AdminPanel\Model\Table\OptionValuesTable $OptionValues
  * @property \AdminPanel\Model\Table\BranchesTable $Branches
+ * @property \AdminPanel\Model\Table\ProductsTable $Products
  * @property \AdminPanel\Model\Table\ProductImageSizesTable $ProductImageSizes
  * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable $ProductToCategories
@@ -50,6 +51,7 @@ class ProductsController extends AppController
         $this->loadModel('AdminPanel.Attributes');
         $this->loadModel('AdminPanel.Brands');
         $this->loadModel('AdminPanel.CategoryToBrands');
+        $this->loadModel('AdminPanel.Products');
 
         $this->allowedFileType = [
             'image/jpg',
@@ -58,6 +60,88 @@ class ProductsController extends AppController
         ];
 
     }
+
+    /**
+     * Index method
+     *
+     * @return \Cake\Http\Response
+     */
+    public function index()
+    {
+        $general = $this->request->getData('general');
+        $sku = $this->request->getData('sku');
+        $stock = $this->request->getData('stock');
+        $publish = $this->request->getData('publish');
+        $created = $this->request->getData('created');
+
+        if ($this->DataTable->isAjax()) {
+            $datatable = $this->DataTable->adapter('AdminPanel.Products')
+                ->contain([
+                    'ProductToCategories' => [
+                        'ProductCategories'
+                    ],
+                    'ProductMetaTags',
+                    'Brands',
+                    'ProductTags' => [
+                        'Tags'
+                    ],
+                    'ProductToCourriers' => [
+                        'Courriers'
+                    ],
+                    'ProductWarranties',
+                    'ProductStockStatuses',
+                    'ProductStatuses',
+                    'ProductImages',
+                    'ProductAttributes' => [
+                        'Attributes'
+                    ],
+                    'ProductOptionPrices' => [
+                        'ProductOptionValueLists' => [
+                            'Options',
+                            'OptionValues',
+                        ],
+                        'ProductOptionStocks' => [
+                            'Branches'
+                        ]
+
+                    ],
+                ])
+                ->where(['Products.sku != ' => 'NULL']);
+
+            if($general){
+                $datatable->where(['Products.name LIKE' => '%' . trim($general) .'%']);
+            }
+            if($sku){
+                $datatable->where(['Products.sku LIKE' => '%' . trim($sku) .'%']);
+            }
+            if($stock){
+                $datatable->where(['Products.product_stock_status_id' => $stock]);
+            }
+            if($publish){
+                $datatable->where(['Products.product_status_id' => $publish]);
+            }
+            if($created){
+                $datatable->where(['DATE(Products.created)' => $created]);
+            }
+
+
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->map(function (\AdminPanel\Model\Entity\Product $row) {
+                    return $row;
+                })
+                ->toArray();
+
+
+
+
+            //set again datatable
+            $datatable->setData($result);
+            return $datatable->response();
+        }
+    }
+
 
     function slug($str){
         $str = strtolower(trim($str));
@@ -816,69 +900,6 @@ class ProductsController extends AppController
 
     }
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response
-     */
-    public function index()
-    {
-
-
-        if ($this->request->is('ajax')) {
-            $this->viewBuilder()->setLayout('ajax');
-
-            $pagination = $this->request->getData('pagination');
-            $sort = $this->request->getData('sort');
-            $query = $this->request->getData('query');
-
-            /** custom default query : select, where, contain, etc. **/
-            $data = $this->Products->find('all')
-                ->select();
-            $data->contain(['ProductStockStatuses', 'ProductWeightClasses', 'ProductStatuses', 'ProductImages']);
-            $data->where(['Products.sku != ' => 'NULL']);
-
-            if ($query && is_array($query)) {
-                if (isset($query['generalSearch'])) {
-                    $search = $query['generalSearch'];
-                    unset($query['generalSearch']);
-                    /**
-                        custom field for general search
-                        ex : 'Users.email LIKE' => '%' . $search .'%'
-                    **/
-                    $data->where(['Products.name LIKE' => '%' . $search .'%']);
-                }
-                $data->where($query);
-            }
-
-            if (isset($sort['field']) && isset($sort['sort'])) {
-                $data->order([$sort['field'] => $sort['sort']]);
-            }
-
-            if (isset($pagination['perpage']) && is_numeric($pagination['perpage'])) {
-                $data->limit($pagination['perpage']);
-            }
-            if (isset($pagination['page']) && is_numeric($pagination['page'])) {
-                $data->page($pagination['page']);
-            }
-
-            $total = $data->count();
-
-            $result = [];
-            $result['data'] = $data->toArray();
-
-
-            $result['meta'] = array_merge((array) $pagination, (array) $sort);
-            $result['meta']['total'] = $total;
-
-
-            return $this->response->withType('application/json')
-            ->withStringBody(json_encode($result));
-        }
-
-
-        $this->set(compact('products'));
-    }
 
     /**
      * View method

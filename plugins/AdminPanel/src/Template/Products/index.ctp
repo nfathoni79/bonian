@@ -1,17 +1,4 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $products
- * nevix
- */
-?>
-<!-- <div class="m-list-pics m-list-pics--sm m--padding-left-20" style="width:110px;">
-    <a href="#"><img src="/zolaku/images/50x50/fb0182b9a6eb45a5a10a8eb5e64b359e.jpg" title=""></a>
-    <a href="#"><img src="/zolaku/images/50x50/fb0182b9a6eb45a5a10a8eb5e64b359e.jpg" title=""></a>
-    <a href="#"><img src="/zolaku/images/50x50/fb0182b9a6eb45a5a10a8eb5e64b359e.jpg" title=""></a>
 
-</div> -->
-<!--begin::Modal-->
 <div class="modal fade" id="m_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -28,7 +15,7 @@
                     <label class="col-form-label col-lg-4">Cari FIle</label>
                     <div class="col-lg-8">
                         <?php
-                             echo $this->Form->control('files',['class' => 'form-control', 'type' => 'file','div' => false, 'label' => false,]);
+                        echo $this->Form->control('files',['class' => 'form-control', 'type' => 'file','div' => false, 'label' => false,]);
                         ?>
                     </div>
                 </div>
@@ -123,25 +110,108 @@
             <div class="m-portlet__body">
                 <?= $this->Flash->render() ?>
                 <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
-                    <div class="row align-items-center">
-                        <div class="col-xl-8 order-2 order-xl-1">
-                            <div class="form-group m-form__group row align-items-center">
-                                <div class="col-md-8">
-                                    <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
-                                        <span class="m-input-icon__icon m-input-icon__icon--left">
-                                            <span>
-                                                <i class="la la-search"></i>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
+                    <div class="form-group m-form__group row">
+                        <label for="example-text-input" class="col-2 col-form-label">General Search</label>
+                        <div class="col-4">
+                            <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                        </div>
+                        <div class="col-md-4">
+                            <a href="javascript:void(0)" class="btn btn-default btn-filtering">Advance Filtering</a>
+                        </div>
+                    </div>
+                    <div class="advance" style="display:none;">
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">Main SKU</label>
+                            <div class="col-4">
+                                <input type="text" class="form-control m-input" placeholder="SKU" id="sku">
                             </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">Stock Status</label>
+                            <div class="col-2">
+                                <?php
+                                echo $this->Form->control('Stock', [
+                                    'type' => 'select',
+                                    'options' => [
+                                        '1' => 'In Stock',
+                                        '2' => 'Out of Stock'
+                                    ],
+                                    'div' => false,
+                                    'label' => false,
+                                    'empty' => 'Stock Status',
+                                    'class' => 'form-control m-input',
+                                    'id' => 'stock'
+                                ]);?>
+                            </div>
+                            <label for="example-text-input" class="col-2 col-form-label">Publish Status</label>
+                            <div class="col-2">
+                                <?php
+                                echo $this->Form->control('Publish', [
+                                    'type' => 'select',
+                                    'options' => [
+                                        '1' => 'Publish',
+                                        '2' => 'Unpublish'
+                                    ],
+                                    'div' => false,
+                                    'label' => false,
+                                    'empty' => 'Publish Status',
+                                    'class' => 'form-control m-input',
+                                    'id' => 'publish'
+                                ]);?>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">Creation Date</label>
+                            <div class="col-2">
+                                <input type="text" name="created" class="form-control m-input" autocomplete="off" id="created">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-separator m-separator--md m-separator--dashed"></div>
+                    <div class="row">
+                        <div class="col-lg-11  offset-md-1">
+                            <button class="btn btn-brand m-btn m-btn--icon" id="m_search">
+                                    <span>
+                                        <i class="la la-search"></i>
+                                        <span>Search</span>
+                                    </span>
+                            </button>
+                            <button class="btn btn-secondary m-btn m-btn--icon" id="m_reset">
+                                    <span>
+                                        <i class="la la-close"></i>
+                                        <span>Reset</span>
+                                    </span>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-productss"></div>
+                <div class="m_datatable">
+                    <div class="table-responsive">
+                        <table class="table table-striped- table-bordered table-hover table-checkable" id="table-product-list">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>SKU</th>
+                                    <th>Stock Status</th>
+                                    <th>Harga Jual</th>
+                                    <th>Publish Status</th>
+                                    <th>View</th>
+                                    <th>Creation</th>
+                                    <th>Point</th>
+                                    <th>Categories</th>
+                                    <th>Supplier</th>
+                                    <th>Brand</th>
+                                    <th>Sub SKU</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -167,214 +237,301 @@
     </div>
 </div>
 
-<?php $this->append('script'); ?>
 <?php
-echo $this->Html->script([
-            '/admin-assets/app/js/lib-tools.js',
-    ]);
+$this->Html->css([
+    '/admin-assets/vendors/custom/datatables/datatables.bundle.css'
+], ['block' => true]);
+$this->Html->script([
+    '/admin-assets/vendors/custom/datatables/datatables.bundle',
+    '/admin-assets/vendors/custom/datatables/buttons.colVis.min',
+    '/admin-assets/app/js/lib-tools.js',
+], ['block' => true]);
 ?>
+<?php $this->append('script'); ?>
 <script>
 
-    function delete_data(id) {
-        $.post( "<?= $this->Url->build(['action' => 'delete']); ?>/" + id, { _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>' } )
-            .done(function( data ) {
-                location.href = '<?= $this->Url->build();?>';
-            });
+    var arrows;
+    if (mUtil.isRTL()) {
+        arrows = {
+            leftArrow: '<i class="la la-angle-right"></i>',
+            rightArrow: '<i class="la la-angle-left"></i>'
+        }
+    } else {
+        arrows = {
+            leftArrow: '<i class="la la-angle-left"></i>',
+            rightArrow: '<i class="la la-angle-right"></i>'
+        }
     }
 
-    function view_data(id) {
-        $('#modalView').modal('show');
-        $('.titleModal').html('Provinces View');
-        $('.contentModal').load( "<?= $this->Url->build(['action' => 'view']); ?>/" + id);
-    }
 
-    var DatatableRemoteAjaxDemo = function() {
-        var demo = function() {
-            var datatable = $('#table-productss').mDatatable({
-                data: {
-                    type: 'remote',
-                    source: {
-                        read: {
-                            method: 'POST',
-                            url: '<?= $this->Url->build(); ?>',
-                            cache: false,
-                            params: {
-                                _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
-                            },
-                            map: function(raw) {
-                                var dataSet = raw;
-                                if (typeof raw.data !== 'undefined') {
-                                    dataSet = raw.data;
-                                }
-                                return dataSet;
-                            },
-                        },
-                    },
-                    pageSize: 10,
-                    serverPaging: true,
-                    serverFiltering: true,
-                    serverSorting: true,
-                },
-                layout: {
-                    scroll: true,
-                    height: 550,
-                    footer: false
-                },
-                sortable: true,
-                pagination: true,
-                toolbar: {
-                    items: {
-                        pagination: {
-                            pageSizeSelect: [10, 20, 30, 50, 100],
-                        },
-                    },
-                },
-                search: {
-                    input: $('#generalSearch'),
-                },
-                order: [[ 0, "desc" ]],
-                columns: [
-                    {
-                        field: 'id',
-                        title: '#',
-                        sortable: false,
-                        width: 40,
-                        selector: false,
-                        textAlign: 'center',
-                        template: function(row, index, datatable) {
-                            var p = datatable.getPageSize();
-                            var c = (datatable.getCurrentPage() - 1) * p;
-                            return (index + 1) + c;
-                        }
-                    },
-                    {
-                        field: '#',
-                        title: 'Image',
-                        sortable: false,
-                        template: function(row) {
-                            // return row.name;
-                            var primary_image = '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"><img src="<?= $this->Url->build('/admin-assets/app/media/img/products/no-image.png');?>" style="width: 50px;" /></a>';
-                            if (typeof row.product_images != 'undefined' && row.product_images.length > 0) {
-                                primary_image = row.product_images[0].name;
-                                for(var i in row.product_images) {
-                                    if (row.product_images[i].primary === 1) {
-                                        primary_image = row.product_images[i].name;
-                                    }
-                                }
-                                primary_image = '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"><img src="<?= $this->Url->build('/images/50x50/');?>' + primary_image + '" style="width: 50px;" /></a>';
-                            }
-                            return primary_image;
-                        }
-                    },
-                    {
-                        field: 'Products.name',
-                        title: 'Name',
-                        template: function(row) {
-                            return row.name;
-                        }
-                    },
+    $('.btn-filtering').on('click',function(){
+        $(this).hide();
+        $('.advance').show();
+    })
 
-                    {
-                        field: 'Products.sku',
-                        title: 'SKU',
-                        template: function(row) {
-                            return row.sku;
-                        }
-                    },
+    $('#created').datepicker({
+        rtl: mUtil.isRTL(),
+        todayHighlight: true,
+        orientation: "bottom left",
+        templates: arrows,
+        format: 'yyyy-mm-dd'
+    });
 
-                    /*{
-                        field: 'Products.qty',
-                        title: 'Qty',
-                        template: function(row) {
-                            return row.qty;
-                        }
-                    },*/
-
-                    {
-                        field: 'ProductStockStatuses.name',
-                        title: 'Stock Status',
-                        template: function(row) {
-                            var status = {
-                                1: {'class': 'm-badge--success'},
-                                2: {'class': ' m-badge--danger'},
-                            };
-                            return '<span class="m-badge ' + status[row.product_stock_status_id].class + ' m-badge--wide">' + row.product_stock_status.name + '</span>';
-                        }
-                    },
-
-
-                    {
-                        field: 'Products.price',
-                        title: 'Harga Reguler',
-                        template: function(row) {
-                            return parseInt(row.price).format(0, 3, '.', ',');
-                        }
-                    },
-
-                    {
-                        field: 'Products.price_sale',
-                        title: 'Harga Jual',
-                        template: function(row) {
-                            return parseInt(row.price_sale).format(0, 3, '.', ',');
-                        }
-                    },
-                    {
-                        field: 'ProductStatuses.name',
-                        title: 'Publish Status',
-                        template: function(row) {
-
-                            var status = {
-                                1: {'class': 'm-badge--success'},
-                                2: {'class': ' m-badge--danger'},
-                            };
-                            return '<span class="m-badge ' + status[row.product_status_id].class + ' m-badge--wide">' + row.product_status.name + '</span>';
-                        }
-                    },
-
-                    {
-                        field: 'Products.view',
-                        title: 'View',
-                        template: function(row) {
-                            return row.view;
-                        }
-                    },
-
-                    {
-                        field: 'Products.created',
-                        title: 'Creation',
-                        template: function(row) {
-                            return row.created;
-                        }
-                    },
-
-                    /** Action button **/
-                    {
-                        field: "Actions",
-                        width: 110,
-                        title: "Actions",
-                        sortable: false,
-                        overflow: 'visible',
-                        template: function (row, index, datatable) {
-                            return '<a href="javascript:view_data('+row.id+');" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="VIew"><i class="la la-eye"></i></a><a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
-                        }
-                    }
-                ]
-            });
-            var query = datatable.getDataSourceQuery();
-
-        };
-        return {
-            init: function() {
-                demo();
+    var datatable = $('#table-product-list').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: ':visible'
+                }
             },
-        };
-    }();
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'csvHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            'colvis'
+        ],
+        searching: false,
+        lengthMenu: [10, 25, 50, 100, 1000],
+        processing: true,
+        serverSide: true,
+        order: [[0, 'desc']],
+        ajax: {
+            url: "<?= $this->Url->build(['action' => 'index']); ?>",
+            type: 'POST',
+            data: function(d) {
+                d.pagination = {perpage: 50};
+                d._csrfToken = '<?= $this->request->getParam('_csrfToken'); ?>';
+                // d.date = Math.random();
+                d.general = $("#generalSearch").val();
+                d.sku = $("#sku").val();
+                d.stock = $("#stock").val();
+                d.publish = $("#publish").val();
+                d.created = $("#created").val();
+            }
+        },
+        initComplete: function(settings, json) {
 
-    jQuery(document).ready(function() {
-        DatatableRemoteAjaxDemo.init();
+        },
+        drawCallback_: function( settings ) {
+            var api = this.api();
+            console.log(api, settings);
+            // Output the data for the visible rows to the browser's console
+            //console.log( api.rows( {page:'current'} ).data() );
+        },
+        columns: [
+            {data: 'Products.id'},
+            {data: 'Products.ProductImages.name'},
+            {data: 'Products.name'},
+            {data: 'Products.sku'},
+            {data: 'Products.ProductStockStatus.name'},
+            {data: 'Products.price_sale'},
+            {data: 'Products.ProductStatus.name'},
+            {data: 'Products.view'},
+            {data: 'Products.created'},
+            {data: 'Products.id'},
+            {data: 'Products.point'},
+            {data: 'Products.ProductToCategories.0.ProductCategory.name'},
+            {data: 'Products.supplier_code'},
+            {data: 'Products.Brand.name'},
+            {data: 'Products.id'},
+        ],
+        //
+        columnDefs: [
+            {
+                targets: 0,
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                targets: 1,
+                render: function (data, type, row, meta) {
+                    var primary_image = '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"><img src="<?= $this->Url->build('/admin-assets/app/media/img/products/no-image.png');?>" style="width: 50px;" /></a>';
+                    if (typeof row.product_images != 'undefined' && row.product_images.length > 0) {
+                        primary_image = row.product_images[0].name;
+                        for(var i in row.product_images) {
+                            if (row.product_images[i].primary === 1) {
+                                primary_image = row.product_images[i].name;
+                            }
+                        }
+                        primary_image = '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"><img src="<?= $this->Url->build('/images/50x50/');?>' + primary_image + '" style="width: 50px;" /></a>';
+                    }
+                    return primary_image;
+                }
+            },
+            {
+                targets: 2,
+                render: function (data, type, row, meta) {
+                    return row.name;
+                }
+            },
+            {
+                targets: 3,
+                render: function (data, type, row, meta) {
+                    return row.sku;
+                }
+            },
+            {
+                targets: 4,
+                render: function (data, type, row, meta) {
+                    var status = {
+                        1: {'class': 'm-badge--success'},
+                        2: {'class': ' m-badge--danger'},
+                    };
+                    return '<span class="m-badge ' + status[row.product_stock_status_id].class + ' m-badge--wide">' + row.product_stock_status.name + '</span>';
+                }
+            },
+            {
+                targets: 5,
+                render: function (data, type, row, meta) {
+                    return parseInt(row.price_sale).format(0, 3, '.', ',');
+                }
+            },
+            {
+                targets: 6,
+                render: function (data, type, row, meta) {
+                    var status = {
+                        1: {'class': 'm-badge--success'},
+                        2: {'class': ' m-badge--danger'},
+                    };
+                    return '<span class="m-badge ' + status[row.product_status_id].class + ' m-badge--wide">' + row.product_status.name + '</span>';
+                }
+            },
+            {
+                targets: 7,
+                render: function (data, type, row, meta) {
+                    return row.view;
+                }
+            },
+            {
+                targets: 8,
+                render: function (data, type, row, meta) {
+                    return row.created;
+                }
+            },
+            {
+                targets: 9,
+                visible: false,
+                render: function (data, type, row, meta) {
+                    return row.point;
+                }
+            },
+            {
+                targets: 10,
+                visible: false,
+                render: function (data, type, row, meta) {
+                    return row.product_to_categories[0].product_category.name;
+                }
+            },
+            {
+                targets: 11,
+                visible: false,
+                render: function (data, type, row, meta) {
+                    return row.supplier_code;
+                }
+            },
+            {
+                targets: 12,
+                visible: false,
+                render: function (data, type, row, meta) {
+                    return row.brand.name;
+                }
+            },
+            {
+                targets: 13,
+                visible: false,
+                render: function (data, type, row, meta) {
+                    var domDraw = '';
+                    $.each(row.product_option_prices, function(k,v){
+                        domDraw += ' SUB SUK : '+ v.sku+'<br>';
+                        domDraw += ' Harga Tambahan : Rp.'+ parseInt(v.price).format(0, 3, '.', ',')+'<br>';
+                        var variant = '';
+                        $.each(v.product_option_value_lists, function(kk,vv){
+                            variant += ' '+vv.option.name +'('+vv.option_value.name+')';
+                        })
+                        domDraw += ' Variant : '+ variant+'<br>';
+                        var stockCabang = '';
+                        $.each(v.product_option_stocks, function(kk,vv){
+                            stockCabang += ' '+vv.branch.name +'('+vv.stock+')';
+                        })
+                        domDraw += ' Stock Cabang : '+ stockCabang+'<br><hr>';
+                    })
+                    return domDraw;
+                }
+            },
+            {
+                targets: -1,
+                render: function (data, type, row, meta) {
+                    return '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
+                }
+            },
+
+        ]
+
+    });
+
+
+
+    $('#m_search').on('click', function(e) {
+        e.preventDefault();
+        $( datatable.column(0).header()).text( $("#stock option:selected").text() );
+        datatable.table().draw();
+    });
+
+    $('#m_reset').on('click', function(e) {
+        e.preventDefault();
+        $('.m-input').each(function() {
+            $(this).val('');
+        });
+        datatable.table().draw();
+    });
+
+
+    $('#export_print').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(0).trigger();
+    });
+
+    $('#export_copy').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(1).trigger();
+    });
+
+    $('#export_excel').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(2).trigger();
+    });
+
+    $('#export_csv').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(3).trigger();
+    });
+
+    $('#export_pdf').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(4).trigger();
     });
 </script>
 <?php $this->end(); ?>
-
-
-
