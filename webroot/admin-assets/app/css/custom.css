@@ -168,3 +168,8 @@ input.disabled {
     top: 32px;
     right: 3px;
 }
+
+.m-messenger .m-scrollable, .chat-discussions.m-scrollable {
+    overflow-y: scroll;
+}
+

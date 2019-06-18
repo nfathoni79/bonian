@@ -396,7 +396,10 @@ $this->Html->script([
 
                 setTimeout(function () {
                     //isInitial = true;
-                    mUtil.data($('.chat-discussions').get(0)).get('ps').update();
+                    var ps = mUtil.data($('.chat-discussions').get(0)).get('ps');
+                    if (ps) {
+                        ps.update();
+                    }
                 }, 2000);
 
 
