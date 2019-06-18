@@ -31,7 +31,7 @@
             ],
             [
                 'name' => 'Customer Chat',
-                'url' => ['controller' => 'Chat', 'action' => 'index'],
+                'url' => ['controller' => 'Chat', 'action' => 'v2'],
                 'icon' => 'm-menu__link-icon flaticon-chat-1',
                 'children' => [
                 ]

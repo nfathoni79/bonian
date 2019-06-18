@@ -16,7 +16,7 @@
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption" style="width: 100%; margin-top: 18px;">
                             <div class="m-input-icon m-input-icon--left">
-                                <input type="text" class="form-control m-input m-input--solid" placeholder="Email">
+                                <input type="text" class="form-control m-input m-input--solid chat-search-filter" placeholder="Cari invoice">
                                 <span class="m-input-icon__icon m-input-icon__icon--left"><span><i class="flaticon-search"></i></span></span>
                             </div>
                         </div>
@@ -207,6 +207,13 @@ $this->Html->script([
         $(window).on('resize', function() {
            //console.log('resize')
             resizeChatList();
+        });
+
+        $(".chat-search-filter").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $(".chat-discussions .room").filter(function() {
+                $(this).toggle($(this).find('.m-widget4__title').text().toLowerCase().indexOf(value) > -1)
+            });
         });
 
         $(document).on('click', '.chat-discussions .room', function () {
@@ -428,9 +435,11 @@ $this->Html->script([
             }
 
 
+
             var m = $(`#room-${message.roomId}`);
             var t = '';
             var statusMessage = '';
+            var avatar = '';
 
             var cursorPosition = m.data('cursor-position');
 
@@ -442,11 +451,21 @@ $this->Html->script([
                 `;
             } else {
                 statusMessage = moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'});
+                var avatarURL = message.userStore.users[message.senderId].avatarURL;
+                if (avatarURL) {
+                    avatar = `<div class="m-messenger__message-pic">
+                        <img src="${avatarURL}" alt="" />
+                    </div>`;
+                } else {
+                    avatar = `<div class="m-messenger__message-no-pic m--bg-fill-danger">
+                        <span>${message.senderId.substring(0, 1).toUpperCase()}</span>
+                    </div>`;
+                }
             }
 
             t += `<div class="m-messenger__wrapper" data-message-id="${message.id}">
                         <div class="m-messenger__message ${messagePosition}">
-
+                            ${avatar}
                             <div class="m-messenger__message-body">
                                 <div class="m-messenger__message-arrow"></div>
                                 <div class="m-messenger__message-content">
