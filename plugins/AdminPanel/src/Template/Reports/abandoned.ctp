@@ -226,6 +226,7 @@
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="table-abandoned">
                         <thead>
                         <tr>
+                            <th>#</th>
                             <th>Product</th>
                             <th>SKU</th>
                             <th>Abandoned Carts</th>
@@ -317,46 +318,52 @@ echo $this->Html->script([
         },
         columns: [
             {data: 'id'},
-            // {data: 'Customers.name'},
-            // {data: 'rating'},
-            // {data: 'comment'},
-            // {data: 'created'},
-            // {data: 'status'},
-            // {data: 'id'},
+            {data: 'Product.name'},
+            {data: 'Product.sku'},
+            {data: 'abandoned_cart'},
+            {data: 'abandoned_revenue'},
+            {data: 'abandoned_rate'},
+            {data: 'Product.view'},
         ],
         columnDefs: [
             {
                 targets: 0,
                 render: function (data, type, row, meta) {
-                    return row.product.name;
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
             {
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return row.product.sku;
+                    return row.product.name;
                 }
             },
             {
                 targets: 2,
                 render: function (data, type, row, meta) {
-                    return row.abandoned_cart;
+                    return row.product.sku;
                 }
             },
             {
                 targets: 3,
                 render: function (data, type, row, meta) {
-                    return parseInt(row.abandoned_revenue).format(0, 3, '.', ',');
+                    return row.abandoned_cart;
                 }
             },
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
-                    return row.abandoned_rate+'%';
+                    return parseInt(row.abandoned_revenue).format(0, 3, '.', ',');
                 }
             },
             {
                 targets: 5,
+                render: function (data, type, row, meta) {
+                    return row.abandoned_rate+'%';
+                }
+            },
+            {
+                targets: 6,
                 render: function (data, type, row, meta) {
                     return row.product.view;
                 }
