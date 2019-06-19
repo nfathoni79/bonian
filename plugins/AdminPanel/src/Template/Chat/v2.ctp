@@ -148,7 +148,7 @@
                                     <input type="text" name="" placeholder="Type here..." class="m-messenger__form-input form-control">
                                 </div>
                                 <div class="m-messenger__form-tools">
-                                    <a href="" class="m-messenger__form-attachment">
+                                    <a  class="m-messenger__form-attachment">
                                         <i class="la la-paperclip"></i>
                                     </a>
                                 </div>
@@ -164,8 +164,22 @@
         </div>
     </div>
 </div>
-
 <?php
+$this->Html->css([
+    '/admin-assets/vendors/filepond/filepond-plugin-image-preview.min.css',
+    '/admin-assets/vendors/filepond/filepond.min.css',
+    '/admin-assets/vendors/custom/filepond-custom.css',
+], ['block' => true]);
+
+$this->Html->script([
+    '/admin-assets/vendors/filepond/filepond-plugin-file-encode.min.js',
+    '/admin-assets/vendors/filepond/filepond-plugin-file-validate-size.min.js',
+    '/admin-assets/vendors/filepond/filepond-plugin-image-exif-orientation.min.js',
+    '/admin-assets/vendors/filepond/filepond-plugin-image-preview.min.js',
+    '/admin-assets/vendors/filepond/filepond-plugin-file-validate-type.js',
+    '/admin-assets/vendors/filepond/filepond.min.js',
+], ['block' => true]);
+
 $this->Html->script([
     '/admin-assets/app/js/tinysort.js',
     '/admin-assets/app/js/jquery.tinysort.js',
@@ -248,11 +262,144 @@ $this->Html->script([
                 height += $(this).height();
             });
             scroll.find('.m-messenger__messages').scrollTop(height);
+        });
+
+        FilePond.registerPlugin(
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize,
+        );
+
+        var pond = FilePond.create();
+        pond.setOptions({
+            maxFiles: 2,
+            required: true,
+            name: 'image',
+            acceptedFileTypes: ['image/png','image/jpeg','image/jpg'],
+            fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
+                resolve(type);
+            }),
+            server: {
+                url: '<?= $this->Url->build(['controller' => 'Attachments', 'action' => 'image', 'plugin' => false]); ?>',
+                process: {
+                    headersx: {
+                        'X-CSRF-Token': $('meta[name="_csrfToken"]').attr('content')
+                    },
+                    onload: (res) => {
+                        // select the right value in the response here and return
+                        try {
+                            var obj = JSON.parse(res);
+                            if (obj.type) {
+                                currentUser.sendMultipartMessage({
+                                    roomId: pond.roomId,
+                                    parts: [
+                                        { type: "text/plain", content: obj.name },
+                                        {
+                                            type: obj.type,
+                                            url: obj.url,
+                                        }
+                                    ],
+                                })
+                                    .then(messageId => {
+                                        currentUser.setReadCursor({
+                                            roomId: pond.roomId,
+                                            position: messageId
+                                        })
+                                        .then(() => {
+
+                                        })
+                                        .catch(err => {
+                                            //console.log(`Error setting cursor: ${err}`)
+                                        });
+                                    })
+                                    .catch(err => {
+                                        console.log(`Error adding message to ${myRoom.name}: ${err}`)
+                                    })
+                            }
+                        } catch(e) {
+
+                        }
+                        return res;
+                    }
+                }
+            }
+        });
 
 
 
+        pond.on('addfile', (error, file) => {
+            if (error) {
+                swal('File yang di upload harus berupa gambar / image');
+                return;
+            }
 
 
+            if ($(`.chat-upload-progress-${pond.random}`).length > 0) {
+                swal('Silahkan tunggu sampai upload selesai');
+                return;
+            }
+
+
+
+            var roomId = $('.m-messenger .tab-pane.active').attr('data-room-id');
+            pond.roomId = roomId;
+
+            pond.random = parseInt(Math.random() * 10000);
+            $('.m-messenger .tab-pane.active').append(`<div class="m-messenger__datetime chat-upload-progress-${pond.random}"><div style="height: 3px; position: relative;"></div></div>`);
+            pond.bar = new ProgressBar.Line(`.chat-upload-progress-${pond.random} div`, {
+                strokeWidth: 2,
+                easing: 'easeInOut',
+                //duration: 1400,
+                color: '#555',
+                trailColor: '#eee',
+                trailWidth: 1,
+                svgStyle: {width: '100%', height: '100%'},
+                text: {
+                    style: {
+                        // Text color.
+                        // Default: same as stroke color (options.color)
+                        color: '#999',
+                        position: 'absolute',
+                        right: '0',
+                        top: '20px',
+                        padding: 0,
+                        margin: 0,
+                        fontSize: '12px',
+                        transform: null
+                    },
+                    autoStyleContainer: false
+                },
+                from: {color: '#FFEA82'},
+                to: {color: '#ED6A5A'},
+                step: (state, bar) => {
+                    bar.setText(Math.round(bar.value() * 100) + ' %');
+                }
+            });
+
+            //scroll to bottom
+            var chatHistory = $('.m-messenger .tab-pane.active');
+            chatHistory.scrollTop(chatHistory.height());
+
+            pond.processFile().then(file => {
+                // File has been processed
+                //console.log('process', file)
+            });
+        });
+
+        pond.on('processfileprogress', (file, progress) => {
+            //console.log(file, progress)
+            pond.bar.animate(progress);
+        });
+
+        pond.on('processfile', (error, file) => {
+            $(`.chat-upload-progress-${pond.random}`).remove();
+        });
+
+        $('.m-messenger__form-attachment').click(function(e) {
+            if ($(`.chat-upload-progress-${pond.random}`).length > 0) {
+                swal('Silahkan tunggu sampai upload selesai');
+                return;
+            }
+            pond.browse();
         });
 
         $(document).on('click', '.delete-chat-conversation', function(e) {
