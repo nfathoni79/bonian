@@ -280,6 +280,7 @@ $this->Html->script([
     var datatable = $('#table-product-list').DataTable({
         dom: 'Bfrtip',
         buttons: [
+            'pageLength',
             {
                 extend: 'print',
                 exportOptions: {
@@ -312,6 +313,7 @@ $this->Html->script([
             },
             'colvis'
         ],
+        lengthChange: true,
         searching: false,
         lengthMenu: [10, 25, 50, 100, 1000],
         processing: true,
@@ -509,29 +511,5 @@ $this->Html->script([
     });
 
 
-    $('#export_print').on('click', function(e) {
-        e.preventDefault();
-        datatable.button(0).trigger();
-    });
-
-    $('#export_copy').on('click', function(e) {
-        e.preventDefault();
-        datatable.button(1).trigger();
-    });
-
-    $('#export_excel').on('click', function(e) {
-        e.preventDefault();
-        datatable.button(2).trigger();
-    });
-
-    $('#export_csv').on('click', function(e) {
-        e.preventDefault();
-        datatable.button(3).trigger();
-    });
-
-    $('#export_pdf').on('click', function(e) {
-        e.preventDefault();
-        datatable.button(4).trigger();
-    });
 </script>
 <?php $this->end(); ?>

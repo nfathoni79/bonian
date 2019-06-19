@@ -214,7 +214,7 @@ $this->Html->script([
             {
                 targets: 0,
                 render: function (data, type, row, meta) {
-                    return row.id;
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
             {
