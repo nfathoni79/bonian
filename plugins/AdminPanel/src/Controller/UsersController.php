@@ -212,7 +212,10 @@ class UsersController extends AppController
 
                     $entity = [
                         'id' => $user->username,
-                        'name' => $user->first_name . ' ' . $user->last_name
+                        'name' => $user->first_name . ' ' . $user->last_name,
+                        'custom_data' => [
+                            'is_admin' => true
+                        ]
                     ];
 
                     $user = $this->ChatKit->getInstance()->createUser($entity);
