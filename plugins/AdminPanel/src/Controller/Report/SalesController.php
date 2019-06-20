@@ -55,6 +55,7 @@ class SalesController extends AppController
                             'total' => $datatable->getTable()->func()->count('ProductToCategories.product_category_id'),
                             'gross_sales' => $datatable->getTable()->func()->sum('OrderDetailProducts.total'),
                             'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
+                            'use_voucher' => "(SUM(IF(isnull(Orders.voucher_id), 0, 1)))"
                         ])
                         ->leftJoinWith('Products.ProductToCategories')
                         ->leftJoinWith('Products.ProductToCategories.ProductCategories')
@@ -69,6 +70,7 @@ class SalesController extends AppController
                             'total' => $datatable->getTable()->func()->count('Products.brand_id'),
                             'gross_sales' => $datatable->getTable()->func()->sum('OrderDetailProducts.total'),
                             'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
+                            'use_voucher' => "(SUM(IF(isnull(Orders.voucher_id), 0, 1)))"
                         ])
                         ->leftJoinWith('Products.Brands')
                         ->leftJoinWith('Products.ProductToCategories')
@@ -140,6 +142,7 @@ class SalesController extends AppController
                             'total' => $datatable->getTable()->func()->count('Products.brand_id'),
                             'gross_sales' => $datatable->getTable()->func()->sum('OrderDetailProducts.total'),
                             'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
+                            'use_voucher' => "(SUM(IF(isnull(Orders.voucher_id), 0, 1)))",
                             'year' => $datatable->getTable()->func()->year([
                                 'Orders.created' => 'identifier'
                             ]),

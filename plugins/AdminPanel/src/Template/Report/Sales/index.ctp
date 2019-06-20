@@ -161,7 +161,7 @@
                             <th>Category</th>
                             <th>Item Sales</th>
                             <th>Gross Sales</th>
-                            <th>Discount</th>
+                            <th>Use Voucher</th>
                             <th>Net Sales</th>
                         </tr>
                         </thead>
@@ -253,7 +253,7 @@ $this->Html->script([
             {data: 'id'},
             {data: 'total'},
             {data: 'gross_sales'},
-            {data: 'discount'},
+            {data: 'use_voucher'},
             {data: 'net_sales'},
         ],
         //
@@ -285,7 +285,7 @@ $this->Html->script([
                 className: 'text-right',
                 orderable: false,
                 render: function (data, type, row, meta) {
-                    return row.discount ? parseInt(row.discount).format(0, 3, ',', '.') : 0;
+                    return row.use_voucher ? parseInt(row.use_voucher).format(0, 3, ',', '.') : 0;
                 }
             },
             {
