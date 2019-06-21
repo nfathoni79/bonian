@@ -118,8 +118,8 @@ class SearchController extends AppController
 
             if ($start && $end) {
                 $datatable->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
-                    return $exp->gte('SearchCategories.created', $start . ' 00:00:00')
-                        ->lte('SearchCategories.created', $end . ' 23:59:59');
+                    return $exp->gte('SearchStats.created', $start . ' 00:00:00')
+                        ->lte('SearchStats.created', $end . ' 23:59:59');
                 });
             }
 
