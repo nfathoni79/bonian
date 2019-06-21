@@ -120,6 +120,24 @@ class DataTableComponent extends Component
         return $this;
     }
 
+    public function hydrate($bool)
+    {
+        $this->_table->enableHydration($bool);
+        return $this;
+    }
+
+    public function from($table = [], $overwrite = false)
+    {
+        $this->_table->from($table, $overwrite);
+        return $this;
+    }
+
+    public function innerJoin($table, $conditions = [], $types = [])
+    {
+        $this->_table->innerJoin($table, $conditions, $types);
+        return $this;
+    }
+
     public function limit($num)
     {
         $this->_table->limit($num);

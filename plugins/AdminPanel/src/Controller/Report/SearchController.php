@@ -37,31 +37,32 @@ class SearchController extends AppController
 
         if ($this->DataTable->isAjax()) {
 
-            $subquery = $this->SearchStats->find();
-            $subquery = $subquery
+
+            $sub = $this->SearchStats->find();
+            $sub = $sub
                 ->select([
-                    'id' => $subquery->func()->max('SearchStat.id')
-                ])
-                ->leftJoin(['SearchStat' => 'search_stats'], [
-                    'SearchStats.id = SearchStat.id'
-                ])
-                ->group('SearchStat.search_term_id');
+                    'id' => $sub->func()->max('SearchStats.id')
+                ]);
 
             if ($start && $end) {
-                $subquery->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
-                    return $exp->gte('SearchStat.created', $start . ' 00:00:00')
-                        ->lte('SearchStat.created', $end . ' 23:59:59');
+                $sub->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
+                    return $exp->gte('SearchStats.created', $start . ' 00:00:00')
+                        ->lte('SearchStats.created', $end . ' 23:59:59');
                 });
             }
 
-
+            $sub->group('SearchStats.search_term_id');
 
             $datatable = $this->DataTable->adapter('AdminPanel.SearchStats')
                 ->select([
+                    'SearchStats.id',
                     'words' => 'SearchTerms.words',
                     'total' => 'SearchStats.total',
                     'category_name' => 'ProductCategories.name',
                     'hits' => 'SearchTerms.hits',
+                ])
+                ->innerJoin(['SearchStat' => $sub], [
+                    'SearchStats.id = SearchStat.id'
                 ])
                 ->leftJoinWith('SearchTerms')
                 ->leftJoinWith('SearchTerms.SearchCategories')
@@ -81,21 +82,15 @@ class SearchController extends AppController
                         ]);
                     }
                 })
+
                 ->group('SearchStats.search_term_id');
 
-            if ($start && $end) {
+            if ($start && $end && false) {
                 $datatable->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
                     return $exp->gte('SearchStats.created', $start . ' 00:00:00')
                         ->lte('SearchStats.created', $end . ' 23:59:59');
                 });
             }
-
-            if ($subquery instanceof \Cake\ORM\Query) {
-                $datatable->where(function (QueryExpression $exp) use ($subquery) {
-                    return $exp->exists($subquery);
-                });
-            }
-
 
 
             $result = $datatable
