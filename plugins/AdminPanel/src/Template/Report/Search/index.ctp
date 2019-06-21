@@ -268,7 +268,7 @@ $this->Html->script([
 
     $('#m_search').on('click', function(e) {
         e.preventDefault();
-        $( datatable.column(0).header()).text( $("#report_type option:selected").text() );
+        //$( datatable.column(0).header()).text( $("#report_type option:selected").text() );
         datatable.table().draw();
     });
 
