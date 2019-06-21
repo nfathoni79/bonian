@@ -241,7 +241,7 @@ $this->Html->script([
         },
         columns: [
             {data: 'SearchTerms.words'},
-            {data: 'category_name'},
+            {data: 'ProductCategories.name'},
             {data: 'total'},
             {data: 'SearchTerms.hits'},
         ],
@@ -251,6 +251,12 @@ $this->Html->script([
                 targets: 0,
                 render: function (data, type, row, meta) {
                     return row.words;
+                }
+            },
+            {
+                targets: 1,
+                render: function (data, type, row, meta) {
+                    return row.category_name;
                 }
             },
             {
