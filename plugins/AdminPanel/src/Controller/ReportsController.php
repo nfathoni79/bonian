@@ -55,7 +55,9 @@ class ReportsController extends AppController
     {
 
 
-        $datatable = $this->ShareStatistics->find()->group(['media_type']);
+        $datatable = $this->ShareStatistics->find()
+            ->where(['media_type IN ' => ['tw','fb','sms','wa', 'ln']])
+            ->group(['media_type']);
         $datatable->select([
             'plus' => $datatable->func()->count("ShareStatistics.id"),
             'type' => 'media_type',
@@ -98,7 +100,7 @@ class ReportsController extends AppController
                     case 'sms':
                         $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Sms';
                         break;
-                    case 'line':
+                    case 'ln':
                         $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Line';
                         break;
                 }
