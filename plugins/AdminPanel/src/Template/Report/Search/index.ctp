@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index', 'prefix' => 'report']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Sales Report') ?>
+                                <?= __('Search Term Report') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Sales Report') ?>
+                            <?= __('Search Term Report') ?>
                         </h3>
                     </div>
                 </div>
