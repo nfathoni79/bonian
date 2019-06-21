@@ -60,6 +60,7 @@ class SearchController extends AppController
                     'total' => 'SearchStats.total',
                     'category_name' => 'ProductCategories.name',
                     'hits' => 'SearchTerms.hits',
+                    'created' => 'SearchStats.created'
                 ])
                 ->innerJoin(['SearchStat' => $sub], [
                     'SearchStats.id = SearchStat.id'

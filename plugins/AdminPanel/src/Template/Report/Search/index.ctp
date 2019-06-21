@@ -155,6 +155,7 @@
                             <th>In category</th>
                             <th>Result</th>
                             <th>Hits</th>
+                            <th>Creation</th>
                         </tr>
                         </thead>
                     </table>
@@ -244,6 +245,7 @@ $this->Html->script([
             {data: 'ProductCategories.name'},
             {data: 'total'},
             {data: 'SearchTerms.hits'},
+            {data: 'SearchStats.created'},
         ],
         //
         columnDefs: [
@@ -263,6 +265,12 @@ $this->Html->script([
                 targets: 3,
                 render: function (data, type, row, meta) {
                     return row.hits;
+                }
+            },
+            {
+                targets: 4,
+                render: function (data, type, row, meta) {
+                    return row.created;
                 }
             },
 
