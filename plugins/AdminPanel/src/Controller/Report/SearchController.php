@@ -2,6 +2,7 @@
 namespace AdminPanel\Controller\Report;
 
 use AdminPanel\Controller\AppController;
+use Cake\Database\Expression\QueryExpression;
 use Cake\I18n\Time;
 
 /**
@@ -35,6 +36,26 @@ class SearchController extends AppController
 
 
         if ($this->DataTable->isAjax()) {
+
+            $subquery = $this->SearchStats->find();
+            $subquery = $subquery
+                ->select([
+                    'id' => $subquery->func()->max('SearchStat.id')
+                ])
+                ->leftJoin(['SearchStat' => 'search_stats'], [
+                    'SearchStats.id = SearchStat.id'
+                ])
+                ->group('SearchStat.search_term_id');
+
+            if ($start && $end) {
+                $subquery->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
+                    return $exp->gte('SearchStat.created', $start . ' 00:00:00')
+                        ->lte('SearchStat.created', $end . ' 23:59:59');
+                });
+            }
+
+
+
             $datatable = $this->DataTable->adapter('AdminPanel.SearchStats')
                 ->select([
                     'words' => 'SearchTerms.words',
@@ -68,6 +89,14 @@ class SearchController extends AppController
                         ->lte('SearchStats.created', $end . ' 23:59:59');
                 });
             }
+
+            if ($subquery instanceof \Cake\ORM\Query) {
+                $datatable->where(function (QueryExpression $exp) use ($subquery) {
+                    return $exp->exists($subquery);
+                });
+            }
+
+
 
             $result = $datatable
                 ->setSorting()
