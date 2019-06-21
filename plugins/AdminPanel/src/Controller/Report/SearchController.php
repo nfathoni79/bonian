@@ -82,15 +82,8 @@ class SearchController extends AppController
                         ]);
                     }
                 })
-
                 ->group('SearchStats.search_term_id');
 
-            if ($start && $end && false) {
-                $datatable->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
-                    return $exp->gte('SearchStats.created', $start . ' 00:00:00')
-                        ->lte('SearchStats.created', $end . ' 23:59:59');
-                });
-            }
 
 
             $result = $datatable
