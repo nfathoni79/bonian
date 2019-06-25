@@ -75,7 +75,7 @@ input.disabled {
 }
 
 .chat-discussions {
-    height: calc(100vh - 300px);
+    max-height: calc(100vh - 300px);
     margin-top: 10px;
 }
 
