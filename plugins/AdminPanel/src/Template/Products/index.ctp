@@ -249,7 +249,12 @@ $this->Html->script([
 ?>
 <?php $this->append('script'); ?>
 <script>
-
+    function delete_data(id) {
+        $.post( "<?= $this->Url->build(['action' => 'delete']); ?>/" + id, { _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>' } )
+            .done(function( data ) {
+                location.href = '<?= $this->Url->build();?>';
+            });
+    }
     var arrows;
     if (mUtil.isRTL()) {
         arrows = {
