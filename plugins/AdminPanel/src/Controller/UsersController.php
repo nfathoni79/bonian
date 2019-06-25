@@ -218,7 +218,7 @@ class UsersController extends AppController
                         ]
                     ];
 
-                    $user = $this->ChatKit->getInstance()->createUser($entity);
+                    $this->ChatKit->getInstance()->createUser($entity);
                 } catch(\Exception $e) {
 
                 }
