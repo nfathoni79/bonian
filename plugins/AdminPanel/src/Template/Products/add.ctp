@@ -30,8 +30,8 @@
         var url = '<?= $this->Url->build(['action' => 'validationWizard']); ?>';
         var url_category = '<?= $this->Url->build(['action' => 'getCategory']); ?>';
         var url_attribute = '<?= $this->Url->build(['action' => 'getAttributeAndBrand']); ?>';
-        var preview_url = '<?= $this->Url->build(['action' => 'preview',($lastId +1),1]); ?>';
-        var preview_url_bottom = '<?= $this->Url->build(['action' => 'preview',($lastId +1),2]); ?>';
+        var preview_url = '<?= $this->Url->build(['action' => 'preview']); ?>';
+        var preview_url_bottom = '<?= $this->Url->build(['action' => 'preview']); ?>';
 
         var product;
         var sku_variant = {};
@@ -109,8 +109,8 @@
                 nextAction.hide();
                 renderImagePreview('#image-preview-wizard');
                 // renderInputPreview('#input-preview-wizard');
-                $( "#preview-wizard-before-save" ).load( preview_url );
-                $( "#preview-wizard-inside" ).load( preview_url_bottom );
+                $( "#preview-wizard-before-save" ).load( preview_url +"/"+formEl.find('input[name=id]').val()+"/1");
+                $( "#preview-wizard-inside" ).load( preview_url_bottom  +"/"+formEl.find('input[name=id]').val()+"/2");
             } else {
                 nextAction.show();
             }
