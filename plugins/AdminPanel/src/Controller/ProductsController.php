@@ -16,7 +16,6 @@ use phpDocumentor\Reflection\Types\Integer;
  * @property \AdminPanel\Model\Table\OptionsTable $Options
  * @property \AdminPanel\Model\Table\OptionValuesTable $OptionValues
  * @property \AdminPanel\Model\Table\BranchesTable $Branches
- * @property \AdminPanel\Model\Table\ProductsTable $Products
  * @property \AdminPanel\Model\Table\ProductImageSizesTable $ProductImageSizes
  * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  * @property \AdminPanel\Model\Table\ProductToCategoriesTable $ProductToCategories
@@ -376,7 +375,8 @@ class ProductsController extends AppController
 
                 $validator
                     ->requirePresence('price')
-                    ->notBlank('price', 'tidak boleh kosong');
+                    ->notBlank('price', 'tidak boleh kosong')
+                    ->greaterThan('price', 0, 'Harus lebih besar dari 0');
 
                 $validator
                     ->requirePresence('point')
@@ -1089,6 +1089,11 @@ class ProductsController extends AppController
                     ->notBlank('point', 'tidak boleh kosong');
 
                 $validator
+                    ->requirePresence('price')
+                    ->notBlank('price', 'tidak boleh kosong')
+                    ->greaterThan('price', 0, 'Harus lebih besar dari 0');
+
+                $validator
                     ->requirePresence('price_sale')
                     ->notBlank('price_sale', 'tidak boleh kosong');
 
@@ -1128,19 +1133,22 @@ class ProductsController extends AppController
 
                 $productSize = new Validator();
                 $validator->addNestedMany('ProductOptionPrices', $productPrice);
-				foreach($this->request->getData('ProductOptionStocks') as $vals){
-					if(!empty($vals['weight'])){ 
-						$productSize
-							->notBlank('weight');
-					}else{ 
-						$productSize
-							->notBlank('length');
-						$productSize
-							->notBlank('width');
-						$productSize
-							->notBlank('height');
-					} 
-				} 
+                if ($this->request->getData('ProductOptionStocks')) {
+                    foreach($this->request->getData('ProductOptionStocks') as $vals){
+                        if(!empty($vals['weight'])){
+                            $productSize
+                                ->notBlank('weight');
+                        }else{
+                            $productSize
+                                ->notBlank('length');
+                            $productSize
+                                ->notBlank('width');
+                            $productSize
+                                ->notBlank('height');
+                        }
+                    }
+                }
+
 
 
                 //added nested validation on branches -> 0 -> branch_id
@@ -2030,6 +2038,7 @@ class ProductsController extends AppController
                 //->requirePresence('brand_id')
                 ->notBlank('brand_id', 'tidak boleh kosong');
 
+
             //$validator
             //    ->requirePresence('condition')
             //    ->notBlank('condition', 'tidak boleh kosong');
@@ -2067,7 +2076,8 @@ class ProductsController extends AppController
 
             $validator
                 ->requirePresence('price')
-                ->notBlank('price', 'tidak boleh kosong');
+                ->notBlank('price', 'tidak boleh kosong')
+                ->greaterThan('price', 0, 'Harus lebih besar dari 0');
 
             $validator
                 ->requirePresence('point')
