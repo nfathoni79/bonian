@@ -90,6 +90,10 @@
                         wizard.goNext();
                     }
 
+                } else {
+                    if (saved.error && saved.error['ProductOptionValueLists'] && $('.sku-prefix').length == 0) {
+                        swal('Silahkan pilih salah satu combo variant, dan klik button "Tambah Variant Product"');
+                    }
                 }
             });
         });

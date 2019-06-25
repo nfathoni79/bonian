@@ -1105,6 +1105,10 @@ class ProductsController extends AppController
                     ->requirePresence('ProductToCourriers')
                     ->hasAtLeast('ProductToCourriers', 1, __d('AdminPanel', __d('AdminPanel','pilihan minimal 1 kurir')));
 
+                $validator
+                    ->requirePresence('ProductOptionValueLists')
+                    ->hasAtLeast('ProductOptionValueLists', 1, __d('AdminPanel', __d('AdminPanel','Pilih salah satu combo variant')));
+
                 $productOption = new Validator();
 
                 /*$productOption
@@ -2095,6 +2099,11 @@ class ProductsController extends AppController
                 ->requirePresence('ProductToCourriers')
                 ->hasAtLeast('ProductToCourriers', 1, __d('AdminPanel', __d('AdminPanel','pilihan minimal 1 kurir')));
 
+
+            $validator
+                ->requirePresence('ProductOptionValueLists')
+                ->hasAtLeast('ProductOptionValueLists', 1, __d('AdminPanel', __d('AdminPanel','Pilih salah satu combo variant')));
+
             $productOption = new Validator();
 
             /*$productOption
@@ -2126,20 +2135,22 @@ class ProductsController extends AppController
 
             $productSize = new Validator();
 			
-			
-			foreach($this->request->getData('ProductOptionStocks') as $vals){
-				if(!empty($vals['weight'])){ 
-					$productSize
-						->notBlank('weight');
-				}else{ 
-					$productSize
-						->notBlank('length');
-					$productSize
-						->notBlank('width');
-					$productSize
-						->notBlank('height');
-				} 
-			}  
+			if ($this->request->getData('ProductOptionStocks')) {
+                foreach($this->request->getData('ProductOptionStocks') as $vals){
+                    if(!empty($vals['weight'])){
+                        $productSize
+                            ->notBlank('weight');
+                    }else{
+                        $productSize
+                            ->notBlank('length');
+                        $productSize
+                            ->notBlank('width');
+                        $productSize
+                            ->notBlank('height');
+                    }
+                }
+            }
+
 
 
             //added nested validation on branches -> 0 -> branch_id

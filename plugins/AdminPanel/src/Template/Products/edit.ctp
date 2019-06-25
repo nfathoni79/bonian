@@ -58,6 +58,10 @@ echo $this->Html->script([
                 if (data.success) {
                     console.log(data, saved);
                     location.href = '<?= $this->Url->build(['action' => 'setPrimaryImage', $this->request->getParam('pass.0')]); ?>';
+                } else {
+                    if (saved.error && saved.error['ProductOptionValueLists'] && $('.sku-prefix').length == 0) {
+                        swal('Silahkan pilih salah satu combo variant, dan klik button "Tambah Variant Product"');
+                    }
                 }
             });
         });
