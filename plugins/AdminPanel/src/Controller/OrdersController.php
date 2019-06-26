@@ -33,70 +33,55 @@ class OrdersController extends AppController
     public function index()
     {
 
+        if ($this->DataTable->isAjax()) {
 
-        if ($this->request->is('ajax')) {
-            $this->viewBuilder()->setLayout('ajax');
-
-            $pagination = $this->request->getData('pagination');
-            $sort = $this->request->getData('sort');
-            $query = $this->request->getData('query');
-
-            /** custom default query : select, where, contain, etc. **/
-            $data = $this->Orders->find('all')
-                ->select()
+            $datatable = $this->DataTable->adapter('AdminPanel.Orders')
                 ->contain([
-                   'Customers',
-                    'Transactions'
+                    'Provinces',
+                    'Cities',
+                    'Subdistricts',
+                    'Customers',
+                    'Transactions',
+                    'Vouchers',
+                    'OrderDetails' => [
+                        'Branches',
+                        'OrderStatuses',
+                        'Provinces',
+                        'Cities',
+                        'Subdistricts',
+                        'OrderDetailProducts' => [
+                            'Products' => [
+                                'ProductImages'
+                            ],
+                            'ProductOptionPrices' => [
+                                'ProductOptionValueLists' => [
+                                    'Options',
+                                    'OptionValues'
+                                ],
+                            ],
+                        ]
+                    ],
+//                    'OrderDigitals' => [
+//                        'DigitalDetails'
+//                    ],
                 ]);
 
-            if ($query && is_array($query)) {
-                if (isset($query['generalSearch'])) {
-                    $search = $query['generalSearch'];
-                    unset($query['generalSearch']);
-                    /**
-                        custom field for general search
-                        ex : 'Users.email LIKE' => '%' . $search .'%'
-                    **/
-                    //$data->where(['Orders.invoice LIKE' => '%' . $search .'%']);
-                    $data->where(function(\Cake\Database\Expression\QueryExpression $exp) use($search) {
-                        $orConditions = $exp->or_([
-                            'Orders.invoice LIKE' => '%' . $search .'%',
-                            'Customers.email LIKE' => '%' . $search .'%',
-                        ]);
-                        return $exp
-                            ->add($orConditions);
-                    });
-                }
-                $data->where($query);
-            }
 
-            if (isset($sort['field']) && !empty($sort['field']) && isset($sort['sort'])) {
-                $data->order([$sort['field'] => $sort['sort']]);
-            }
-
-            if (isset($pagination['perpage']) && is_numeric($pagination['perpage'])) {
-                $data->limit($pagination['perpage']);
-            }
-            if (isset($pagination['page']) && is_numeric($pagination['page'])) {
-                $data->page($pagination['page']);
-            }
-
-            $total = $data->count();
-
-            $result = [];
-            $result['data'] = $data->toArray();
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->map(function (\AdminPanel\Model\Entity\Order $row) {
+                    return $row;
+                })
+                ->toArray();
 
 
-            $result['meta'] = array_merge((array) $pagination, (array) $sort);
-            $result['meta']['total'] = $total;
 
-
-            return $this->response->withType('application/json')
-            ->withStringBody(json_encode($result));
+            //set again datatable
+            $datatable->setData($result);
+            return $datatable->response();
         }
 
-
-        $this->set(compact('orders'));
     }
 
     /**

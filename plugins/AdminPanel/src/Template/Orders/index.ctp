@@ -61,45 +61,108 @@
             <div class="m-portlet__body">
                 <?= $this->Flash->render() ?>
                 <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
-                    <div class="row align-items-center">
-                        <div class="col-xl-8 order-2 order-xl-1">
-                            <div class="form-group m-form__group row align-items-center">
-                                <div class="col-md-8">
-                                    <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
-                                        <span class="m-input-icon__icon m-input-icon__icon--left">
-                                            <span>
-                                                <i class="la la-search"></i>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
+                    <div class="form-group m-form__group row">
+                        <label for="example-text-input" class="col-2 col-form-label">General Search</label>
+                        <div class="col-4">
+                            <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
+                        </div>
+                        <div class="col-md-4">
+                            <a href="javascript:void(0)" class="btn btn-default btn-filtering">Advance Filtering</a>
+                        </div>
+                    </div>
+                    <div class="advance" style="display:none;">
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">Main SKU</label>
+                            <div class="col-4">
+                                <input type="text" class="form-control m-input" placeholder="SKU" id="sku">
                             </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">Stock Status</label>
+                            <div class="col-2">
+                                <?php
+                                echo $this->Form->control('Stock', [
+                                'type' => 'select',
+                                'options' => [
+                                '1' => 'In Stock',
+                                '2' => 'Out of Stock'
+                                ],
+                                'div' => false,
+                                'label' => false,
+                                'empty' => 'Stock Status',
+                                'class' => 'form-control m-input',
+                                'id' => 'stock'
+                                ]);?>
+                            </div>
+                            <label for="example-text-input" class="col-2 col-form-label">Publish Status</label>
+                            <div class="col-2">
+                                <?php
+                                echo $this->Form->control('Publish', [
+                                'type' => 'select',
+                                'options' => [
+                                '1' => 'Publish',
+                                '2' => 'Unpublish'
+                                ],
+                                'div' => false,
+                                'label' => false,
+                                'empty' => 'Publish Status',
+                                'class' => 'form-control m-input',
+                                'id' => 'publish'
+                                ]);?>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">Creation Date</label>
+                            <div class="col-2">
+                                <input type="text" name="created" class="form-control m-input" autocomplete="off" id="created">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-separator m-separator--md m-separator--dashed"></div>
+                    <div class="row">
+                        <div class="col-lg-11  offset-md-1">
+                            <button class="btn btn-brand m-btn m-btn--icon" id="m_search">
+                                    <span>
+                                        <i class="la la-search"></i>
+                                        <span>Search</span>
+                                    </span>
+                            </button>
+                            <button class="btn btn-secondary m-btn m-btn--icon" id="m_reset">
+                                    <span>
+                                        <i class="la la-close"></i>
+                                        <span>Reset</span>
+                                    </span>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="m_datatable" id="table-orders"></div>
+                <div class="m_datatable">
+                    <div class="table-responsive">
+                        <table class="table table-striped- table-bordered table-hover table-checkable" id="table-orders">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Invoice</th>
+                                <th>Customer Name</th>
+                                <th>Customer Email</th>
+                                <th>Voucher</th>
+                                <th>Diskon Kupon</th>
+                                <th>Diskon Voucher</th>
+                                <th>Gross Total</th>
+                                <th>Total</th>
+                                <th>Payment Status</th>
+                                <th>Payment Method</th>
+                                <th>Shipping Destination</th>
+                                <th>Created</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
 
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modalView" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><span class="titleModal"></span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body contentModal">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -107,174 +170,215 @@
 
 <?php $this->append('script'); ?>
 <?php
-echo $this->Html->script([
-    '/admin-assets/app/js/lib-tools.js',
-]);
+$this->Html->css([
+'/admin-assets/vendors/custom/datatables/datatables.bundle.css'
+], ['block' => true]);
+$this->Html->script([
+'/admin-assets/vendors/custom/datatables/datatables.bundle',
+'/admin-assets/vendors/custom/datatables/buttons.colVis.min',
+'/admin-assets/app/js/lib-tools.js',
+], ['block' => true]);
 ?>
 <script>
 
-    function delete_data(id) {
-        $.post( "<?= $this->Url->build(['action' => 'delete']); ?>/" + id, { _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>' } )
-            .done(function( data ) {
-                location.href = '<?= $this->Url->build();?>';
-            });
-    }
-
-    function view_data(id) {
-        $('#modalView').modal('show');
-        $('.titleModal').html('Orders View');
-        $('.contentModal').load( "<?= $this->Url->build(['action' => 'view']); ?>/" + id);
-    }
-
-    var DatatableRemoteAjaxDemo = function() {
-        var demo = function() {
-            var datatable = $('#table-orders').mDatatable({
-                data: {
-                    type: 'remote',
-                    source: {
-                        read: {
-                            method: 'POST',
-                            url: '<?= $this->Url->build(); ?>',
-                            cache: false,
-                            params: {
-                                _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
-                            },
-                            map: function(raw) {
-                                var dataSet = raw;
-                                if (typeof raw.data !== 'undefined') {
-                                    dataSet = raw.data;
-                                }
-                                return dataSet;
-                            },
-                        },
-                    },
-                    pageSize: 10,
-                    serverPaging: true,
-                    serverFiltering: true,
-                    serverSorting: true,
-                },
-                layout: {
-                    scroll: true,
-                    height: 550,
-                    footer: false
-                },
-                sortable: true,
-                pagination: true,
-                toolbar: {
-                    items: {
-                        pagination: {
-                            pageSizeSelect: [10, 20, 30, 50, 100],
-                        },
-                    },
-                },
-                search: {
-                    input: $('#generalSearch'),
-                },
-                order: [[ 0, "desc" ]],
-                columns: [
-                    {
-                        field: 'id',
-                        title: '#',
-                        sortable: true,
-                        width: 40,
-                        selector: false,
-                        textAlign: 'center',
-                        template: function(row, index, datatable) {
-                            return ++index;
-                        }
-                    },
-                    {
-                        field: 'Orders.invoice',
-                        title: 'Invoice',
-                        template: function(row) {
-                            return row.invoice;
-                        }
-                    },
-
-                    {
-                        field: 'Customers.id',
-                        title: 'Customer',
-                        template: function(row) {
-                            return row.customer.email;
-                        }
-                    },
-
-
-                    {
-                        field: 'Vouchers.id',
-                        title: 'Voucher Id',
-                        template: function(row) {
-                            return row.voucher ? row.voucher.id : '-';
-                        }
-                    },
-
-
-                    {
-                        field: 'Orders.total',
-                        title: 'Total',
-                        template: function(row) {
-                            return parseInt(row.total).format(0, 3, ',', '.');
-                        }
-                    },
-
-                    {
-                        field: 'Orders.payment_status',
-                        title: 'Payment Status',
-                        template: function(row) {
-                            let status = {
-                                1: {'class': 'm-badge--default', 'name': 'Pending'},
-                                2: {'class': ' m-badge--success', 'name': 'Success'},
-                                3: {'class': ' m-badge--danger', 'name': 'Failed'},
-                                4: {'class': ' m-badge--default', 'name': 'Expired'}
-                            };
-                            return row.payment_status && status[row.payment_status] ? '<span class="m-badge ' + status[row.payment_status].class + ' m-badge--wide">'
-                            + status[row.payment_status].name
-                            + '</span>' : '-';
-                        }
-                    },
-
-                    {
-                        field: '',
-                        sortable: false,
-                        title: 'Payment Method',
-                        template: function(row) {
-                            return row.transactions.length > 0 ? row.transactions[row.transactions.length - 1].payment_type : '-';
-                        }
-                    },
-
-                    {
-                        field: 'Orders.created',
-                        title: 'Created',
-                        template: function(row) {
-                            return row.created;
-                        }
-                    },
-
-                    /** Action button **/
-                    {
-                        field: "Actions",
-                        width: 110,
-                        title: "Actions",
-                        sortable: false,
-                        overflow: 'visible',
-                        template: function (row, index, datatable) {
-                            return '<a href="javascript:view_data('+row.id+');" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="VIew"><i class="la la-eye"></i></a><a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
-                        }
-                    }
-                ]
-            });
-            var query = datatable.getDataSourceQuery();
-
-        };
-        return {
-            init: function() {
-                demo();
+    var datatable = $('#table-orders').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'pageLength',
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: ':visible'
+                }
             },
-        };
-    }();
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'csvHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            'colvis'
+        ],
+        lengthChange: true,
+        searching: false,
+        lengthMenu: [10, 25, 50, 100, 1000],
+        processing: true,
+        serverSide: true,
+        order: [[0, 'desc']],
+        ajax: {
+            url: "<?= $this->Url->build(['action' => 'index']); ?>",
+            type: 'POST',
+            data: function(d) {
+                d.pagination = {perpage: 50};
+                d._csrfToken = '<?= $this->request->getParam('_csrfToken'); ?>';
+                // d.date = Math.random();
+                d.general = $("#generalSearch").val();
+                // d.sku = $("#sku").val();
+                // d.stock = $("#stock").val();
+                // d.publish = $("#publish").val();
+                // d.created = $("#created").val();
+            }
+        },
+        initComplete: function(settings, json) {
 
-    jQuery(document).ready(function() {
-        DatatableRemoteAjaxDemo.init();
+        },
+        drawCallback_: function( settings ) {
+            var api = this.api();
+            console.log(api, settings);
+            // Output the data for the visible rows to the browser's console
+            //console.log( api.rows( {page:'current'} ).data() );
+        },
+        columns: [
+            {data: 'id'},
+            {data: 'invoice'},
+            {data: 'Customers.first_name'},
+            {data: 'Customers.email'},
+            {data: 'Vouchers.name'},
+            {data: 'discount_kupon'},
+            {data: 'discount_voucher'},
+            {data: 'gross_total'},
+            {data: 'total'},
+            {data: 'payment_status'},
+            {data: 'id'},
+            {data: 'id'},
+            {data: 'created'},
+            {data: 'id'},
+        ],
+        //
+        columnDefs: [
+            {
+                targets: 0,
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                targets: 1,
+                render: function (data, type, row, meta) {
+                    return row.invoice;
+                }
+            },
+            {
+                targets: 2,
+                render: function (data, type, row, meta) {
+                    return row.customer.first_name;
+                }
+            },
+            {
+                targets: 3,
+                render: function (data, type, row, meta) {
+                    return row.customer.email;
+                }
+            },
+            {
+                targets: 4,
+                render: function (data, type, row, meta) {
+                    return row.voucher ? row.voucher.name : '-';
+                }
+            },
+            {
+                targets: 5,
+                render: function (data, type, row, meta) {
+                    return parseInt(row.discount_kupon).format(0, 3, ',', '.');
+                }
+            },
+            {
+                targets: 6,
+                render: function (data, type, row, meta) {
+                    return parseInt(row.discount_voucher).format(0, 3, ',', '.');
+                }
+            },
+            {
+                targets: 7,
+                render: function (data, type, row, meta) {
+                    return parseInt(row.gross_total).format(0, 3, ',', '.');
+                }
+            },
+            {
+                targets: 8,
+                render: function (data, type, row, meta) {
+                    return parseInt(row.total).format(0, 3, ',', '.');
+                }
+            },
+            {
+                targets: 9,
+                render: function (data, type, row, meta) {
+                    let status = {
+                        1: {'class': 'm-badge--default', 'name': 'Pending'},
+                        2: {'class': ' m-badge--success', 'name': 'Success'},
+                        3: {'class': ' m-badge--danger', 'name': 'Failed'},
+                        4: {'class': ' m-badge--default', 'name': 'Expired'}
+                    };
+                    return row.payment_status && status[row.payment_status] ? '<span class="m-badge ' + status[row.payment_status].class + ' m-badge--wide">'
+                        + status[row.payment_status].name
+                        + '</span>' : '-';
+                }
+            },
+            {
+                targets: 10,
+                render: function (data, type, row, meta) {
+                    return row.transactions.length > 0 ? row.transactions[row.transactions.length - 1].payment_type : '-';
+                }
+            },
+            {
+                targets: 11,
+                render: function (data, type, row, meta) {
+                    // return row.created;
+                    var doms = '';
+                    doms += 'Nama Penerima : '+row.recipient_name+'<br>';
+                    doms += 'Telepon : '+row.recipient_phone+'<br>';
+                    return doms;
+                }
+            },
+            {
+                targets: 12,
+                render: function (data, type, row, meta) {
+                    return row.created;
+                }
+            },
+            {
+                targets: -1,
+                render: function (data, type, row, meta) {
+                    return '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Edit"><i class="la la-edit"></i></a><a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete"><i class="la la-trash"></i></a>';
+                }
+            },
+
+        ]
+
+    });
+
+
+
+    $('#m_search').on('click', function(e) {
+        e.preventDefault();
+        $( datatable.column(0).header()).text( $("#stock option:selected").text() );
+        datatable.table().draw();
+    });
+
+    $('#m_reset').on('click', function(e) {
+        e.preventDefault();
+        $('.m-input').each(function() {
+            $(this).val('');
+        });
+        datatable.table().draw();
     });
 </script>
 <?php $this->end(); ?>
