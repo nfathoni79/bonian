@@ -186,14 +186,8 @@
                 'icon' => 'm-menu__link-icon flaticon-business',
                 'children' => [
                     [
-                        'name' => 'Daftar Pembelian',
+                        'name' => 'Daftar Penjualan',
                         'url' => ['controller' => 'Orders', 'action' => 'index'],
-                        'icon' => 'm-menu__link-bullet',
-                        'children' => []
-                    ],
-                    [
-                        'name' => 'Export Data Pembelian',
-                        'url' => ['controller' => 'Products', 'action' => 'prices'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],

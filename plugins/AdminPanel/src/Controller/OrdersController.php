@@ -33,6 +33,9 @@ class OrdersController extends AppController
     public function index()
     {
 
+        $general = $this->request->getData('general'); //invoice, email, customer name
+        $type = $this->request->getData('type');
+        $created = $this->request->getData('created');
         if ($this->DataTable->isAjax()) {
 
             $datatable = $this->DataTable->adapter('AdminPanel.Orders')
@@ -66,6 +69,21 @@ class OrdersController extends AppController
 //                    ],
                 ]);
 
+            if($general){
+                if($general){
+                    $datatable->where(['OR' => [
+                        'Orders.invoice LIKE ' => '%'.$general.'%',
+                        'Customers.email LIKE ' => '%'.general.'%',
+                        'Customers.first_name LIKE ' => '%'.$general.'%',
+                    ]]);
+                }
+            }
+            if($type){ 
+                $datatable->where(['Orders.order_type' => $type]);
+            }
+            if($created){
+                $datatable->where(['DATE(Orders.created)' => $created]);
+            }
 
             $result = $datatable
                 ->setSorting()
