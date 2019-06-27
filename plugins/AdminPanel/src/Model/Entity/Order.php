@@ -31,6 +31,7 @@ use Cake\ORM\Entity;
  * @property \AdminPanel\Model\Entity\OrderDetail[] $order_details
  * @property \AdminPanel\Model\Entity\Transaction[] $transactions
  * @property \AdminPanel\Model\Entity\OrderDigital[] $order_digitals
+ * @property \AdminPanel\Model\Entity\CustomerShareProduct[] $customer_share_products
  */
 class Order extends Entity
 {
@@ -67,6 +68,7 @@ class Order extends Entity
         'product_promotion' => true,
         'order_details' => true,
         'transactions' => true,
-        'order_digitals' => true
+        'order_digitals' => true,
+        'customer_share_products' => true
     ];
 }
