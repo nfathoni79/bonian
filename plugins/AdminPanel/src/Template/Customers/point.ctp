@@ -194,7 +194,7 @@ $this->Html->script([
                         }
                     },
                     {
-                        field: 'created',
+                        field: 'CustomerMutationPoints.created',
                         title: 'Tanggal',
                         template: function(row) {
                             return row.created;
