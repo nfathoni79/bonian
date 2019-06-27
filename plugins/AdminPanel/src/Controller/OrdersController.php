@@ -10,6 +10,7 @@ use Cake\Core\Configure;
  * @property \AdminPanel\Model\Table\OrderShippingDetailsTable $OrderShippingDetails
  * @property \AdminPanel\Model\Table\TransactionsTable $Transactions
  * @property \AdminPanel\Model\Table\ProductRatingsTable $ProductRatings
+ * @property \AdminPanel\Model\Table\CustomerShareProductsTable $CustomerShareProducts
  * @method \AdminPanel\Model\Entity\Order[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class OrdersController extends AppController
@@ -22,6 +23,7 @@ class OrdersController extends AppController
         $this->loadModel('AdminPanel.OrderShippingDetails');
         $this->loadModel('AdminPanel.Transactions');
         $this->loadModel('AdminPanel.ProductRatings');
+        $this->loadModel('AdminPanel.CustomerShareProducts');
     }
 
 
@@ -177,6 +179,9 @@ class OrdersController extends AppController
      */
     public function edit($id = null)
     {
+        /**
+         * @var \AdminPanel\Model\Entity\Order $order
+         */
         $order = $this->Orders->get($id, [
             'contain' => [
                 'Provinces',
@@ -225,6 +230,21 @@ class OrdersController extends AppController
 
             //    return $this->redirect(['action' => 'index']);
             //}
+
+            //process bonus product entity
+            $selected_products = [];
+            $total_products = 0;
+            /**
+             * @var \AdminPanel\Model\Entity\CustomerShareProduct $shareProductEntity
+             */
+            $shareProductEntity = $this->CustomerShareProducts->find()
+                ->where([
+                    'order_id' => $order->id,
+                    'credited' => 0
+                ])
+                ->first();
+            //process bonus product entity
+
             foreach($order->order_details as $detail) {
                 foreach($this->request->getData('origin') as $origin => $shipping) {
                     if(!empty($shipping['order_status_id'])){
@@ -271,6 +291,27 @@ class OrdersController extends AppController
 
                                     }
                                 }
+
+                                //check share products
+                                if ($shareProductEntity) {
+                                    foreach($detail->order_detail_products as $detail_product) {
+                                        if ($shareProductEntity->product_id == $detail_product->product_id) {
+                                            $selected_products = [
+                                                'customer_id' => $shareProductEntity->customer_id,
+                                                'product_id' => $detail_product->product_id,
+                                                'price' => $detail_product->price,
+                                                'qty' => $detail_product->qty,
+                                            ];
+                                        }
+                                        /*if (!array_key_exists($detail_product->product_id, $total_products)) {
+                                            $total_products[$detail_product->product_id] = $detail_product->qty;
+                                        } else {
+                                            $total_products[$detail_product->product_id] += $detail_product->qty;
+                                        }*/
+                                        $total_products += (int) $detail_product->qty;
+                                    }
+                                }
+                                //check share products
                             }
                             /* END SEMENTARA */
 
@@ -351,6 +392,35 @@ class OrdersController extends AppController
                     }
                 }
             }
+
+            //processing share products
+
+            if ($selected_products && $total_products > 0) {
+                $reductions = [
+                    'voucher' => $order->discount_voucher / $total_products,
+                    'point' => $order->use_point / $total_products,
+                    'coupon' => 0 //TODO check coupon detail
+                ];
+
+                $sharing_percentage = Configure::read('sharing_percentage', 0.01);
+                $bonus_point = $sharing_percentage *
+                    ($selected_products['price'] * $selected_products['qty'] - $reductions['voucher'] - $reductions['point'] - $reductions['coupon']);
+
+                $bonus_point = floor($bonus_point); //pembulatan kebawah
+                if ($this->Orders
+                    ->Customers
+                    ->CustomerMutationPoints
+                    ->saving(
+                        $selected_products['customer_id'],
+                        3,
+                        intval($bonus_point),
+                        'bonus point sharing product'
+                    )) {
+                    $shareProductEntity->set('credited', 1);
+                    $this->CustomerShareProducts->save($shareProductEntity);
+                }
+            }
+            //processing share products
 
         }
 //        $order_detail_statuses = $this->Orders->OrderDetails->OrderStatuses->find('list');

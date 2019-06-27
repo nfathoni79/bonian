@@ -18,6 +18,8 @@ use Cake\ORM\Entity;
  * @property int|null $product_promotion_id
  * @property int|null $use_point
  * @property float|null $gross_total
+ * @property float|null $discount_voucher
+ * @property float|null $discount_kupon
  * @property float $total
  * @property int|null $payment_status
  * @property \Cake\I18n\FrozenTime $created
@@ -57,6 +59,8 @@ class Order extends Entity
         'product_promotion_id' => true,
         'use_point' => true,
         'gross_total' => true,
+        'discount_voucher' => true,
+        'discount_kupon' => true,
         'total' => true,
         'payment_status' => true,
         'created' => true,
