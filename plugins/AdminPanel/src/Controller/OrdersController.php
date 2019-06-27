@@ -73,7 +73,7 @@ class OrdersController extends AppController
                 if($general){
                     $datatable->where(['OR' => [
                         'Orders.invoice LIKE ' => '%'.$general.'%',
-                        'Customers.email LIKE ' => '%'.general.'%',
+                        'Customers.email LIKE ' => '%'.$general.'%',
                         'Customers.first_name LIKE ' => '%'.$general.'%',
                     ]]);
                 }
