@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <?= __('Penjualan') ?>
+                    <?= __('Report') ?>
                 </h3>
                 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                     <li class="m-nav__item m-nav__item--home">
@@ -24,7 +24,7 @@
                     <li class="m-nav__item">
                         <a href="#" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Penjualan') ?>
+                                <?= __('Report') ?>
                             </span>
                         </a>
                     </li>
@@ -32,9 +32,9 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                        <a href="<?= $this->Url->build(); ?>" class="m-nav__link">
+                        <a href="<?= $this->Url->build(['action' => 'detail', 'prefix' => 'report']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Daftar Penjualan') ?>
+                                <?= __('Sales Report') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Daftar Penjualan') ?>
+                            <?= __('Sales Report') ?>
                         </h3>
                     </div>
                 </div>
@@ -76,16 +76,16 @@
                             <div class="col-2">
                                 <?php
                                 echo $this->Form->control('type', [
-                                'type' => 'select',
-                                'options' => [
-                                '1' => 'Regular Produk',
-                                '2' => 'Produk Digital'
-                                ],
-                                'div' => false,
-                                'label' => false,
-                                'empty' => 'Product Type',
-                                'class' => 'form-control m-input',
-                                'id' => 'type'
+                                    'type' => 'select',
+                                    'options' => [
+                                        '1' => 'Regular Produk',
+                                        '2' => 'Produk Digital'
+                                    ],
+                                    'div' => false,
+                                    'label' => false,
+                                    'empty' => 'Product Type',
+                                    'class' => 'form-control m-input',
+                                    'id' => 'type'
                                 ]);?>
                             </div>
                             <label for="example-text-input" class="col-2 col-form-label">Date</label>
@@ -98,20 +98,20 @@
                             <div class="col-2">
                                 <?php
                                 echo $this->Form->control('status', [
-                                'type' => 'select',
-                                'options' => [
-                                    '1' => 'Pending',
-                                    '2' => 'Success',
-                                    '3' => 'Failed',
-                                    '4' => 'Expired',
-                                    '5' => 'Refund',
-                                    '6' => 'Cancel'
-                                ],
-                                'div' => false,
-                                'label' => false,
-                                'empty' => 'Payment Status',
-                                'class' => 'form-control m-input',
-                                'id' => 'status'
+                                    'type' => 'select',
+                                    'options' => [
+                                        '1' => 'Pending',
+                                        '2' => 'Success',
+                                        '3' => 'Failed',
+                                        '4' => 'Expired',
+                                        '5' => 'Refund',
+                                        '6' => 'Cancel'
+                                    ],
+                                    'div' => false,
+                                    'label' => false,
+                                    'empty' => 'Payment Status',
+                                    'class' => 'form-control m-input',
+                                    'id' => 'status'
                                 ]);?>
                             </div>
                         </div>
@@ -155,7 +155,6 @@
                                 <th>Payment Method</th>
                                 <th>Shipping Destination</th>
                                 <th>Created</th>
-                                <th>Action</th>
                             </tr>
                             </thead>
                         </table>
@@ -170,12 +169,12 @@
 <?php $this->append('script'); ?>
 <?php
 $this->Html->css([
-'/admin-assets/vendors/custom/datatables/datatables.bundle.css'
+    '/admin-assets/vendors/custom/datatables/datatables.bundle.css'
 ], ['block' => true]);
 $this->Html->script([
-'/admin-assets/vendors/custom/datatables/datatables.bundle',
-'/admin-assets/vendors/custom/datatables/buttons.colVis.min',
-'/admin-assets/app/js/lib-tools.js',
+    '/admin-assets/vendors/custom/datatables/datatables.bundle',
+    '/admin-assets/vendors/custom/datatables/buttons.colVis.min',
+    '/admin-assets/app/js/lib-tools.js',
 ], ['block' => true]);
 ?>
 <script>
@@ -249,7 +248,7 @@ $this->Html->script([
         serverSide: true,
         order: [[0, 'desc']],
         ajax: {
-            url: "<?= $this->Url->build(['action' => 'index']); ?>",
+            url: "<?= $this->Url->build(['action' => 'index', 'controller' => 'orders']); ?>",
             type: 'POST',
             data: function(d) {
                 d.pagination = {perpage: 50};
@@ -284,7 +283,6 @@ $this->Html->script([
             {data: 'id'},
             {data: 'id'},
             {data: 'created'},
-            {data: 'id'},
         ],
         //
         columnDefs: [
@@ -391,12 +389,6 @@ $this->Html->script([
                 targets: 13,
                 render: function (data, type, row, meta) {
                     return row.created;
-                }
-            },
-            {
-                targets: -1,
-                render: function (data, type, row, meta) {
-                    return '<a href="<?= $this->Url->build(['action' => 'edit']); ?>/'+ row.id +'"class="m-portlet__nav-link btn btn-primary btn-sm" title="View Order"><i class="la la-edit"></i> View Order</a>';
                 }
             },
 

@@ -56,7 +56,7 @@ class ReportsController extends AppController
 
 
         $datatable = $this->ShareStatistics->find()
-            ->where(['media_type IN ' => ['tw','fb','sms','wa', 'ln']])
+            ->where(['media_type IN ' => ['tw','fb','sms','wa', 'ln'], 'clicked' => '1'])
             ->group(['media_type']);
         $datatable->select([
             'plus' => $datatable->func()->count("ShareStatistics.id"),
@@ -123,6 +123,7 @@ class ReportsController extends AppController
                     'id',
                     'name',
                     'sku',
+                    'rating',
                     'rating_count',
                     'modified',
                 ])

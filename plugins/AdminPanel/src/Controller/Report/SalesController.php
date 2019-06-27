@@ -235,6 +235,8 @@ class SalesController extends AppController
         $this->set(compact('branches', 'start', 'end'));
     }
 
+    public function detail(){
 
+    }
 
 }

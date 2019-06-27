@@ -329,8 +329,14 @@
                         'children' => []
                     ],
                     [
-                        'name' => 'Sales Report',
+                        'name' => 'Summary Sales Report',
                         'url' => ['controller' => 'Sales', 'prefix' => 'report'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Sales Report',
+                        'url' => ['controller' => 'Sales', 'prefix' => 'report','action' => 'detail'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],

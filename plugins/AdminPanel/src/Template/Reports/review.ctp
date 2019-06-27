@@ -187,8 +187,8 @@ $this->Html->script([
             {data: 'id'},
             {data: 'sku'},
             {data: 'name'},
+            {data: 'rating'},
             {data: 'rating_count'},
-            {data: 'count_review'},
             {data: 'modified'},
             {data: 'id'},
             // {data: 'comment'},
@@ -218,13 +218,13 @@ $this->Html->script([
                 targets: 3,
                 orderable: false,
                 render: function (data, type, row, meta) {
-                    return '<span class="stars" data-rating="'+row.rating_count+'" data-num-stars="5" ></span>';
+                    return '<span class="stars" data-rating="'+Math.round(row.rating)+'" data-num-stars="5" ></span> ('+row.rating+')';
                 }
             },
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
-                    return row.count_review+' Orang';
+                    return row.rating_count+' Orang';
                 }
             },
             {

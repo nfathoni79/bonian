@@ -36,6 +36,7 @@ class OrdersController extends AppController
         $general = $this->request->getData('general'); //invoice, email, customer name
         $type = $this->request->getData('type');
         $created = $this->request->getData('created');
+        $status = $this->request->getData('status');
         if ($this->DataTable->isAjax()) {
 
             $datatable = $this->DataTable->adapter('AdminPanel.Orders')
@@ -83,6 +84,9 @@ class OrdersController extends AppController
             }
             if($created){
                 $datatable->where(['DATE(Orders.created)' => $created]);
+            }
+            if($status){
+                $datatable->where(['Orders.payment_status' => $status]);
             }
 
             $result = $datatable
