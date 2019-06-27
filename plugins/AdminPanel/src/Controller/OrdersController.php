@@ -193,7 +193,13 @@ class OrdersController extends AppController
                     'Subdistricts',
                     'OrderDetailProducts' => [
                         'Products' => [
-                            'ProductImages'
+                            'ProductImages' => [
+                                'fields' => [
+                                    'name',
+                                    'product_id',
+                                ],
+                                'sort' => ['ProductImages.primary' => 'DESC','ProductImages.created' => 'ASC']
+                            ]
                         ],
                         'ProductOptionPrices' => [
                             'ProductOptionValueLists' => [
@@ -242,7 +248,26 @@ class OrdersController extends AppController
                                             'rating' => 0,
                                             'status' => 0,
                                         ]);
-                                        $this->ProductRatings->save($saveRatting);
+                                        if($this->ProductRatings->save($saveRatting)){
+
+                                            if ($this->Notification->create(
+                                                $order->customer_id,
+                                                '1',
+                                                'Ulasan Produk',
+                                                'Silahkan memberikan ulasan produk '.$vals->product->name,
+                                                'Products',
+                                                $vals->product->id,
+                                                2,
+                                                Configure::read('mainSite').'/images/70x59/'. $vals->product->product_images[0]->name,
+                                                Configure::read('frontsite').'user/history?status=semua&page=1&start=&search='.$order->invoice
+                                            )) {
+
+                                                $this->Notification->triggerCount(
+                                                    $order->customer_id,
+                                                    $order->customer->reffcode
+                                                );
+                                            }
+                                        }
 
                                     }
                                 }
