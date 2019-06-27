@@ -148,7 +148,7 @@ $this->Html->script([
                 order: [[ 6, "desc" ]],
                 columns: [
                     {
-                        field: 'id',
+                        field: 'CustomerMutationAmounts.id',
                         title: '#',
                         sortable: true,
                         width: 40,
@@ -194,7 +194,7 @@ $this->Html->script([
                         }
                     },
                     {
-                        field: 'created',
+                        field: 'CustomerMutationAmounts.created',
                         title: 'Tanggal',
                         template: function(row) {
                             return row.created;
