@@ -330,7 +330,7 @@
                     ],
                     [
                         'name' => 'Summary Sales Report',
-                        'url' => ['controller' => 'Sales', 'prefix' => 'report'],
+                        'url' => ['controller' => 'Sales', 'prefix' => 'report', 'action' => 'index'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],
