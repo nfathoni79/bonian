@@ -154,6 +154,7 @@
                                 <th>Payment Status</th>
                                 <th>Payment Method</th>
                                 <th>Shipping Destination</th>
+                                <th>Produt Detail</th>
                                 <th>Created</th>
                             </tr>
                             </thead>
@@ -282,6 +283,7 @@ $this->Html->script([
             {data: 'payment_status'},
             {data: 'id'},
             {data: 'id'},
+            {data: 'id'},
             {data: 'created'},
         ],
         //
@@ -325,14 +327,12 @@ $this->Html->script([
             },
             {
                 targets: 6,
-                visible: false,
                 render: function (data, type, row, meta) {
                     return parseInt(row.discount_kupon).format(0, 3, ',', '.');
                 }
             },
             {
                 targets: 7,
-                visible: false,
                 render: function (data, type, row, meta) {
                     return parseInt(row.discount_voucher).format(0, 3, ',', '.');
                 }
@@ -387,6 +387,37 @@ $this->Html->script([
             },
             {
                 targets: 13,
+                visible: false,
+                render: function (data, type, row, meta) {
+                    if(row.order_type == 2){
+                        return '-';
+                    }else{
+                        var doms = '';
+                        $.each(row.order_details,function(k,v){
+                            doms += '<b>Order ID : '+row.invoice+'-'+v.id+'</b><br>';
+                            var current = 1;
+                            $.each(v.order_detail_products, function(kk,vv){
+                                doms += '<b>'+current+'. '+vv.product.name+'</b><br>';
+                                doms += 'Sub SKU : '+vv.product_option_price.sku+'<br>';
+                                doms += 'QTY : '+vv.qty+'<br>';
+                                var variant = '';
+                                $.each(vv.product_option_price.product_option_value_lists,function(kkk,vvv){
+                                    variant += vvv.option.name+' : '+vvv.option_value.name+'<br>';
+                                });
+                                doms += variant+'<br>';
+                                current++;
+                            });
+                            doms += '<hr>';
+                        });
+                        // doms += 'Nama Penerima : '+row.recipient_name+'<br>';
+                        // doms += 'Telepon : '+row.recipient_phone+'<br>';
+                        // doms += 'Alamat : '+row.address+', '+row.subdistrict.name+', '+row.city.name+', '+row.province.name+'<br>';
+                        return doms;
+                    }
+                }
+            },
+            {
+                targets: 14,
                 render: function (data, type, row, meta) {
                     return row.created;
                 }
