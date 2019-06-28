@@ -54,14 +54,16 @@ echo $this->Html->script([
         ajaxRequest.setblockUI('#m_wizard');
         formEl.submit(function(e) {
             e.preventDefault();
+            if ($('.sku-prefix').length == 0) {
+                swal('Silahkan pilih salah satu combo variant, dan klik button "Tambah Variant Product"');
+                return;
+            }
             ajaxRequest.post(formEl.attr('action'), formEl.find(':input'), function(data, saved) {
                 if (data.success) {
                     console.log(data, saved);
                     location.href = '<?= $this->Url->build(['action' => 'setPrimaryImage', $this->request->getParam('pass.0')]); ?>';
                 } else {
-                    if (saved.error && saved.error['ProductOptionValueLists'] && $('.sku-prefix').length == 0) {
-                        swal('Silahkan pilih salah satu combo variant, dan klik button "Tambah Variant Product"');
-                    }
+
                 }
             });
         });

@@ -2100,9 +2100,9 @@ class ProductsController extends AppController
                 ->hasAtLeast('ProductToCourriers', 1, __d('AdminPanel', __d('AdminPanel','pilihan minimal 1 kurir')));
 
 
-            $validator
-                ->requirePresence('ProductOptionValueLists')
-                ->hasAtLeast('ProductOptionValueLists', 1, __d('AdminPanel', __d('AdminPanel','Pilih salah satu combo variant')));
+            //$validator
+            //    ->requirePresence('ProductOptionValueLists')
+            //    ->hasAtLeast('ProductOptionValueLists', 1, __d('AdminPanel', __d('AdminPanel','Pilih salah satu combo variant')));
 
             $productOption = new Validator();
 
@@ -2118,6 +2118,7 @@ class ProductsController extends AppController
                 $productOption
                     ->notBlank($option_id, 'tidak boleh kosong');
             }
+
 
             $validator->addNestedMany('ProductOptionValueLists', $productOption);
 
@@ -2349,17 +2350,21 @@ class ProductsController extends AppController
                     }
 
                     if ($option_prices = $this->request->getData('ProductOptionPrices')) {
-                        // $idx = 1;
- 
+                         $idx = 1;
+
                         foreach($option_prices as $key => $price) {
 
                             // $price['idx'] = $idx;
+                            if (!isset($price['idx'])) {
+                                $price['idx'] = $idx;
+                            }
+
                             $getOptionPrice = $this
                                 ->Products
                                 ->ProductOptionPrices
                                 ->find()
                                 ->where([
-                                    'id' => $price['id'],
+                                    'id' => @$price['id'],
                                     // 'idx' => $idx
                                 ])
                                 ->first();
@@ -2387,7 +2392,7 @@ class ProductsController extends AppController
                                 //exit;
                             }
 
-                            // $idx++;
+                             $idx++;
                         }
 
                         /**
@@ -2414,8 +2419,8 @@ class ProductsController extends AppController
 
 
                         if ($option_value_lists = $this->request->getData('ProductOptionValueLists')) {
-                            $idx = count($OptionPriceEntity); //1;
-                            //debug($option_value_lists);exit;
+                            //$idx = count($OptionPriceEntity); //1;
+                            $idx = count($OptionPriceEntity) > 0 ? count($OptionPriceEntity) - count($option_value_lists) + 1 : 1;
                             foreach($option_value_lists as $k => $lists) {
 
                                 foreach($lists as $option_id => $option_value_id) {
@@ -2431,6 +2436,7 @@ class ProductsController extends AppController
                                         ->first();
 
 
+
                                     $OptionValueListEntity = !empty($getValueList) ? $getValueList : $this
                                         ->ProductOptionValueLists
                                         ->newEntity([
@@ -2442,9 +2448,13 @@ class ProductsController extends AppController
                                         ->ProductOptionValueLists
                                         ->patchEntity($OptionValueListEntity, ['option_value_id' => $option_value_id]);
 
+
+
                                     $this
                                         ->ProductOptionValueLists
                                         ->save($OptionValueListEntity);
+
+                                    //debug($OptionValueListEntity);
 
 
                                 }
@@ -2499,7 +2509,7 @@ class ProductsController extends AppController
                                                 'product_option_price_id' => $OptionPriceEntity[$idx]->get('id')
                                             ]);
 
-                                        //debug($OptionStockEntity);
+                                        //debug($OptionStockEntity);exit;
 
 
                                         $this
