@@ -492,13 +492,9 @@ class VouchersController extends AppController
                 case '3':
 
                     $validator
-                        ->requirePresence('files')
-                        ->add('files', [
-                            'validExtension' => [
-                                'rule' => ['extension',['csv']], // default  ['gif', 'jpeg', 'png', 'jpg']
-                                'message' => __('These files extension are allowed: .csv')
-                            ]
-                        ]);
+                        ->requirePresence('code_voucher')
+                        ->regex('code_voucher','/[^\s]+/', 'Format no whitespace')
+                        ->notBlank('code_voucher', 'Code voucher harus diisi');
                     break;
             }
             $error = $validator->errors($this->request->getData());
@@ -556,68 +552,9 @@ class VouchersController extends AppController
                     case '3':
 
                         /* Import data */
-                        try {
-
-                            $data = $this->request->getData('files');
-                            $file = $data['tmp_name'];
-                            $handle = fopen($file, "r");
-                            $success = true;
-                            $this->Vouchers->getConnection()->begin();
-
-                            $count = 0;
-                            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
-
-                                /* SKIP ROW 0*/
-                                $count++;
-                                if ($count == 1) {
-                                    continue;
-                                }
-
-                                /* CHECK TO DB EXSIST */
-                                $find = $this->Vouchers->find()
-                                    ->where(['code_voucher' => trim($row[0])])
-                                    ->first();
-                                if(empty($find)){
-                                    $entity = $this->Vouchers->newEntity([
-                                        'id' => $voucher->get('id'),
-                                        'name' => $this->request->getData('name'),
-                                        'slug' => Text::slug(strtolower($this->request->getData('name'))),
-                                        'code_voucher' => trim($row[0]),
-                                        'date_start' => $this->request->getData('date_start'),
-                                        'date_end' => $this->request->getData('date_end'),
-                                        'qty' => 1,
-                                        'stock' => 1,
-                                        'type' => 3,
-                                        'point' => 0,
-                                        'percent' => $this->request->getData('percent'),
-                                        'value' => $this->request->getData('value'),
-                                        'status' => 1,
-                                    ]);
-
-                                    if($this->Vouchers->save($entity)){
-
-                                    }else{
-                                        $this->Flash->error(__('Gagal menyimpan konfigurasi, duplikasi kode produk '.$row[0]));
-                                        $success = false;
-                                        break;
-                                    }
-                                }else{
-                                    $this->Flash->error(__('Gagal menyimpan konfigurasi, duplikasi kode produk '.$row[0]));
-                                    $success = false;
-                                    break;
-                                }
-                            }
-
-                            if($success){
-                                $this->Vouchers->getConnection()->commit();
-                                $this->Flash->success(__('Konfigurasi voucher berhasil disimpan'));
-                            }else{
-                                $this->Vouchers->getConnection()->rollback();
-                            }
-
-                        } catch(\Cake\ORM\Exception\PersistenceFailedException $e) {
-                            $this->Vouchers->getConnection()->rollback();
-                        }
+                        $voucher = $this->Vouchers->patchEntity($voucher, $this->request->getData());
+                        $this->Vouchers->save($voucher);
+                        $this->Flash->success(__('Konfigurasi voucher berhasil disimpan'));
 
                         break;
                 }

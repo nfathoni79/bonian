@@ -278,13 +278,13 @@ echo $this->Html->script([
             {
                 targets: 5,
                 render: function (data, type, row, meta) {
-                    return  parseInt(row.qty).format(0, 3, '.', ',');
+                    return  parseInt(row.qty).format(0, 3, ',', '.');
                 }
             },
             {
                 targets: 6,
                 render: function (data, type, row, meta) {
-                    return  parseInt(row.value).format(0, 3, '.', ',');
+                    return  parseInt(row.value).format(0, 3, ',', '.');
                 }
             },
             {
