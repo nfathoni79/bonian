@@ -413,7 +413,7 @@ $this->Html->script([
             {
                 targets: 5,
                 render: function (data, type, row, meta) {
-                    return parseInt(row.price_sale).format(0, 3, '.', ',');
+                    return parseInt(row.price_sale).format(0, 3, ',', '.');
                 }
             },
             {

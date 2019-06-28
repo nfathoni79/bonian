@@ -70,7 +70,7 @@
             <?= $this->Form->create($voucher,['class' => 'm-login__form m-form', 'templates' => 'AdminPanel.app_form', 'id' => 'm_form','type' => 'file']); ?>
             <div class="m-portlet__body">
                 <?php
-                    $this->Form->setConfig('errorClass', 'is-invalid');
+                $this->Form->setConfig('errorClass', 'is-invalid');
                 echo $this->Flash->render();
                 $default_class = 'form-control form-control-danger m-input m-input--air';
                 ?>
@@ -86,11 +86,11 @@
                             <div class="col-lg-4">
                                 <?php echo $this->Form->control('type',['class' => $default_class, 'label' => 'Tipe', 'options' => ['1' => 'Penukaran Point', '2' => 'Seleksi Berdasarkan Kategori', '3' => 'Private Voucher'],'empty' => 'Pilih Tipe Voucher']); ?>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 qty">
                                 <?php echo $this->Form->control('qty',['class' => $default_class, 'label' => 'Kuota','required' => false, 'placeholder' => 'Jumlah kuota']); ?>
                             </div>
                         </div>
-                        <div class="form-group m-form__group row code" style="display:none;">
+                        <div class="form-group m-form__group row code">
                             <div class="col-lg-4">
                                 <?php  echo $this->Form->control('code_voucher',['class' => $default_class,'required' => false,'label' => 'Code Voucher']); ?>
                             </div>
@@ -120,51 +120,25 @@
                             <div class="form-group  m-form__group row">
                                 <label  class="col-lg-1 col-form-label">Kategori </label>
                                 <div class="col-lg-9">
-
                                     <div class="repeater">
-                                            <?php foreach($voucher->voucher_details as $k => $vals):?>
-                                            <?php if($k == 0): ?>
-                                            <div data-repeatable data-repeater-list="" class="col-lg-12">
-                                                <div data-repeater-item class="row m--margin-bottom-10">
-                                                    <div class="col-lg-4">
-                                                        <?php echo $this->Form->control('categories['.$vals->product_category_id.'][idx]', ['type'=> 'hidden','label' => false, 'class' => $default_class . ' category-id', 'readonly' => true, 'data-id' => $vals->product_category_id, 'value' => $vals->id]);?>
-                                                        <?php echo $this->Form->control('categories['.$vals->product_category_id.'][id]', ['type'=> 'hidden','label' => false, 'class' => $default_class . ' category-id', 'readonly' => true, 'data-id' => $vals->product_category_id, 'value' => $vals->product_category->id]);?>
-                                                        <?php echo $this->Form->control('categories['.$vals->product_category_id.'][name]', ['label' => false, 'class' => $default_class . ' category-name', 'readonly' => true, 'data-id' => $vals->product_category_id, 'value' => $vals->product_category->name]);?>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <a href="javascript:void(0);" class="btn btn-info m-btn m-btn--icon btn-sm btn-pick" data-idcategori="<?= $vals->product_category->id;?>" data-id="<?= $vals->product_category_id;?>"  data-toggle="modal" data-target="#m_modal_1">
-                                                            <i class="la la-list-alt"></i> Pilih Kategori
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <a href="javascript:void(0);" data-repeater-delete="" class="btn btn-danger btn-sm m-btn m-btn--icon m-btn--icon-only remove-row">
-                                                            <i class="la la-remove"></i>
-                                                        </a>
-                                                    </div>
+                                        <div data-repeatable data-repeater-list="" class="col-lg-12">
+                                            <div data-repeater-item class="row m--margin-bottom-10">
+                                                <div class="col-lg-4">
+                                                    <?php echo $this->Form->control('categories[0][id]', ['type'=> 'hidden','label' => false, 'class' => $default_class . ' category-id', 'readonly' => true, 'data-id' => 0]);?>
+                                                    <?php echo $this->Form->control('categories[0][name]', ['label' => false, 'class' => $default_class . ' category-name', 'readonly' => true, 'data-id' => 0]);?>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <a href="javascript:void(0);" class="btn btn-info m-btn m-btn--icon btn-sm btn-pick"  data-id="0"  data-toggle="modal" data-target="#m_modal_1">
+                                                        <i class="la la-list-alt"></i> Pilih Kategori
+                                                    </a>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <a href="javascript:void(0);" data-repeater-delete="" class="btn btn-danger btn-sm m-btn m-btn--icon m-btn--icon-only remove-row">
+                                                        <i class="la la-remove"></i>
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <?php else: ?>
-                                            <div class="col-lg-12">
-                                                <div class="row m--margin-bottom-10">
-                                                    <div class="col-lg-4">
-                                                        <?php echo $this->Form->control('categories['.$vals->product_category_id.'][idx]', ['type'=> 'hidden','label' => false, 'class' => $default_class . ' category-id', 'readonly' => true, 'data-id' => $vals->product_category_id, 'value' => $vals->id]);?>
-                                                        <?php echo $this->Form->control('categories['.$vals->product_category_id.'][id]', ['type'=> 'hidden','label' => false, 'class' => $default_class . ' category-id', 'readonly' => true, 'data-id' => $vals->product_category_id, 'value' => $vals->product_category->id]);?>
-                                                        <?php echo $this->Form->control('categories['.$vals->product_category_id.'][name]', ['label' => false, 'class' => $default_class . ' category-name', 'readonly' => true, 'data-id' => $vals->product_category_id, 'value' => $vals->product_category->name]);?>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <a href="javascript:void(0);" class="btn btn-info m-btn m-btn--icon btn-sm btn-pick"  data-idcategori="<?= $vals->product_category->id;?>" data-id="<?= $vals->product_category_id;?>"  data-toggle="modal" data-target="#m_modal_1">
-                                                            <i class="la la-list-alt"></i> Pilih Kategori
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <a href="javascript:void(0);"  class="btn btn-danger btn-sm m-btn m-btn--icon m-btn--icon-only remove-row voucher-delete" data-id="<?=  $vals->id;?>">
-                                                            <i class="la la-remove"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <?php endif; ?>
-                                            <?php endforeach;?>
+                                        </div>
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div data-repeater-create="" class="btn btn btn-primary btn-sm m-btn m-btn--icon button">
@@ -184,25 +158,7 @@
                             <div class="col-lg-9">
                                 <?php  echo $this->Form->control('tos',['label' => false, 'div' => false, 'class' => $default_class. ' froala-editor']);?>
                             </div>
-                        </div>
-                        <div class="form-group m-form__group row file"  style="display:none;">
-                            <label class="col-lg-1 col-form-label">Import File</label>
-                            <div class="col-lg-4">
-                                <div></div>
-                                <div class="custom-file">
-                                    <input type="file" name="files" class="custom-file-input" id="customFile">
-                                    <label class="custom-file-label"  for="customFile">Pilih file</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 offset-1">
-                                <a href="<?= $this->Url->build('/files/csv/vouchers.csv'); ?>" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
-                                <span>
-                                    <i class="la la-download"></i>
-                                    <span><?= __('Contoh CSV Voucher') ?></span>
-                                </span>
-                                </a>
-                            </div>
-                        </div>
+                        </div> 
                         <div class="form-group m-form__group row">
                             <div class="col-lg-4">
                                 <?php  echo $this->Form->control('status',['class' => $default_class, 'label' => 'Status', 'options' => ['1' => 'Aktif', '2' => 'Tidak Aktif'], 'empty' => 'Pilih Status']); ?>
@@ -298,7 +254,7 @@ $this->Html->script([
             pickerPosition: 'bottom-left',
             format: 'yyyy-mm-dd hh:ii',
         });
-
+        $('#type').trigger('change');
         $('#type').on('change',function(){
             var tipe = $(this).val();
             if(tipe == '1'){
@@ -307,18 +263,24 @@ $this->Html->script([
                 $('.file').hide();
                 $('.syarat').hide();
                 $('.code').show();
+                $('#qty').val('');
+                $('.qty').show();
             }else if(tipe == '2'){
                 $('.point').hide();
                 $('.file').hide();
                 $('.category').show();
                 $('.syarat').show();
                 $('.code').show();
+                $('#qty').val('');
+                $('.qty').show();
             }else if(tipe == '3'){
                 $('.point').hide();
                 $('.category').hide();
                 $('.syarat').hide();
-                $('.code').show();
-                $('.file').hide();
+                // $('.code').hide();
+                $('.file').show();
+                $('#qty').val('1');
+                $('.qty').hide();
             }
         });
 
