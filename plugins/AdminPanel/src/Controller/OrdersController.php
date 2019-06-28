@@ -247,6 +247,35 @@ class OrdersController extends AppController
 
             foreach($order->order_details as $detail) {
                 foreach($this->request->getData('origin') as $origin => $shipping) {
+                    if (!empty($shipping['order_status_id'])) {
+                        if($shipping['order_status_id'] == 4) {
+                            //check share products
+                            if ($shareProductEntity) {
+                                foreach($detail->order_detail_products as $detail_product) {
+                                    if ($shareProductEntity->product_id == $detail_product->product_id) {
+                                        $selected_products = [
+                                            'customer_id' => $shareProductEntity->customer_id,
+                                            'product_id' => $detail_product->product_id,
+                                            'price' => $detail_product->price,
+                                            'qty' => $detail_product->qty,
+                                        ];
+                                    }
+                                    /*if (!array_key_exists($detail_product->product_id, $total_products)) {
+                                        $total_products[$detail_product->product_id] = $detail_product->qty;
+                                    } else {
+                                        $total_products[$detail_product->product_id] += $detail_product->qty;
+                                    }*/
+                                    $total_products += (int) $detail_product->qty;
+                                }
+                            }
+                            //check share products
+                        }
+                    }
+                }
+            }
+
+            foreach($order->order_details as $detail) {
+                foreach($this->request->getData('origin') as $origin => $shipping) {
                     if(!empty($shipping['order_status_id'])){
                         if ($detail->get('branch_id') == $origin) {
 
@@ -292,26 +321,7 @@ class OrdersController extends AppController
                                     }
                                 }
 
-                                //check share products
-                                if ($shareProductEntity) {
-                                    foreach($detail->order_detail_products as $detail_product) {
-                                        if ($shareProductEntity->product_id == $detail_product->product_id) {
-                                            $selected_products = [
-                                                'customer_id' => $shareProductEntity->customer_id,
-                                                'product_id' => $detail_product->product_id,
-                                                'price' => $detail_product->price,
-                                                'qty' => $detail_product->qty,
-                                            ];
-                                        }
-                                        /*if (!array_key_exists($detail_product->product_id, $total_products)) {
-                                            $total_products[$detail_product->product_id] = $detail_product->qty;
-                                        } else {
-                                            $total_products[$detail_product->product_id] += $detail_product->qty;
-                                        }*/
-                                        $total_products += (int) $detail_product->qty;
-                                    }
-                                }
-                                //check share products
+
                             }
                             /* END SEMENTARA */
 
