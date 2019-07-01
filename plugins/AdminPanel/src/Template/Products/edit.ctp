@@ -16,6 +16,8 @@ echo $this->Html->script([
     '/admin-assets/vendors/custom/libs/validation-render',
 ]);
 ?>
+
+<?= $this->Element('Script/froala-editor'); ?>
 <script>
     Dropzone.autoDiscover = false;
 
@@ -36,12 +38,12 @@ echo $this->Html->script([
     }
 
     $(document).ready(function() {
-        $('.summernotes').summernote({
-            height: 150
-        });
-        $('.summernote').summernote({
-            height: 150
-        });
+        // $('.summernotes').summernote({
+        //     height: 150
+        // });
+        // $('.summernote').summernote({
+        //     height: 150
+        // });
         $('#slug').slugify('#name'); // Type as you slug
 
         var formEl = $("#m_form");
@@ -1082,14 +1084,14 @@ echo $this->Html->script([
                         <div class="col-xl-6">
                             <div class="form-group m-form__group">
                                 <label class="col-form-label"><?= __d('AdminPanel',  'Highlight Produk'); ?></label>
-                                <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class. ' summernotes', 'rows' => 1, 'placeholder' => 'Highlight Produk']);?>
+                                <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class. ' froala-editor', 'rows' => 1, 'placeholder' => 'Highlight Produk']);?>
                             </div>
                         </div>
 
                         <div class="col-xl-6">
                             <div class="form-group m-form__group">
                                 <label class="col-form-label"><?= __d('AdminPanel',  'Profil Produk'); ?></label>
-                                <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1]);?>
+                                <?php echo $this->Form->control('profile',['label' => false,'class' => $default_class. ' froala-editor', 'rows' => 1]);?>
                             </div>
                         </div>
                     </div>
