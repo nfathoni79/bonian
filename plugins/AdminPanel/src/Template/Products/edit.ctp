@@ -36,6 +36,9 @@ echo $this->Html->script([
     }
 
     $(document).ready(function() {
+        $('.summernotes').summernote({
+            height: 150
+        });
         $('.summernote').summernote({
             height: 150
         });
@@ -1079,7 +1082,7 @@ echo $this->Html->script([
                         <div class="col-xl-6">
                             <div class="form-group m-form__group">
                                 <label class="col-form-label"><?= __d('AdminPanel',  'Highlight Produk'); ?></label>
-                                <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class. ' summernote', 'rows' => 1, 'placeholder' => 'Highlight Produk']);?>
+                                <?php echo $this->Form->control('highlight',['label' => false,'class' => $default_class. ' summernotes', 'rows' => 1, 'placeholder' => 'Highlight Produk']);?>
                             </div>
                         </div>
 
