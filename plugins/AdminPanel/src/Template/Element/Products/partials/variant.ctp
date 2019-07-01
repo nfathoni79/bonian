@@ -25,7 +25,7 @@
                                     ]); ?>
                         </div>
                         <div class="col-xl-2">
-                            <?php /*<a href="#" class="btn btn-info m-btn m-btn--icon m-btn--icon-only add-variant" style="width:40px; height: 40px;" data-toggle="modal" data-target="#modal-attribute" data-variant="'+text.toLowerCase()+'"><i class="la la-plus"></i></a>*/ ?>
+                             <a href="<?php echo $this->Url->build(['controller' => 'OptionValues', 'action' => 'edit', $variant['option_value_id']]);?>" class="btn btn-info m-btn m-btn--icon m-btn--icon-only" style="width:40px; height: 40px;" ><i class="la la-edit"></i></a>
                         </div>
                     </div>
                     <?php endforeach; ?>
