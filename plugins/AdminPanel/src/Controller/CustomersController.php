@@ -199,7 +199,13 @@ class CustomersController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Customers.name LIKE' => '%' . $search .'%']);
+                    $data->where([
+                        'OR' => [
+                            'Customers.username LIKE' => '%' . $search .'%',
+                            'Customers.reffcode LIKE' => '%' . $search .'%',
+                            'Customers.phone LIKE' => '%' . $search .'%',
+                        ]
+                    ]);
                 }
                 $data->where($query);
             }
