@@ -111,7 +111,7 @@
                 <?= $this->Flash->render() ?>
                 <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
                     <div class="form-group m-form__group row">
-                        <label for="example-text-input" class="col-2 col-form-label">General Search</label>
+                        <label for="example-text-input" class="col-2 col-form-label">Product Name</label>
                         <div class="col-4">
                             <input type="text" class="form-control m-input" placeholder="Search..." id="generalSearch">
                         </div>
