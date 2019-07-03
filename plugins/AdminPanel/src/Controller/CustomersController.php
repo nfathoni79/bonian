@@ -202,6 +202,7 @@ class CustomersController extends AppController
                     $data->where([
                         'OR' => [
                             'Customers.username LIKE' => '%' . $search .'%',
+                            'Customers.email LIKE' => '%' . $search .'%',
                             'Customers.reffcode LIKE' => '%' . $search .'%',
                             'Customers.phone LIKE' => '%' . $search .'%',
                         ]
