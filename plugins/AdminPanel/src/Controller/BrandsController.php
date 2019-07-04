@@ -56,7 +56,13 @@ class BrandsController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Brands.name LIKE' => '%' . $search .'%']);
+                    $data->where([
+                        'OR' => [
+                            'ProductCategories.name LIKE' => '%' . $search .'%',
+                            'Brands.name LIKE' => '%' . $search .'%',
+
+                        ]
+                    ]);
                 }
                 $data->where($query);
             }
