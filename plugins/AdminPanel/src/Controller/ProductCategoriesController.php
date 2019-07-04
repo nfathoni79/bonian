@@ -22,6 +22,9 @@ class ProductCategoriesController extends AppController
     {
         parent::initialize();
         $this->loadModel('AdminPanel.ProductCategories');
+        $this->loadModel('AdminPanel.Products');
+        $this->loadModel('AdminPanel.CategoryToBrands');
+        $this->loadModel('AdminPanel.Brands');
     }
 
 
@@ -275,4 +278,74 @@ class ProductCategoriesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+	
+	
+	public function sync(){
+		Configure::write('debug',true);
+		// $arr = [354,355,356,357,358,359,360,361];
+		
+		// SELECT count(`name`) as total , `name`, GROUP_CONCAT(id) FROM `brands` group by `name` order by total DESC
+		// $brands = $this->Brands->find()
+			// ->select([
+				// 'total' => 'count(name)',
+				// 'name',
+				// 'brandid' => 'GROUP_CONCAT(id)',
+			// ])
+			// ->group(['name'])
+			// ->orderDesc('total')->toArray();
+		// foreach($brands as $value){
+			// if($value->total > 1 ){
+				// debug($value->name);
+				// $arr = explode(',',$value->brandid);
+					
+				// $products = $this->Products->find()
+				// ->contain(['ProductToCategories'])
+				// ->where(['brand_id IN ' => $arr])
+				// ->all()
+				// ->toArray();
+				
+				// foreach($products as $vals){ 
+					// $query = $this->Products->query();
+					// $update = $query->update()
+						// ->set(['brand_id' => $arr[0]])
+						// ->where([
+							// 'id' => $vals->id, 
+						// ])
+						// ->execute();
+					// if($update){ 
+							// $cek = $this->CategoryToBrands->find()
+							// ->where([
+								// 'CategoryToBrands.product_category_id' => $vals->product_to_categories[0]->product_category_id,
+								// 'CategoryToBrands.brand_id' => $arr[0],
+							// ])->first();
+							// if(!$cek){ 
+								// $CategoryToBrandsEntity = $this->CategoryToBrands->newEntity([
+									// 'product_category_id' => $vals->product_to_categories[0]->product_category_id,
+									// 'brand_id' => $arr[0],
+								// ]);
+								// $this->CategoryToBrands->save($CategoryToBrandsEntity);
+							// }
+							
+					// } 
+				// } 
+				
+				// unset($arr[0]);
+				// foreach($arr as $vals){ 
+					// $query = $this->Brands->query();
+					// $query->delete() 
+						// ->where([
+							// 'id' => $vals, 
+						// ])
+						// ->execute();
+				// }
+				
+				
+			// }
+		// } 
+		// exit;
+		
+		
+		
+		
+	}
 }
