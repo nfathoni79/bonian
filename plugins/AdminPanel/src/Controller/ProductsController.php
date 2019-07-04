@@ -1736,7 +1736,7 @@ class ProductsController extends AppController
             }*/
 
             $getBrands = $this->Brands->find()
-                ->where(['Brands.product_category_id' => $cat, 'Brands.name' => $name ])
+                ->where(['Brands.name' => $name ])
                 ->first();
 
             if ($getBrands) {
