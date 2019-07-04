@@ -124,9 +124,22 @@
                     ],
                     [
                         'name' => 'Manajemen Brand',
-                        'url' => ['controller' => 'Brands', 'action' => 'index'],
+                        'url' => '#',
                         'icon' => 'm-menu__link-bullet',
-                        'children' => []
+                        'children' => [
+                            [
+                                'name' => 'List Brand',
+                                'url' => ['controller' => 'Brands', 'action' => 'lists'],
+                                'icon' => 'm-menu__link-bullet',
+                                'children' => []
+                            ],
+                            [
+                                'name' => 'Kategori Brand',
+                                'url' => ['controller' => 'Brands', 'action' => 'index'],
+                                'icon' => 'm-menu__link-bullet',
+                                'children' => []
+                            ],
+                        ]
                     ],
                     [
                         'name' => 'Manajemen Kategori',
