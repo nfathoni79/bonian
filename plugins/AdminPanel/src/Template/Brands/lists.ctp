@@ -227,7 +227,7 @@
                 order: [[ 0, "desc" ]],
                 columns: [
                     {
-                        field: 'id',
+                        field: 'Brands.id',
                         title: '#',
                         sortable: true,
                         width: 40,
