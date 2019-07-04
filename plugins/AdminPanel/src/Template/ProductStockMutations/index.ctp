@@ -190,8 +190,34 @@ $this->Html->script([
         processing: true,
         serverSide: true,
         searching: true,
-        searchDelay: 1000,
+        //searchDelay: 1000,
         order: [[0, 'desc']],
+		initComplete: function() {
+			var api = this.api();
+			var searchWait = 0;
+			var searchWaitInterval;
+			// Grab the datatables input box and alter how it is bound to events
+			$(this)
+			.parents('.dataTables_wrapper')
+			.find('.dataTables_filter input')
+			.unbind() // Unbind previous default bindings
+			.bind("input", function(e) { // Bind our desired behavior
+				var item = $(this);
+				searchWait = 0;
+				if(!searchWaitInterval) searchWaitInterval = setInterval(function(){
+					searchTerm = $(item).val();
+					// if(searchTerm.length >= 3 || e.keyCode == 13) {
+						clearInterval(searchWaitInterval);
+						searchWaitInterval = '';
+						// Call the API search function
+						api.search(searchTerm).draw();
+						searchWait = 0;
+					// }
+					searchWait++;
+				},1000);                       
+				return;
+			});
+		},
         ajax: {
             url: "<?= $this->Url->build(['action' => 'index']); ?>",
             type: 'POST',
@@ -283,7 +309,6 @@ $this->Html->script([
         ]
 
     });
-
 
     $('#export_print').on('click', function(e) {
         e.preventDefault();
