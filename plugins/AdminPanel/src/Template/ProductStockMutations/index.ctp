@@ -189,6 +189,8 @@ $this->Html->script([
         lengthMenu: [10, 25, 50, 100, 1000],
         processing: true,
         serverSide: true,
+        searching: true,
+        searchDelay: 1000,
         order: [[0, 'desc']],
         ajax: {
             url: "<?= $this->Url->build(['action' => 'index']); ?>",
