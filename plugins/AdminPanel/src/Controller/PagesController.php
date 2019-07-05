@@ -40,7 +40,12 @@ class PagesController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Pages.name LIKE' => '%' . $search .'%']);
+                    $data->where([
+                        'OR' => [
+                            'Pages.title LIKE' => '%' . $search .'%',
+                            'Pages.content LIKE' => '%' . $search .'%',
+                        ]
+                    ]);
                 }
                 $data->where($query);
             }
