@@ -218,7 +218,7 @@ $this->Html->script([
             {
                 targets: 7,
                 render: function (data, type, row, meta) {
-                    return '<a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.id+'\');" class="btn btn-danger btn-sm" title="Delete"><i class="la la-trash"></i> Hapus</a>';
+                    return '<a href="javascript:delete_data('+row.id+');" onclick="return confirm(\'Are you sure delete #'+row.name+'\');" class="btn btn-danger btn-sm" title="Delete"><i class="la la-trash"></i> Hapus</a>';
                 }
             },
         ],
