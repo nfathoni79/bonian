@@ -1,6 +1,7 @@
 <?php
 namespace AdminPanel\Model\Table;
 
+use Cake\Log\Log;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -103,5 +104,33 @@ class ProductRatingsTable extends Table
         $rules->add($rules->existsIn(['customer_id'], 'Customers'));
 
         return $rules;
+    }
+
+    public function afterDelete(\Cake\Event\Event $event,  \AdminPanel\Model\Entity\ProductRating $entity, \ArrayObject $options)
+    {
+        if ($product_id = $entity->get('product_id')) {
+            $product_ratings = $this->find();
+            $product_ratings = $product_ratings
+                ->select([
+                    'rate' => $product_ratings->func()->avg('rating'),
+                    'total' => $product_ratings->func()->count('*')
+                ])
+                ->where([
+                    'product_id' => $product_id,
+                    'status' => 1
+                ])
+                ->first();
+            if ($product_ratings) {
+                try {
+                    $product = $this->Products->get($product_id);
+                    if ($product) {
+                        $product->set('rating', $product_ratings->get('rate'));
+                        $product->set('rating_count', $product_ratings->get('total'));
+                        $this->Products->save($product);
+                    }
+                } catch(\Exception $e) {}
+            }
+        }
+
     }
 }

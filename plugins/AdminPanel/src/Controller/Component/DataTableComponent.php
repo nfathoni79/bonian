@@ -252,7 +252,7 @@ class DataTableComponent extends Component
     public function Search(\Closure $callback)
     {
         $search = $this->getController()->request->getData('search');
-        if (array_key_exists('value', $search) && !empty($search['value'])) {
+        if (is_array($search) && array_key_exists('value', $search) && !empty($search['value'])) {
             $d = $callback($search['value'], $this->_table->newExpr());
             $this->_table->where($d);
         }
