@@ -179,7 +179,10 @@ class BranchesController extends AppController
         }
         $provinces = $this->Branches->Provinces->find('list', ['limit' => 200]);
         $cities = $this->Branches->Cities->find('list', ['limit' => 200])->toArray();
-        $subdistricts = $this->Branches->Subdistricts->find('list', ['limit' => 200])->toArray();
+        $subdistricts = $this->Branches->Subdistricts->find('list', ['limit' => 200])
+            ->where([
+                'city_id' => $branch->city_id
+            ])->toArray();
         $this->set(compact('branch', 'provinces', 'cities', 'subdistricts'));
     }
 
