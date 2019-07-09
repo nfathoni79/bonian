@@ -70,7 +70,7 @@ class SalesController extends AppController
                 ->setSorting()
                 ->getTable()
                 ->where([
-                    //'Orders.payment_status' => 2
+                    'DigitalDetails.status' => 1
                     //'Orders.id' => 78, //TODO this for testing
                 ]);
 
