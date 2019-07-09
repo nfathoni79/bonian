@@ -2,6 +2,8 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use Cake\Database\Expression\QueryExpression;
+use Cake\Database\Query;
 
 /**
  * Faqs Controller
@@ -41,7 +43,17 @@ class FaqsController extends AppController
                         custom field for general search
                         ex : 'Users.email LIKE' => '%' . $search .'%'
                     **/
-                    $data->where(['Faqs.name LIKE' => '%' . $search .'%']);
+//                    $data->where(['Faqs.name LIKE' => '%' . $search .'%']);
+
+                    $data->where(function (QueryExpression $exp, Query $query) use($search) {
+                        $orConditions = $exp->or_([
+                            'FaqCategories.name LIKE' => '%' . $search .'%',
+                            'Faqs.judul LIKE' => '%' . $search .'%',
+                        ]);
+                        return $exp
+                            ->add($orConditions);
+                    });
+
                 }
                 $data->where($query);
             }
