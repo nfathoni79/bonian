@@ -56,10 +56,11 @@ class ReportsController extends AppController
 
 
         $datatable = $this->ShareStatistics->find()
-            ->where(['media_type IN ' => ['tw','fb','sms','wa', 'ln'], 'clicked' => '1'])
+            ->where(['media_type IN ' => ['tw','fb','sms','wa', 'ln']])
             ->group(['media_type']);
         $datatable->select([
-            'plus' => $datatable->func()->count("ShareStatistics.id"),
+            'not_clicked' => $datatable->func()->sum("IF(ShareStatistics.clicked = 0, 1, 0)"),
+            'clicked' => $datatable->func()->sum("IF(ShareStatistics.clicked = 1, ShareStatistics.clicked, 0)"),
             'type' => 'media_type',
             'year' => $datatable->func()->year([
                 'ShareStatistics.created' => 'identifier'
