@@ -40,7 +40,7 @@ class SearchController extends AppController
         if ($this->DataTable->isAjax()) {
 
 
-            $sub = $this->SearchStats->find();
+            /*$sub = $this->SearchStats->find();
             $sub = $sub
                 ->select([
                     'id' => $sub->func()->max('SearchStats.id')
@@ -69,31 +69,52 @@ class SearchController extends AppController
                         ->lte('SearchCategories.created', $end . ' 23:59:59');
                 });
             }
-            $categories->group('SearchCategories.search_term_id');
+            $categories->group('SearchCategories.search_term_id');*/
 
 
+            $search_stats = $this->SearchStats->find();
 
-            $datatable = $this->DataTable->adapter('AdminPanel.SearchStats')
+            $search_stats = $search_stats
                 ->select([
-                    'SearchStats.id',
-                    'words' => 'SearchTerms.words',
+                    'id' => $search_stats->func()->max('SearchStats.id'),
+                    'search_term_id' => 'SearchStats.search_term_id',
                     'total' => 'SearchStats.total',
+                ]);
+
+            if ($start && $end) {
+                $search_stats->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
+                    return $exp->gte('SearchStats.created', $start . ' 00:00:00')
+                        ->lte('SearchStats.created', $end . ' 23:59:59');
+                });
+            }
+            $search_stats->group([
+                'SearchStats.search_term_id',
+            ]);
+
+
+
+            $datatable = $this->DataTable->adapter('AdminPanel.SearchCategories')
+                ->select([
+                    'SearchCategories.id',
+                    'words' => 'SearchTerms.words',
+                    'total' => '(IF(SearchCategories.total = 0, SearchStats.total, SearchCategories.total))', //SearchStats.total
                     'category_name' => 'ProductCategories.name',
-                    'hits' => 'SearchTerms.hits',
-                    'created' => 'SearchStats.created',
-                    'search_term_id' => 'SearchStats.search_term_id'
+                    'total_hits' => 'SearchTerms.hits',
+                    'hits' => "(COUNT(ISNULL(product_category_id)))",
+                    'created' => 'SearchCategories.created',
+                    'search_term_id' => 'SearchCategories.search_term_id'
                 ])
                 ->leftJoin(['SearchTerms' => 'search_terms'], [
-                    'SearchTerms.id = SearchStats.search_term_id'
+                    'SearchTerms.id = SearchCategories.search_term_id'
                 ])
-                ->innerJoin(['SearchStat' => $sub], [
-                    'SearchStats.id = SearchStat.id'
-                ])
-                ->leftJoin(['SearchCategory' => $categories], [
-                    'SearchStats.search_term_id = SearchCategory.search_term_id'
-                ])
-                ->leftJoin(['SearchCategories' => 'search_categories'], [
-                    'SearchCategories.id = SearchCategory.id'
+                //->innerJoin(['SearchStat' => $sub], [
+                //    'SearchStats.id = SearchStat.id'
+                //])
+                //->leftJoin(['SearchCategory' => $categories], [
+                //    'SearchStats.search_term_id = SearchCategory.search_term_id'
+                //])
+                ->leftJoin(['SearchStats' => $search_stats], [
+                    'SearchStats.search_term_id = SearchCategories.search_term_id'
                 ])
                 ->leftJoin(['ProductCategories' => 'product_categories'], [
                     'ProductCategories.id = SearchCategories.product_category_id'
@@ -114,12 +135,16 @@ class SearchController extends AppController
                         ]);
                     }
                 })
-                ->group('SearchStats.search_term_id');
+                ->group([
+                    'SearchCategories.product_category_id',
+                    'SearchCategories.search_term_id',
+                    //'SearchStats.id',
+                ]);
 
             if ($start && $end) {
                 $datatable->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
-                    return $exp->gte('SearchStats.created', $start . ' 00:00:00')
-                        ->lte('SearchStats.created', $end . ' 23:59:59');
+                    return $exp->gte('SearchCategories.created', $start . ' 00:00:00')
+                        ->lte('SearchCategories.created', $end . ' 23:59:59');
                 });
             }
 
