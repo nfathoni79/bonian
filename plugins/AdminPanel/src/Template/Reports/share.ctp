@@ -178,10 +178,19 @@ $this->Html->script([
             "fillAlphas": 0.8,
             "labelText": "[[value]]",
             "lineAlpha": 0.3,
-            "title": "Total Share",
+            "title": "Total Shared (share ke sosial media)",
             "type": "column",
-            "backgroundColor": "#3123123",
-            "valueField": "plus"
+            "color": "#000000",
+            "valueField": "not_clicked"
+        }, {
+            "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]</b></span>",
+            "fillAlphas": 0.8,
+            "labelText": "[[value]]",
+            "lineAlpha": 0.3,
+            "title": "Total Callback Share (refferer dari sosial media)",
+            "type": "column",
+            "color": "#000000",
+            "valueField": "clicked"
         }],
         "rotate": true,
         "categoryField": "name",
