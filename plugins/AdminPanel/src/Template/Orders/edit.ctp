@@ -106,7 +106,19 @@
                                         '3' => [
                                             'name' => 'Failed',
                                             'class' => 'm-badge--danger'
-                                        ]
+                                        ],
+                                        '4' => [
+                                            'name' => 'Expired',
+                                            'class' => 'm-badge--danger'
+                                        ],
+                                        '5' => [
+                                            'name' => 'Refund',
+                                            'class' => 'm-badge--danger'
+                                        ],
+                                        '6' => [
+                                            'name' => 'Cancel',
+                                            'class' => 'm-badge--danger'
+                                        ],
                                     ];
 
                                 ?>
