@@ -45,6 +45,7 @@ class SalesController extends AppController
                     'total' => $datatable->getTable()->func()->count('OrderDigitals.digital_detail_id'),
                     'net_sales' => $datatable->getTable()->func()->sum('OrderDigitals.price'),
                 ])
+                ->where(['DigitalDetails.status' => 1])
                 ->group([
                     'OrderDigitals.digital_detail_id'
                 ])
@@ -70,7 +71,6 @@ class SalesController extends AppController
                 ->setSorting()
                 ->getTable()
                 ->where([
-                    'DigitalDetails.status' => 1
                     //'Orders.id' => 78, //TODO this for testing
                 ]);
 
