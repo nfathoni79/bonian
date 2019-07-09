@@ -34,7 +34,7 @@
                     <li class="m-nav__item">
                         <a href="<?= $this->Url->build(['action' => 'index', 'prefix' => 'report']); ?>" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                <?= __('Summary Sales Report Regular Produk') ?>
+                                <?= __('Summary Sales Report Digital Produk') ?>
                             </span>
                         </a>
                     </li>
@@ -49,7 +49,7 @@
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
                         <h3 class="m-portlet__head-text">
-                            <?= __('Summary Sales Report Regular Produk') ?>
+                            <?= __('Summary Sales Report Report Digital Produk') ?>
                         </h3>
                     </div>
                 </div>
@@ -123,14 +123,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-2 m--margin-bottom-10-tablet-and-mobile">
-                            <label>Branch:</label>
-                            <?= $this->Form->select('branch_id', $branches, ['empty' => '-', 'id' => 'branch_id', 'class' => 'form-control m-input selectpicker', 'data-col-index' => 3]); ?>
-                        </div>
-                        <div class="col-lg-2 m--margin-bottom-10-tablet-and-mobile">
-                            <label>Report By:</label>
-                            <?= $this->Form->select('report_type', [1 => 'Category', 2 => 'Brand', 3 => 'Period'], ['value' => 1, 'id' => 'report_type', 'class' => 'form-control selectpicker', 'data-col-index' => 3]); ?>
-                        </div>
                     </div>
 
                     <div class="m-separator m-separator--md m-separator--dashed"></div>
@@ -160,8 +152,6 @@
                         <tr>
                             <th>Category</th>
                             <th>Item Sales</th>
-                            <th>Gross Sales</th>
-                            <th>Use Voucher</th>
                             <th>Net Sales</th>
                         </tr>
                         </thead>
@@ -229,7 +219,7 @@ $this->Html->script([
         serverSide: true,
         order: [[0, 'desc']],
         ajax: {
-            url: "<?= $this->Url->build(['action' => 'index', 'prefix' => 'report']); ?>",
+            url: "<?= $this->Url->build(['action' => 'digital', 'prefix' => 'report']); ?>",
             type: 'POST',
             data: function(d) {
                 d.pagination = {perpage: 50};
@@ -253,8 +243,6 @@ $this->Html->script([
         columns: [
             {data: 'id'},
             {data: 'total'},
-            {data: 'gross_sales'},
-            {data: 'use_voucher'},
             {data: 'net_sales'},
         ],
         //
@@ -275,22 +263,6 @@ $this->Html->script([
             },
             {
                 targets: 2,
-                className: 'text-right',
-                orderable: false,
-                render: function (data, type, row, meta) {
-                    return parseInt(row.gross_sales).format(0, 3, ',', '.');
-                }
-            },
-            {
-                targets: 3,
-                className: 'text-right',
-                orderable: false,
-                render: function (data, type, row, meta) {
-                    return row.use_voucher ? parseInt(row.use_voucher).format(0, 3, ',', '.') : 0;
-                }
-            },
-            {
-                targets: 4,
                 className: 'text-right',
                 orderable: false,
                 render: function (data, type, row, meta) {

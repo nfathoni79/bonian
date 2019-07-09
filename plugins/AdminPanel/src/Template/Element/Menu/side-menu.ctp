@@ -336,8 +336,14 @@
                         'children' => []
                     ],
                     [
-                        'name' => 'Summary Sales Report',
+                        'name' => 'Summary Sales Report Regular Produk',
                         'url' => ['controller' => 'Sales', 'prefix' => 'report', 'action' => 'index'],
+                        'icon' => 'm-menu__link-bullet',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Summary Sales Report Digital Produk',
+                        'url' => ['controller' => 'Sales', 'prefix' => 'report', 'action' => 'digital'],
                         'icon' => 'm-menu__link-bullet',
                         'children' => []
                     ],

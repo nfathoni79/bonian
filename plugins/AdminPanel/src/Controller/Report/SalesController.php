@@ -20,6 +20,74 @@ class SalesController extends AppController
         $this->loadModel('AdminPanel.OrderDetailProducts');
     }
 
+    public function digital(){
+
+        $start = (Time::now())->addDays(-29)->format('Y-m-d');
+        $end = (Time::now())->format('Y-m-d');
+
+        if ($date_range = $this->request->getData('date_range')) {
+            //parse date range
+            list($start, $end) = explode('/', $date_range);
+            $start = (Time::parse(trim($start)))->format('Y-m-d');
+            $end = (Time::parse(trim($end)))->format('Y-m-d');
+        }
+
+        if ($this->DataTable->isAjax()) {
+            $datatable = $this->DataTable->adapter('AdminPanel.OrderDigitals')
+                ->leftJoinWith('Orders')
+                ->leftJoinWith('DigitalDetails') ;
+
+            $datatable
+                ->select([
+                    'name' => 'DigitalDetails.name',
+                    'denom' => 'DigitalDetails.denom',
+                    'operator' => 'DigitalDetails.operator',
+                    'total' => $datatable->getTable()->func()->count('OrderDigitals.digital_detail_id'),
+                    'net_sales' => $datatable->getTable()->func()->sum('OrderDigitals.price'),
+                ])
+                ->group([
+                    'OrderDigitals.digital_detail_id'
+                ])
+            ;
+
+            if ($start && $end) {
+                $datatable->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
+                    return $exp->gte('OrderDigitals.created', $start . ' 00:00:00')
+                        ->lte('OrderDigitals.created', $end . ' 23:59:59');
+                });
+            }
+
+            $datatable
+                ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+                    $orConditions = $exp->or_([
+                        'DigitalDetails.name LIKE' => '%' . $search .'%',
+                    ]);
+                    return $exp
+                        ->add($orConditions);
+                });
+
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->where([
+                    //'Orders.payment_status' => 2
+                    //'Orders.id' => 78, //TODO this for testing
+                ]);
+
+
+            $result = $result
+                ->map(function (\AdminPanel\Model\Entity\OrderDigital $row) use($type) {
+                    return $row;
+                })
+                ->toArray();
+
+            //set again datatable
+            $datatable->setData($result);
+            return $datatable->response();
+        }
+
+        $this->set(compact( 'start', 'end'));
+    }
 
     public function index()
     {
