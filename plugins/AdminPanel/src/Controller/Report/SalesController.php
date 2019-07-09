@@ -62,6 +62,16 @@ class SalesController extends AppController
                         ->group([
                             'ProductToCategories.product_category_id'
                         ]);
+
+                    $datatable
+                        ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+                            $orConditions = $exp->or_([
+                                'ProductCategories.name LIKE' => '%' . $search .'%',
+                            ]);
+                            return $exp
+                                ->add($orConditions);
+                        });
+
                     break;
                 case '2':
                     $datatable
@@ -78,6 +88,15 @@ class SalesController extends AppController
                         ->group([
                             'Products.brand_id'
                         ]);
+
+                    $datatable
+                        ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+                            $orConditions = $exp->or_([
+                                'Brands.name LIKE' => '%' . $search .'%',
+                            ]);
+                            return $exp
+                                ->add($orConditions);
+                        });
                     break;
                 case '3':
                     $range = $this->OrderDetailProducts->find();
@@ -168,19 +187,18 @@ class SalesController extends AppController
                             break;
                     }
 
+                    $datatable
+                        ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
+                            $orConditions = $exp->or_([
+                                'Orders.created LIKE' => '%' . $search .'%',
+                            ]);
+                            return $exp
+                                ->add($orConditions);
+                        });
+
                     break;
             }
 
-            $datatable
-                ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
-                    $orConditions = $exp->or_([
-                        'Products.name LIKE' => '%' . $search .'%',
-                        'ProductOptionPrices.sku LIKE' => '%' . $search .'%',
-                        'Brands.name LIKE' => '%' . $search .'%',
-                    ]);
-                    return $exp
-                        ->add($orConditions);
-                });
 
 
             $result = $datatable
