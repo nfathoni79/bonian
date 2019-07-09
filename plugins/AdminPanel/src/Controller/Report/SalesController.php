@@ -76,7 +76,7 @@ class SalesController extends AppController
 
 
             $result = $result
-                ->map(function (\AdminPanel\Model\Entity\OrderDigital $row) use($type) {
+                ->map(function (\AdminPanel\Model\Entity\OrderDigital $row) {
                     return $row;
                 })
                 ->toArray();
