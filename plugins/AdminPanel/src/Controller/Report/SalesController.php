@@ -54,11 +54,14 @@ class SalesController extends AppController
                             'name' => 'ProductCategories.name',
                             'total' => $datatable->getTable()->func()->count('ProductToCategories.product_category_id'),
                             'gross_sales' => $datatable->getTable()->func()->sum('OrderDetailProducts.total'),
-                            'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
+                            //'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
+                            'discount' => "(SUM(Orders.discount_voucher + Orders.discount_kupon))",
                             'use_voucher' => "(SUM(IF(isnull(Orders.voucher_id), 0, 1)))"
                         ])
                         ->leftJoinWith('Products.ProductToCategories')
                         ->leftJoinWith('Products.ProductToCategories.ProductCategories')
+                        ->leftJoinWith('OrderDetails')
+                        ->leftJoinWith('OrderDetails.Orders')
                         ->group([
                             'ProductToCategories.product_category_id'
                         ]);
@@ -69,12 +72,15 @@ class SalesController extends AppController
                             'name' => 'Brands.name',
                             'total' => $datatable->getTable()->func()->count('Products.brand_id'),
                             'gross_sales' => $datatable->getTable()->func()->sum('OrderDetailProducts.total'),
-                            'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
+                            //'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
+                            'discount' => "(SUM(Orders.discount_voucher + Orders.discount_kupon))",
                             'use_voucher' => "(SUM(IF(isnull(Orders.voucher_id), 0, 1)))"
                         ])
                         ->leftJoinWith('Products.Brands')
                         ->leftJoinWith('Products.ProductToCategories')
                         ->leftJoinWith('Products.ProductToCategories.ProductCategories')
+                        ->leftJoinWith('OrderDetails')
+                        ->leftJoinWith('OrderDetails.Orders')
                         ->group([
                             'Products.brand_id'
                         ]);
@@ -141,7 +147,8 @@ class SalesController extends AppController
                             'name' => "Orders.created",
                             'total' => $datatable->getTable()->func()->count('Products.brand_id'),
                             'gross_sales' => $datatable->getTable()->func()->sum('OrderDetailProducts.total'),
-                            'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
+                            //'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
+                            'discount' => "(SUM(Orders.discount_voucher + Orders.discount_kupon))",
                             'use_voucher' => "(SUM(IF(isnull(Orders.voucher_id), 0, 1)))",
                             'year' => $datatable->getTable()->func()->year([
                                 'Orders.created' => 'identifier'
