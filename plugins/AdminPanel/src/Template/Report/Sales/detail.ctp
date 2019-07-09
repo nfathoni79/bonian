@@ -357,7 +357,9 @@ $this->Html->script([
                         1: {'class': 'm-badge--default', 'name': 'Pending'},
                         2: {'class': ' m-badge--success', 'name': 'Success'},
                         3: {'class': ' m-badge--danger', 'name': 'Failed'},
-                        4: {'class': ' m-badge--default', 'name': 'Expired'}
+                        4: {'class': ' m-badge--default', 'name': 'Expired'},
+                        5: {'class': ' m-badge--danger', 'name': 'Refund'},
+                        6: {'class': ' m-badge--danger', 'name': 'Cancel'},
                     };
                     return row.payment_status && status[row.payment_status] ? '<span class="m-badge ' + status[row.payment_status].class + ' m-badge--wide">'
                         + status[row.payment_status].name
