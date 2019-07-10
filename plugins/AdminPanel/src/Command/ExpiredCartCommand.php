@@ -49,7 +49,7 @@ class ExpiredCartCommand extends Command
 
         $check = $this->CustomerCarts->find()
             ->where(function (\Cake\Database\Expression\QueryExpression $exp) {
-                return $exp->lte('created', (Time::now())->addDays(-3)->format('Y-m-d H:i:s'));
+                return $exp->lte('created', (Time::now())->addDays(-1)->format('Y-m-d H:i:s'));
             })
             ->where([
                 'status' => 1
