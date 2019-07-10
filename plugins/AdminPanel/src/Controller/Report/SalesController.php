@@ -45,7 +45,7 @@ class SalesController extends AppController
                     'total' => $datatable->getTable()->func()->count('OrderDigitals.digital_detail_id'),
                     'net_sales' => $datatable->getTable()->func()->sum('OrderDigitals.price'),
                 ])
-                ->where(['DigitalDetails.status' => 1])
+                ->where(['OrderDigitals.status' => 1])
                 ->group([
                     'OrderDigitals.digital_detail_id'
                 ])
