@@ -189,7 +189,7 @@
                     {
                         field: 'id',
                         title: '#',
-                        sortable: true,
+                        sortable: false,
                         width: 40,
                         selector: false,
                         textAlign: 'center',

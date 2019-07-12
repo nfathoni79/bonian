@@ -295,7 +295,7 @@ echo $this->Html->script([
                     {
                         field: 'id',
                         title: '#',
-                        sortable: true,
+                        sortable: false,
                         width: 40,
                         selector: false,
                         textAlign: 'center',
@@ -323,7 +323,7 @@ echo $this->Html->script([
                         field: 'ProductCoupons.expired',
                         title: 'Kadaluarsa',
                         template: function(row) {
-                            return row.expired;
+                            return moment(row.expired).format('YYYY-MM-DD');
                         }
                     },
 
