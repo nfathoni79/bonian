@@ -25,6 +25,7 @@ class TopPurchaseProductController  extends AppController
     {
         $start = $this->request->getQuery('start');
         $end = $this->request->getQuery('end');
+        $limit = $this->request->getQuery('limit', 10);
 
         if (empty($start) || empty ($end)) {
             $start = (Time::now())->addDays(-14)->format('Y-m-d');
@@ -32,9 +33,9 @@ class TopPurchaseProductController  extends AppController
         }
 
         $list_of_products = [];
-        $by_categories = $this->byCategory($start, $end);
-        $by_brands = $this->byBrand($start, $end);
-        $by_periods = $this->byPeriod($start, $end,$list_of_products);
+        $by_categories = $this->byCategory($start, $end, $limit);
+        $by_brands = $this->byBrand($start, $end, $limit);
+        $by_periods = $this->byPeriod($start, $end, $limit, $list_of_products);
 
         //debug($list_of_products);
 
@@ -42,7 +43,7 @@ class TopPurchaseProductController  extends AppController
         $this->set(compact('by_categories', 'by_brands', 'by_periods', 'start', 'end', 'list_of_products'));
     }
 
-    protected function byCategory($start = null, $end = null)
+    protected function byCategory($start = null, $end = null, $limit = 10)
     {
 
 
@@ -80,7 +81,7 @@ class TopPurchaseProductController  extends AppController
             ->order([
                 'total_sales' => 'DESC'
             ])
-            ->limit(10)
+            ->limit($limit)
             ->map(function(\AdminPanel\Model\Entity\OrderDetailProduct $row) {
                 $row->sector = $row->category_name;
                 $row->size = $row->total_sales;
@@ -109,7 +110,7 @@ class TopPurchaseProductController  extends AppController
         return checkdate ($month, $day, $year);
     }
 
-    public function byBrand($start = null, $end = null)
+    public function byBrand($start = null, $end = null, $limit = 10)
     {
 
 
@@ -146,7 +147,7 @@ class TopPurchaseProductController  extends AppController
             ->order([
                 'total_sales' => 'DESC'
             ])
-            ->limit(10)
+            ->limit($limit)
             ->map(function(\AdminPanel\Model\Entity\OrderDetailProduct $row) {
                 $row->sector = $row->brand_name;
                 $row->size = $row->total_sales;
@@ -159,7 +160,7 @@ class TopPurchaseProductController  extends AppController
         return $datatable;
     }
 
-    protected function byPeriod($start = null, $end = null, &$list_of_products = null)
+    protected function byPeriod($start = null, $end = null, $limit = 10,  &$list_of_products = null)
     {
 
         //get date diff
@@ -232,7 +233,7 @@ class TopPurchaseProductController  extends AppController
             ]);
 
         $datatable = $datatable
-            ->map(function(\AdminPanel\Model\Entity\OrderDetailProduct $row) use($type, &$list_of_products) {
+            ->map(function(\AdminPanel\Model\Entity\OrderDetailProduct $row) use($type, &$list_of_products, $limit) {
                 switch ($type) {
                     case 'year':
                         $row->name = $row->year;
@@ -290,7 +291,9 @@ class TopPurchaseProductController  extends AppController
                         $products->group(['day', 'month', 'year']);
                         break;
                 }
-                $products->group('OrderDetailProducts.product_id');
+                $products->group('OrderDetailProducts.product_id')
+                    ->orderDesc('total')
+                    ->limit($limit);
 
                 if (!$products->isEmpty()) {
                     foreach($products as $product) {

@@ -77,6 +77,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group mb-2" style="width: 210px;">
+                        <div class="form-group m-form__group row">
+                            <label class="col-form-label col-md-4">Limit</label>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" name="limit" style="width:85%;"  value="<?= $this->request->getQuery('limit', 10);?>" />
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group mx-sm-3 mb-2">
                         <button class="btn btn-brand m-btn m-btn--icon" id="m_search">
                                         <span>
