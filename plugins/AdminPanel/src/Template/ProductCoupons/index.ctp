@@ -142,6 +142,17 @@
                         ?>
                     </div>
                 </div>
+
+                <div class="form-group m-form__group row">
+                    <label class="col-form-label col-lg-4">Notifikasi?</label>
+                    <div class="col-lg-6 m-form__group-sub">
+                        <div class="m-checkbox-inline">
+                            <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                <input type="checkbox" name="notif" value="1"> Kirim sebagai pesan notifikasi <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>

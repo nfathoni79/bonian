@@ -2,6 +2,7 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use Cake\Core\Configure;
 use Cake\Validation\Validator;
 
 
@@ -10,6 +11,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\ProductCouponsTable $ProductCoupons
  * @property \AdminPanel\Model\Table\ProductsTable $Products
  * @property \AdminPanel\Model\Table\ProductOptionStocksTable $ProductOptionStocks
+ * @property \AdminPanel\Model\Table\CustomersTable $Customers
  *
  * @method \AdminPanel\Model\Entity\ProductCoupon[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -20,6 +22,7 @@ class ProductCouponsController extends AppController
     {
         parent::initialize();
         $this->loadModel('AdminPanel.Products');
+        $this->loadModel('AdminPanel.Customers');
         $this->loadModel('AdminPanel.ProductCoupons');
         $this->loadModel('AdminPanel.ProductOptionStocks');
     }
@@ -123,11 +126,44 @@ class ProductCouponsController extends AppController
             $error = $validator->errors($this->request->getData());
 
             if (empty($error)) {
-
                 $productCoupon = $this->ProductCoupons->newEntity();
                 $productCoupon = $this->ProductCoupons->patchEntity($productCoupon, $this->request->getData());
 
                 if ($this->ProductCoupons->save($productCoupon)) {
+                    if($this->request->getData('notif') == 1){
+
+                        $products = $this->Products->find()
+                            ->select(['id','price_sale', 'name', 'slug'])
+                            ->contain(['ProductImages'])
+                            ->where(['Products.id' => $this->request->getData('product_id')])
+                            ->first();
+
+                        $customers = $this->Customers->find()
+                            ->select(['id','email','username','reffcode'])
+                            ->where([
+                                'Customers.is_verified' => 1,
+                                'Customers.is_email_verified' => 1,
+                            ])->toArray();
+                        foreach($customers as $vals){
+                            if ($this->Notification->create(
+                                $vals->id,
+                                '3',
+                                'Kupon promo',
+                                'Harga spesial '.$products->name.' Rp.'.$products->price_sale.'!, Makin hemat dengan kupon Rp.'.$this->request->getData('price').'. Buruan, checkout sekarang ',
+                                'Products',
+                                $products->id,
+                                2,
+                                Configure::read('mainSite').'/images/70x59/'. $products->product_images[0]['name'],
+                                Configure::read('frontsite').'products/detail/'. $products->slug
+                            )) {
+
+                                $this->Notification->triggerCount(
+                                    $vals->id,
+                                    $vals->reffcode
+                                );
+                            }
+                        }
+                    }
                     $this->Flash->success(__('The coupon has been saved.'));
                 }
             }
