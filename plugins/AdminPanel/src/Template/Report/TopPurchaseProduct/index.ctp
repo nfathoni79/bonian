@@ -297,36 +297,52 @@ $this->Html->script([
         });
 
 
-
+        //"dataProvider": <?= json_encode($by_periods); ?>,
         var chart = AmCharts.makeChart( "m_amcharts_15", {
             "type": "serial",
             "theme": "light",
-            "dataProvider": <?= json_encode($by_periods); ?>,
-            "valueAxes": [ {
-                "gridColor": "#FFFFFF",
-                "gridAlpha": 0.2,
-                "dashLength": 0
-            } ],
-            "gridAboveGraphs": true,
-            "startDuration": 1,
-            "graphs": [ {
-                "balloonText": "[[category]]: <b>[[value]]</b>",
-                "fillAlphas": 0.8,
-                "lineAlpha": 0.2,
-                "type": "column",
-                "valueField": "value"
-            } ],
-            "chartCursor": {
-                "categoryBalloonEnabled": false,
-                "cursorAlpha": 0,
-                "zoomable": false
+            "legend": {
+                "autoMargins": false,
+                "borderAlpha": 0.2,
+                "equalWidths": false,
+                "horizontalGap": 10,
+                "markerSize": 10,
+                "useGraphSettings": true,
+                "valueAlign": "left",
+                "valueWidth": 0
             },
+            "dataProvider": <?= json_encode($by_periods); ?>,
+            "valueAxes": [{
+                "stackType": "100%",
+                "axisAlpha": 0,
+                "gridAlpha": 0,
+                "labelsEnabled": false,
+                "position": "left"
+            }],
+            "graphs": [
+                <?php foreach($list_of_products as $product_id => $product_name) : ?>
+                {
+                    "balloonText": "[[title]], [[category]]<br><span style='font-size:14px;'><b>[[value]]</b> ([[percents]]%)</span>",
+                    "fillAlphas": 0.9,
+                    "fontSize": 11,
+                    "labelText": "[[percents]]%",
+                    "lineAlpha": 0.5,
+                    "title": "<?= $product_name; ?>",
+                    "type": "column",
+                    "valueField": "<?= $product_id; ?>"
+                },
+                <?php endforeach; ?>
+            ],
+            "marginTop": 30,
+            "marginRight": 0,
+            "marginLeft": 0,
+            "marginBottom": 40,
+            "autoMargins": false,
             "categoryField": "name",
             "categoryAxis": {
                 "gridPosition": "start",
-                "gridAlpha": 0,
-                "tickPosition": "start",
-                "tickLength": 20
+                "axisAlpha": 0,
+                "gridAlpha": 0
             },
             "export": {
                 "enabled": true

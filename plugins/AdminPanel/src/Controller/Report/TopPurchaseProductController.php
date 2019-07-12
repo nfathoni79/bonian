@@ -31,12 +31,15 @@ class TopPurchaseProductController  extends AppController
             $end = (Time::now())->format('Y-m-d');
         }
 
+        $list_of_products = [];
         $by_categories = $this->byCategory($start, $end);
         $by_brands = $this->byBrand($start, $end);
-        $by_periods = $this->byPeriod($start, $end);
+        $by_periods = $this->byPeriod($start, $end,$list_of_products);
+
+        //debug($list_of_products);
 
 
-        $this->set(compact('by_categories', 'by_brands', 'by_periods', 'start', 'end'));
+        $this->set(compact('by_categories', 'by_brands', 'by_periods', 'start', 'end', 'list_of_products'));
     }
 
     protected function byCategory($start = null, $end = null)
@@ -156,7 +159,7 @@ class TopPurchaseProductController  extends AppController
         return $datatable;
     }
 
-    protected function byPeriod($start = null, $end = null)
+    protected function byPeriod($start = null, $end = null, &$list_of_products = null)
     {
 
         //get date diff
@@ -191,6 +194,7 @@ class TopPurchaseProductController  extends AppController
                 'Orders.created' => 'identifier'
             ])
         ])
+        ->leftJoinWith('Products')
         ->leftJoinWith('OrderDetails')
         ->leftJoinWith('OrderDetails.Orders')
             ->where([
@@ -204,6 +208,8 @@ class TopPurchaseProductController  extends AppController
                     ->lte('Orders.created', $end . ' 23:59:59');
             });
         }
+
+        //$datatable->group(['product_id']);
 
         switch ($type) {
             case 'year':
@@ -225,9 +231,8 @@ class TopPurchaseProductController  extends AppController
                 'Orders.created' => 'ASC'
             ]);
 
-
         $datatable = $datatable
-            ->map(function(\AdminPanel\Model\Entity\OrderDetailProduct $row) use($type) {
+            ->map(function(\AdminPanel\Model\Entity\OrderDetailProduct $row) use($type, &$list_of_products) {
                 switch ($type) {
                     case 'year':
                         $row->name = $row->year;
@@ -236,8 +241,64 @@ class TopPurchaseProductController  extends AppController
                         $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day));
                         break;
                     case 'day':
-                        $row->name = $row->day;
+                        $row->name = date('d M', strtotime($row->year . '-' . $row->month . '-' . $row->day));
                         break;
+                }
+
+                //list of products
+                $products = $this->OrderDetailProducts->find();
+                $products = $products
+                    ->select([
+                        'total' => $products->func()->count('OrderDetailProducts.product_id'),
+                        'product_name' => 'Products.name',
+                        'product_id' => 'OrderDetailProducts.product_id',
+                        'year' => $products->func()->year([
+                            'Orders.created' => 'identifier'
+                        ]),
+                        'month' => $products->func()->month([
+                            'Orders.created' => 'identifier'
+                        ]),
+                        'day' => $products->func()->day([
+                            'Orders.created' => 'identifier'
+                        ])
+                    ])
+                    ->leftJoinWith('Products')
+                    ->leftJoinWith('OrderDetails')
+                    ->leftJoinWith('OrderDetails.Orders')
+                    ->where([
+                        'Orders.payment_status' => 2
+                    ]);
+
+                switch ($type) {
+                    case 'year':
+                        $products->where([
+                            'YEAR(Orders.created)' => $row->year
+                        ]);
+                        $products->group(['year']);
+                        break;
+                    case 'month':
+                        $products->where([
+                            'YEAR(Orders.created)' => $row->year,
+                            'MONTH(Orders.created)' => $row->month,
+                        ]);
+                        $products->group(['month', 'year']);
+                        break;
+                    case 'day':
+                        $products->where([
+                            'DATE(Orders.created)' => $row->year . '-' . $row->month . '-' . $row->day
+                        ]);
+                        $products->group(['day', 'month', 'year']);
+                        break;
+                }
+                $products->group('OrderDetailProducts.product_id');
+
+                if (!$products->isEmpty()) {
+                    foreach($products as $product) {
+                        if (!array_key_exists($product->product_id, $list_of_products)) {
+                            $list_of_products[$product->product_id] = $product->product_name;
+                        }
+                        $row->{$product->product_id} = $product->total;
+                    }
                 }
 
                 unset($row->year);
