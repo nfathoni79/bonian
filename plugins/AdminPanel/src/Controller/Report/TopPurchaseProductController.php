@@ -25,7 +25,8 @@ class TopPurchaseProductController  extends AppController
     {
         $start = $this->request->getQuery('start');
         $end = $this->request->getQuery('end');
-        $limit = $this->request->getQuery('limit', 10);
+        $limit = (int) $this->request->getQuery('limit', 10);
+        $limit = $limit == 0 ? 10 : $limit;
 
         if (empty($start) || empty ($end)) {
             $start = (Time::now())->addDays(-14)->format('Y-m-d');
