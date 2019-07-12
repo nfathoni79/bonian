@@ -225,7 +225,20 @@ $this->Html->script([
             {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: ':visible'
+                    columns: ':visible(:not(.not-export-col))',
+                    stripHtml: false,
+                    autoFilter: true,
+                    format: {
+                        body: function ( data, row, column ) {
+                            data = (column === 12 && column === 13) ? data.replace( /\n/g, '"&CHAR(10)&"' ) : data;
+                            data = String(data).replace(/<.*?>/g, "");
+                            return data;
+                        }
+                    }
+                },
+                customize: function( xlsx ) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    $('row c', sheet).attr( 's', '55' );
                 }
             },
             {
@@ -380,9 +393,9 @@ $this->Html->script([
                         return '-';
                     }else{
                         var doms = '';
-                        doms += 'Nama Penerima : '+row.recipient_name+'<br>';
-                        doms += 'Telepon : '+row.recipient_phone+'<br>';
-                        doms += 'Alamat : '+row.address+', '+row.subdistrict.name+', '+row.city.name+', '+row.province.name+'<br>';
+                        doms += 'Nama Penerima : '+row.recipient_name+"<br>\n";
+                        doms += 'Telepon : '+row.recipient_phone+"<br>\n";
+                        doms += 'Alamat : '+row.address+', '+row.subdistrict.name+', '+row.city.name+', '+row.province.name+"<br>\n";
                         return doms;
                     }
                 }
@@ -396,17 +409,17 @@ $this->Html->script([
                     }else{
                         var doms = '';
                         $.each(row.order_details,function(k,v){
-                            doms += '<b>Order ID : '+row.invoice+'-'+v.id+'</b><br>';
+                            doms += '<b>Order ID : '+row.invoice+'-'+v.id+"</b><br>\n";
                             var current = 1;
                             $.each(v.order_detail_products, function(kk,vv){
-                                doms += '<b>'+current+'. '+vv.product.name+'</b><br>';
-                                doms += 'Sub SKU : '+vv.product_option_price.sku+'<br>';
-                                doms += 'QTY : '+vv.qty+'<br>';
+                                doms += '<b>'+current+'. '+vv.product.name+"</b><br>\n";
+                                doms += 'Sub SKU : '+vv.product_option_price.sku+"<br>\n";
+                                doms += 'QTY : '+vv.qty+"<br>\n";
                                 var variant = '';
                                 $.each(vv.product_option_price.product_option_value_lists,function(kkk,vvv){
-                                    variant += vvv.option.name+' : '+vvv.option_value.name+'<br>';
+                                    variant += vvv.option.name+' : '+vvv.option_value.name+"<br>\n";
                                 });
-                                doms += variant+'<br>';
+                                doms += variant+"<br>\n";
                                 current++;
                             });
                             doms += '<hr>';
