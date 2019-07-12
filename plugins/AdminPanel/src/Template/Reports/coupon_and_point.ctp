@@ -100,7 +100,7 @@
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
                                 <h3 class="m-portlet__head-text">
-                                    <?= __('Coupon Mutation Report') ?>
+                                    <?= __('Coupon Summary Report') ?>
                                 </h3>
                             </div>
                         </div>
@@ -110,7 +110,18 @@
                     </div>
 
                     <div class="m-portlet__body">
+                        <div class="m_datatable">
 
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="table-summary-coupon">
+                                <thead>
+                                <tr>
+                                    <th>Periode</th>
+                                    <th>Item sales</th>
+                                    <th>coupon</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -161,6 +172,7 @@ $this->Html->script([
 '/admin-assets/vendors/custom/amcharts/amcharts',
 '/admin-assets/vendors/custom/amcharts/serial',
 '/admin-assets/vendors/custom/amcharts/plugins/export/export.min',
+'/admin-assets/app/js/lib-tools.js',
 ], ['block' => true]);
 ?>
 <?php $this->append('script'); ?>
@@ -234,6 +246,91 @@ $this->Html->script([
             "enabled": true
         }
     });
+
+    var datatable = $('#table-summary-coupon').DataTable({
+
+        buttons: [
+            'print',
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5',
+        ],
+        lengthMenu: [10, 25, 50, 100, 1000],
+        processing: true,
+        serverSide: true,
+        //order: [[0, 'desc']],
+        "ordering": false,
+        "searching": false,
+        ajax: {
+            url: "<?= $this->Url->build(); ?>",
+            type: 'POST',
+            data: {
+                pagination: {
+                    perpage: 50,
+                },
+                _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
+            },
+        },
+        columns: [
+            {data: 'name'},
+            {data: 'item_sales'},
+            {data: 'coupon'}
+            // {data: 'percent'},
+        ],
+        columnDefs: [
+            {
+                targets: 0,
+                "orderable": false,
+                render: function (data, type, row, meta) {
+                    return row.name;
+                }
+            },
+            {
+                targets: 1,
+                "orderable": false,
+                render: function (data, type, row, meta) {
+                    return row.item_sales;
+                }
+            },
+            {
+                targets: 2,
+                "orderable": false,
+                render: function (data, type, row, meta) {
+                    return parseInt(row.coupon).format(0, 3, ',', '.');
+                }
+            },
+        ]
+
+    });
+    $('#export_print').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(0).trigger();
+    });
+
+    $('#export_copy').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(1).trigger();
+    });
+
+    $('#export_excel').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(2).trigger();
+    });
+
+    $('#export_csv').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(3).trigger();
+    });
+
+    $('#export_pdf').on('click', function(e) {
+        e.preventDefault();
+        datatable.button(4).trigger();
+    });
+
+
+
+
 </script>
 <?php $this->end(); ?>
 

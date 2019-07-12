@@ -439,9 +439,143 @@ class ReportsController extends AppController
         $datestart = $this->request->getQuery('start');
         $dateend = $this->request->getQuery('end');
 
-        if (empty($datestart) || empty ($dateend)) {
-            $dateend = date("Y-m-d");
-            $datestart = date("Y-m-d",strtotime(date("Y-m-d", strtotime($dateend)) . " -2 week"));
+        //if (empty($datestart) || empty ($dateend)) {
+        //    $dateend = date("Y-m-d");
+        //    $datestart = date("Y-m-d",strtotime(date("Y-m-d", strtotime($dateend)) . " -2 week"));
+        //}
+
+        $dateend = $dateend ? $dateend : date("Y-m-d");
+        $datestart = $datestart ? $datestart : date("Y-m-d",strtotime(date("Y-m-d", strtotime($dateend)) . " -2 week"));
+
+        if ($this->DataTable->isAjax()) {
+
+            $range = $this->Orders->find();
+            $range = $range
+                ->select([
+                    'min' => $range->func()->min('Orders.created'),
+                    'max' => $range->func()->max('Orders.created'),
+                ])
+                ->where([
+                    'Orders.payment_status' => 2
+                ])
+                ->where(function(\Cake\Database\Expression\QueryExpression $exp) {
+                    return $exp->gt('Orders.discount_kupon', 0);
+                });
+
+
+            if ($datestart && $dateend) {
+                $range->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($datestart, $dateend) {
+                    return $exp->gte('Orders.created', $datestart . ' 00:00:00')
+                        ->lte('Orders.created', $dateend . ' 23:59:59');
+                });
+            }
+
+
+            $range = $range
+                ->first();
+
+            $timeInYear = 0;
+            $timeInMonth = 0;
+            //$timeInDay = 0;
+            $type = 'day';
+            if ($range) {
+                $timeInYear = (Time::parse($range->get('max')))->diffInYears(
+                    Time::parse($range->get('min'))
+                );
+                $timeInMonth = (Time::parse($range->get('max')))->diffInMonths(
+                    Time::parse($range->get('min'))
+                );
+
+                /*$timeInDay = (Time::parse($range->get('max')))->diffInDays(
+                    Time::parse($range->get('min'))
+                );*/
+            }
+
+
+            if ($timeInYear) {
+                $type = 'year';
+            } else if ($timeInMonth) {
+                $type = 'month';
+            } else {
+                $type = 'day';
+            }
+
+
+
+
+
+            $datatable = $this->DataTable->adapter('AdminPanel.Orders');
+            $datatable = $datatable->select([
+                'name' => 'Orders.created',
+                'item_sales' => $datatable->getTable()->func()->count('Orders.id'),
+                'coupon' => $datatable->getTable()->func()->sum('Orders.discount_kupon'),
+                'year' => $datatable->getTable()->func()->year([
+                    'Orders.created' => 'identifier'
+                ]),
+                'month' => $datatable->getTable()->func()->month([
+                    'Orders.created' => 'identifier'
+                ]),
+                'day' => $datatable->getTable()->func()->day([
+                    'Orders.created' => 'identifier'
+                ])
+            ]);
+
+
+
+            switch ($type) {
+                case 'year':
+                    $datatable->group(['year']);
+                    break;
+                case 'month':
+                    $datatable->group(['month', 'year']);
+                    break;
+                case 'day':
+                    $datatable->group(['day', 'month', 'year']);
+                    break;
+            }
+
+            $result = $datatable
+                ->setSorting()
+                ->getTable()
+                ->where([
+                    'Orders.payment_status' => 2
+                ])
+                ->where(function(\Cake\Database\Expression\QueryExpression $exp) {
+                    return $exp->gt('Orders.discount_kupon', 0);
+                });
+
+
+            if ($datestart && $dateend) {
+                $result->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($datestart, $dateend) {
+                    return $exp->gte('Orders.created', $datestart . ' 00:00:00')
+                        ->lte('Orders.created', $dateend . ' 23:59:59');
+                });
+            }
+
+
+            $result = $result
+                ->map(function (\AdminPanel\Model\Entity\Order $row) use($type) {
+                    if ($type) {
+                        switch ($type) {
+                            case 'year':
+                                $row->name = (Time::parse($row->name))->format('Y');
+                                break;
+                            case 'month':
+                                $row->name = (Time::parse($row->name))->format('M Y');
+                                break;
+                            case 'day':
+                                $row->name = (Time::parse($row->name))->format('d M Y');
+                                break;
+                        }
+                    }
+
+                    return $row;
+                })
+                ->toArray();
+
+            //set again datatable
+            $datatable->setData($result);
+            return $datatable->response();
         }
 
         $by_periods = $this->byPeriod($datestart, $dateend);
