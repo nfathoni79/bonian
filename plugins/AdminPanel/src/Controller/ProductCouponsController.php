@@ -4,6 +4,7 @@ namespace AdminPanel\Controller;
 use AdminPanel\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Validation\Validator;
+use Cake\I18n\Number;
 
 
 /**
@@ -131,7 +132,6 @@ class ProductCouponsController extends AppController
 
                 if ($this->ProductCoupons->save($productCoupon)) {
                     if($this->request->getData('notif') == 1){
-
                         $products = $this->Products->find()
                             ->select(['id','price_sale', 'name', 'slug'])
                             ->contain(['ProductImages'])
@@ -149,7 +149,7 @@ class ProductCouponsController extends AppController
                                 $vals->id,
                                 '3',
                                 'Kupon promo',
-                                'Harga spesial '.$products->name.' Rp.'.$products->price_sale.'!, Makin hemat dengan kupon Rp.'.$this->request->getData('price').'. Buruan, checkout sekarang ',
+                                'Harga spesial '.$products->name.' '.Number::format($products->price_sale, ['places' => 0,'before' => 'Rp ']).'!, Makin hemat dengan kupon ' .Number::format($this->request->getData('price'), ['places' => 0,'before' => 'Rp ']).'. Buruan, checkout sekarang ',
                                 'Products',
                                 $products->id,
                                 2,
