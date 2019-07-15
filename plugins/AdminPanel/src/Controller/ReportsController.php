@@ -60,7 +60,7 @@ class ReportsController extends AppController
             ->group(['media_type']);
         $datatable->select([
             'not_clicked' => $datatable->func()->sum("IF(ShareStatistics.clicked = 0, 1, 0)"),
-            'clicked' => $datatable->func()->sum("IF(ShareStatistics.clicked = 1, ShareStatistics.clicked, 0)"),
+            'clickeds' => $datatable->func()->sum("IF(ShareStatistics.clicked = 1, 1, 0)"),
             'type' => 'media_type',
             'year' => $datatable->func()->year([
                 'ShareStatistics.created' => 'identifier'
@@ -94,15 +94,18 @@ class ReportsController extends AppController
                         break;
                     case 'tw':
                         $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Twitter';
+                        $row->not_clicked = floor($row->not_clicked / 2);
                         break;
                     case 'fb':
                         $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Facebook';
+                        $row->not_clicked = floor($row->not_clicked / 2);
                         break;
                     case 'sms':
                         $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Sms';
                         break;
                     case 'ln':
                         $row->name = date('M Y', strtotime($row->year . '-' . $row->month . '-' . $row->day)).' Line';
+                        $row->not_clicked = floor($row->not_clicked / 2);
                         break;
                 }
 

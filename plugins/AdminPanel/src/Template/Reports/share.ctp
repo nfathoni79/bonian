@@ -190,7 +190,7 @@ $this->Html->script([
             "title": "Total Callback Share (refferer dari sosial media)",
             "type": "column",
             "color": "#000000",
-            "valueField": "clicked"
+            "valueField": "clickeds"
         }],
         "rotate": true,
         "categoryField": "name",
