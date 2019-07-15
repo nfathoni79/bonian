@@ -71,6 +71,39 @@
                             <div class="m-widget1__item">
                                 <div class="row m-row--no-padding align-items-center">
                                     <div class="col">
+                                        <h3 class="m-widget1__title">Success Revenue</h3>
+                                        <span class="m-widget1__desc">total of the success revenue from all carts </span>
+                                    </div>
+                                    <div class="col m--align-right">
+                                        <span class="m-widget1__number m--font-brand">IDR <?php echo $this->Number->precision($successReveneu, 2);?></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-widget1__item">
+                                <div class="row m-row--no-padding align-items-center">
+                                    <div class="col">
+                                        <h3 class="m-widget1__title">Abandoned Items</h3>
+                                        <span class="m-widget1__desc">total of the revenue from all abandoned carts </span>
+                                    </div>
+                                    <div class="col m--align-right">
+                                        <span class="m-widget1__number m--font-brand"><?php echo $this->Number->precision($abandoneItems, 0);?></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-widget1__item">
+                                <div class="row m-row--no-padding align-items-center">
+                                    <div class="col">
+                                        <h3 class="m-widget1__title">Success Items</h3>
+                                        <span class="m-widget1__desc">total of the success revenue from all carts </span>
+                                    </div>
+                                    <div class="col m--align-right">
+                                        <span class="m-widget1__number m--font-brand"><?php echo $this->Number->precision($successItems, 0);?></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-widget1__item">
+                                <div class="row m-row--no-padding align-items-center">
+                                    <div class="col">
                                         <h3 class="m-widget1__title">Abandoned Carts</h3>
                                         <span class="m-widget1__desc">total of carts that did not result in an order.</span>
                                     </div>
@@ -82,22 +115,22 @@
                             <div class="m-widget1__item">
                                 <div class="row m-row--no-padding align-items-center">
                                     <div class="col">
-                                        <h3 class="m-widget1__title">Abandon Rate</h3>
-                                        <span class="m-widget1__desc">percentage of all carts that were abandoned</span>
+                                        <h3 class="m-widget1__title">Success Carts</h3>
+                                        <span class="m-widget1__desc">number of unique completed orders</span>
                                     </div>
                                     <div class="col m--align-right">
-                                        <span class="m-widget1__number m--font-brand"><?php echo $this->Number->toPercentage($abandoneRate);?></span>
+                                        <span class="m-widget1__number m--font-brand"><?php echo $countOrders;?></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="m-widget1__item">
                                 <div class="row m-row--no-padding align-items-center">
                                     <div class="col">
-                                        <h3 class="m-widget1__title">Orders</h3>
-                                        <span class="m-widget1__desc">number of unique completed orders</span>
+                                        <h3 class="m-widget1__title">Abandon Rate</h3>
+                                        <span class="m-widget1__desc">percentage of all carts that were abandoned</span>
                                     </div>
                                     <div class="col m--align-right">
-                                        <span class="m-widget1__number m--font-brand"><?php echo $countOrders;?></span>
+                                        <span class="m-widget1__number m--font-brand"><?php echo $this->Number->toPercentage($abandoneRate);?></span>
                                     </div>
                                 </div>
                             </div>
@@ -228,11 +261,10 @@
                         <tr>
                             <th>#</th>
                             <th>Product</th>
-                            <th>SKU</th>
-                            <th>Abandoned Carts</th>
-                            <th>Abandoned Revenue</th>
-                            <th>Abandoned Rate</th>
-                            <th>Visits</th>
+                            <th>SKU ID</th>
+                            <th>SUB SKU ID</th>
+                            <th>Qty</th>
+                            <th>Total</th>
                         </tr>
                         </thead>
                     </table>
@@ -320,10 +352,9 @@ echo $this->Html->script([
             {data: 'id'},
             {data: 'Product.name'},
             {data: 'Product.sku'},
-            {data: 'abandoned_cart'},
-            {data: 'abandoned_revenue'},
-            {data: 'abandoned_rate'},
-            {data: 'Product.view'},
+            {data: 'ProductOptionPrice.sku'},
+            {data: 'qty'},
+            {data: 'total'},
         ],
         columnDefs: [
             {
@@ -347,25 +378,19 @@ echo $this->Html->script([
             {
                 targets: 3,
                 render: function (data, type, row, meta) {
-                    return row.abandoned_cart;
+                    return row.product_option_price.sku;
                 }
             },
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
-                    return parseInt(row.abandoned_revenue).format(0, 3, '.', ',');
+                    return row.qty;
                 }
             },
             {
                 targets: 5,
                 render: function (data, type, row, meta) {
-                    return row.abandoned_rate+'%';
-                }
-            },
-            {
-                targets: 6,
-                render: function (data, type, row, meta) {
-                    return row.product.view;
+                    return parseInt(row.total).format(0, 3, ',', '.');
                 }
             },
         ]

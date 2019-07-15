@@ -235,69 +235,27 @@ class ReportsController extends AppController
                             'view',
                             'sku',
                         ]
-                    ]
+                    ],
+                    'ProductOptionPrices'
                 ])
                 ->search(function ($search, \Cake\Database\Expression\QueryExpression $exp) {
                     $orConditions = $exp->or_([
                         'Products.name LIKE' => '%' . $search .'%',
                         'Products.sku LIKE' => '%' . $search .'%',
-//                        'ProductRatings.comment LIKE' => '%' . $search .'%',
                     ]);
                     return $exp
                         ->add($orConditions);
                 })
                 ->where(['CustomerCartDetails.status NOT IN' => [1,4]]);
 
+            $datatable->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($datestart, $dateend) {
+                return $exp->gte('CustomerCartDetails.created', $datestart . ' 00:00:00')
+                    ->lte('CustomerCartDetails.created', $dateend . ' 23:59:59');
+            });
+
             $result = $datatable
                 ->setSorting()
                 ->getTable()
-                ->where(function ($exp) use($datestart,$dateend) {
-                    return $exp->between('CustomerCartDetails.created', $datestart , $dateend );
-                })
-                ->group('product_id')
-                ->map(function (\AdminPanel\Model\Entity\CustomerCartDetail $row) use($datestart, $dateend){
-                    $sumAbandonedByProduct = $this->CustomerCartDetails->find('all')
-                        ->where([
-                            'CustomerCartDetails.status NOT IN ' => [1,4],
-                            'CustomerCartDetails.product_id' => $row->product->id
-                        ])
-                        ->where([
-                            'created BETWEEN :start AND :end'
-                        ])
-                        ->bind(':start', $datestart, 'date')
-                        ->bind(':end',   $dateend, 'date')
-                        ->group(['customer_cart_id']);
-
-                    $row->abandoned_cart = $sumAbandonedByProduct->count();
-
-
-                    $allAbandon = $this->CustomerCartDetails
-                        ->find()
-                        ->where([
-                            'CustomerCartDetails.status NOT IN' => [1,4],
-                            'CustomerCartDetails.product_id' => $row->product->id
-                        ])
-                        ->where([
-                            'created BETWEEN :start AND :end'
-                        ])
-                        ->bind(':start', $datestart, 'date')
-                        ->bind(':end',   $dateend, 'date');
-
-                    $allRes = $allAbandon->select(['total' => $allAbandon->func()->sum('total')])->first();
-                    $row->abandoned_revenue = $allRes->total;
-
-                    $allAbandonRate = $this->CustomerCartDetails
-                        ->find()
-                        ->where([
-                            'CustomerCartDetails.status NOT IN' => [1,4],
-                            'CustomerCartDetails.product_id' => $row->product->id
-                        ]);
-
-                    $allResRate = $allAbandonRate->select(['total' => $allAbandonRate->func()->sum('total')])->first();
-                    $row->abandoned_rate = ($allRes->total / $allResRate->total ) * 100;
-
-                    return $row;
-                })
                 ->toArray();
             //set again datatable
             $datatable->setData($result);
@@ -307,55 +265,81 @@ class ReportsController extends AppController
 
         $Query = $this->CustomerCartDetails
             ->find()
-            ->where([
-                'created BETWEEN :start AND :end'
-            ])
-            ->bind(':start', $datestart, 'date')
-            ->bind(':end',   $dateend, 'date')
             ->where(['CustomerCartDetails.status NOT IN ' => [1,4]]);
+        $Query->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($datestart, $dateend) {
+            return $exp->gte('CustomerCartDetails.created', $datestart . ' 00:00:00')
+                ->lte('CustomerCartDetails.created', $dateend . ' 23:59:59');
+        });
+        $res = $Query->select([
+            'total' => $Query->func()->sum('total'),
+            'items' => $Query->func()->sum('qty'),
+        ])->first();
+        $abandoneReveneu = $res->total;
+        $abandoneItems = $res->items;
 
-        $res = $Query->select(['total' => $Query->func()->sum('total')])->first();
+
+        $Query = $this->CustomerCartDetails
+            ->find()
+            ->where(['CustomerCartDetails.status' => 4]);
+        $Query->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($datestart, $dateend) {
+            return $exp->gte('CustomerCartDetails.created', $datestart . ' 00:00:00')
+                ->lte('CustomerCartDetails.created', $dateend . ' 23:59:59');
+        });
+        $result = $Query->select([
+            'total' => $Query->func()->sum('total'),
+            'items' => $Query->func()->sum('qty'),
+        ])->first();
+
+        $successReveneu = $result->total;
+        $successItems = $result->items;
+
 
         $cart = $this->CustomerCarts
             ->find('all')
-            ->where([
-                'created BETWEEN :start AND :end'
-            ])
-            ->bind(':start', $datestart, 'date')
-            ->bind(':end',   $dateend, 'date')
-            ->where(['CustomerCarts.status' => 2]);
+            ->where(['CustomerCarts.status IN ' => [2]]);
 
-        $abandoneReveneu = $res->total;
+        $cart->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($datestart, $dateend) {
+            return $exp->gte('CustomerCarts.created', $datestart . ' 00:00:00')
+                ->lte('CustomerCarts.created', $dateend . ' 23:59:59');
+        });
         $abandonedCart = $cart->count();
-        $allAbandon = $this->CustomerCartDetails
-            ->find()
-            ->where(['CustomerCartDetails.status NOT IN' => [1,4]]);
 
-        $allRes = $allAbandon->select(['total' => $allAbandon->func()->sum('total')])->first();
-
-        $abandoneRate = ( $abandoneReveneu / $allRes->total ) * 100;
-
-        $sumAllOrders= $this->Orders->find('all')->where(['Orders.payment_status' => 2]);
+        $sumAllOrders = $this->CustomerCarts
+            ->find('all')
+            ->where(['CustomerCarts.status NOT IN ' => [1,2]]);
+        $sumAllOrders->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($datestart, $dateend) {
+            return $exp->gte('CustomerCarts.created', $datestart . ' 00:00:00')
+                ->lte('CustomerCarts.created', $dateend . ' 23:59:59');
+        });
         $countOrders = $sumAllOrders->count();
+
+
+        $abandoneRate = ( $abandonedCart / ($countOrders + $abandonedCart)  ) * 100;
+
+
+
+
 
         $newList = [];
         foreach($this->createRange($datestart, $dateend) as $k => $vals){
             $newList[$k]['date'] = $vals;
-            $findStatsTotal = $this->CustomerCartDetails
+            $findStatsTotal = $this->CustomerCarts
                 ->find('all')
                 ->where([
-                    'DATE(CustomerCartDetails.created)' => $vals
+                    'DATE(CustomerCarts.created)' => $vals,
+                    'CustomerCarts.status NOT IN ' => [1,2]
                 ]);
-            $laku = $findStatsTotal->select(['total' => $findStatsTotal->func()->sum('total')])->where(['status IN ' => [1,4]])->first();
+            $laku = $findStatsTotal->count();
 
-            $findStatsTotal = $this->CustomerCartDetails
+            $findStatsTotal = $this->CustomerCarts
                 ->find('all')
                 ->where([
-                    'DATE(CustomerCartDetails.created)' => $vals
+                    'DATE(CustomerCarts.created)' => $vals,
+                    'CustomerCarts.status IN ' => [2]
                 ]);
+            $galaku = $findStatsTotal->count();
 
-            $galaku = $findStatsTotal->select(['totals' => $findStatsTotal->func()->sum('total')])->where(['status NOT IN ' => [1,4]])->first();
-            $percent = @($galaku->totals / ($galaku->totals + $laku->total) * 100);
+            $percent = @($galaku / ($galaku + $laku) * 100);
             if(is_nan($percent)){
                 $percent = 0;
             }else{
@@ -367,7 +351,7 @@ class ReportsController extends AppController
 
         }
 
-        $this->set(compact('abandoneReveneu', 'abandonedCart','abandoneRate','countOrders','datestart','dateend','newList'));
+        $this->set(compact('abandoneReveneu','abandoneItems', 'abandonedCart','abandoneRate','countOrders','datestart','dateend','newList', 'successReveneu', 'successItems'));
 
 
     }
