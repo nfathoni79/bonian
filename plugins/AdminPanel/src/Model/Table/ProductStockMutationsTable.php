@@ -147,7 +147,7 @@ class ProductStockMutationsTable extends Table
                             ->set(['product_stock_status_id' => 1])
                             ->where(['id' => $getStock->get('product_id')])
                             ->execute();
-                    }else{ 
+                    }else{
                         $products->query()
                             ->update()
                             ->set(['product_stock_status_id' => 2])

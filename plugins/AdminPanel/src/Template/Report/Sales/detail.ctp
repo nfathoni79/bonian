@@ -89,8 +89,13 @@
                                 ]);?>
                             </div>
                             <label for="example-text-input" class="col-2 col-form-label">Date</label>
-                            <div class="col-2">
-                                <input type="text" name="created" class="form-control m-input" autocomplete="off" id="created">
+                            <div class="col-3">
+                                <div class='input-group ' id='m_daterangepicker_6'>
+                                    <input type='text' name="created" value="<?= $start; ?> / <?= $end; ?>" class="form-control m-input" readonly placeholder="Select date range" id="date_range" />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group m-form__group row">
@@ -185,6 +190,31 @@ $this->Html->script([
 ?>
 <script>
 
+    $('select.selectpicker').selectpicker();
+
+    // predefined ranges
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    $('#m_daterangepicker_6').daterangepicker({
+        buttonClasses: 'm-btn btn',
+        applyClass: 'btn-primary',
+        cancelClass: 'btn-secondary',
+
+        startDate: start,
+        endDate: end,
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, function(start, end, label) {
+        $('#m_daterangepicker_6 .form-control').val( start.format('YYYY-MM-DD') + ' / ' + end.format('YYYY-MM-DD'));
+    });
+
     var arrows;
     if (mUtil.isRTL()) {
         arrows = {
@@ -263,7 +293,7 @@ $this->Html->script([
                 d._csrfToken = '<?= $this->request->getParam('_csrfToken'); ?>';
                 d.general = $("#generalSearch").val();
                 d.type = $("#type").val();
-                d.created = $("#created").val();
+                d.created = $("#date_range").val();
                 d.status = $("#status").val();
             }
         },

@@ -121,7 +121,7 @@ class SalesController extends AppController
                     $datatable
                         ->select([
                             'name' => 'ProductCategories.name',
-                            'total' => $datatable->getTable()->func()->count('ProductToCategories.product_category_id'),
+                            'total' => $datatable->getTable()->func()->sum('OrderDetailProducts.qty'),
                             'gross_sales' => $datatable->getTable()->func()->sum('OrderDetailProducts.total'),
                             //'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
                             'discount' => "(SUM(Orders.discount_voucher + Orders.discount_kupon))",
@@ -149,7 +149,7 @@ class SalesController extends AppController
                     $datatable
                         ->select([
                             'name' => 'Brands.name',
-                            'total' => $datatable->getTable()->func()->count('Products.brand_id'),
+                            'total' => $datatable->getTable()->func()->sum('OrderDetailProducts.qty'),
                             'gross_sales' => $datatable->getTable()->func()->sum('OrderDetailProducts.total'),
                             //'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
                             'discount' => "(SUM(Orders.discount_voucher + Orders.discount_kupon))",
@@ -232,8 +232,8 @@ class SalesController extends AppController
 
                     $datatable
                         ->select([
-                            'name' => "Orders.created",
-                            'total' => $datatable->getTable()->func()->count('Products.brand_id'),
+                            'name' => "Orders.created", 
+                            'total' => $datatable->getTable()->func()->sum('OrderDetailProducts.qty'),
                             'gross_sales' => $datatable->getTable()->func()->sum('OrderDetailProducts.total'),
                             //'discount' => "SUM(IF(Vouchers.type = 1, Vouchers.value / 100 * OrderDetailProducts.total, Vouchers.value))",
                             'discount' => "(SUM(Orders.discount_voucher + Orders.discount_kupon))",
@@ -331,16 +331,27 @@ class SalesController extends AppController
 
     public function detail(){
 
+
+        $start = (Time::now())->addDays(-29)->format('Y-m-d');
+        $end = (Time::now())->format('Y-m-d');
+
+        if ($date_range = $this->request->getData('created')) {
+            //parse date range
+            list($start, $end) = explode('/', $date_range);
+            $start = (Time::parse(trim($start)))->format('Y-m-d');
+            $end = (Time::parse(trim($end)))->format('Y-m-d');
+        }
+
+
         $general = $this->request->getData('general'); //invoice, email, customer name
         $type = $this->request->getData('type');
-        $created = $this->request->getData('created');
         $status = $this->request->getData('status');
         if ($this->DataTable->isAjax()) {
 
             $datatable = $this->DataTable->adapter('AdminPanel.Orders')
                 ->select([
                     'id' => 'OrderDetails.id',
-                    'created' => 'OrderDetails.created',
+                    'created' => 'Orders.created',
                     'invoice' => 'Orders.invoice',
                     'type' => "(IF(Orders.order_type = 1, 'Product', 'Product Digital'))",
                     'customer_name' => 'Customers.first_name',
@@ -383,9 +394,14 @@ class SalesController extends AppController
             if($type){
                 $datatable->where(['Orders.order_type' => $type]);
             }
-            if($created){
-                $datatable->where(['DATE(Orders.created)' => $created]);
+
+            if ($start && $end) {
+                $datatable->where(function(\Cake\Database\Expression\QueryExpression $exp) use ($start, $end) {
+                    return $exp->gte('Orders.created', $start . ' 00:00:00')
+                        ->lte('Orders.created', $end . ' 23:59:59');
+                });
             }
+
             if($status){
                 $datatable->where(['Orders.payment_status' => $status]);
             }
@@ -403,6 +419,8 @@ class SalesController extends AppController
             $datatable->setData($result);
             return $datatable->response();
         }
+
+        $this->set(compact( 'start', 'end'));
     }
 
 }
