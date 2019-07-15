@@ -142,25 +142,20 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Created</th>
                                 <th>Invoice</th>
                                 <th>Tipe</th>
                                 <th>Customer Name</th>
+                                <th>Customer Email</th>
+                                <th>Voucher</th>
+                                <th>Diskon Kupon</th>
+                                <th>Diskon Voucher</th>
+                                <th>Gross Total</th>
+                                <th>Total</th>
                                 <th>Payment Status</th>
                                 <th>Payment Method</th>
-                                <th>Shipping Status</th>
-                                <th>AWB No.</th>
-                                <th>Total Invoice</th>
-                                <th>Point</th>
-                                <th>Voucher</th>
-                                <th>Coupon</th>
-                                <th>Ship.Cost</th>
-                                <th>Total Bayar</th>
-                                <th>SKU ID</th>
-                                <th>Nama Produk</th>
-                                <th>Sub SKU ID</th>
-                                <th>QTY</th>
-                                <th>Harga Produk</th>
+                                <th>Shipping Destination</th>
+                                <th>Produt Detail</th>
+                                <th>Created</th>
                             </tr>
                             </thead>
                         </table>
@@ -230,7 +225,20 @@ $this->Html->script([
             {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: ':visible'
+                    columns: ':visible(:not(.not-export-col))',
+                    stripHtml: false,
+                    autoFilter: true,
+                    format: {
+                        body: function ( data, row, column ) {
+                            data = (column === 12 && column === 13) ? data.replace( /\n/g, '"&CHAR(10)&"' ) : data;
+                            data = String(data).replace(/<.*?>/g, "");
+                            return data;
+                        }
+                    }
+                },
+                customize: function( xlsx ) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    $('row c', sheet).attr( 's', '55' );
                 }
             },
             {
@@ -254,7 +262,7 @@ $this->Html->script([
         serverSide: true,
         order: [[0, 'desc']],
         ajax: {
-            url: "<?= $this->Url->build(['action' => 'detail', 'controller' => 'sales', 'prefix' => 'report']); ?>",
+            url: "<?= $this->Url->build(['action' => 'index', 'controller' => 'orders']); ?>",
             type: 'POST',
             data: function(d) {
                 d.pagination = {perpage: 50};
@@ -276,27 +284,22 @@ $this->Html->script([
         },
         columns: [
             {data: 'id'},
-            {data: 'created'},
             {data: 'invoice'},
-            {data: 'type'},
-            {data: 'customer_name'},
-            {data: 'payment_status'},
-            {data: 'payment_type'},
-            {data: 'shipping_status'},
-            {data: 'awb'},
-            {data: 'total_invoice'},
-            {data: 'point'},
-            {data: 'voucher'},
-            {data: 'coupon'},
-            {data: 'shipping_cost'},
+            {data: 'order_type'},
+            {data: 'Customers.first_name'},
+            {data: 'Customers.email'},
+            {data: 'Vouchers.name'},
+            {data: 'discount_kupon'},
+            {data: 'discount_voucher'},
+            {data: 'gross_total'},
             {data: 'total'},
-            {data: 'sku'},
-            {data: 'product_name'},
-            {data: 'sub_sku'},
-            {data: 'qty'},
-            {data: 'price'},
+            {data: 'payment_status'},
+            {data: 'id'},
+            {data: 'id'},
+            {data: 'id'},
+            {data: 'created'},
         ],
-
+        //
         columnDefs: [
             {
                 targets: 0,
@@ -305,7 +308,63 @@ $this->Html->script([
                 }
             },
             {
+                targets: 1,
+                render: function (data, type, row, meta) {
+                    return row.invoice;
+                }
+            },
+            {
+                targets: 2,
+                render: function (data, type, row, meta) {
+                    return row.order_type == 1 ? 'Regular Produk' : 'Produk Digital';
+                }
+            },
+            {
+                targets: 3,
+                render: function (data, type, row, meta) {
+                    return row.customer.first_name;
+                }
+            },
+            {
+                targets: 4,
+                visible: false,
+                render: function (data, type, row, meta) {
+                    return row.customer.email;
+                }
+            },
+            {
                 targets: 5,
+                render: function (data, type, row, meta) {
+                    return row.voucher ? row.voucher.name : '-';
+                }
+            },
+            {
+                targets: 6,
+                render: function (data, type, row, meta) {
+                    return parseInt(row.discount_kupon).format(0, 3, ',', '.');
+                }
+            },
+            {
+                targets: 7,
+                render: function (data, type, row, meta) {
+                    return parseInt(row.discount_voucher).format(0, 3, ',', '.');
+                }
+            },
+            {
+                targets: 8,
+                visible: false,
+                render: function (data, type, row, meta) {
+                    return parseInt(row.gross_total).format(0, 3, ',', '.');
+                }
+            },
+            {
+                targets: 9,
+                render: function (data, type, row, meta) {
+                    return parseInt(row.total).format(0, 3, ',', '.');
+                }
+            },
+            {
+                targets: 10,
                 render: function (data, type, row, meta) {
                     let status = {
                         1: {'class': 'm-badge--default', 'name': 'Pending'},
@@ -321,57 +380,61 @@ $this->Html->script([
                 }
             },
             {
-                targets: 7,
-                render: function (data, type, row, meta) {
-                    let status = {
-                        1: {'name': 'Menunggu Pembayaran'},
-                        2: {'name': 'Di Proses'},
-                        3: {'name': 'Di Kirim'},
-                        4: {'name': 'Selesai'}
-                    };
-                    return row.shipping_status && status[row.shipping_status] ?  status[row.shipping_status].name  : '-';
-                }
-            },
-            {
-                targets: 9,
-                render: function (data, type, row, meta) {
-                    return parseInt(row.total_invoice).format(0, 3, ',', '.');
-                }
-            },
-            {
-                targets: 10,
-                render: function (data, type, row, meta) {
-                    return parseInt(row.point).format(0, 3, ',', '.');
-                }
-            },
-            {
                 targets: 11,
                 render: function (data, type, row, meta) {
-                    return parseInt(row.voucher).format(0, 3, ',', '.');
+                    return row.transactions.length > 0 ? row.transactions[row.transactions.length - 1].payment_type : '-';
                 }
             },
             {
                 targets: 12,
+                visible: false,
                 render: function (data, type, row, meta) {
-                    return parseInt(row.coupon).format(0, 3, ',', '.');
+                    if(row.order_type == 2){
+                        return '-';
+                    }else{
+                        var doms = '';
+                        doms += 'Nama Penerima : '+row.recipient_name+"<br>\n";
+                        doms += 'Telepon : '+row.recipient_phone+"<br>\n";
+                        doms += 'Alamat : '+row.address+', '+row.subdistrict.name+', '+row.city.name+', '+row.province.name+"<br>\n";
+                        return doms;
+                    }
                 }
             },
             {
                 targets: 13,
+                visible: false,
                 render: function (data, type, row, meta) {
-                    return parseInt(row.shipping_cost).format(0, 3, ',', '.');
+                    if(row.order_type == 2){
+                        return '-';
+                    }else{
+                        var doms = '';
+                        $.each(row.order_details,function(k,v){
+                            doms += '<b>Order ID : '+row.invoice+'-'+v.id+"</b><br>\n";
+                            var current = 1;
+                            $.each(v.order_detail_products, function(kk,vv){
+                                doms += '<b>'+current+'. '+vv.product.name+"</b><br>\n";
+                                doms += 'Sub SKU : '+vv.product_option_price.sku+"<br>\n";
+                                doms += 'QTY : '+vv.qty+"<br>\n";
+                                var variant = '';
+                                $.each(vv.product_option_price.product_option_value_lists,function(kkk,vvv){
+                                    variant += vvv.option.name+' : '+vvv.option_value.name+"<br>\n";
+                                });
+                                doms += variant+"<br>\n";
+                                current++;
+                            });
+                            doms += '<hr>';
+                        });
+                        // doms += 'Nama Penerima : '+row.recipient_name+'<br>';
+                        // doms += 'Telepon : '+row.recipient_phone+'<br>';
+                        // doms += 'Alamat : '+row.address+', '+row.subdistrict.name+', '+row.city.name+', '+row.province.name+'<br>';
+                        return doms;
+                    }
                 }
             },
             {
                 targets: 14,
                 render: function (data, type, row, meta) {
-                    return parseInt(row.total).format(0, 3, ',', '.');
-                }
-            },
-            {
-                targets: 19,
-                render: function (data, type, row, meta) {
-                    return parseInt(row.price).format(0, 3, ',', '.');
+                    return row.created;
                 }
             },
 

@@ -331,6 +331,103 @@ class SalesController extends AppController
 
     public function detail(){
 
+        $general = $this->request->getData('general'); //invoice, email, customer name
+        $type = $this->request->getData('type');
+        $created = $this->request->getData('created');
+        $status = $this->request->getData('status');
+        if ($this->DataTable->isAjax()) {
+
+            $datatable = $this->DataTable->adapter('AdminPanel.Orders')
+                ->select([
+                    'id' => 'OrderDetails.id',
+                    'created' => 'OrderDetails.created',
+                    'invoice' => 'Orders.invoice',
+                    'type' => "(IF(Orders.order_type = 1, 'Product', 'Product Digital'))",
+                    'customer_name' => 'Customers.first_name',
+                    'payment_status' => 'Orders.payment_status',
+                    'payment_type' => 'Transactions.payment_type',
+                    'shipping_status' => 'OrderShippingDetails.status',
+                    'awb' => 'OrderDetails.awb',
+                    'total_invoice' => 'Orders.gross_total',
+                    'point' => 'Orders.use_point',
+                    'voucher' => 'Orders.discount_voucher',
+                    'coupon' => 'Orders.discount_kupon',
+                    'total' => 'Orders.total',
+                    'sku' => 'Products.sku',
+                    'product_name' => 'Products.name',
+                    'sub_sku' => 'ProductOptionPrices.sku',
+                    'qty' => 'OrderDetailProducts.qty',
+                    'price' => 'Products.price_sale',
+                    'shipping_cost' => 'OrderDetails.shipping_cost',
+                ])
+                ->leftJoinWith('OrderDetails')
+                ->leftJoinWith('Customers')
+                ->leftJoinWith('Transactions')
+                ->leftJoinWith('OrderDetails.OrderShippingDetails')
+                ->leftJoinWith('OrderDetails.OrderDetailProducts.Products')
+                ->leftJoinWith('OrderDetails.OrderDetailProducts.ProductOptionPrices')
+                ;
+//                ->contain([
+//                    'Provinces',
+//                    'Cities',
+//                    'Subdistricts',
+//                    'Customers',
+//                    'Transactions',
+//                    'Vouchers',
+//                    'OrderDetails' => [
+//                        'Branches',
+//                        'OrderStatuses',
+//                        'Provinces',
+//                        'Cities',
+//                        'Subdistricts',
+//                        'OrderDetailProducts' => [
+//                            'Products' => [
+//                                'ProductImages'
+//                            ],
+//                            'ProductOptionPrices' => [
+//                                'ProductOptionValueLists' => [
+//                                    'Options',
+//                                    'OptionValues'
+//                                ],
+//                            ],
+//                        ]
+//                    ],
+//                    'OrderDigitals' => [
+//                        'DigitalDetails'
+//                    ],
+//                ]);
+
+            if($general){
+                if($general){
+                    $datatable->where(['OR' => [ 
+                        'Orders.invoice LIKE ' => '%'.$general.'%',
+                        'Customers.first_name LIKE ' => '%'.$general.'%',
+                    ]]);
+                }
+            }
+            if($type){
+                $datatable->where(['Orders.order_type' => $type]);
+            }
+            if($created){
+                $datatable->where(['DATE(Orders.created)' => $created]);
+            }
+            if($status){
+                $datatable->where(['Orders.payment_status' => $status]);
+            }
+
+            $result = $datatable
+//                ->setSorting()
+                ->getTable()
+                ->map(function (\AdminPanel\Model\Entity\Order $row) {
+                    return $row;
+                })
+                ->toArray();
+
+
+
+            $datatable->setData($result);
+            return $datatable->response();
+        }
     }
 
 }
