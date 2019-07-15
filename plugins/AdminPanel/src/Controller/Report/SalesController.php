@@ -399,7 +399,7 @@ class SalesController extends AppController
 
             if($general){
                 if($general){
-                    $datatable->where(['OR' => [ 
+                    $datatable->where(['OR' => [
                         'Orders.invoice LIKE ' => '%'.$general.'%',
                         'Customers.first_name LIKE ' => '%'.$general.'%',
                     ]]);
@@ -416,7 +416,7 @@ class SalesController extends AppController
             }
 
             $result = $datatable
-//                ->setSorting()
+                ->setSorting()
                 ->getTable()
                 ->map(function (\AdminPanel\Model\Entity\Order $row) {
                     return $row;
