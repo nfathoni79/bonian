@@ -117,6 +117,7 @@ class ProductStockMutationsTable extends Table
     public function saving($productOptionStockId, $transactionType, $amount, $description) {
 //        $amount = bcmul(sprintf('%.8f', $amount),'1',0);
         $productStock = TableRegistry::get('AdminPanel.ProductOptionStocks');
+        $products = TableRegistry::get('AdminPanel.Products');
         $getStock = $productStock->find()
             ->where(['id' => $productOptionStockId])
             ->first();
@@ -140,6 +141,19 @@ class ProductStockMutationsTable extends Table
                         ->set(['stock' => $balance])
                         ->where(['id' => $getStock->get('id')])
                         ->execute();
+                    if($balance > 0){
+                        $products->query()
+                            ->update()
+                            ->set(['product_stock_status_id' => 1])
+                            ->where(['id' => $getStock->get('product_id')])
+                            ->execute();
+                    }else{ 
+                        $products->query()
+                            ->update()
+                            ->set(['product_stock_status_id' => 2])
+                            ->where(['id' => $getStock->get('product_id')])
+                            ->execute();
+                    }
                     return true;
                 }else{
                     return false;

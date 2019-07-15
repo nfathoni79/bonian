@@ -359,43 +359,17 @@ class SalesController extends AppController
                     'qty' => 'OrderDetailProducts.qty',
                     'price' => 'Products.price_sale',
                     'shipping_cost' => 'OrderDetails.shipping_cost',
+                    'digital_name' => 'DigitalDetails.name',
+                    'digital_price' => 'DigitalDetails.price',
                 ])
                 ->leftJoinWith('OrderDetails')
+                ->leftJoinWith('OrderDigitals')
+                ->leftJoinWith('OrderDigitals.DigitalDetails')
                 ->leftJoinWith('Customers')
                 ->leftJoinWith('Transactions')
                 ->leftJoinWith('OrderDetails.OrderShippingDetails')
                 ->leftJoinWith('OrderDetails.OrderDetailProducts.Products')
-                ->leftJoinWith('OrderDetails.OrderDetailProducts.ProductOptionPrices')
-                ;
-//                ->contain([
-//                    'Provinces',
-//                    'Cities',
-//                    'Subdistricts',
-//                    'Customers',
-//                    'Transactions',
-//                    'Vouchers',
-//                    'OrderDetails' => [
-//                        'Branches',
-//                        'OrderStatuses',
-//                        'Provinces',
-//                        'Cities',
-//                        'Subdistricts',
-//                        'OrderDetailProducts' => [
-//                            'Products' => [
-//                                'ProductImages'
-//                            ],
-//                            'ProductOptionPrices' => [
-//                                'ProductOptionValueLists' => [
-//                                    'Options',
-//                                    'OptionValues'
-//                                ],
-//                            ],
-//                        ]
-//                    ],
-//                    'OrderDigitals' => [
-//                        'DigitalDetails'
-//                    ],
-//                ]);
+                ->leftJoinWith('OrderDetails.OrderDetailProducts.ProductOptionPrices');
 
             if($general){
                 if($general){
@@ -405,6 +379,7 @@ class SalesController extends AppController
                     ]]);
                 }
             }
+
             if($type){
                 $datatable->where(['Orders.order_type' => $type]);
             }

@@ -360,8 +360,8 @@ $this->Html->script([
                         '</div>\n' +
                         '</div>\n' +
                         '<div class="m-form__group form-group row row-val-'+row.id+'" style="display:none;">\n' +
-                        '<div class="col-xl-4"><input type="number" class="form-control" name="ProductOptionStocks['+row.id+'][stock]" placeholder="Stock"/></div>\n' +
-                        '<div class="col-xl-8"><input type="text" class="form-control"  name="ProductOptionStocks['+row.id+'][description]" placeholder="Deskripsi"/></div>\n' +
+                        '<div class="col-xl-12"><input type="number" class="form-control" name="ProductOptionStocks['+row.id+'][stock]" placeholder="Jumlah Stock"/></div>\n' +
+                        '<div class="col-xl-12"><input type="text" class="form-control"  name="ProductOptionStocks['+row.id+'][description]" placeholder="Deskripsi"/></div>\n' +
                         '</div>';
                 }
             },
