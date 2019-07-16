@@ -358,7 +358,7 @@ $this->Html->script([
             {
                 targets: 2,
                 render: function (data, type, row, meta) {
-                    return row.id ? row.invoice+'-'+row.id : row.invoice;
+                    return row.invoice;
                 }
             },
             {
