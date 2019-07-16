@@ -346,6 +346,7 @@ class SalesController extends AppController
         $general = $this->request->getData('general'); //invoice, email, customer name
         $type = $this->request->getData('type');
         $status = $this->request->getData('status');
+        $dstatus = $this->request->getData('dstatus');
         if ($this->DataTable->isAjax()) {
 
             $datatable = $this->DataTable->adapter('AdminPanel.Orders')
@@ -373,6 +374,7 @@ class SalesController extends AppController
                     'shipping_cost' => 'OrderDetails.shipping_cost',
                     'digital_name' => 'DigitalDetails.name',
                     'digital_price' => 'DigitalDetails.price',
+                    'digital_status' => 'OrderDigitals.status',
                 ])
                 ->leftJoinWith('OrderDetails')
                 ->leftJoinWith('OrderDigitals')
@@ -405,6 +407,10 @@ class SalesController extends AppController
 
             if($status){
                 $datatable->where(['Orders.payment_status' => $status]);
+            }
+
+            if($dstatus){
+                $datatable->where(['OrderDigitals.status' => $dstatus]);
             }
 
             $result = $datatable

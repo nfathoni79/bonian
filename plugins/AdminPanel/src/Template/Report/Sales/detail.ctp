@@ -120,6 +120,27 @@
                                 ]);?>
                             </div>
                         </div>
+                        <div class="sdigital" style="display:none;">
+                            <div class="form-group m-form__group row">
+                                <label for="example-text-input" class="col-2 col-form-label">Transaction Digital Status</label>
+                                <div class="col-2">
+                                    <?php
+                                    echo $this->Form->control('digital_status', [
+                                        'type' => 'select',
+                                        'options' => [
+                                            '0' => 'Pending',
+                                            '1' => 'Success',
+                                            '2' => 'Failed',
+                                        ],
+                                        'div' => false,
+                                        'label' => false,
+                                        'empty' => 'Transaction Digital Status',
+                                        'class' => 'form-control m-input',
+                                        'id' => 'digital_status'
+                                    ]);?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="m-separator m-separator--md m-separator--dashed"></div>
@@ -154,6 +175,7 @@
                                 <th>Payment Status</th>
                                 <th>Payment Method</th>
                                 <th>Shipping Status</th>
+                                <th>Digital Status</th>
                                 <th>AWB No.</th>
                                 <th>Total Invoice</th>
                                 <th>Point</th>
@@ -243,6 +265,13 @@ $this->Html->script([
         format: 'yyyy-mm-dd'
     });
 
+    $('#type').on('change',function(){
+        if($(this).val() == '2'){
+            $('.sdigital').show();
+        }else{
+            $('.sdigital').hide();
+        }
+    });
 
     var datatable = $('#table-orders').DataTable({
         dom: 'Bfrtip',
@@ -296,6 +325,7 @@ $this->Html->script([
                 d.type = $("#type").val();
                 d.created = $("#date_range").val();
                 d.status = $("#status").val();
+                d.dstatus = $("#digital_status").val();
             }
         },
         initComplete: function(settings, json) {
@@ -329,6 +359,7 @@ $this->Html->script([
             {data: 'payment_status'},
             {data: 'payment_type'},
             {data: 'shipping_status'},
+            {data: 'digital_status'},
             {data: 'awb'},
             {data: 'total_invoice'},
             {data: 'point'},
@@ -392,61 +423,74 @@ $this->Html->script([
                 }
             },
             {
-                targets: 9,
+                targets: 8,
                 render: function (data, type, row, meta) {
-                    return row.total_invoice ? parseInt(row.total_invoice).format(0, 3, ',', '.') : 0;
+                    var status = {
+                        0: {'class': 'm-badge--default', 'name': 'Pending'},
+                        1: {'class': ' m-badge--success', 'name': 'Success'},
+                        2: {'class': ' m-badge--danger', 'name': 'Failed'},
+                    };
+                    return typeof row.digital_status && status[row.digital_status] ? '<span class="m-badge ' + status[row.digital_status].class + ' m-badge--wide">'
+                        + status[row.digital_status].name
+                        + '</span>' : '-';
                 }
             },
             {
                 targets: 10,
                 render: function (data, type, row, meta) {
-                    return row.point ? parseInt(row.point).format(0, 3, ',', '.') : 0;
+                    return row.total_invoice ? parseInt(row.total_invoice).format(0, 3, ',', '.') : 0;
                 }
             },
             {
                 targets: 11,
                 render: function (data, type, row, meta) {
-                    return row.voucher ? parseInt(row.voucher).format(0, 3, ',', '.') : 0;
+                    return row.point ? parseInt(row.point).format(0, 3, ',', '.') : 0;
                 }
             },
             {
                 targets: 12,
                 render: function (data, type, row, meta) {
-                    return row.coupon ? parseInt(row.coupon).format(0, 3, ',', '.') : 0;
+                    return row.voucher ? parseInt(row.voucher).format(0, 3, ',', '.') : 0;
                 }
             },
             {
                 targets: 13,
                 render: function (data, type, row, meta) {
-                    return row.shipping_cost ? parseInt(row.shipping_cost).format(0, 3, ',', '.') : 0;
+                    return row.coupon ? parseInt(row.coupon).format(0, 3, ',', '.') : 0;
                 }
             },
             {
                 targets: 14,
                 render: function (data, type, row, meta) {
-                    return row.total ? parseInt(row.total).format(0, 3, ',', '.') : 0;
+                    return row.shipping_cost ? parseInt(row.shipping_cost).format(0, 3, ',', '.') : 0;
                 }
             },
             {
-                targets: 16,
+                targets: 15,
                 render: function (data, type, row, meta) {
-                    return row.flashsale ? row.flashsale : '-';
+                    return row.total ? parseInt(row.total).format(0, 3, ',', '.') : 0;
                 }
             },
             {
                 targets: 17,
                 render: function (data, type, row, meta) {
+                    return row.flashsale ? row.flashsale : '-';
+                }
+            },
+            {
+                targets: 18,
+                render: function (data, type, row, meta) {
                     return (row.type == 'Product') ? row.product_name : row.digital_name;
                 }
             },
             {
-                targets: 19,
+                targets: 20,
                 render: function (data, type, row, meta) {
                     return (row.type == 'Product') ? row.qty : '1';
                 }
             },
             {
-                targets: 20,
+                targets: 21,
                 render: function (data, type, row, meta) {
                     return (row.type == 'Product') ? (row.price) ? parseInt(row.price).format(0, 3, ',', '.') : 0 :  parseInt(row.digital_price).format(0, 3, ',', '.') ;
                 }
