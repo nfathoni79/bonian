@@ -51,7 +51,7 @@ class TopPurchaseProductController  extends AppController
         $datatable = $this->OrderDetailProducts->find();
         $datatable
             ->select([
-                'total_sales' => $datatable->func()->count('ProductToCategories.product_category_id'),
+                'total_sales' => $datatable->func()->sum('OrderDetailProducts.qty'),
                 //'revenue' => $datatable->func()->sum('OrderDetailProducts.total'),
                 'category_name' => 'ProductCategories.name',
                 //'Product_id' => 'Products.id',
@@ -118,7 +118,7 @@ class TopPurchaseProductController  extends AppController
         $datatable = $this->OrderDetailProducts->find();
         $datatable
             ->select([
-                'total_sales' => $datatable->func()->count('Products.brand_id'),
+                'total_sales' => $datatable->func()->sum('OrderDetailProducts.qty'),
                 //'revenue' => $datatable->func()->sum('OrderDetailProducts.total'),
                 'brand_name' => 'Brands.name',
                 //'Product_id' => 'Products.id',
@@ -251,7 +251,7 @@ class TopPurchaseProductController  extends AppController
                 $products = $this->OrderDetailProducts->find();
                 $products = $products
                     ->select([
-                        'total' => $products->func()->count('OrderDetailProducts.product_id'),
+                        'total' => $products->func()->sum('OrderDetailProducts.qty'),
                         'product_name' => 'Products.name',
                         'product_id' => 'OrderDetailProducts.product_id',
                         'year' => $products->func()->year([
