@@ -165,7 +165,7 @@
                 order: [[ 0, "desc" ]],
                 columns: [
                     {
-                        field: 'id',
+                        field: 'Customers.id',
                         title: '#',
                         sortable: true,
                         width: 40,
@@ -219,6 +219,7 @@
                     {
                         field: 'CustomerGroups.balance',
                         title: 'Saldo',
+                        sortable: false,
                         template: function(row) {
                             return (new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2})).format(row.customer_balances[0]['balance']) + ' <a href="<?= $this->Url->build(['action' => 'balance']); ?>/'+ row.id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Mutasi Saldo"><i class="la la-money"></i></a>' ;
                         }
@@ -226,6 +227,7 @@
                     {
                         field: 'CustomerGroups.point',
                         title: 'Point',
+                        sortable: false,
                         template: function(row) {
                             return (new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2})).format(row.customer_balances[0]['point']) + ' <a href="<?= $this->Url->build(['action' => 'point']); ?>/'+ row.id +'"class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="Mutasi Point"><i class="la la-money"></i></a>' ;
                         }
