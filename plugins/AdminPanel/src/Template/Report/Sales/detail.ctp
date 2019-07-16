@@ -269,6 +269,7 @@ $this->Html->script([
         if($(this).val() == '2'){
             $('.sdigital').show();
         }else{
+            $('#digital_status').val('');
             $('.sdigital').hide();
         }
     });
