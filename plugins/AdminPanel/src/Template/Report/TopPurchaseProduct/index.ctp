@@ -172,7 +172,7 @@ $this->Html->css([
     '/admin-assets/vendors/custom/amcharts/plugins/export/export.css'
 ], ['block' => true]);
 $this->Html->script([
-    '/admin-assets/vendors/custom/datatables/datatables.bundle',
+    //'/admin-assets/vendors/custom/datatables/datatables.bundle',
     '/admin-assets/vendors/custom/amcharts/amcharts',
     '/admin-assets/vendors/custom/amcharts/serial',
     '/admin-assets/vendors/custom/amcharts/radar',
