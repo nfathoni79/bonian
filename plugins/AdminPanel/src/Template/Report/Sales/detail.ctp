@@ -315,6 +315,7 @@ $this->Html->script([
         processing: true,
         serverSide: true,
         order: [[0, 'desc']],
+        ordering: false,
         ajax: {
             url: "<?= $this->Url->build(['action' => 'detail', 'controller' => 'sales', 'prefix' => 'report']); ?>",
             type: 'POST',
