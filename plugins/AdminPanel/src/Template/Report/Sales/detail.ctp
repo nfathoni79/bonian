@@ -162,6 +162,7 @@
                                 <th>Ship.Cost</th>
                                 <th>Total Bayar</th>
                                 <th>SKU ID</th>
+                                <th>Flash Sale</th>
                                 <th>Nama Produk</th>
                                 <th>Sub SKU ID</th>
                                 <th>QTY</th>
@@ -336,6 +337,7 @@ $this->Html->script([
             {data: 'shipping_cost'},
             {data: 'total'},
             {data: 'sku'},
+            {data: 'flashsale'},
             {data: 'product_name'},
             {data: 'sub_sku'},
             {data: 'qty'},
@@ -428,17 +430,23 @@ $this->Html->script([
             {
                 targets: 16,
                 render: function (data, type, row, meta) {
+                    return row.flashsale ? row.flashsale : '-';
+                }
+            },
+            {
+                targets: 17,
+                render: function (data, type, row, meta) {
                     return (row.type == 'Product') ? row.product_name : row.digital_name;
                 }
             },
             {
-                targets: 18,
+                targets: 19,
                 render: function (data, type, row, meta) {
                     return (row.type == 'Product') ? row.qty : '1';
                 }
             },
             {
-                targets: 19,
+                targets: 20,
                 render: function (data, type, row, meta) {
                     return (row.type == 'Product') ? (row.price) ? parseInt(row.price).format(0, 3, ',', '.') : 0 :  parseInt(row.digital_price).format(0, 3, ',', '.') ;
                 }
