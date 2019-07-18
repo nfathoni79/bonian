@@ -141,6 +141,28 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="sshipping" style="display:none;">
+                            <div class="form-group m-form__group row">
+                                <label for="example-text-input" class="col-2 col-form-label">Shipping Status</label>
+                                <div class="col-2">
+                                    <?php
+                                    echo $this->Form->control('digital_status', [
+                                        'type' => 'select',
+                                        'options' => [
+                                            '1' => 'Menunggu Pembayaran',
+                                            '2' => 'Diproses',
+                                            '3' => 'Dikirim',
+                                            '4' => 'Selesai',
+                                        ],
+                                        'div' => false,
+                                        'label' => false,
+                                        'empty' => 'Shipping Status',
+                                        'class' => 'form-control m-input',
+                                        'id' => 'shipping_status'
+                                    ]);?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="m-separator m-separator--md m-separator--dashed"></div>
@@ -268,9 +290,12 @@ $this->Html->script([
     $('#type').on('change',function(){
         if($(this).val() == '2'){
             $('.sdigital').show();
+            $('.sshipping').hide();
+            $('#shiping_status').val('');
         }else{
             $('#digital_status').val('');
             $('.sdigital').hide();
+            $('.sshipping').show();
         }
     });
 
@@ -328,6 +353,7 @@ $this->Html->script([
                 d.created = $("#date_range").val();
                 d.status = $("#status").val();
                 d.dstatus = $("#digital_status").val();
+                d.sstatus = $("#shipping_status").val();
             }
         },
         initComplete: function(settings, json) {

@@ -347,6 +347,7 @@ class SalesController extends AppController
         $type = $this->request->getData('type');
         $status = $this->request->getData('status');
         $dstatus = $this->request->getData('dstatus');
+        $sstatus = $this->request->getData('sstatus');
         if ($this->DataTable->isAjax()) {
 
             $datatable = $this->DataTable->adapter('AdminPanel.Orders')
@@ -411,6 +412,9 @@ class SalesController extends AppController
 
             if($dstatus){
                 $datatable->where(['OrderDigitals.status' => $dstatus]);
+            }
+            if($sstatus){
+                $datatable->where(['OrderShippingDetails.status' => $sstatus]);
             }
 
             $result = $datatable
