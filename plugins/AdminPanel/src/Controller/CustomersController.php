@@ -138,6 +138,8 @@ class CustomersController extends AppController
                      **/
                     $data->where([
                         'Customers.username LIKE' => '%' . $search .'%',
+                        'CustomerMutationPoints.description LIKE' => '%' . $search .'%',
+                        'CustomerMutationPointTypes.name LIKE' => '%' . $search .'%',
                     ]);
                 }
                 $data->where($query);
