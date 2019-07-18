@@ -220,7 +220,7 @@ $this->Html->script([
             "fillAlphas": 0.8,
             "labelText": "[[value]]",
             "lineAlpha": 0.3,
-            "title": "Refund, Bonus Point, Bonus Point Generasi",
+            "title": "Bonus Point, Bonus Point Generasi",
             "type": "column",
             "color": "#000000",
             "valueField": "plus"
