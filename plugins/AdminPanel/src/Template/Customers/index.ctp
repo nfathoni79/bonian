@@ -150,7 +150,7 @@
                     height: 550,
                     footer: false
                 },
-                sortable: true,
+                sortable: false,
                 pagination: true,
                 toolbar: {
                     items: {
