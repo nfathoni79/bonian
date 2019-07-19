@@ -28,6 +28,8 @@
 
         <a href="<?= Cake\Core\Configure::read('frontsite');?>user/history/detail/<?= $orderEntity->invoice;?>" style="padding:8px 20px;background-color:#DF0101;color:#fff;font-weight:bolder;font-size:16px;display:inline-block;margin:20px 0px;text-decoration:none"><?= 'Pantau Pesanan Anda'; ?></a>
 
+        <p>Silahkan memberikan ulasan dengan mengakses [My Account] anda untuk menikmati diskon dan promo tambahan.</p>
+ 
         <?php if ($orderEntity->order_type == 1) : ?>
         <?php echo $this->element('Email/Partials/product_detail', ['orderEntity' => $orderEntity, 'transactionEntity' => $transactionEntity]); ?>
         <?php elseif ($orderEntity->order_type == 2) : ?>
