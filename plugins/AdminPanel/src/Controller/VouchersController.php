@@ -338,28 +338,31 @@ class VouchersController extends AppController
                                     $voucher_start = $voucher->date_start instanceof \Cake\I18n\FrozenTime ?
                                         $voucher->date_start->format('Y-m-d H:i') : $voucher->date_start;
 
+                                    $category_names = [];
+                                    foreach($voucherDetailEntity as $category) {
+                                        array_push($category_names, $category->product_category->name);
+                                    }
+
                                     foreach($customers as $vals) {
-                                        foreach($voucherDetailEntity as $category) {
-                                            if ($this->Notification->create(
+                                        if ($this->Notification->create(
+                                            $vals->id,
+                                            '3',
+                                            'Voucher promo',
+                                            'Dapatkan diskon sebesar ' . $voucher->percent . '% atau maksimal senilai ' .
+                                            Number::format($voucher->value, ['places' => 0,'before' => 'Rp ']) .
+                                            ' untuk kategori '. join(', ', $category_names) .
+                                            ' berlaku mulai ' . $voucher_start .
+                                            ' Makin hemat dengan voucher Buruan, checkout sekarang',
+                                            'Vouchers',
+                                            $voucher->id,
+                                            2,
+                                            Configure::read('mainSite').'/img/notifications/voucher-promo.png',
+                                            Configure::read('frontsite').'promotion/'. $voucher->slug
+                                        )) {
+                                            $this->Notification->triggerCount(
                                                 $vals->id,
-                                                '3',
-                                                'Voucher promo',
-                                                'Dapatkan diskon sebesar ' . $voucher->percent . '% atau maksimal senilai ' .
-                                                Number::format($voucher->value, ['places' => 0,'before' => 'Rp ']) .
-                                                ' untuk kategori '.$category->product_category->name .
-                                                ' berlaku mulai ' . $voucher_start .
-                                                ' Makin hemat dengan voucher Buruan, checkout sekarang',
-                                                'VoucherDetails',
-                                                $category->id,
-                                                2,
-                                                Configure::read('mainSite').'/img/notifications/voucher-promo.png',
-                                                Configure::read('frontsite').'promotion/'. $voucher->slug
-                                            )) {
-                                                $this->Notification->triggerCount(
-                                                    $vals->id,
-                                                    $vals->reffcode
-                                                );
-                                            }
+                                                $vals->reffcode
+                                            );
                                         }
                                     }
 
