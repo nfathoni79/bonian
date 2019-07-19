@@ -44,6 +44,47 @@
     </div>
 
     <div class="m-content">
+
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            <?= __('Periode Aktifitas') ?>
+                        </h3>
+                    </div>
+                </div>
+                <div class="m-portlet__head-tools">
+
+                </div>
+            </div>
+
+            <div class="m-portlet__body">
+                <?= $this->Flash->render() ?>
+
+                <!--begin: Search Form -->
+                <form class="form-inline m-form m-form--fit m--margin-bottom-20">
+                    <div class="col-lg-3 m--margin-bottom-10-tablet-and-mobile">
+                        <div class='input-group ' id='m_daterangepicker_6'>
+                            <input type='text' name="date_range" value="<?= $start; ?> / <?= $end; ?>" class="form-control m-input" readonly placeholder="Select date range" id="date_range" />
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <button class="btn btn-brand m-btn m-btn--icon" id="m_search">
+                            <span>
+                                <i class="la la-search"></i>
+                                <span>Filter Date Periode</span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
         <div class="m-portlet m-portlet--mobile">
             <div class="m-portlet__head">
                 <div class="m-portlet__head-caption">
@@ -141,11 +182,39 @@ $this->Html->css([
 $this->Html->script([
 '/admin-assets/vendors/custom/datatables/datatables.bundle',
 '/admin-assets/vendors/custom/libs/validation-render',
+    '/admin-assets/app/js/lib-tools.js',
 ], ['block' => true]);
 ?>
 <?php $this->append('script'); ?>
 <script>
 
+    $(document).ready(function(){
+
+        $('select.selectpicker').selectpicker();
+
+        // predefined ranges
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+        $('#m_daterangepicker_6').daterangepicker({
+            buttonClasses: 'm-btn btn',
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-secondary',
+
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+            $('#m_daterangepicker_6 .form-control').val( start.format('YYYY-MM-DD') + ' / ' + end.format('YYYY-MM-DD'));
+        });
+    });
     // begin first table
     var table = $('#table-logs').DataTable({
         responsive: true,
@@ -163,12 +232,20 @@ $this->Html->script([
         ajax: {
             url: "<?= $this->Url->build(['action' => 'index']); ?>",
             type: 'POST',
-            data: {
-                pagination: {
-                    perpage: 50,
-                },
-                _csrfToken: '<?= $this->request->getParam('_csrfToken'); ?>'
-            },
+            data: function(d) {
+                d.pagination = {perpage: 50};
+                d._csrfToken = '<?= $this->request->getParam('_csrfToken'); ?>';
+                d.date_range = $("#date_range").val();
+            }
+        },
+        initComplete: function(settings, json) {
+
+        },
+        drawCallback_: function( settings ) {
+            var api = this.api();
+            console.log(api, settings);
+            // Output the data for the visible rows to the browser's console
+            //console.log( api.rows( {page:'current'} ).data() );
         },
         columns: [
             {data: 'created_at'},
@@ -221,6 +298,19 @@ $this->Html->script([
         ],
     });
 
+    $('#m_search').on('click', function(e) {
+        e.preventDefault();
+        $( table.column(0).header()).text( $("#report_type option:selected").text() );
+        table.table().draw();
+    });
+
+    $('#m_reset').on('click', function(e) {
+        e.preventDefault();
+        $('.m-input').each(function() {
+            $(this).val('');
+        });
+        table.table().draw();
+    });
 
     $('#export_print').on('click', function(e) {
         e.preventDefault();
