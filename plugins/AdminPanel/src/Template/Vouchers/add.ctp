@@ -153,6 +153,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         <div class="form-group m-form__group row syarat" style="display:none;">
                             <label class="col-lg-1 col-form-label">Syarat & Ketentuan</label>
@@ -166,6 +167,16 @@
                             </div>
                             <div class="col-lg-4">
                                 <?php echo $this->Form->control('jumlah',['type' => 'text','required' => false,'class' => $default_class, 'label' => 'Jumlah voucher', 'placeholder' => 'Generate jumlah voucher']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row notification" style="display:none;">
+                            <label class="col-form-label col-lg-1">Notifikasi?</label>
+                            <div class="col-lg-9 ">
+                                <div class="m-checkbox-inline">
+                                    <label class="m-checkbox m-checkbox--solid m-checkbox--brand">
+                                        <input type="checkbox" name="notif" value="1"> Kirim sebagai pesan notifikasi <span></span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group m-form__group row">
@@ -275,6 +286,8 @@ $this->Html->script([
                 $('.code').show();
                 $('#qty').val('');
                 $('.qty').show();
+                $('.notification').hide();
+                $('input[name="notif"]').prop('checked', false);
             }else if(tipe == '2'){
                 $('.point').hide();
                 $('.file').hide();
@@ -283,6 +296,7 @@ $this->Html->script([
                 $('.code').show();
                 $('#qty').val('');
                 $('.qty').show();
+                $('.notification').show();
             }else if(tipe == '3'){
                 $('.point').hide();
                 $('.category').hide();
@@ -291,6 +305,8 @@ $this->Html->script([
                 $('.file').show();
                 $('#qty').val('1');
                 $('.qty').hide();
+                $('.notification').hide();
+                $('input[name="notif"]').prop('checked', false);
             }
         });
 

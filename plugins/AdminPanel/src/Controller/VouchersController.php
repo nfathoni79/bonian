@@ -2,6 +2,8 @@
 namespace AdminPanel\Controller;
 
 use AdminPanel\Controller\AppController;
+use Cake\Core\Configure;
+use Cake\I18n\Number;
 use Cake\Validation\Validator;
 use Cake\Utility\Text;
 
@@ -10,6 +12,7 @@ use Cake\Utility\Text;
  * @property \AdminPanel\Model\Table\VouchersTable $Vouchers
  * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  * @property \AdminPanel\Model\Table\VoucherDetailsTable $VoucherDetails
+ * @property \AdminPanel\Model\Table\CustomersTable $Customers
  *
  * @method \AdminPanel\Model\Entity\Voucher[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -22,6 +25,7 @@ class VouchersController extends AppController
         $this->loadModel('AdminPanel.ProductCategories');
         $this->loadModel('AdminPanel.Vouchers');
         $this->loadModel('AdminPanel.VoucherDetails');
+        $this->loadModel('AdminPanel.Customers');
 
     }
     /**
@@ -312,6 +316,59 @@ class VouchersController extends AppController
                                 }
                             }
                             $this->Flash->success(__('Konfigurasi voucher berhasil disimpan'));
+
+                            if($this->request->getData('notif') == 1) {
+
+                                $voucherDetailEntity = $this->VoucherDetails->find()
+                                    ->contain([
+                                        'ProductCategories'
+                                    ])
+                                    ->where([
+                                        'voucher_id' => $voucher->id
+                                    ]);
+                                $category_names = [];
+                                if (!$voucherDetailEntity->isEmpty()) {
+                                    $customers = $this->Customers->find()
+                                        ->select(['id','email','username','reffcode'])
+                                        ->where([
+                                            'Customers.is_verified' => 1,
+                                            'Customers.is_email_verified' => 1,
+                                        ])->toArray();
+
+                                    $voucher_start = $voucher->date_start instanceof \Cake\I18n\FrozenTime ?
+                                        $voucher->date_start->format('Y-m-d H:i') : $voucher->date_start;
+
+                                    foreach($customers as $vals) {
+                                        foreach($voucherDetailEntity as $category) {
+                                            if ($this->Notification->create(
+                                                $vals->id,
+                                                '3',
+                                                'Voucher promo',
+                                                'Dapatkan diskon sebesar ' . $voucher->percent . '% atau maksimal senilai ' .
+                                                Number::format($voucher->value, ['places' => 0,'before' => 'Rp ']) .
+                                                ' untuk kategori '.$category->product_category->name .
+                                                ' berlaku mulai ' . $voucher_start .
+                                                ' Makin hemat dengan voucher Buruan, checkout sekarang',
+                                                'VoucherDetails',
+                                                $category->id,
+                                                2,
+                                                Configure::read('mainSite').'/img/notifications/voucher-promo.png',
+                                                Configure::read('frontsite').'promotion/'. $voucher->slug
+                                            )) {
+                                                $this->Notification->triggerCount(
+                                                    $vals->id,
+                                                    $vals->reffcode
+                                                );
+                                            }
+                                        }
+                                    }
+
+
+
+
+                                }
+
+                            }
                         }
 
                         break;

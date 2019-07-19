@@ -7,11 +7,15 @@ use Cake\ORM\Entity;
  * Voucher Entity
  *
  * @property int $id
+ * @property string $name
+ * @property string $slug
  * @property string $code_voucher
  * @property \Cake\I18n\FrozenTime $date_start
  * @property \Cake\I18n\FrozenTime $date_end
  * @property int $qty
  * @property int $type
+ * @property int $point
+ * @property int $percent
  * @property float $value
  * @property int $status
  *
