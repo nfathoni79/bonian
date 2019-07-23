@@ -177,9 +177,9 @@ class BranchesController extends AppController
             }
             $this->Flash->error(__('The branch could not be saved. Please, try again.'));
         }
-        $provinces = $this->Branches->Provinces->find('list', ['limit' => 200]);
-        $cities = $this->Branches->Cities->find('list', ['limit' => 200])->toArray();
-        $subdistricts = $this->Branches->Subdistricts->find('list', ['limit' => 200])
+        $provinces = $this->Branches->Provinces->find('list');
+        $cities = $this->Branches->Cities->find('list')->toArray();
+        $subdistricts = $this->Branches->Subdistricts->find('list')
             ->where([
                 'city_id' => $branch->city_id
             ])->toArray();
