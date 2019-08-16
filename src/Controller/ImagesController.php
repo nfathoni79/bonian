@@ -137,7 +137,7 @@ class ImagesController extends AppController
                      * @var \AdminPanel\Model\Entity\Banner $data
                      */
                     $data = $find->first();
-                    $data['dir'] = 'webroot\files\ProductCategories\path\/';
+                    $data['dir'] = 'webroot/files/ProductCategories/path/';
                     $data['type'] = 'image/png';
 
                     if (!$data->get('image_path')) {
