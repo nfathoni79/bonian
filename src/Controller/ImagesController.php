@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Core\Configure;
 use Cake\Log\Log;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
@@ -47,6 +48,7 @@ class ImagesController extends AppController
      */
     public function index($dimension, $name, $ext)
     {
+        Configure::write('debug',true);
         $this->disableAutoRender();
 
         $find = $this->ProductImageSizes->ProductImages->find('all')
@@ -120,6 +122,8 @@ class ImagesController extends AppController
                     ->select([
                         'image_dimension' => 'ImageSizes.dimension',
                         'image_path' => 'ImageSizes.path',
+                        'name' => 'ProductCategories.path',
+                        'id'
                     ])
                     ->where([
                         'ProductCategories.path' => $name . '.' . $ext
@@ -128,17 +132,20 @@ class ImagesController extends AppController
                         'ImageSizes.model' => 'AdminPanel.ProductCategories',
                         'ImageSizes.foreign_key = ProductCategories.id',
                         'ImageSizes.dimension' => $dimension,
-                    ])
-                    ->enableAutoFields(true);
-
+                    ]);
                 if (!$find->isEmpty()) {
                     /**
                      * @var \AdminPanel\Model\Entity\Banner $data
                      */
                     $data = $find->first();
+                    $data['dir'] = 'webroot\files\ProductCategories\path\/';
+                    $data['type'] = 'image/png';
+
                     if (!$data->get('image_path')) {
                         list($width, $height) = explode('x', $dimension);
+
                         if ($entity = $this->ImageSizes->resize($data, $width, $height)) {
+
                             return $this->response->withAddedHeader('content-type', $data->get('type'))
                                 ->withStringBody(file_get_contents(WWW_ROOT  . $entity->get('path')));
                         }
