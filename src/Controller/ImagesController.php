@@ -17,6 +17,7 @@ use Cake\Validation\Validator;
  * @property \AdminPanel\Model\Table\BannersTable $Banners
  * @property \AdminPanel\Model\Table\ImageSizesTable $ImageSizes
  * @property \AdminPanel\Model\Table\ProductImagesTable $ProductImages
+ * @property \AdminPanel\Model\Table\ProductCategoriesTable $ProductCategories
  */
 class ImagesController extends AppController
 {
@@ -35,6 +36,7 @@ class ImagesController extends AppController
         $this->loadModel('AdminPanel.Banners');
         $this->loadModel('AdminPanel.ImageSizes');
         $this->loadModel('AdminPanel.ProductImages');
+        $this->loadModel('AdminPanel.ProductCategories');
     }
 
     /**
@@ -111,6 +113,38 @@ class ImagesController extends AppController
                             ->withStringBody(file_get_contents(WWW_ROOT  . $entity->get('path')));
                     }
                 }
+
+            }else{
+
+                $find = $this->ProductCategories->find()
+                    ->select([
+                        'image_dimension' => 'ImageSizes.dimension',
+                        'image_path' => 'ImageSizes.path',
+                    ])
+                    ->where([
+                        'ProductCategories.path' => $name . '.' . $ext
+                    ])
+                    ->leftJoin(['ImageSizes' => 'image_sizes'], [
+                        'ImageSizes.model' => 'AdminPanel.ProductCategories',
+                        'ImageSizes.foreign_key = ProductCategories.id',
+                        'ImageSizes.dimension' => $dimension,
+                    ])
+                    ->enableAutoFields(true);
+
+                if (!$find->isEmpty()) {
+                    /**
+                     * @var \AdminPanel\Model\Entity\Banner $data
+                     */
+                    $data = $find->first();
+                    if (!$data->get('image_path')) {
+                        list($width, $height) = explode('x', $dimension);
+                        if ($entity = $this->ImageSizes->resize($data, $width, $height)) {
+                            return $this->response->withAddedHeader('content-type', $data->get('type'))
+                                ->withStringBody(file_get_contents(WWW_ROOT  . $entity->get('path')));
+                        }
+                    }
+                }
+
             }
         }
     }
