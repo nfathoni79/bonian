@@ -47,7 +47,7 @@ class ImagesController extends AppController
      * @return \Cake\Http\Response
      */
     public function index($dimension, $name, $ext)
-    { 
+    {
         $this->disableAutoRender();
 
         $find = $this->ProductImageSizes->ProductImages->find('all')
