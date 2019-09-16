@@ -566,16 +566,63 @@ $this->Html->script([
             });
         
         function renderChatContainer(room, position) {
+            //console.log('participant', participant, room)
             var active = (parseInt(position) === 0) ? 'active' : '';
+
+            var isCustomData = room.customData && typeof room.customData.order_detail_id != 'undefined';
+
+            var images = '';
+            if (isCustomData) {
+                if (room.customData.images.length > 0) {
+                    for(var i in room.customData.images) {
+                        images += `<li class="avatars__item">
+                                        <img src="${room.customData.images[i]}" class="avatars__img" />
+                                    </li>`;
+                        if (i >= 1) {
+                            break;
+                        }
+                    }
+                    var moreImages = room.customData.images.length - (parseInt(i) + 1);
+                    if (moreImages > 0) {
+                        images += `<li class="avatars__item">
+                                        <span class="avatars__others">+${moreImages}</span>
+                                    </li>`;
+                    }
+                }
+
+                if (images !== '') {
+                    images = `<div class="col-md-4">
+                                <ul class="avatars" style="padding: 13px 0px 7px 7px">
+                                    ${images}
+                                </ul>
+                            </div>`;
+                }
+
+
+
+            }
+
+
+
             return `<div class="tab-pane ${active}" id="room-${room.id}" data-room-id="${room.id}">
                         <div class="m-messenger__messages m-scrollable m-scrollable--track" data-scrollable="true">
-
+                        <div style="background: #ffffff; border: 1px solid #efefef; padding: 10px; margin-bottom: 10px;">
+                            <div class="row" >
+                                    <div class="col-md-4">
+                                        ${images}
+                                    </div>
+                                    <div class="col-md-8">
+                                        Nomor Pesanan : <a href="<?php echo $this->Url->build(['controller' => 'Orders', 'action' => 'edit']); ?>/${room.customData.order_id}"><span>${room.name}</span></a> <br/>
+                                        Total: <span>${numeral(room.customData.total).format('0,0')}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>`;
         }
 
         function renderMessage(message) {
-
+            //console.log('render message', message)
             var messagePosition = user_id.toUpperCase() === message.senderId.toUpperCase() ? 'm-messenger__message--out' : 'm-messenger__message--in';
 
             var m_attachment = '';
@@ -613,6 +660,7 @@ $this->Html->script([
             } else {
                 statusMessage = moment(message.createdAt).calendar(null, {sameElse: 'YYYY-MM-DD h:MM A', lastWeek: 'YYYY-MM-DD h:MM A'});
                 var avatarURL = message.userStore.users[message.senderId].avatarURL;
+                var customer_id = message.userStore.users[message.senderId].customData['customer_id'];
                 if (avatarURL) {
                     avatar = `<div class="m-messenger__message-pic pic-relative">
                         <img src="${avatarURL}" alt="" />
@@ -620,10 +668,15 @@ $this->Html->script([
                     </div>`;
                 } else {
                     avatar = `<div class="m-messenger__message-no-pic m--bg-fill-danger pic-relative">
-                        <span>${message.senderId.substring(0, 1).toUpperCase()}</span>
-                        <span class="m-badge m-badge--success m-badge--dot pic-online-status" data-user-name="${message.senderId}"></span>
-                    </div>`;
+                                <span>${message.senderId.substring(0, 1).toUpperCase()}</span>
+                                <span class="m-badge m-badge--success m-badge--dot pic-online-status" data-user-name="${message.senderId}"></span>
+                            </div>`;
                 }
+            }
+
+            var senderId = message.senderId;
+            if (customer_id) {
+                senderId = `<a href="<?php echo $this->Url->build(['controller' => 'Customers', 'action' => 'edit']); ?>/${customer_id}">${message.senderId}</a>`;
             }
 
             t += `<div class="m-messenger__wrapper" data-message-id="${message.id}">
@@ -633,7 +686,7 @@ $this->Html->script([
                                 <div class="m-messenger__message-arrow"></div>
                                 <div class="m-messenger__message-content">
                                     <div class="m-messenger__message-username">
-                                        ${message.senderId}
+                                        ${senderId}
                                     </div>
                                     <div class="m-messenger__message-text">
                                         ${message.text + m_attachment}
