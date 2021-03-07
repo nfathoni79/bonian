@@ -22,14 +22,14 @@ class UserStatusSeed extends AbstractSeed
             [
                 'id' => '1',
                 'name' => 'Active',
-                'created' => '0000-00-00 00:00:00',
-                'modified' => '0000-00-00 00:00:00',
+                'created' => '2000-01-01 00:00:00',
+                'modified' => '2000-01-01 00:00:00',
             ],
             [
                 'id' => '2',
                 'name' => 'In Active',
-                'created' => '0000-00-00 00:00:00',
-                'modified' => '0000-00-00 00:00:00',
+                'created' => '2000-01-01 00:00:00',
+                'modified' => '2000-01-01 00:00:00',
             ],
         ];
 
